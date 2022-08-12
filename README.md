@@ -42,4 +42,4 @@ class APIStuff
 }
 
 ```
-if you want to learn more about compiling this game then [read here!](https://github.com/ninjamuffin99/Funkin#compiling-game)
+if you want to learn more about compiling this game then [read here!](https://github.com/ninjamuffin99/Funkin/blob/master/README.md#compiling-game)
