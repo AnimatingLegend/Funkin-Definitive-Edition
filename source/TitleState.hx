@@ -51,9 +51,9 @@ class TitleState extends MusicBeatState
 	var swagShader:ColorSwap;
 
 	var mustUpdate:Bool;
-	public static var closedState:Bool = false;
 
 	public static var updateVersion:String = '';
+	public static var closedState:Bool = false;
 
 	#if web
 	var video:Video;
@@ -68,33 +68,6 @@ class TitleState extends MusicBeatState
 		#end*/
 
 	//	FlxG.game.focusLostFramerate = 60;
-
-		#if CHECK_FOR_UPDATES
-		if(!closedState) 
-		{
-			trace('checking for update');
-			var http = new haxe.Http("https://raw.githubusercontent.com/LegendLOL/Funkin-Definitive-Edition/master/gitVersion.txt");
-		
-			http.onData = function (data:String)
-			{
-				updateVersion = data.split('\n')[0].trim();
-				var curVersion:String = MainMenuState.versionTxt.trim();
-				trace('version online: ' + updateVersion + ', your version: ' + curVersion);
-				if(updateVersion != curVersion) 
-				{
-					trace('versions arent matching!');
-					mustUpdate = true;
-				}
-			}
-			
-			http.onError = function (error)
-			{
-				trace('error: $error');
-			}
-		
-			http.request();
-		}
-		#end
 
 		swagShader = new ColorSwap();
 
@@ -128,6 +101,34 @@ class TitleState extends MusicBeatState
 		{
 			VideoState.seenVideo = FlxG.save.data.seenVideo;
 		}
+
+		#if CHECK_FOR_UPDATES
+		if(!closedState) 
+		{
+			trace('checking for update');
+			var http = new haxe.Http("https://raw.githubusercontent.com/LegendLOL/Funkin-Definitive-Edition/master/gitVersion.txt");
+		
+			http.onData = function (data:String)
+			{
+				updateVersion = data.split('\n')[0].trim();
+				var curVersion:String = MainMenuState.versionTxt.trim();
+				trace('version online: ' + updateVersion + ', your version: ' + curVersion);
+				
+				if(updateVersion != curVersion) 
+				{
+					trace('versions arent matching!');
+					mustUpdate = true;
+				}
+			}
+			
+			http.onError = function (error)
+			{
+				trace('error: $error');
+			}
+		
+			http.request();
+		}
+		#end
 
 		#if FREEPLAY
 		FlxG.switchState(new FreeplayState());
@@ -366,7 +367,6 @@ class TitleState extends MusicBeatState
 
 			new FlxTimer().start(0.5, function(tmr:FlxTimer)
 			{
-				
 				if (mustUpdate) 
 					FlxG.switchState(new OutdatedSubState());
 				else 
