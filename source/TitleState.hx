@@ -73,7 +73,7 @@ class TitleState extends MusicBeatState
 		if(!closedState) 
 		{
 			trace('checking for update');
-			var http = new haxe.Http("https://raw.githubusercontent.com/ShadowMario/FNF-PsychEngine/main/gitVersion.txt");
+			var http = new haxe.Http("https://raw.githubusercontent.com/LegendLOL/Funkin-Definitive-Edition/master/gitVersion.txt");
 		
 			http.onData = function (data:String)
 			{
