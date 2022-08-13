@@ -358,6 +358,7 @@ class ChartingState extends MusicBeatState
 		check_mustHitSection.name = 'check_mustHit';
 		check_mustHitSection.checked = true;
 		// _song.needsVoices = check_mustHit.checked;
+		updateHeads();
 
 		check_altAnim = new FlxUICheckBox(10, 400, null, null, "Alt Animation", 100);
 		check_altAnim.name = 'check_altAnim';
@@ -453,7 +454,6 @@ class ChartingState extends MusicBeatState
 			{
 				case 'Must hit section':
 					_song.notes[curSection].mustHitSection = check.checked;
-
 					updateHeads();
 
 				case 'Change BPM':
@@ -525,7 +525,6 @@ class ChartingState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		updateHeads();
 		curStep = recalculateSteps();
 
 		Conductor.songPosition = FlxG.sound.music.time;
