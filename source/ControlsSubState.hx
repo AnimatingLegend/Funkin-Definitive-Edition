@@ -84,7 +84,7 @@ class ControlsSubState extends MusicBeatState
         menuBG.scrollFactor.x = 0;
         menuBG.scrollFactor.y = 0.06;
 		menuBG.screenCenter();
-		menuBG.antialiasing = true;
+		menuBG.antialiasing = FlxG.save.data.lowData;
 		add(menuBG);
 
 		camFollow = new FlxObject(0, 0, 1, 1);

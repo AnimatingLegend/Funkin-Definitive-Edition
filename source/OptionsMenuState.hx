@@ -28,16 +28,19 @@ class OptionsMenuState extends MusicBeatState
 		new OptionCatagory("Preferences", [
 			new NaughtyOption("If checked, any explicit content will be censored/removed from the game."),
 			#if !html5
-			new FramerateOption("self explanatory"), // HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
+			new FramerateOption("self explanatory. use your left and right arrow keys to switch between your framerate (60 - 240)"), // HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
 			#end
+			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
+			new CameraZoomOption("If unchecked, the camera won't zoom on every concurring beat-hit."),
+			new FPSOption("If unchecked, your fps counter & memory counter disappear's."),
+		]),
+		new OptionCatagory("Appearence", [
 			new DownscrollOption("If checked, your note strums appears on the bottom of the screen instead of up."),
 			new MiddlescrollOption("If checked, your note strums appear in the middle of the screen, & your opponents note strums disappear."),
-			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
-			new CameraZoomOption("If unchecked, the camera won't zoom on every concurring beat."),
-			new RatingHudOption("If checked, the rating sprites with appear on the games HUD."),
+			new LowDataOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
+			new RatingHudOption("If checked, the rating/combo sprites with appear on the games HUD."),
 			new NotesplashOption("If unchecked, hitting 'Sick!' notes won't show firework particles."),
 			new OpponentLightStrums("If checked, your opponents note strums light up whenever its their turn to sing."),
-			new FPSOption("If unchecked, your fps counter & memory counter disappear's."),
 		]),
 		new OptionCatagory("Controls", []),
 		new OptionCatagory("Exit", []),
@@ -63,7 +66,7 @@ class OptionsMenuState extends MusicBeatState
 		menuBG.scrollFactor.x = 0;
 		menuBG.scrollFactor.y = 0.18;
 		menuBG.screenCenter();
-		menuBG.antialiasing = true;
+		menuBG.antialiasing = FlxG.save.data.lowData;
 		add(menuBG);
 
 		grpControls = new FlxTypedGroup<Alphabet>();

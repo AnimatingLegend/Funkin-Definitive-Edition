@@ -53,6 +53,9 @@ class Main extends Sprite
 
 		if(FlxG.save.data.ratingHUD == null)
 			FlxG.save.data.ratingHUD = false;
+
+		if(FlxG.save.data.lowData == null)
+			FlxG.save.data.lowData = true;
 	}
 
 	public static function main():Void

@@ -29,7 +29,7 @@ class Character extends FlxSprite
 		this.isPlayer = isPlayer;
 
 		var tex:FlxAtlasFrames;
-		antialiasing = true;
+		antialiasing = FlxG.save.data.lowData;
 
 		switch (curCharacter)
 		{
@@ -122,7 +122,7 @@ class Character extends FlxSprite
 
 				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 				updateHitbox();
-				antialiasing = false;
+				antialiasing = FlxG.save.data.lowData;
 
 			case 'gf-tankmen':
 				frames = Paths.getSparrowAtlas('charactersAssets/gfTankmen', 'shared');
@@ -441,7 +441,7 @@ class Character extends FlxSprite
 				width -= 100;
 				height -= 100;
 
-				antialiasing = false;
+				antialiasing = FlxG.save.data.lowData;
 
 				flipX = true;
 
@@ -467,7 +467,7 @@ class Character extends FlxSprite
 				width -= 100;
 				height -= 100;
 
-				antialiasing = false;
+				antialiasing = FlxG.save.data.lowData;
 				flipX = true;
 
 			case 'bf-pixel-dead':
@@ -485,7 +485,7 @@ class Character extends FlxSprite
 
 				setGraphicSize(Std.int(width * 6)); // <-- pixel bullshit (dont mind it)
 				updateHitbox();
-				antialiasing = false;
+				antialiasing = FlxG.save.data.lowData;
 				flipX = true;
 
 			case 'bf-holding-gf':
@@ -556,7 +556,7 @@ class Character extends FlxSprite
 				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
 
-				antialiasing = false;
+				antialiasing = FlxG.save.data.lowData;
 
 			case 'senpai-angry':
 				frames = Paths.getSparrowAtlas('charactersAssets/senpai', 'shared');
@@ -576,7 +576,7 @@ class Character extends FlxSprite
 				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
 
-				antialiasing = false;
+				antialiasing = FlxG.save.data.lowData;
 
 			case 'spirit':
 				frames = Paths.getPackerAtlas('charactersAssets/spirit', 'shared');
@@ -597,7 +597,7 @@ class Character extends FlxSprite
 
 				playAnim('idle');
 
-				antialiasing = false;
+				antialiasing = FlxG.save.data.lowData;
 
 			case 'tankman':
 				tex = Paths.getSparrowAtlas('charactersAssets/tankmanCaptain', 'shared');

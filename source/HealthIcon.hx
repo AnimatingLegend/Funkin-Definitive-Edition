@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxSprite;
+import flixel.FlxG;
 
 using StringTools;
 
@@ -20,7 +21,7 @@ class HealthIcon extends FlxSprite
 		super();
 		this.isPlayer = isPlayer;
 		changeIcon(char);
-		antialiasing = true;
+		antialiasing = FlxG.save.data.lowData;
 		scrollFactor.set();
 	}
 

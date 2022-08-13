@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
+import flixel.FlxG;
 
 using StringTools;
 
@@ -17,7 +18,7 @@ class CheckboxThingie extends FlxSprite
 		animation.addByPrefix("selecting", "Check Box selecting animation0", 24, false);
 		animation.addByPrefix("selected", "Check Box Selected Static0", 24, false);
 		animation.addByPrefix('unchecked', "Check Box unselected0", 24, false);
-		antialiasing = true;
+		antialiasing = FlxG.save.data.lowData;
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
 		set_daValue(checked);

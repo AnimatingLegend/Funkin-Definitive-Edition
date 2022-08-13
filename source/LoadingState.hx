@@ -25,10 +25,6 @@ class LoadingState extends MusicBeatState
 	var stopMusic = false;
 	var callbacks:MultiCallback;
 	
-	var logo:FlxSprite;
-	var gfDance:FlxSprite;
-	var danceLeft = false;
-	
 	function new(target:FlxState, stopMusic:Bool)
 	{
 		super();
@@ -46,14 +42,14 @@ class LoadingState extends MusicBeatState
 		funkay = new FlxSprite(0, 0).loadGraphic(Paths.image('funkay'));
 		funkay.setGraphicSize(0, FlxG.height);
 		funkay.updateHitbox();
-		funkay.antialiasing = true;
+		funkay.antialiasing = FlxG.save.data.lowData;
 		funkay.scrollFactor.set();
 		funkay.screenCenter();
 		add(funkay);
 
 		loadBar = new FlxSprite(0, FlxG.height - 20).makeGraphic(FlxG.width, 10, 0xffff16d2);
 		loadBar.screenCenter(X);
-		loadBar.antialiasing = true;
+		loadBar.antialiasing = FlxG.save.data.lowData;
 		add(loadBar);
 		
 		initSongsManifest().onComplete

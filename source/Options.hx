@@ -347,3 +347,26 @@ class OpponentLightStrums extends Option
 		return "Opponents light strums ";
 	}
 }
+
+class LowDataOption extends Option 
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.lowData = !FlxG.save.data.lowData;
+		acceptValues = FlxG.save.data.lowData;
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Anti-Aliasing ";
+	}
+}
