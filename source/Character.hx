@@ -664,7 +664,7 @@ class Character extends FlxSprite
 			flipX = !flipX;
 
 			// Doesn't flip for BF, since his are already in the right place???
-			if (curCharacter.startsWith('bf') && !curCharacter.startsWith('pico-player'))
+			if (!curCharacter.startsWith('bf') && !curCharacter.startsWith('pico-player'))
 			{
 				// var animArray
 				var oldRight = animation.getByName('singRIGHT').frames;
