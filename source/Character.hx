@@ -274,34 +274,44 @@ class Character extends FlxSprite
 				animation.addByPrefix('idle', "Pico Idle Dance", 24);
 				animation.addByPrefix('singUP', 'pico Up note0', 24, false);
 				animation.addByPrefix('singDOWN', 'Pico Down Note0', 24, false);
-				if (isPlayer)
-				{
-					animation.addByPrefix('singLEFT', 'Pico NOTE LEFT0', 24, false);
-					animation.addByPrefix('singRIGHT', 'Pico Note Right0', 24, false);
-					animation.addByPrefix('singRIGHTmiss', 'Pico Note Right Miss', 24, false);
-					animation.addByPrefix('singLEFTmiss', 'Pico NOTE LEFT miss', 24, false);
-				}
-				else
-				{
-					// Need to be flipped! REDO THIS LATER!
-					animation.addByPrefix('singLEFT', 'Pico Note Right0', 24, false);
-					animation.addByPrefix('singRIGHT', 'Pico NOTE LEFT0', 24, false);
-					animation.addByPrefix('singRIGHTmiss', 'Pico NOTE LEFT miss', 24, false);
-					animation.addByPrefix('singLEFTmiss', 'Pico Note Right Miss', 24, false);
-				}
-
-				animation.addByPrefix('singUPmiss', 'pico Up note miss', 24);
-				animation.addByPrefix('singDOWNmiss', 'Pico Down Note MISS', 24);
+				animation.addByPrefix('singLEFT', 'Pico Note Right0', 24, false);
+				animation.addByPrefix('singRIGHT', 'Pico NOTE LEFT0', 24, false);
 
 				addOffset('idle');
 				addOffset("singUP", -29, 27);
 				addOffset("singRIGHT", -68, -7);
 				addOffset("singLEFT", 65, 9);
 				addOffset("singDOWN", 200, -70);
-				addOffset("singUPmiss", -19, 67);
-				addOffset("singRIGHTmiss", -60, 41);
-				addOffset("singLEFTmiss", 62, 64);
-				addOffset("singDOWNmiss", 210, -28);
+				playAnim('idle');
+
+				flipX = true;
+
+			case 'pico-player':
+				tex = Paths.getSparrowAtlas('charactersAssets/Pico_FNF_assetss', 'shared');
+				frames = tex;
+				animation.addByPrefix('idle', "Pico Idle Dance", 24);
+				animation.addByPrefix('singUP', 'pico Up note0', 24, false);
+				animation.addByPrefix('singDOWN', 'Pico Down Note0', 24, false);
+				animation.addByPrefix('singLEFT', 'Pico NOTE LEFT0', 24, false);
+				animation.addByPrefix('singRIGHT', 'Pico Note Right0', 24, false);
+
+				// Miss anims
+				animation.addByPrefix('singUPmiss', 'pico Up note miss', 24);
+				animation.addByPrefix('singDOWNmiss', 'Pico Down Note MISS', 24);
+				animation.addByPrefix('singRIGHTmiss', 'Pico Note Right Miss', 24, false);
+				animation.addByPrefix('singLEFTmiss', 'Pico NOTE LEFT miss', 24, false);
+
+				addOffset('idle');
+				addOffset("singUP", 21, 27);
+				addOffset("singRIGHT", -48, 2);
+				addOffset("singLEFT", 85, -10);
+				addOffset("singDOWN", 84, -80);
+
+				// Miss anims
+				addOffset("singUPmiss", 28, 67);
+				addOffset("singRIGHTmiss", -45, 50);
+				addOffset("singLEFTmiss", 83, 28);
+				addOffset("singDOWNmiss", 80, -38);
 
 				playAnim('idle');
 
@@ -458,6 +468,7 @@ class Character extends FlxSprite
 				height -= 100;
 
 				antialiasing = false;
+				flipX = true;
 
 			case 'bf-pixel-dead':
 				frames = Paths.getSparrowAtlas('charactersAssets/bfPixelsDEAD', 'shared');
@@ -653,7 +664,7 @@ class Character extends FlxSprite
 			flipX = !flipX;
 
 			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.startsWith('bf'))
+			if (curCharacter.startsWith('bf') && !curCharacter.startsWith('pico-player'))
 			{
 				// var animArray
 				var oldRight = animation.getByName('singRIGHT').frames;
@@ -693,22 +704,44 @@ class Character extends FlxSprite
 
 	override function update(elapsed:Float)
 	{
-		if (!curCharacter.startsWith('bf'))
+		if (animation.curAnim != null)
 		{
-			if (animation.curAnim.name.startsWith('sing'))
+			if (!isPlayer)
 			{
-				holdTimer += elapsed;
-			}
-	
-			var dadVar:Float = 4;
-	
-			if (curCharacter == 'dad')
-				dadVar = 6.1;
-			if (holdTimer >= Conductor.stepCrochet * dadVar * 0.001)
-			{
-				dance();
-				holdTimer = 0;
-			}
+				// there should be a better way to do this, but it works so whatever lol
+				if (curCharacter.startsWith('bf') && !curCharacter.startsWith('pico-player'))
+				{
+					if (animation.curAnim.name.startsWith('sing'))
+					{
+						holdTimer += elapsed;
+					}
+					
+					var dadVar:Float = 4;
+					
+					if (curCharacter == 'dad')
+						dadVar = 6.1;
+				
+					if (holdTimer >= Conductor.stepCrochet * dadVar * 0.0011)
+					{
+						dance();
+								
+						holdTimer = 0;
+					}
+				}
+				else
+				{
+					if (animation.curAnim.name.startsWith('sing'))
+						holdTimer += elapsed;
+					else
+						holdTimer = 0;
+				
+					if (animation.curAnim.name.endsWith('miss') && !animation.curAnim.finished && !debugMode)
+						dance();
+				
+					if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
+						playAnim('deathLoop');
+				}	
+			}	
 		}
 		
 			switch (curCharacter)

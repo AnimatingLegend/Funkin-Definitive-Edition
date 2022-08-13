@@ -8,8 +8,8 @@ dad
 gf
 gf-christmas
 spooky
+pico-player
 pico
-pico-speaker
 mom
 mom-car
 parents-christmas

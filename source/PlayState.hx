@@ -49,7 +49,7 @@ using StringTools;
 
 class PlayState extends MusicBeatState
 {
-	public static var curStage:String = '';
+	public static var curStage:String = 'stage';
 	public static var stageCheck:String = 'stage';
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
@@ -729,8 +729,14 @@ class PlayState extends MusicBeatState
 			case 'tankman':
 				dad.y += 180;
 			case 'bf-pixel-opponent':
-				dad.x -= 100;
+				camPos.x += 50;
+				camPos.y -= 160;
+				dad.x += 80;
 				dad.y += 460;
+			case 'pico-player':
+				camPos.x += 220;
+				dad.y += 300;
+
 		}
 
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
@@ -744,7 +750,7 @@ class PlayState extends MusicBeatState
 
 				resetFastCar();
 				add(fastCar);
-
+			
 			case 'mall':
 				boyfriend.x += 200;
 
