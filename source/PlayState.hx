@@ -734,8 +734,8 @@ class PlayState extends MusicBeatState
 				dad.x += 80;
 				dad.y += 460;
 			case 'pico-player':
-				camPos.x += 220;
-				dad.y += 300;
+				camPos.x += 600;
+				boyfriend.y += 300;
 
 		}
 
@@ -747,6 +747,11 @@ class PlayState extends MusicBeatState
 			case 'limo':
 				boyfriend.y -= 220;
 				boyfriend.x += 260;
+
+				if (boyfriend.curCharacter.startsWith('pico-player'))
+				{
+					boyfriend.y -= 90;
+				}	
 
 				resetFastCar();
 				add(fastCar);
@@ -2650,13 +2655,16 @@ class PlayState extends MusicBeatState
 		lightningStrikeBeat = curBeat;
 		lightningOffset = FlxG.random.int(8, 24);
 
-		boyfriend.playAnim('scared', true);
-		gf.playAnim('scared', true);
-
-		if (!boyfriend.curCharacter.startsWith('pico-player'))
+		if (boyfriend.curCharacter.startsWith('pico-player'))
 		{
 			boyfriend.playAnim('idle', true);
-		}	
+		}
+		else if (!boyfriend.curCharacter.startsWith('bf'))
+		{
+			boyfriend.playAnim('scared', true);
+		}
+
+		gf.playAnim('scared', true);
 	}
 
 	override function stepHit()
@@ -2736,7 +2744,7 @@ class PlayState extends MusicBeatState
 		{
 			boyfriend.playAnim('hey', true);
 
-			if (!boyfriend.curCharacter.startsWith('pico-player'))
+			if (boyfriend.curCharacter.startsWith('pico-player'))
 			{
 				boyfriend.playAnim('idle', true);
 			}	
@@ -2747,7 +2755,7 @@ class PlayState extends MusicBeatState
 			boyfriend.playAnim('hey', true);
 			dad.playAnim('cheer', true);
 
-			if (!boyfriend.curCharacter.startsWith('pico-player'))
+			if (boyfriend.curCharacter.startsWith('pico-player'))
 			{
 				boyfriend.playAnim('idle', true);
 			}	
