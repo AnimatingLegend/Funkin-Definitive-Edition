@@ -38,6 +38,7 @@ class MainMenuState extends MusicBeatState
 	var camFollow:FlxObject;
 
 	public static var versionTxt:String = '0.1.0';
+	public static var updateShit:Bool = false;
 
 	override function create()
 	{

@@ -52,6 +52,9 @@ class TitleState extends MusicBeatState
 
 	var mustUpdate:Bool;
 
+	var http = new haxe.Http("https://raw.githubusercontent.com/LegendLOL/Funkin-Definitive-Edition/master/gitVersion.txt");
+	var returnedData:Array<String> = [];
+
 	public static var updateVersion:String = '';
 	public static var closedState:Bool = false;
 
@@ -101,34 +104,6 @@ class TitleState extends MusicBeatState
 		{
 			VideoState.seenVideo = FlxG.save.data.seenVideo;
 		}
-
-		#if CHECK_FOR_UPDATES
-		if(!closedState) 
-		{
-			trace('checking for update');
-			var http = new haxe.Http("https://raw.githubusercontent.com/LegendLOL/Funkin-Definitive-Edition/master/gitVersion.txt");
-		
-			http.onData = function (data:String)
-			{
-				updateVersion = data.split('\n')[0].trim();
-				var curVersion:String = MainMenuState.versionTxt.trim();
-				trace('version online: ' + updateVersion + ', your version: ' + curVersion);
-				
-				if(updateVersion != curVersion) 
-				{
-					trace('versions arent matching!');
-					mustUpdate = true;
-				}
-			}
-			
-			http.onError = function (error)
-			{
-				trace('error: $error');
-			}
-		
-			http.request();
-		}
-		#end
 
 		#if FREEPLAY
 		FlxG.switchState(new FreeplayState());
@@ -367,10 +342,10 @@ class TitleState extends MusicBeatState
 
 			new FlxTimer().start(0.5, function(tmr:FlxTimer)
 			{
-				if (mustUpdate) 
+				if (MainMenuState.updateShit) 
 					FlxG.switchState(new OutdatedSubState());
 				else 
-					FlxG.switchState(new MainMenuState()); 
+					FlxG.switchState(new OutdatedSubState()); 
 
 				closedState = true;
 			});
@@ -388,6 +363,36 @@ class TitleState extends MusicBeatState
 		}
 
 		super.update(elapsed);
+	}
+
+	function getBuildVer():Void
+	{
+		http.request();
+	
+		http.onData = function(data:String)
+		{
+			returnedData[0] = data.substring(0, data.indexOf(';'));
+			returnedData[1] = data.substring(data.indexOf('-'), data.length);
+
+			if (!MainMenuState.versionTxt.contains(returnedData[0].trim()) && !OutdatedSubState.leftState)
+			{
+					trace('New version detected: ' + returnedData[0]);
+					MainMenuState.updateShit = true;
+					trace('outdated lmao! ' + returnedData[0] + ' != ' + Application.current.meta.get('version'));
+					OutdatedSubState.needVer = returnedData[0];
+			}
+			else
+			{
+				trace('Build is up to date bois.');
+			}
+		}
+	
+		http.onError = function(error)
+		{
+			trace('error: $error');
+		}
+	
+		http.request();
 	}
 
 	function createCoolText(textArray:Array<String>)
