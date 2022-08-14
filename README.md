@@ -14,7 +14,6 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 - LOADS of gameplay fixes (Mostly week 6 & 7)
 - Made Menus more appealing & easier to browse through (options menu in particular)
 - Janky Input system!
-![image](https://user-images.githubusercontent.com/83415030/184519445-3fa30eb0-8442-41bf-b03b-f37650949bdc.png)
 
 ![Windows Screenshot 2022 08 13 - 22 03 37 43](https://user-images.githubusercontent.com/83415030/184519479-e518c156-6b0e-4af5-a70a-32d5ff223af7.png)
 
