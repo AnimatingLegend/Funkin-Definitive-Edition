@@ -1,19 +1,30 @@
 # Friday Night Funkin': Defintive Editon
 
-Everything that you see in this engine was used on my [Week 7 Port](https://github.com/LegendLOL/Funkin-Week7) project. intended to be a addon and tweak this vanilla versions gameplay, and issues overlying in it.
+Everything that you see in this engine was used on my [Week 7 Port](https://github.com/LegendLOL/Funkin-Week7) project.
 
 ## Things added/changed in this engine
 **Additions**
-- Asset overhaul - changed charting, file locations, ETC (newgrounds week 7 update)
+- Asset overhaul: Fixed/Changed File locations, Song charting (.json), & much more
 - Options menu + Ghost tapping + Down/MiddleScroll
 - Customizable Keybindings
-- Combo Sprite
+- Combo Sprite, Added ratings/combo sprites to  games HUD
 - Playable characters (pico & tankman)
 
 **Changes/Fixes**
-- LOADS of gameplay fixes (Mostly week 6 & 7)
+- TONS of gameplay fixes
 - Made Menus more appealing & easier to browse through (options menu in particular)
 - Janky Input system!
+
+## there has been atleast one change/fix to just about every week:
+### Week 1:
+* Added Unused stage lights
+### Week 4:
+* Better hair physics for Mom & Boyfriend
+### Week 6:
+* Fixed major dialogue bugs || backend changes
+* Bumped up scroll speed for Roses || 2.7
+* Tweaked map size for Thorns || 1.0
+* On Thorns - the HUD is hidden during the mini cutscene
 
 ![Windows Screenshot 2022 08 13 - 22 03 37 43](https://user-images.githubusercontent.com/83415030/184519479-e518c156-6b0e-4af5-a70a-32d5ff223af7.png)
 

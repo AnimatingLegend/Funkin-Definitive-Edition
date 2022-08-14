@@ -66,11 +66,15 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
+		getBuildVer();
+
+		#if desktop
+		FlxG.game.focusLostFramerate = 60;
+		#end
+
 		/*#if polymod
 		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod'], framework: OPENFL});
 		#end*/
-
-	//	FlxG.game.focusLostFramerate = 60;
 
 		swagShader = new ColorSwap();
 
@@ -345,7 +349,7 @@ class TitleState extends MusicBeatState
 				if (MainMenuState.updateShit) 
 					FlxG.switchState(new OutdatedSubState());
 				else 
-					FlxG.switchState(new OutdatedSubState()); 
+					FlxG.switchState(new MainMenuState()); 
 
 				closedState = true;
 			});
@@ -383,7 +387,7 @@ class TitleState extends MusicBeatState
 			}
 			else
 			{
-				trace('Build is up to date bois.');
+				trace('Build is up to date !!! - ' + MainMenuState.versionTxt);
 			}
 		}
 	
