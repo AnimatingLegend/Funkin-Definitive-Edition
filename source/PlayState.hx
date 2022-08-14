@@ -268,7 +268,7 @@ class PlayState extends MusicBeatState
 
 		switch (stageCheck)
 		{
-			case 'halloween':
+			case 'halloween': // Week 2
 				{
 					curStage = 'spooky';
 					halloweenLevel = true;
@@ -284,7 +284,7 @@ class PlayState extends MusicBeatState
 
 					isHalloween = true;
 				}
-			case 'philly':
+			case 'philly': // Week 3
 				{
 					curStage = 'philly';
 
@@ -326,7 +326,7 @@ class PlayState extends MusicBeatState
 					var street:FlxSprite = new FlxSprite(-40, streetBehind.y).loadGraphic(Paths.image('philly/street'));
 					add(street);
 				}
-			case 'limo':
+			case 'limo': // Week 4
 				{
 					curStage = 'limo';
 					defaultCamZoom = 0.9;
@@ -373,7 +373,7 @@ class PlayState extends MusicBeatState
 					fastCar = new FlxSprite(-300, 160).loadGraphic(Paths.image('limo/fastCarLol'));
 					// add(limo);
 				}
-			case 'mall':
+			case 'mall': // Week 5 - Cocoa, Eggnog
 				{
 					curStage = 'mall';
 
@@ -429,7 +429,7 @@ class PlayState extends MusicBeatState
 					santa.antialiasing = FlxG.save.data.lowData;
 					add(santa);
 				}
-			case 'mallEvil':
+			case 'mallEvil': // Week 5 - Winter Horrorland
 				{
 					curStage = 'mallEvil';
 
@@ -450,7 +450,7 @@ class PlayState extends MusicBeatState
 					evilSnow.antialiasing = FlxG.save.data.lowData;
 					add(evilSnow);
 				}
-			case 'school':
+			case 'school': // Week 6 - Senpai, Roses
 				{
 					curStage = 'school';
 
@@ -515,7 +515,7 @@ class PlayState extends MusicBeatState
 					bgGirls.updateHitbox();
 					add(bgGirls);
 				}
-			case 'schoolEvil':
+			case 'schoolEvil': // Week 6 - Thorns
 				{
 					defaultCamZoom = 1.0;
 
@@ -535,12 +535,13 @@ class PlayState extends MusicBeatState
 					bg.scale.set(7, 7);
 					add(bg);
 				}
-			case 'tank':
+			case 'tank': // Week 7 -  Ugh, Guns, Stress
 				{
 					defaultCamZoom = 0.9;
 
 					curStage = 'tank';
 
+					// im only using BGSprite for this stage and this stage only. too lazy to use/change it for the other stages.
 					var sky:BGSprite = new BGSprite('tank/tankSky', -400, -400, 0, 0);
 					add(sky);
 
@@ -610,6 +611,19 @@ class PlayState extends MusicBeatState
 					stageFront.scrollFactor.set(0.9, 0.9);
 					stageFront.active = false;
 					add(stageFront);
+
+					var stageLight:FlxSprite = new FlxSprite(-125, -100).loadGraphic(Paths.image('stage_light'));
+					stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
+					stageLight.antialiasing = FlxG.save.data.lowData;
+					stageLight.updateHitbox();
+					add(stageLight);
+
+					var stageLight:FlxSprite = new FlxSprite(1225, -100).loadGraphic(Paths.image('stage_light'));
+					stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
+					stageLight.antialiasing = FlxG.save.data.lowData;
+					stageLight.updateHitbox();
+					stageLight.flipX = true;
+					add(stageLight);
 
 					var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stagecurtains'));
 					stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
