@@ -29,6 +29,8 @@ class Character extends FlxSprite
 		this.isPlayer = isPlayer;
 
 		var tex:FlxAtlasFrames;
+
+		// PIXEL SPRITES ANTI-ALIASING STAYS FALSE, DONT CHANGE IT !!!!!
 		antialiasing = FlxG.save.data.lowData;
 
 		switch (curCharacter)
@@ -102,6 +104,7 @@ class Character extends FlxSprite
 				animation.addByIndices('singUP', 'GF Dancing Beat Hair blowing CAR', [0], "", 24, false);
 				animation.addByIndices('danceLeft', 'GF Dancing Beat Hair blowing CAR', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 				animation.addByIndices('danceRight', 'GF Dancing Beat Hair blowing CAR', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+				animation.addByIndices('idleHair', 'GF Dancing Beat Hair blowing CAR', [10, 11, 12, 25, 26, 27], "", 24, true);
 
 				addOffset('danceLeft', 0);
 				addOffset('danceRight', 0);
@@ -122,7 +125,7 @@ class Character extends FlxSprite
 
 				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 				updateHitbox();
-				antialiasing = FlxG.save.data.lowData;
+				antialiasing = false;
 
 			case 'gf-tankmen':
 				frames = Paths.getSparrowAtlas('charactersAssets/gfTankmen', 'shared');
@@ -227,6 +230,7 @@ class Character extends FlxSprite
 				// ANIMATION IS CALLED MOM LEFT POSE BUT ITS FOR THE RIGHT
 				// CUZ DAVE IS DUMB!
 				animation.addByPrefix('singRIGHT', 'Mom Pose Left', 24, false);
+				animation.addByIndices('idleHair', 'Mom Idle', [10, 11, 12, 13], '', 24, true);
 
 				addOffset('idle');
 				addOffset("singUP", 14, 71);
@@ -397,8 +401,9 @@ class Character extends FlxSprite
 				animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
 				animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
 				animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
+				animation.addByIndices('idleHair', 'BF idle dance', [10, 11, 12, 13], '', 24, true);
 
-				addOffset('idle', -5);
+				addOffset('idle');
 				addOffset("singUP", -29, 27);
 				addOffset("singRIGHT", -38, -7);
 				addOffset("singLEFT", 12, -6);
@@ -441,7 +446,7 @@ class Character extends FlxSprite
 				width -= 100;
 				height -= 100;
 
-				antialiasing = FlxG.save.data.lowData;
+				antialiasing = false;
 
 				flipX = true;
 
@@ -467,7 +472,7 @@ class Character extends FlxSprite
 				width -= 100;
 				height -= 100;
 
-				antialiasing = FlxG.save.data.lowData;
+				antialiasing = false;
 				flipX = true;
 
 			case 'bf-pixel-dead':
@@ -485,7 +490,7 @@ class Character extends FlxSprite
 
 				setGraphicSize(Std.int(width * 6)); // <-- pixel bullshit (dont mind it)
 				updateHitbox();
-				antialiasing = FlxG.save.data.lowData;
+				antialiasing = false;
 				flipX = true;
 
 			case 'bf-holding-gf':
@@ -556,7 +561,7 @@ class Character extends FlxSprite
 				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
 
-				antialiasing = FlxG.save.data.lowData;
+				antialiasing = false;
 
 			case 'senpai-angry':
 				frames = Paths.getSparrowAtlas('charactersAssets/senpai', 'shared');
@@ -576,7 +581,7 @@ class Character extends FlxSprite
 				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
 
-				antialiasing = FlxG.save.data.lowData;
+				antialiasing = false;
 
 			case 'spirit':
 				frames = Paths.getPackerAtlas('charactersAssets/spirit', 'shared');
@@ -597,7 +602,7 @@ class Character extends FlxSprite
 
 				playAnim('idle');
 
-				antialiasing = FlxG.save.data.lowData;
+				antialiasing = false;
 
 			case 'tankman':
 				tex = Paths.getSparrowAtlas('charactersAssets/tankmanCaptain', 'shared');
@@ -743,34 +748,41 @@ class Character extends FlxSprite
 				}	
 			}	
 		}
+
 		
-			switch (curCharacter)
-			{
-				case 'gf':
-					if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
-						playAnim('danceRight');
+		if (curCharacter.endsWith('-car') && !animation.curAnim.name.startsWith('sing') && animation.curAnim.finished)
+		{
+			playAnim('idleHair');
+		}
+		
+		switch (curCharacter)
+		{
+			case 'gf':
+				if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
+					playAnim('danceRight');
 					
-				case 'pico-speaker':
-					if (animationNotes.length > 0 && Conductor.songPosition > animationNotes[0][0])
+			case 'pico-speaker':
+				if (animationNotes.length > 0 && Conductor.songPosition > animationNotes[0][0])
+				{
+				 	trace("played shoot anim" + animationNotes[0][1]);
+					var shotDirection:Int = 1;
+					if (animationNotes[0][1] >= 2)
 					{
-					 // trace("played shoot anim" + animationNotes[0][1]);
-						var shotDirection:Int = 1;
-						if (animationNotes[0][1] >= 2)
-						{
-							shotDirection = 3;
-						}
-						shotDirection += FlxG.random.int(0, 1);
+						shotDirection = 3;
+					}
+					shotDirection += FlxG.random.int(0, 1);
 						
-						playAnim('shoot' + shotDirection, true);
-						animationNotes.shift();
-					}
-					if (animation.curAnim.finished)
-					{
-						playAnim(animation.curAnim.name, false, false, animation.curAnim.frames.length - 3);
-					}
-			}
+					playAnim('shoot' + shotDirection, true);
+					animationNotes.shift();
+				}
+
+				if (animation.curAnim.finished)
+				{
+					playAnim(animation.curAnim.name, false, false, animation.curAnim.frames.length - 3);
+				}
+		}
 	
-			super.update(elapsed);
+		super.update(elapsed);
 	}
 
 	private var danced:Bool = false;

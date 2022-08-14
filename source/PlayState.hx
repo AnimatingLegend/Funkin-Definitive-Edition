@@ -1385,7 +1385,7 @@ class PlayState extends MusicBeatState
 
 					babyArrow.setGraphicSize(Std.int(babyArrow.width * daPixelZoom));
 					babyArrow.updateHitbox();
-					babyArrow.antialiasing = FlxG.save.data.lowData;
+					babyArrow.antialiasing = false;
 
 					switch (Math.abs(i))
 					{
