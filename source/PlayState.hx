@@ -1641,8 +1641,8 @@ class PlayState extends MusicBeatState {
 			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
 		}
 
-		FlxG.watch.addQuick("beatShit", curBeat);
-		FlxG.watch.addQuick("stepShit", curStep);
+		FlxG.watch.addQuick("curBeat", curBeat);
+		FlxG.watch.addQuick("curStep", curStep);
 
 		if (curSong == 'Fresh') {
 			switch (curBeat) {
@@ -2443,13 +2443,31 @@ class PlayState extends MusicBeatState {
 		lightningStrikeBeat = curBeat;
 		lightningOffset = FlxG.random.int(8, 24);
 
-		if (boyfriend.curCharacter.startsWith('pico-player')) {
+		if (boyfriend.curCharacter.startsWith('pico-player')) 
+		{
 			boyfriend.playAnim('idle', true);
-		} else if (!boyfriend.curCharacter.startsWith('bf')) {
-			boyfriend.playAnim('scared', true);
+		} 
+		else
+		{
+			if (boyfriend.curCharacter.startsWith('bf')) 
+			{
+				boyfriend.playAnim('scared', true);
+			}	
 		}
 
 		gf.playAnim('scared', true);
+
+		// taken from psych engine teehee 
+		if (FlxG.save.data.camhudZoom)
+		{
+			FlxG.camera.zoom += 0.015;
+			camHUD.zoom += 0.03;
+
+			if(!camZooming) { //Just a way for preventing it to be permanently zoomed until Skid & Pump hits a note ~ Shadow Mario
+				FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 0.5);
+				FlxTween.tween(camHUD, {zoom: 1}, 0.5);
+			}
+		}	
 	}
 
 	override function stepHit() {
@@ -2513,8 +2531,10 @@ class PlayState extends MusicBeatState {
 			boyfriend.playAnim('idle');
 		}
 
+		// Mid Song Events start here lol
 		if (curBeat % 8 == 7 && curSong == 'Bopeebo') {
 			boyfriend.playAnim('hey', true);
+			gf.playAnim('cheer');
 
 			if (boyfriend.curCharacter.startsWith('pico-player')) {
 				boyfriend.playAnim('idle', true);
@@ -2530,27 +2550,76 @@ class PlayState extends MusicBeatState {
 			}
 		}
 
-		foregroundSprites.forEach(function(spr:BGSprite) {
-			spr.dance();
-		});
-
-		// Week 7 Mid-Song Events
-		// hard coding because im just like that
-		if (dad.curCharacter == 'tankman' && SONG.song == 'Ugh') {
-			if (curBeat == 14 || curBeat == 110 || curBeat == 131 || curBeat == 206) {
-				dad.addOffset("singUP", -14, -8);
-				dad.animation.getByName('singUP').frames = dad.animation.getByName('singUP-alt').frames;
-			}
-
-			if (curBeat == 16 || curBeat == 112 || curBeat == 132 || curBeat == 208) {
-				dad.addOffset("singUP", 54, 49);
-				dad.animation.getByName('singUP').frames = dad.animation.getByName('singLEFT-alt').frames;
-			}
+		if (SONG.song == 'Philly')
+		{
+			if(curBeat < 250)
+			{
+				if(curBeat != 184 && curBeat != 216)
+				{
+					if(curBeat % 16 == 8)
+					{
+						boyfriend.playAnim('hey', true);
+					}	
+				}		
+			}		
 		}
+
+		if (SONG.song == 'Blammed')
+		{
+			if(curBeat > 30 && curBeat < 190)
+			{
+				if(curBeat < 90 || curBeat > 128)
+				{
+					if(curBeat % 4 == 2)
+						gf.playAnim('cheer', true);
+				}
+			}	
+		}
+
+		if (SONG.song == 'Cocoa')
+		{
+			if(curBeat < 65 || curBeat > 130 && curBeat < 145)
+			{
+				if(curBeat % 16 == 15)
+					gf.playAnim('cheer', true);	
+			}
+
+		}
+
+		if (SONG.song == 'Eggnog')
+		{
+			if(curBeat > 10 && curBeat != 111 && curBeat < 220)
+			{
+				if(curBeat % 8 == 7)
+					gf.playAnim('cheer', true);
+			}	
+		}
+
+		if (SONG.song == 'Ugh')
+		{
+			if (dad.curCharacter == 'tankman')
+			{
+				if (curBeat == 14 || curBeat == 110 || curBeat == 131 || curBeat == 206) 
+				{
+					dad.addOffset("singUP", -14, -8);
+					dad.animation.getByName('singUP').frames = dad.animation.getByName('singUP-alt').frames;
+				}
+
+				if (curBeat == 16 || curBeat == 112 || curBeat == 132 || curBeat == 208) 
+				{
+					dad.addOffset("singUP", 54, 49);
+					dad.animation.getByName('singUP').frames = dad.animation.getByName('singLEFT-alt').frames;
+				}
+			}	
+		}	
 
 		switch (curStage) {
 			case 'tank':
 				tankWatchtower.dance();
+
+				foregroundSprites.forEach(function(spr:BGSprite) {
+					spr.dance();
+				});
 
 			case 'school':
 				bgGirls.dance();
@@ -2569,17 +2638,17 @@ class PlayState extends MusicBeatState {
 
 			case "philly":
 				if (!trainMoving)
-					trainCooldown += 2;
+					trainCooldown += 1;
 
-				if (curBeat % 4 == 0) {
-					phillyCityLights.forEach(function(light:FlxSprite) {
+				if (curBeat % 4 == 0) 
+				{
+					phillyCityLights.forEach(function(light:FlxSprite){
 						light.visible = false;
 					});
 
-					curLight = FlxG.random.int(0, phillyCityLights.length - 1);
-
+					curLight = FlxG.random.int(0, phillyCityLights.length - 1, [curLight]);
 					phillyCityLights.members[curLight].visible = true;
-					// phillyCityLights.members[curLight].alpha = 1;
+					phillyCityLights.members[curLight].alpha = 0.5;
 				}
 
 				if (curBeat % 8 == 4 && FlxG.random.bool(30) && !trainMoving && trainCooldown > 8) {
@@ -2588,7 +2657,7 @@ class PlayState extends MusicBeatState {
 				}
 		}
 
-		if (isHalloween && FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset) {
+		if (curStage == 'spooky' && FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset) {
 			lightningStrikeShit();
 		}
 	}
