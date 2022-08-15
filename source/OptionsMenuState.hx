@@ -34,7 +34,7 @@ class OptionsMenuState extends MusicBeatState
 			new CameraZoomOption("If unchecked, the camera won't zoom on every concurring beat-hit."),
 			new FPSOption("If unchecked, your fps counter & memory counter disappear's."),
 		]),
-		new OptionCatagory("Gameplay", [
+		new OptionCatagory("Appearance", [
 			new DownscrollOption("If checked, your note strums appears on the bottom of the screen instead of up."),
 			new MiddlescrollOption("If checked, your note strums appear in the middle of the screen, & your opponents note strums disappear."),
 			new LowDataOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
