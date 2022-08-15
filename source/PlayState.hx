@@ -745,6 +745,12 @@ class PlayState extends MusicBeatState {
 
 		// REPOSITIONING PER STAGE
 		switch (curStage) {
+			case 'spooky':
+				if (boyfriend.curCharacter.startsWith('pico-player')) {
+					boyfriend.x += 100;
+					boyfriend.y -= 60;
+				}
+
 			case 'limo':
 				boyfriend.y -= 220;
 				boyfriend.x += 260;
@@ -847,13 +853,11 @@ class PlayState extends MusicBeatState {
 		FlxG.camera.zoom = defaultCamZoom;
 		FlxG.camera.focusOn(camFollow.getPosition());
 
-		// did this to avoid camera locking onto a character w/o the smooth camera tween
-		#if !html5
+		#if desktop
+		FlxG.camera.follow(camFollow, LOCKON, 0.04 * (30 / FlxG.save.data.framerateDraw));
+		#else
 		FlxG.camera.follow(camFollow, LOCKON, 0.04);
 		#end
-
-		// Godbless OldFlag for making my life a lot easier <3
-		FlxG.camera.follow(camFollow, LOCKON, 0.04 * (30 / FlxG.save.data.framerateDraw));
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
@@ -2533,20 +2537,34 @@ class PlayState extends MusicBeatState {
 
 		// Mid Song Events start here lol
 		if (curBeat % 8 == 7 && curSong == 'Bopeebo') {
-			boyfriend.playAnim('hey', true);
 			gf.playAnim('cheer');
 
-			if (boyfriend.curCharacter.startsWith('pico-player')) {
+			if (boyfriend.curCharacter.startsWith('pico-player')) 
+			{
 				boyfriend.playAnim('idle', true);
+			} 
+			else
+			{
+				if (boyfriend.curCharacter.startsWith('bf')) 
+				{
+					boyfriend.playAnim('hey', true);
+				}	
 			}
 		}
 
 		if (curBeat % 16 == 15 && SONG.song == 'Tutorial' && dad.curCharacter == 'gf' && curBeat > 16 && curBeat < 48) {
-			boyfriend.playAnim('hey', true);
 			dad.playAnim('cheer', true);
 
-			if (boyfriend.curCharacter.startsWith('pico-player')) {
+			if (boyfriend.curCharacter.startsWith('pico-player')) 
+			{
 				boyfriend.playAnim('idle', true);
+			} 
+			else
+			{
+				if (boyfriend.curCharacter.startsWith('bf')) 
+				{
+					boyfriend.playAnim('hey', true);
+				}	
 			}
 		}
 
@@ -2558,7 +2576,17 @@ class PlayState extends MusicBeatState {
 				{
 					if(curBeat % 16 == 8)
 					{
-						boyfriend.playAnim('hey', true);
+						if (boyfriend.curCharacter.startsWith('pico-player')) 
+						{
+							boyfriend.playAnim('idle', true);
+						} 
+						else
+						{
+							if (boyfriend.curCharacter.startsWith('bf')) 
+							{
+								boyfriend.playAnim('hey', true);
+							}	
+						}
 					}	
 				}		
 			}		
