@@ -2,6 +2,10 @@
 
 Everything that you see in this engine was used on my [Week 7 Port](https://github.com/LegendLOL/Funkin-Week7) project.
 
+## Credits & Shoutouts
+- [Legend (thats me)](https://twitter.com/AnimatingLegend) - Programmer
+- [OldFlag](https://github.com/ItzOldFlagDEV) -  Additional Programmer
+
 ## Things added/changed in this engine
 **Additions**
 - Asset overhaul: Fixed/Changed File locations, Song charting (.json), & much more
@@ -41,12 +45,8 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 ### Chart Editor
 ![Windows Screenshot 2022 08 07 - 22 53 26 56](https://user-images.githubusercontent.com/83415030/184576058-f06ddf19-7c07-494f-8529-0739b286bead.png)
 
-### Random Gameplay
-![Windows Screenshot 2022 08 07 - 22 55 30 28](https://user-images.githubusercontent.com/83415030/184576954-4df191dd-3985-40e7-a958-d112870c710a.png)
-
-## Credits
-- [Legend (thats me)](https://twitter.com/AnimatingLegend) - Programmer
-- [OldFlag](https://github.com/ItzOldFlagDEV) -  Additional Programmer
+### Piece of old Gameplay
+![ezgif-1-2b0132a422](https://user-images.githubusercontent.com/83415030/184709897-bea3d00e-90d3-4c37-b24b-91094343f948.gif)
 
 ## Installation Shit
 First, you need to install Haxe and HaxeFlixel. I'm too lazy to write and keep updated with that setup (which is pretty simple). 
