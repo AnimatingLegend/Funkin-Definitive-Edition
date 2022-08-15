@@ -370,3 +370,26 @@ class LowDataOption extends Option
 		return "Anti-Aliasing ";
 	}
 }
+
+class JudgemntOption extends Option 
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.judgementCounter = !FlxG.save.data.judgementCounter;
+		acceptValues = FlxG.save.data.judgementCounter;
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Judgemnt-Counter ";
+	}
+}
