@@ -13,6 +13,7 @@ class Character extends FlxSprite
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var debugMode:Bool = false;
 
+	public var loop:Bool;
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
 
@@ -21,6 +22,7 @@ class Character extends FlxSprite
 	public var animationNotes:Array<Dynamic> = [];
 
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
+
 	{
 		super(x, y);
 
@@ -230,13 +232,27 @@ class Character extends FlxSprite
 				// ANIMATION IS CALLED MOM LEFT POSE BUT ITS FOR THE RIGHT
 				// CUZ DAVE IS DUMB!
 				animation.addByPrefix('singRIGHT', 'Mom Pose Left', 24, false);
-				animation.addByIndices('idleHair', 'Mom Idle', [10, 11, 12, 13], '', 24, true);
 
+				animation.addByIndices('idle-loop', 'Mom Idle', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singUP-loop', 'Mom Up Pose', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singDOWN-loop', 'MOM DOWN POSE', [10, 11, 12, 13], '', 24, true);
+				// ANIMATION IS CALLED MOM LEFT POSE BUT ITS FOR THE RIGHT
+				// CUZ DAVE IS DUMB!
+				animation.addByIndices('singRIGHT-loop', 'Mom Pose Left', [10, 11, 12, 25, 26, 27], '', 24, true);
+				animation.addByIndices('singLEFT-loop', 'Mom Left Pose', [10, 11, 12, 13], '', 24, true);
+				
 				addOffset('idle');
 				addOffset("singUP", 14, 71);
 				addOffset("singRIGHT", 10, -60);
 				addOffset("singLEFT", 250, -23);
 				addOffset("singDOWN", 20, -160);
+
+				// dont mind this
+				addOffset('idle-loop');
+				addOffset("singUP-loop", 14, 71);
+				addOffset("singRIGHT-loop",  10, -60);
+				addOffset("singLEFT-loop", 250, -23);
+				addOffset("singDOWN-loop", 20, -160);
 
 				playAnim('idle');
 
@@ -397,21 +413,37 @@ class Character extends FlxSprite
 				animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
 				animation.addByPrefix('singRIGHT', 'BF NOTE RIGHT0', 24, false);
 				animation.addByPrefix('singDOWN', 'BF NOTE DOWN0', 24, false);
+
 				animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
 				animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
 				animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
 				animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
-				animation.addByIndices('idleHair', 'BF idle dance', [10, 11, 12, 13], '', 24, true);
+
+				animation.addByIndices('idle-loop', 'BF idle dance', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singUP-loop', 'BF NOTE UP0', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singDOWN-loop', 'BF NOTE DOWN0', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singRIGHT-loop', 'BF NOTE RIGHT0', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singLEFT-loop', 'BF NOTE LEFT0', [10, 11, 12, 13], '', 24, true);
+				
 
 				addOffset('idle');
 				addOffset("singUP", -29, 27);
 				addOffset("singRIGHT", -38, -7);
 				addOffset("singLEFT", 12, -6);
 				addOffset("singDOWN", -10, -50);
+
 				addOffset("singUPmiss", -29, 27);
 				addOffset("singRIGHTmiss", -30, 21);
 				addOffset("singLEFTmiss", 12, 24);
 				addOffset("singDOWNmiss", -11, -19);
+
+				// due to hair physics freezing & fucked offsets, i made this
+				addOffset('idle-loop');
+				addOffset("singUP-loop", -29, 27);
+				addOffset("singRIGHT-loop", -38, -7);
+				addOffset("singLEFT-loop", 12, -6);
+				addOffset("singDOWN-loop", -10, -50);
+
 				playAnim('idle');
 
 				flipX = true;
@@ -749,11 +781,11 @@ class Character extends FlxSprite
 			}	
 		}
 
-		
-		if (curCharacter.endsWith('-car') && !animation.curAnim.name.startsWith('sing') && animation.curAnim.finished)
+		// due to hair physics freezing & fucked offsets, i made this
+		if(animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null)
 		{
-			playAnim('idleHair');
-		}
+			playAnim(animation.curAnim.name + '-loop');
+		}	
 		
 		switch (curCharacter)
 		{
