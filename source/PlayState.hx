@@ -2536,37 +2536,48 @@ class PlayState extends MusicBeatState {
 		}
 
 		// Mid Song Events start here lol
-		if (curBeat % 8 == 7 && curSong == 'Bopeebo') {
-			gf.playAnim('cheer');
-
-			if (boyfriend.curCharacter.startsWith('pico-player')) 
+		if (SONG.song == 'Bopeebo')
+		{
+			if (curBeat % 8 == 7)
 			{
-				boyfriend.playAnim('idle', true);
-			} 
-			else
-			{
-				if (boyfriend.curCharacter.startsWith('bf')) 
+				gf.playAnim('cheer');
+	
+				if (boyfriend.curCharacter.startsWith('pico-player')) 
 				{
-					boyfriend.playAnim('hey', true);
-				}	
-			}
-		}
-
-		if (curBeat % 16 == 15 && SONG.song == 'Tutorial' && dad.curCharacter == 'gf' && curBeat > 16 && curBeat < 48) {
-			dad.playAnim('cheer', true);
-
-			if (boyfriend.curCharacter.startsWith('pico-player')) 
-			{
-				boyfriend.playAnim('idle', true);
-			} 
-			else
-			{
-				if (boyfriend.curCharacter.startsWith('bf')) 
+					boyfriend.playAnim('idle', true);
+				} 
+				else
 				{
-					boyfriend.playAnim('hey', true);
-				}	
-			}
+					if (boyfriend.curCharacter.startsWith('bf')) 
+					{
+						boyfriend.playAnim('hey', true);
+					}	
+				}
+			}	
 		}
+			
+		if (SONG.song == 'Tutorial')
+		{
+			if (dad.curCharacter == 'gf')
+			{
+				if (curBeat % 16 == 15 && curBeat > 16 && curBeat < 48)
+				{
+					dad.playAnim('cheer', true);
+	
+					if (boyfriend.curCharacter.startsWith('pico-player')) 
+					{
+						boyfriend.playAnim('idle', true);
+					} 
+					else
+					{
+						if (boyfriend.curCharacter.startsWith('bf')) 
+						{
+							boyfriend.playAnim('hey', true);
+						}	
+					}
+				}	
+			}	
+		}	
 
 		if (SONG.song == 'Philly')
 		{
