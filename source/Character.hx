@@ -18,6 +18,7 @@ class Character extends FlxSprite
 	public var curCharacter:String = 'bf';
 
 	public var holdTimer:Float = 0;
+	public var holdLength:Float;
 
 	public var animationNotes:Array<Dynamic> = [];
 
@@ -233,13 +234,11 @@ class Character extends FlxSprite
 				// CUZ DAVE IS DUMB!
 				animation.addByPrefix('singRIGHT', 'Mom Pose Left', 24, false);
 
-				animation.addByIndices('idle-loop', 'Mom Idle', [10, 11, 12, 13], '', 24, true);
-				animation.addByIndices('singUP-loop', 'Mom Up Pose', [10, 11, 12, 13], '', 24, true);
-				animation.addByIndices('singDOWN-loop', 'MOM DOWN POSE', [10, 11, 12, 13], '', 24, true);
-				// ANIMATION IS CALLED MOM LEFT POSE BUT ITS FOR THE RIGHT
-				// CUZ DAVE IS DUMB!
-				animation.addByIndices('singRIGHT-loop', 'Mom Pose Left', [10, 11, 12, 25, 26, 27], '', 24, true);
-				animation.addByIndices('singLEFT-loop', 'Mom Left Pose', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('idle-loop', "Mom Idle", [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singUP-loop', "Mom Up Pose", [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singDOWN-loop', "MOM DOWN POSE", [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singLEFT-loop', 'Mom Left Pose0', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singRIGHT-loop', 'Mom Pose Left0', [10, 11, 12, 13], '', 24, true);
 				
 				addOffset('idle');
 				addOffset("singUP", 14, 71);
@@ -247,7 +246,6 @@ class Character extends FlxSprite
 				addOffset("singLEFT", 250, -23);
 				addOffset("singDOWN", 20, -160);
 
-				// dont mind this
 				addOffset('idle-loop');
 				addOffset("singUP-loop", 14, 71);
 				addOffset("singRIGHT-loop",  10, -60);
@@ -753,12 +751,7 @@ class Character extends FlxSprite
 						holdTimer += elapsed;
 					}
 					
-					var dadVar:Float = 4;
-					
-					if (curCharacter == 'dad')
-						dadVar = 6.1;
-				
-					if (holdTimer >= Conductor.stepCrochet * dadVar * 0.0011)
+					if (holdTimer >= Conductor.stepCrochet * holdLength * 0.001)
 					{
 						dance();
 								
@@ -768,11 +761,11 @@ class Character extends FlxSprite
 				else
 				{
 					if (animation.curAnim.name.startsWith('sing'))
-						holdTimer += elapsed;
-					else
 						holdTimer = 0;
+					else
+						holdTimer += elapsed;
 				
-					if (animation.curAnim.name.endsWith('miss') && !animation.curAnim.finished && !debugMode)
+					if (animation.curAnim.finished && !animation.curAnim.name.endsWith('miss') && !debugMode)
 						dance();
 				
 					if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
@@ -781,10 +774,11 @@ class Character extends FlxSprite
 			}	
 		}
 
-		// due to hair physics freezing & fucked offsets, i made this
-		if(animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null)
+		if (!debugMode)
 		{
-			playAnim(animation.curAnim.name + '-loop');
+			// due to hair physics freezing & fucked offsets, i made this
+			if(animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null)
+				playAnim(animation.curAnim.name + '-loop');	
 		}	
 		
 		switch (curCharacter)
