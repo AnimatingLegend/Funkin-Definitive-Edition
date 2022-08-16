@@ -32,10 +32,11 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 * Better hair physics for Mom & Boyfriend
 ### Week 5
 * Girlfriend does Cheering animations during Cocoa & Eggnog
+* On Winter Horrorland - the HUD is hidden during its mini cutscene
 ### Week 6:
-* Fixed major dialogue bugs || backend changes
-* Bumped up scroll speed for Roses || 2.7
-* Tweaked map size for Thorns || 1.0
+* Fixed major dialogue bugs // backend changes
+* Bumped up scroll speed for Roses - 2.7
+* Tweaked map size for Thorns - 1.0
 * On Thorns - the HUD is hidden during the mini cutscene
 
 ## Photos & Gifs
