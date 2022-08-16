@@ -936,12 +936,12 @@ class PlayState extends MusicBeatState {
 						FlxG.camera.zoom = 1.5;
 
 						new FlxTimer().start(0.8, function(tmr:FlxTimer) {
-							camHUD.visible = true;
 							remove(blackScreen);
 							FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, {
 								ease: FlxEase.quadInOut,
 								onComplete: function(twn:FlxTween) {
 									startCountdown();
+									camHUD.visible = true;
 								}
 							});
 						});
@@ -1952,12 +1952,12 @@ class PlayState extends MusicBeatState {
 			if (FlxG.save.data.notesplash)
 				createNoteSplash(note);
 			score = 350;
-		} else if (noteDiff <= Conductor.safeZoneOffset * 0.7) {
+		} else if (noteDiff <= Conductor.safeZoneOffset * 0.8) {
 			daRating = 'good';
 			goods++;
 			score = 200;
 			updateStatistic();
-		} else if (noteDiff <= Conductor.safeZoneOffset * 0.2) {
+		} else if (noteDiff <= Conductor.safeZoneOffset * 0.4) {
 			daRating = 'bad';
 			bads++;
 			score = 100;
@@ -1971,14 +1971,6 @@ class PlayState extends MusicBeatState {
 
 		if (!practiceMode)
 			songScore += score;
-
-		/* if (combo > 60)
-				daRating = 'sick';
-			else if (combo > 12)
-				daRating = 'good'
-			else if (combo > 4)
-				daRating = 'bad';
-		 */
 
 		var pixelShitPart1:String = "";
 		var pixelShitPart2:String = '';
