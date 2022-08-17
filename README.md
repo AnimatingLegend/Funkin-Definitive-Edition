@@ -13,10 +13,11 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 - Customizable Keybindings
 - Combo Sprite, Added ratings/combo sprites to  games HUD
 - Playable characters (pico)
+- Functionable Chart Editor
 
 **Changes/Fixes**
-- TONS of gameplay fixes
 - Made Menus more appealing & easier to browse through (options menu in particular)
+- TONS of gameplay fixes
 - Janky Input system!
 
 ## there has been atleast one change/fix to just about every week:
@@ -29,15 +30,15 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 * Boyfriend does "Hey" animation during Philly
 * Girlfriend does Cheering animations during Blammed
 ### Week 4:
-* Better hair physics for Mom & Boyfriend
+* Better hair physics for Mom & Boyfriend (identical to psych engines)
 ### Week 5
 * Girlfriend does Cheering animations during Cocoa & Eggnog
 * On Winter Horrorland - the HUD is hidden during its mini cutscene
 ### Week 6:
-* Fixed major dialogue bugs // backend changes
+* On Thorns - the HUD is hidden during its mini cutscene
+* Fixed major dialogue bugs, tons of backend changes
 * Bumped up scroll speed for Roses - 2.7
 * Tweaked map size for Thorns - 1.0
-* On Thorns - the HUD is hidden during the mini cutscene
 
 ## Photos & Gifs
 ### Options Menu
