@@ -378,7 +378,7 @@ class TitleState extends MusicBeatState
 			returnedData[0] = data.substring(0, data.indexOf(';'));
 			returnedData[1] = data.substring(data.indexOf('-'), data.length);
 
-			if (!MainMenuState.versionTxt.contains(returnedData[0].trim()) && !OutdatedSubState.leftState)
+			if (!MainMenuState.definitiveVersion.contains(returnedData[0].trim()) && !OutdatedSubState.leftState)
 			{
 					trace('New version detected: ' + returnedData[0]);
 					MainMenuState.updateShit = true;
@@ -387,7 +387,7 @@ class TitleState extends MusicBeatState
 			}
 			else
 			{
-				trace('Build is up to date !!! - ' + MainMenuState.versionTxt);
+				trace('Build is up to date !!! - ' + MainMenuState.definitiveVersion);
 			}
 		}
 	

@@ -21,7 +21,7 @@ class OutdatedSubState extends MusicBeatState
 
 		var ver = "v" + Application.current.meta.get('version');
 		var warnText:FlxText = new FlxText(0, 0, FlxG.width,
-			"HEY! looks like you're running an\n outdated version of Friday Night Funkin' (" + MainMenuState.versionTxt + "),\n
+			"HEY! looks like you're running an\n outdated version of Friday Night Funkin' (" + MainMenuState.definitiveVersion + "),\n
 			please update to " + needVer + "!\n Press 'ESCAPE' to proceed anyway.",
 			32);
 		warnText.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
