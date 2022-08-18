@@ -25,7 +25,7 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 * Added Unused stage lights
 * Updated Dad's Left sing sprite
 ### Week 2
-* when lightning occurs, the camera zooms in slightly
+* When lightning occurs, the camera zooms in slightly
 ### Week 3
 * Boyfriend does "Hey" animation during Philly
 * Girlfriend does Cheering animations during Blammed
