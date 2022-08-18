@@ -40,3 +40,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Major Stage/Preloading issues - [it only preloads when your on that specific week]
 - Fixed issue where opponents didn't go idle after their turn was over
 - More Week 4 hair physics
+------------------------------------------------------------
+## [0.1.2h] - [8/17/22]
+### v0.1.2 is broken, so heres a hotfix update (sorry lol)
+
+### Changed
+- Some option description's
+- A couple of file locations
+
+### Fixed
+- Charting Editor tweaks & fixes
+- Fixed issue where opponent's did their idle animations a little early
+- Watchtower Asset from not preloading (week 7)
+- More preloading stage issue's

@@ -174,11 +174,22 @@ class Character extends FlxSprite
 				animation.addByPrefix('singDOWN', 'Dad Sing Note DOWN', 24);
 				animation.addByPrefix('singLEFT', 'Dad Sing Note LEFT', 24);
 
+				animation.addByIndices('idle-loop', 'Dad idle dance', [10, 11, 12, 13], "", 24);
+				animation.addByIndices('singLEFT-loop', 'Dad Sing Note LEFT', [12, 13, 14, 15], "", 24);
+				animation.addByIndices('singRIGHT-loop', 'Dad Sing Note RIGHT', [15, 16, 17, 18], "", 24);
+				animation.addByIndices('singUP-loop', 'Dad Sing Note UP', [56, 57, 58, 59], "", 24);
+
 				addOffset('idle');
 				addOffset("singUP", -6, 50);
 				addOffset("singRIGHT", 0, 27);
 				addOffset("singLEFT", -10, 10);
 				addOffset("singDOWN", 0, -30);
+
+				addOffset('idle-loop');
+				addOffset("singUP-loop", -6, 50);
+				addOffset("singRIGHT-loop", 0, 27);
+				addOffset("singLEFT-loop", -10, 10);
+
 
 				playAnim('idle');
 
@@ -234,11 +245,11 @@ class Character extends FlxSprite
 				// CUZ DAVE IS DUMB!
 				animation.addByPrefix('singRIGHT', 'Mom Pose Left', 24, false);
 
-				animation.addByIndices('idle-loop', "Mom Idle", [10, 11, 12, 13], '', 24, true);
-				animation.addByIndices('singUP-loop', "Mom Up Pose", [10, 11, 12, 13], '', 24, true);
-				animation.addByIndices('singDOWN-loop', "MOM DOWN POSE", [10, 11, 12, 13], '', 24, true);
-				animation.addByIndices('singLEFT-loop', 'Mom Left Pose0', [10, 11, 12, 13], '', 24, true);
-				animation.addByIndices('singRIGHT-loop', 'Mom Pose Left0', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('idle-loop', "Mom Idle", [10, 11, 12, 13], "", 24, true);
+				animation.addByIndices('singUP-loop', "Mom Up Pose", [10, 11, 12, 13], "", 24, true);
+				animation.addByIndices('singDOWN-loop', "MOM DOWN POSE", [10, 11, 12, 13], "", 24, true);
+				animation.addByIndices('singLEFT-loop', 'Mom Left Pose', [10, 11, 12, 13], "", 24, true);
+				animation.addByIndices('singRIGHT-loop', 'Mom Pose Left', [10, 11, 12, 13], "", 24, true);
 				
 				addOffset('idle');
 				addOffset("singUP", 14, 71);
@@ -699,7 +710,7 @@ class Character extends FlxSprite
 			flipX = !flipX;
 
 			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.startsWith('bf') && !curCharacter.startsWith('pico-player'))
+			if (!curCharacter.startsWith('bf') && curCharacter.startsWith('pico-player'))
 			{
 				// var animArray
 				var oldRight = animation.getByName('singRIGHT').frames;
@@ -751,7 +762,7 @@ class Character extends FlxSprite
 						holdTimer += elapsed;
 					}
 					
-					if (holdTimer >= Conductor.stepCrochet * holdLength * 0.0011)
+					if (holdTimer >= Conductor.stepCrochet * 0.0011 * holdLength)
 					{
 						dance();
 								
@@ -765,7 +776,7 @@ class Character extends FlxSprite
 					else
 						holdTimer += elapsed;
 				
-					if (animation.curAnim.finished && !animation.curAnim.name.endsWith('miss') && !debugMode)
+					if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished && !debugMode)
 						dance();
 				
 					if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
@@ -776,9 +787,11 @@ class Character extends FlxSprite
 
 		if (!debugMode)
 		{
-			// due to hair physics freezing & fucked offsets, i made this
+			// 	For Week 4 Assets. (maybe more idk)
 			if(animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null)
+			{
 				playAnim(animation.curAnim.name + '-loop');	
+			}		
 		}	
 		
 		switch (curCharacter)
@@ -790,7 +803,7 @@ class Character extends FlxSprite
 			case 'pico-speaker':
 				if (animationNotes.length > 0 && Conductor.songPosition > animationNotes[0][0])
 				{
-				 	trace("played shoot anim" + animationNotes[0][1]);
+				// 	trace("played shoot anim" + animationNotes[0][1]);
 					var shotDirection:Int = 1;
 					if (animationNotes[0][1] >= 2)
 					{

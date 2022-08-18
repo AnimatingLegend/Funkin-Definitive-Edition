@@ -243,28 +243,34 @@ class PlayState extends MusicBeatState {
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 		#end
 
-		if (SONG.stage == null) {
-			switch (storyWeek) {
-				case 2:
+		if (SONG.stage == null) 
+		{
+			switch (storyWeek) 
+			{
+				case 2: // Wweek 2 stage
 					stageCheck = 'halloween';
-				case 3:
+				case 3: // Week 3 stage
 					stageCheck = 'philly';
-				case 4:
+				case 4: // Week 4 stage
 					stageCheck = 'limo';
-				case 5:
-					if (SONG.song.toLowerCase() == 'winter-horrorland')
+				case 5: // Week 5 stage
+					if (SONG.song == 'Winter-horrorland')
 						stageCheck = 'mallEvil';
 					else
 						stageCheck = 'mall';
-				case 6:
-					if (SONG.song.toLowerCase() == 'thorns')
+				case 6: // Week 6 stage
+					if (SONG.song == 'Thorns')
 						stageCheck = 'schoolEvil';
 					else
 						stageCheck = 'school';
-				case 7:
+				case 7: // Week 7 stage
 					stageCheck = 'tank';
+				default: // Week 1 stage | default stage
+					stageCheck = 'stage';
 			}
-		} else {
+		} 
+		else 
+		{
 			stageCheck = SONG.stage;
 		}
 
@@ -387,7 +393,7 @@ class PlayState extends MusicBeatState {
 					add(bg);
 
 					upperBoppers = new FlxSprite(-240, -90);
-					upperBoppers.frames = Paths.getSparrowAtlas('christmas/upperBop');
+					upperBoppers.frames = Paths.getSparrowAtlas('christmas/upperBop', 'week5');
 					upperBoppers.animation.addByPrefix('bop', "Upper Crowd Bob", 24, false);
 					upperBoppers.antialiasing = FlxG.save.data.lowData;
 					upperBoppers.scrollFactor.set(0.33, 0.33);
@@ -570,7 +576,7 @@ class PlayState extends MusicBeatState {
 					var smokeR:BGSprite = new BGSprite('tank/smokeRight', 1100, -100, 0.4, 0.4, ['SmokeRight'], true);
 					add(smokeR);
 
-					tankWatchtower = new BGSprite('tank/Watchtower', 100, 50, 0.5, 0.5, ['watchtower gradient color']);
+					tankWatchtower = new BGSprite('tank/tankWatchtower', 100, 50, 0.5, 0.5, ['watchtower gradient color']);
 					add(tankWatchtower);
 
 					tankGround = new BGSprite('tank/tankRolling', 300, 300, 0.5, 0.5, ['BG tank w lighting'], true);
@@ -597,13 +603,13 @@ class PlayState extends MusicBeatState {
 				{
 					defaultCamZoom = 0.9;
 					curStage = 'stage';
-					var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
+					var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stage/stageback', 'shared'));
 					bg.antialiasing = FlxG.save.data.lowData;
 					bg.scrollFactor.set(0.9, 0.9);
 					bg.active = false;
 					add(bg);
 
-					var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stagefront'));
+					var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stage/stagefront', 'shared'));
 					stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
 					stageFront.updateHitbox();
 					stageFront.antialiasing = FlxG.save.data.lowData;
@@ -611,20 +617,20 @@ class PlayState extends MusicBeatState {
 					stageFront.active = false;
 					add(stageFront);
 
-					var stageLight:FlxSprite = new FlxSprite(-125, -100).loadGraphic(Paths.image('stage_light'));
+					var stageLight:FlxSprite = new FlxSprite(-125, -100).loadGraphic(Paths.image('stage/stage_light', 'shared'));
 					stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
 					stageLight.antialiasing = FlxG.save.data.lowData;
 					stageLight.updateHitbox();
 					add(stageLight);
 
-					var stageLight:FlxSprite = new FlxSprite(1225, -100).loadGraphic(Paths.image('stage_light'));
+					var stageLight:FlxSprite = new FlxSprite(1225, -100).loadGraphic(Paths.image('stage/stage_light', 'shared'));
 					stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
 					stageLight.antialiasing = FlxG.save.data.lowData;
 					stageLight.updateHitbox();
 					stageLight.flipX = true;
 					add(stageLight);
 
-					var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stagecurtains'));
+					var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stage/stagecurtains', 'shared'));
 					stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
 					stageCurtains.updateHitbox();
 					stageCurtains.antialiasing = FlxG.save.data.lowData;
@@ -646,7 +652,7 @@ class PlayState extends MusicBeatState {
 				case 6:
 					gfCheck = 'gf-pixel';
 				case 7:
-					if (SONG.song.toLowerCase() == 'stress')
+					if (SONG.song == 'Stress')
 						gfCheck = 'pico-speaker';
 					else
 						gfCheck = 'gf-tankmen';
