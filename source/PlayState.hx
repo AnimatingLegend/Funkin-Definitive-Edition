@@ -254,7 +254,7 @@ class PlayState extends MusicBeatState {
 				case 4: // Week 4 stage
 					stageCheck = 'limo';
 				case 5: // Week 5 stage
-					if (SONG.song == 'Winter-horrorland')
+					if (SONG.song == 'Winter-Horrorland')
 						stageCheck = 'mallEvil';
 					else
 						stageCheck = 'mall';
