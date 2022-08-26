@@ -16,7 +16,6 @@ import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUITooltip.FlxUITooltipStyle;
-import flixel.addons.transition.FlxTransitionableState;
 import flixel.system.FlxSound;
 
 /**
@@ -36,6 +35,7 @@ class AnimationDebug extends FlxState
 	var camFollow:FlxObject;
 	var song:FlxSound;
 
+	var gridBG:FlxSprite;
 	var bg:FlxSprite;
 	var stageFront:FlxSprite;
 	var stageCurtains:FlxSprite;
@@ -55,11 +55,12 @@ class AnimationDebug extends FlxState
 
 	override function create()
 	{
-		// var gridBG:FlxSprite = FlxGridOverlay.create(10, 10);
-		// gridBG.scrollFactor.set(0.5, 0.5);
-		// add(gridBG);
+		//gridBG = FlxGridOverlay.create(10, 10);
+		//gridBG.scrollFactor.set(0.5, 0.5);
+		//add(gridBG);
 
-		FlxG.sound.music.stop();
+		//FlxG.sound.music.stop();
+		FlxG.sound.playMusic(Paths.music('breakfast'), 0.5);
 
 		// Stage Shit
 		bg = new FlxSprite(-600, -200).loadGraphic(Paths.image('stage/stageback', 'shared'));
