@@ -11,7 +11,7 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 - Asset overhaul: Fixed/Changed File locations, Updated Charting, ETC
 - Options menu + Ghost tapping + Down/MiddleScroll + NoteSplashes, ETC
 - Customizable Keybindings
-- Combo Sprite, Added ratings/combo sprites to  games HUD
+- Combo Sprite, Added ratings/combo sprites to games HUD
 - Playable characters (pico)
 - Functionable Chart Editor
 
