@@ -1,6 +1,6 @@
 # Friday Night Funkin': Defintive Editon
 
-Everything that you see in this engine was used on my [Week 7 Port](https://github.com/LegendLOL/Funkin-Week7) project.
+Everything that you see in this engine was used on my [Week 7 Port](https://github.com/LegendLOL/Funkin-Week7) project. This is intended to be a more fixed and polished version of the port.
 
 ## Credits & Shoutouts
 - [Legend (thats me)](https://twitter.com/AnimatingLegend) - Programmer
@@ -8,8 +8,8 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 
 ## Things added/changed in this engine
 **Additions**
-- Asset overhaul: Fixed/Changed File locations, Song charting (.json), & much more
-- Options menu + Ghost tapping + Down/MiddleScroll
+- Asset overhaul: Fixed/Changed File locations, Updated Charting, ETC
+- Options menu + Ghost tapping + Down/MiddleScroll + NoteSplashes, ETC
 - Customizable Keybindings
 - Combo Sprite, Added ratings/combo sprites to  games HUD
 - Playable characters (pico)
