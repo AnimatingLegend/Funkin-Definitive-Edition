@@ -217,7 +217,6 @@ class AnimationDebug extends FlxState
 		Arrows : Offset Animation\n
 		Shift-Arrows : Offset Animation x10\n
 		Space : Replay Animation\n
-		CTRL-S : Save Offsets to File\n
 		Enter/ESC : Exit\n";
 
 		helpText = new FlxText(940, 20, 0, helpTextValue, 15);
