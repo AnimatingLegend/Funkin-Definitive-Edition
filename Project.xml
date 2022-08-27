@@ -99,7 +99,7 @@
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
 	<!-- <template path='mods' /> -->
 	
-	<assets path='art/Definitive CHANGELOG.md' rename='changelog - definitive edition.txt' />
+	<assets path='art/Definitive CHANGELOG.md' rename='changelog.txt' />
 
 	<!-- NOTE FOR FUTURE SELF SINCE FONTS ARE ALWAYS FUCKY 
 		TO FIX ONE OF THEM, I CONVERTED IT TO OTF. DUNNO IF YOU NEED TO
