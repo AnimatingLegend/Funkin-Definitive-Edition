@@ -24,6 +24,7 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 ### Week 1:
 * Added Unused stage lights
 * Updated Dad's Left sing sprite
+* Girlfriend does Cheering animations during Bopeebo
 ### Week 2
 * When lightning occurs, the camera zooms in slightly
 ### Week 3
@@ -35,9 +36,9 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 * Girlfriend does Cheering animations during Cocoa & Eggnog
 * On Winter Horrorland - the HUD is hidden during its mini cutscene
 ### Week 6:
-* On Thorns - the HUD is hidden during its mini cutscene
 * Fixed major dialogue bugs, tons of backend changes
 * Bumped up scroll speed for Roses - 2.7
+* On Thorns - the HUD is hidden during its mini cutscene
 * Tweaked map size for Thorns - 1.0
 
 ## Photos & Gifs

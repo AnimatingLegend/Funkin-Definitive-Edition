@@ -28,10 +28,14 @@ class OptionsMenuState extends MusicBeatState
 		new OptionCatagory("Preferences", [
 			new NaughtyOption("If checked, any explicit content will be censored/hidden from the game."),
 			#if !html5
-			new FramerateOption("self explanatory. use your left and right arrow keys to switch between your framerate [DEFAULT: 60]"), // HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
+			new FramerateOption("self explanatory. use your left and right arrow keys to switch between your framerate [DEFAULT: 60]"), 
+			// HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
 			#end
+		//	new TimerOption("If unchecked, the bar showing how much time is left will be hidden. [WIP]"),
 			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
+			new AccuracyOption("If unchecked, it will not display your misses and accuracy, but only your song score."),
 			new CameraZoomOption("If unchecked, the camera won't zoom on every concurring beat hit."),
+			new HBColorOption("If unchecked, it doesn't display the characters healthbar colors."),
 			new FPSOption("If unchecked, your fps & memory counter gets hidden."),
 		]),
 		new OptionCatagory("Appearance", [

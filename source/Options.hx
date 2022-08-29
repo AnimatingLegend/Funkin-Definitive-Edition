@@ -8,6 +8,7 @@ import openfl.display.FPS;
 import openfl.Lib;
 import flixel.FlxState;
 import flixel.FlxSubState;
+import flixel.util.FlxTimer;
 
 class OptionCatagory
 {
@@ -160,7 +161,7 @@ class FramerateOption extends Option
 	private override function updateDisplay():String
 	{
 		boldDisplay = false;
-		return "Framerate: " + FlxG.drawFramerate;
+		return "FPS Cap: " + FlxG.drawFramerate;
 	}
 }
 
@@ -390,6 +391,79 @@ class JudgemntOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "Judgemnt-Counter ";
+		return "Judgemnt Counter ";
+	}
+}
+
+class AccuracyOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+		{
+			FlxG.save.data.accuracy = !FlxG.save.data.accuracy;
+		}
+		acceptValues = FlxG.save.data.accuracy;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Accuracy and Miss meter";
+	}
+}
+
+class HBColorOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+		{
+			FlxG.save.data.colors = !FlxG.save.data.colors;
+		}
+		acceptValues = FlxG.save.data.colors;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Health Bar Colors";
+	}
+}
+
+class TimerOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+		
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.songPos = !FlxG.save.data.songPos;
+		acceptValues = FlxG.save.data.songPos;
+		display = updateDisplay();
+		return true;
+	}
+		
+	private override function updateDisplay():String
+	{
+		return "Song Length";
 	}
 }

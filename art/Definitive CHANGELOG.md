@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.1.0] - [8/12/22]
-## Initial Public Release ~ (dont expect much from this update)
+### Initial Public Release ~ (dont expect much from this update)
 - Added Literally everything from my [Week 7 Port](https://github.com/LegendLOL/Funkin-Week7)
 - Backend Version shit
 ------------------------------------------------------------
@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The HUD is hidden during Winter Horrorland's mini cutscene
 
 ### Fixed
-- Major Stage/Preloading issues - [it only preloads when your on that specific week]
+- Major Stage/Preloading issues - (it only preloads when your on that specific week)
 - Fixed issue where opponents didn't go idle after their turn was over
 - More Week 4 hair physics
 ------------------------------------------------------------
@@ -50,6 +50,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Charting Editor tweaks & fixes
-- Fixed issue where opponent's did their idle animations a little early
 - Watchtower Asset from not preloading (week 7)
 - More preloading stage issue's
+------------------------------------------------------------
+## [0.2.0] - [8/29/22]
+
+### Added
+- Caching Menu (Preloads Assets as soon as the game boots up) 
+- Rating FC system (Accuracy & Miss meter || Optional)
+- Health Bar colors (Optional)
+
+### Changed
+- Tweaked Tankmans 'Ugh' code (All i did was change the variable names lol)
+- Animation Debug Menu (Made it more easier to use & navigate through)
+- Option Descriptions
+
+### Fixed
+- Pico Miss animations looping
+- Issue where character didn't go idle after their turn was over
+- The game SHOULDN'T crash after you finish playing a song in the freeplay menu
+- Issue where Winter-Horrorland stage wouldn't load - (Backend Stage-Preloading bullshit)

@@ -22,7 +22,7 @@ class Main extends Sprite
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
-	public static function setupSaveData()
+	public static function setupSaveData() // False =  not enabled by default | True = enabled by default
 	{
 		if(FlxG.save.data.downscroll == null)
 			FlxG.save.data.downscroll = false;
@@ -32,9 +32,6 @@ class Main extends Sprite
 
 		if(FlxG.save.data.framerateDraw == null)
 			FlxG.save.data.framerateDraw = 120;
-
-		if(FlxG.save.data.fps == null)
-			FlxG.save.data.fps = true;
 
 		if(FlxG.save.data.ghostTapping == null)
 			FlxG.save.data.ghostTapping = false;
@@ -54,14 +51,20 @@ class Main extends Sprite
 		if(FlxG.save.data.ratingHUD == null)
 			FlxG.save.data.ratingHUD = false;
 
+		if(FlxG.save.data.accuracy == null)
+			FlxG.save.data.accuracy = true;
+
+		if(FlxG.save.data.colors == null)
+			FlxG.save.data.colors = true;
+
 		if(FlxG.save.data.lowData == null)
 			FlxG.save.data.lowData = true;
 
+		if(FlxG.save.data.fps == null)
+			FlxG.save.data.fps = true;
+
 		if(FlxG.save.data.judgementCounter == null)
 			FlxG.save.data.judgementCounter = false;
-
-		if(FlxG.save.data.accuracy == null)
-			FlxG.save.data.accuracy = true;
 	}
 
 	public static function main():Void

@@ -51,9 +51,10 @@ class FreeplayState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		if (!FlxG.sound.music.playing)
+		if (FlxG.sound.music != null)
 		{
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+			if (!FlxG.sound.music.playing)
+				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		}
 
 		if (StoryMenuState.weekUnlocked[2])

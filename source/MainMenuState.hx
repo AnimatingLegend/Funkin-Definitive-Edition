@@ -31,13 +31,13 @@ class MainMenuState extends MusicBeatState
 	#if !switch
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
 	#else
-	var optionShit:Array<String> = ['story mode', 'freeplay'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
 	#end
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	public static var definitiveVersion:String = '0.1.2h';
+	public static var definitiveVersion:String = '0.2.0';
 	public static var updateShit:Bool = false;
 
 	override function create()

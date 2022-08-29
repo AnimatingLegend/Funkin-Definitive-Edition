@@ -8,6 +8,7 @@ import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import flixel.FlxCamera;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUIState;
 import flixel.addons.ui.FlxUICheckBox;
@@ -47,6 +48,8 @@ class AnimationDebug extends FlxState
 
 	var characters:Array<String>;
 
+	private var camHUD:FlxCamera;
+
 	public function new(daAnim:String = 'bf')
 	{
 		super();
@@ -61,6 +64,8 @@ class AnimationDebug extends FlxState
 
 		//FlxG.sound.music.stop();
 		FlxG.sound.playMusic(Paths.music('breakfast'), 0.5);
+
+		camHUD = new FlxCamera();
 
 		// Stage Shit
 		bg = new FlxSprite(-600, -200).loadGraphic(Paths.image('stage/stageback', 'shared'));
@@ -99,6 +104,7 @@ class AnimationDebug extends FlxState
 		textAnim = new FlxText(300, 16);
 		textAnim.size = 26;
 		textAnim.scrollFactor.set();
+		textAnim.cameras = [camHUD];
 		add(textAnim);
 		
 		genBoyOffsets();
@@ -106,11 +112,11 @@ class AnimationDebug extends FlxState
 
 		characters = CoolUtil.coolTextFile(Paths.txt('characterList'));
 
-		var tabs = [{name: "Offsets", label: 'Offset menu'},];
+		var tabs = [{name: "Character List", label: 'Characters'},];
 
 		UI_box = new FlxUITabMenu(null, tabs, true);
 		UI_box.scrollFactor.set();
-		UI_box.resize(150, 200);
+		UI_box.resize(150, 70);
 		UI_box.x = FlxG.width - UI_box.width - 20;
 		UI_box.y = 20;
 		add(UI_box);
@@ -146,30 +152,10 @@ class AnimationDebug extends FlxState
 		});
 	
 		player1DropDown.selectedLabel = char.curCharacter;
-	
-		var offsetX_label = new FlxText(10, 50, 'X Offset');
-	
-		var UI_offsetX:FlxUINumericStepper = new FlxUINumericStepper(10, offsetX_label.y + offsetX_label.height + 10, 1,
-			char.animOffsets.get(animList[curAnim])[0], -500.0, 500.0, 0);
-		UI_offsetX.value = char.animOffsets.get(animList[curAnim])[0];
-		UI_offsetX.name = 'offset_x';
-		offsetX = UI_offsetX;
-	
-		var offsetY_label = new FlxText(10, UI_offsetX.y + UI_offsetX.height + 10, 'Y Offset');
-	
-		var UI_offsetY:FlxUINumericStepper = new FlxUINumericStepper(10, offsetY_label.y + offsetY_label.height + 10, 1,
-			char.animOffsets.get(animList[curAnim])[0], -500.0, 500.0, 0);
-		UI_offsetY.value = char.animOffsets.get(animList[curAnim])[1];
-		UI_offsetY.name = 'offset_y';
-		offsetY = UI_offsetY;
-	
+ 
 		var tab_group_offsets = new FlxUI(null, UI_box);
-		tab_group_offsets.name = "Offsets";
-	
-		tab_group_offsets.add(offsetX_label);
-		tab_group_offsets.add(offsetY_label);
-		tab_group_offsets.add(UI_offsetX);
-		tab_group_offsets.add(UI_offsetY);
+		tab_group_offsets.name = "Character List";
+ 
 		tab_group_offsets.add(player1DropDown);
 	
 		UI_box.addGroup(tab_group_offsets);
@@ -206,26 +192,27 @@ class AnimationDebug extends FlxState
 		});
 	}
 
-	var helpText:FlxText;
 	function addHelpText():Void
 	{
-		var helpTextValue = "Help:\n
-		Q/E : Zoom in and out\n
-		F : Flip\n
-		I/J/K/L : Pan Camera\n
+		var helpTextArray:Array<String> = "Q/E : Zoom in and out\n
+		R : Resets Camerea Zoom\n
+		F : Flip Characters Sprite\n
+		I/J/K/L : Move Camera\n
 		W/S : Cycle Animation\n
 		Arrows : Offset Animation\n
 		Shift-Arrows : Offset Animation x10\n
 		Space : Replay Animation\n
-		Enter/ESC : Exit\n";
+		Enter/ESC : Exit\n".split('\n');
 
-		helpText = new FlxText(940, 20, 0, helpTextValue, 15);
-		helpText.scrollFactor.set();
-		helpText.y = FlxG.height - helpText.height - 20;
-		helpText.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
-		helpText.color = FlxColor.WHITE;
-
-		add(helpText);
+		for (i in 0...helpTextArray.length-1)
+		{
+			var helpText:FlxText = new FlxText(FlxG.width - 320, FlxG.height - 15 - 16 * (helpTextArray.length - i), 300, helpTextArray[i], 12);
+			textAnim.cameras = [camHUD];
+			helpText.scrollFactor.set();
+			helpText.setFormat(null, 12, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE_FAST, FlxColor.BLACK);
+			helpText.borderSize = 1;
+			add(helpText);
+		}
 	}
 	
 	override function update(elapsed:Float)
@@ -242,6 +229,8 @@ class AnimationDebug extends FlxState
 			FlxG.camera.zoom += 0.25;
 		if (FlxG.keys.justPressed.Q)
 			FlxG.camera.zoom -= 0.25;
+		if (FlxG.keys.justPressed.R)
+			FlxG.camera.zoom = 0.00;
 		if (FlxG.keys.justPressed.F)
 			char.flipX = !char.flipX;
 
