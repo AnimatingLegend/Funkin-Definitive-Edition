@@ -14,7 +14,6 @@ class Character extends FlxSprite
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var debugMode:Bool = false;
 
-	public var loop:Bool;
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
 	public var barColor:FlxColor;
@@ -28,8 +27,8 @@ class Character extends FlxSprite
 	{
 		super(x, y);
 
-		// Default Health bar color
 		barColor = isPlayer ? 0xFF66FF33 : 0xFFFF0000;
+
 		animOffsets = new Map<String, Array<Dynamic>>();
 		curCharacter = character;
 		this.isPlayer = isPlayer;
@@ -39,7 +38,6 @@ class Character extends FlxSprite
 		// Anti-Aliasing for pixel sprites stay **FALSE**, dont change it !!!!
 		antialiasing = FlxG.save.data.lowData;
 
-		// Redoing Offset system later next update :) - (0.2.1)
 		switch (curCharacter)
 		{
 			case 'gf':
@@ -580,7 +578,7 @@ class Character extends FlxSprite
 				flipX = true;
 				barColor = 0xFF31b0d1;
 
-			case 'bf-holding-gf-DEAD':
+			case 'bf-holding-gf-dead':
 
 				frames = Paths.getSparrowAtlas('charactersAssets/bfHoldingGF-DEAD', 'shared');
 				animation.addByPrefix('singUP', "BF Dies with GF", 24, false);
@@ -752,7 +750,6 @@ class Character extends FlxSprite
 		}
 		TankmenBG.animationNotes = animationNotes;
 		animationNotes.sort(sortAnims);
-	//	trace(animationNotes); 
 	}
 
 	function sortAnims(x, y)
@@ -819,9 +816,8 @@ class Character extends FlxSprite
 
 	private var danced:Bool = false;
 
-/**
- * FOR GF DANCING SHIT
- */
+	
+ 	// FOR GF DANCING SHIT
 	public function dance()
 	{
 		if (!debugMode)
@@ -840,7 +836,7 @@ class Character extends FlxSprite
 					}
 				case 'bf-pixel-dead':
 					// do nothing, just act casual lol
-				case 'bf-holding-gf-DEAD':
+				case 'bf-holding-gf-dead':
 					// do nothing, just act casual lol
 				case 'spooky':
 					danced = !danced;
