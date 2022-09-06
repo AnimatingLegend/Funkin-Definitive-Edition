@@ -41,7 +41,6 @@ class Character extends FlxSprite
 		switch (curCharacter)
 		{
 			case 'gf':
-				// GIRLFRIEND CODE
 				tex = Paths.getSparrowAtlas('charactersAssets/GF_assets', 'shared');
 				frames = tex;
 				animation.addByPrefix('cheer', 'GF Cheer', 24, false);
@@ -667,6 +666,11 @@ class Character extends FlxSprite
 				animation.addByPrefix('singDOWN', 'Tankman DOWN note', 24, false);
 				animation.addByPrefix('singLEFT', 'Tankman Right Note', 24, false);
 				animation.addByPrefix('singRIGHT', 'Tankman Note Left', 24, false);
+
+				animation.addByPrefix('singUPmiss', 'Tankman UP note MISS', 24, false);
+				animation.addByPrefix('singDOWNmiss', 'Tankman DOWN note MISS', 24, false);
+				animation.addByPrefix('singLEFTmiss', 'Tankman Right Note MISS', 24, false);
+				animation.addByPrefix('singRIGHTmiss', 'Tankman Note Left MISS', 24, false);
 	
 				animation.addByPrefix('singUP-alt', 'Tankman UP note', 24, false);
 				animation.addByPrefix('singDOWN-alt', 'PRETTY GOOD', 24, false);
@@ -677,6 +681,11 @@ class Character extends FlxSprite
 				addOffset("singRIGHT", -23, -31);
 				addOffset("singLEFT", 89, -12);
 				addOffset("singDOWN", 88, -100);
+
+				addOffset("singUPmiss", 54, 49);
+				addOffset("singRIGHTmiss", -23, -31);
+				addOffset("singLEFTmiss", 89, -12);
+				addOffset("singDOWNmiss", 88, -100);
 
 				addOffset("ughAnim", -14, -8);
 				addOffset("singUP-alt", 54, 49);
@@ -766,13 +775,6 @@ class Character extends FlxSprite
 				holdTimer += elapsed;
 			}
 
-			// since characters dont go idle after their part is over, this comes in handy | DONT DELETE OR CHARS GO ALL OVER THE PLACE...
-			if (animation.getByName('idleLoop') != null)
-			{
-				if (!animation.curAnim.name.startsWith('sing') && animation.curAnim.finished)
-					playAnim('idleLoop');
-			}
-
 			var dadVar:Float = 4;
 
 			if (curCharacter == 'dad')
@@ -783,7 +785,21 @@ class Character extends FlxSprite
 				dance();		
 				holdTimer = 0;
 			}
-		}	
+
+			// since characters dont go idle after their part is over, this comes in handy | DONT DELETE OR CHARS GO ALL OVER THE PLACE...
+			if (animation.getByName('idle-loop') != null)
+			{
+				if (!animation.curAnim.name.startsWith('sing') && animation.curAnim.finished)
+					playAnim('idle-loop');
+			}
+	
+		}
+
+		if (!debugMode)
+		{
+			if(animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null)
+				playAnim(animation.curAnim.name + '-loop');		
+		}
 
 		switch (curCharacter)
 		{
