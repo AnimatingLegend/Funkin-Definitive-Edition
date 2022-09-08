@@ -48,8 +48,8 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 ### Chart Editor
 ![Windows Screenshot 2022 08 07 - 22 53 26 56](https://user-images.githubusercontent.com/83415030/184576058-f06ddf19-7c07-494f-8529-0739b286bead.png)
 
-### Piece of old Gameplay
-![ezgif-1-2b0132a422](https://user-images.githubusercontent.com/83415030/184709897-bea3d00e-90d3-4c37-b24b-91094343f948.gif)
+### Gameplay
+![ezgif-1-2b0132a422](https://user-images.githubusercontent.com/83415030/189006860-b5a84f6b-12db-4b79-ab6c-e56808a28f37.gif)
 
 ## Installation Shit
 First, you need to install Haxe and HaxeFlixel. I'm too lazy to write and keep updated with that setup (which is pretty simple). 
