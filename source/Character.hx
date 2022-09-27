@@ -156,10 +156,10 @@ class Character extends FlxSprite
 					
 				animation.addByIndices('idle', 'Pico shoot 1', [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], "", 24, true);
 	
-				animation.addByIndices('shoot1', 'Pico shoot 1', [0, 1, 2, 3, 4, 5, 6, 7], "", 24, true);
-				animation.addByIndices('shoot2', 'Pico shoot 2', [0, 1, 2, 3, 4, 5, 6, 7], "", 24, false);
-				animation.addByIndices('shoot3', 'Pico shoot 3', [0, 1, 2, 3, 4, 5, 6, 7], "", 24, false);
-				animation.addByIndices('shoot4', 'Pico shoot 4', [0, 1, 2, 3, 4, 5, 6, 7], "", 24, false);
+				animation.addByPrefix('shoot1', 'Pico shoot 1', 24, false);
+				animation.addByPrefix('shoot2', 'Pico shoot 2', 24, false);
+				animation.addByPrefix('shoot3', 'Pico shoot 3', 24, false);
+				animation.addByPrefix('shoot4', 'Pico shoot 4', 24, false);
 
 				addOffset('shoot1', 0, 0);
 				addOffset('shoot2', -1, -128);
@@ -658,43 +658,6 @@ class Character extends FlxSprite
 
 				antialiasing = false;
 
-			case 'tankman':
-				tex = Paths.getSparrowAtlas('charactersAssets/tankmanCaptain', 'shared');
-				frames = tex;
-				animation.addByPrefix('idle', "Tankman Idle Dance", 24);
-				animation.addByPrefix('singUP', 'Tankman UP note', 24, false);
-				animation.addByPrefix('singDOWN', 'Tankman DOWN note', 24, false);
-				animation.addByPrefix('singLEFT', 'Tankman Right Note', 24, false);
-				animation.addByPrefix('singRIGHT', 'Tankman Note Left', 24, false);
-
-				animation.addByPrefix('singUPmiss', 'Tankman UP note MISS', 24, false);
-				animation.addByPrefix('singDOWNmiss', 'Tankman DOWN note MISS', 24, false);
-				animation.addByPrefix('singLEFTmiss', 'Tankman Right Note MISS', 24, false);
-				animation.addByPrefix('singRIGHTmiss', 'Tankman Note Left MISS', 24, false);
-	
-				animation.addByPrefix('singUP-alt', 'Tankman UP note', 24, false);
-				animation.addByPrefix('singDOWN-alt', 'PRETTY GOOD', 24, false);
-				animation.addByPrefix('ughAnim', 'TANKMAN UGH', 24, false);
-
-				addOffset('idle');
-				addOffset("singUP", 54, 49);
-				addOffset("singRIGHT", -23, -31);
-				addOffset("singLEFT", 89, -12);
-				addOffset("singDOWN", 88, -100);
-
-				addOffset("singUPmiss", 54, 49);
-				addOffset("singRIGHTmiss", -23, -31);
-				addOffset("singLEFTmiss", 89, -12);
-				addOffset("singDOWNmiss", 88, -100);
-
-				addOffset("ughAnim", -14, -8);
-				addOffset("singUP-alt", 54, 49);
-				addOffset("singDOWN-alt", 2, 16);
-				playAnim('idle');
-				barColor = 0xffffd000;
-				
-				flipX = true;
-
 			case 'parents-christmas':
 				frames = Paths.getSparrowAtlas('charactersAssets/mom_dad_christmas_assets', 'shared');
 				animation.addByPrefix('idle', 'Parent Christmas Idle', 24, false);
@@ -720,6 +683,33 @@ class Character extends FlxSprite
 				addOffset("singDOWN-alt", -30, -27);
 				playAnim('idle');
 				barColor = 0x86f800df;
+
+			case 'tankman':
+				tex = Paths.getSparrowAtlas('charactersAssets/tankmanCaptain', 'shared');
+				frames = tex;
+				animation.addByPrefix('idle', "Tankman Idle Dance", 24);
+				animation.addByPrefix('singUP', 'Tankman UP note', 24, false);
+				animation.addByPrefix('singDOWN', 'Tankman DOWN note', 24, false);
+				animation.addByPrefix('singLEFT', 'Tankman Right Note', 24, false);
+				animation.addByPrefix('singRIGHT', 'Tankman Note Left', 24, false);
+	
+				animation.addByPrefix('singUP-alt', 'Tankman UP note', 24, false);
+				animation.addByPrefix('singDOWN-alt', 'PRETTY GOOD', 24, false);
+				animation.addByPrefix('ughAnim', 'TANKMAN UGH', 24, false);
+
+				addOffset('idle');
+				addOffset("singUP", 54, 49);
+				addOffset("singRIGHT", -23, -31);
+				addOffset("singLEFT", 89, -12);
+				addOffset("singDOWN", 88, -100);
+
+				addOffset("ughAnim", -14, -8);
+				addOffset("singUP-alt", 54, 49);
+				addOffset("singDOWN-alt", 2, 16);
+				playAnim('idle');
+				barColor = 0xffffd000;
+	 		
+				flipX = true;
 		}
 
 		dance();
@@ -853,6 +843,8 @@ class Character extends FlxSprite
 				case 'bf-pixel-dead':
 					// do nothing, just act casual lol
 				case 'bf-holding-gf-dead':
+					// do nothing, just act casual lol
+				case 'pico-speaker':
 					// do nothing, just act casual lol
 				case 'spooky':
 					danced = !danced;
