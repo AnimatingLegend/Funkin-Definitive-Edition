@@ -10,12 +10,15 @@ import flixel.util.FlxTimer;
 class GameOverSubstate extends MusicBeatSubstate
 {
 	var bf:Boyfriend;
+	public var dad:Character;
 	var camFollow:FlxObject;
 
 	var stageSuffix:String = "";
 
 	var randomGameover:Int = 1;
 	var playingDeathSound:Bool = false;
+
+	public var isPlayer:Bool = false;
 
 	public function new(x:Float, y:Float)
 	{
@@ -30,16 +33,11 @@ class GameOverSubstate extends MusicBeatSubstate
 				daBf = 'bf';
 		}
 		if (PlayState.SONG.song.toLowerCase() == 'stress')
-		{
 			daBf = 'bf-holding-gf-dead';
-		}
 
 		super();
 
 		Conductor.songPosition = 0;
-
-		bf = new Boyfriend(x, y, daBf);
-		add(bf);
 
 		camFollow = new FlxObject(bf.getGraphicMidpoint().x, bf.getGraphicMidpoint().y, 1, 1);
 		add(camFollow);
@@ -47,8 +45,6 @@ class GameOverSubstate extends MusicBeatSubstate
 		FlxG.sound.play(Paths.sound('fnf_loss_sfx' + stageSuffix));
 		Conductor.changeBPM(100);
 
-		// FlxG.camera.followLerp = 1;
-		// FlxG.camera.focusOn(FlxPoint.get(FlxG.width / 2, FlxG.height / 2));
 		FlxG.camera.scroll.set();
 		FlxG.camera.target = null;
 
@@ -85,12 +81,11 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12)
 		{
-			// did this to avoid camera locking onto a character w/o the smooth camera tween
-			#if html5
-			FlxG.camera.follow(camFollow, LOCKON, 0.02);
+			#if desktop
+			FlxG.camera.follow(camFollow, LOCKON, 0.01 * (30 / FlxG.save.data.framerateDraw));
+			#else
+			FlxG.camera.follow(camFollow, LOCKON, 0.01);
 			#end
-			// OldFlag was here
-			FlxG.camera.follow(camFollow, LOCKON, 0.02 * (30 / FlxG.save.data.framerateDraw));
 		}
 
 		if (PlayState.storyWeek == 7)
@@ -100,7 +95,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				playingDeathSound = true;
 				bf.startedDeath = true;
 				coolStartDeath(0.2);
-				FlxG.sound.play(Paths.sound('jeffGameover/jeffGameover-' + randomGameover), 1, false, null, true, function()
+				FlxG.sound.play(Paths.sound('jeffGameover/jeffGameover-' + randomGameover), 1, false, null, true, function() 
 				{
 					FlxG.sound.music.fadeIn(4, 0.2, 1);
 				});
