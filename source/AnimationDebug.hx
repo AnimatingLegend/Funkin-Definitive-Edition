@@ -146,7 +146,7 @@ class AnimationDebug extends FlxState
 			replace(char, dad);
 			char = dad;
 	
-			dumbTexts.clear();
+		//	dumbTexts.clear();
 			genBoyOffsets(true, true);
 			updateTexts();
 		});
@@ -223,6 +223,7 @@ class AnimationDebug extends FlxState
 		{
 			FlxG.mouse.visible = false;
 			FlxG.switchState(new PlayState());
+			trace('Returning to PlayState');
 		}
 
 		if (FlxG.keys.justPressed.E)
