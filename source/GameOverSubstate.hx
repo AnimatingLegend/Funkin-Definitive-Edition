@@ -18,8 +18,6 @@ class GameOverSubstate extends MusicBeatSubstate
 	var randomGameover:Int = 1;
 	var playingDeathSound:Bool = false;
 
-	public var isPlayer:Bool = false;
-
 	public function new(x:Float, y:Float)
 	{
 		var daStage = PlayState.stageCheck;
@@ -38,6 +36,9 @@ class GameOverSubstate extends MusicBeatSubstate
 		super();
 
 		Conductor.songPosition = 0;
+
+		bf = new Boyfriend(x, y, daBf);
+		add(bf);
 
 		camFollow = new FlxObject(bf.getGraphicMidpoint().x, bf.getGraphicMidpoint().y, 1, 1);
 		add(camFollow);
@@ -95,7 +96,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				playingDeathSound = true;
 				bf.startedDeath = true;
 				coolStartDeath(0.2);
-				FlxG.sound.play(Paths.sound('jeffGameover/jeffGameover-' + randomGameover), 1, false, null, true, function() 
+				FlxG.sound.play(Paths.sound('jeffGameover/jeffGameover-' + randomGameover), 1, false, null, true, function()
 				{
 					FlxG.sound.music.fadeIn(4, 0.2, 1);
 				});
