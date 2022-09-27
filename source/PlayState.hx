@@ -1659,8 +1659,8 @@ class PlayState extends MusicBeatState {
 			#end
 		}
 
-		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, 0.50)));
-		iconP2.setGraphicSize(Std.int(FlxMath.lerp(150, iconP2.width, 0.50)));
+		iconP1.setGraphicSize(Std.int(FlxMath.lerp(145, iconP1.width, 0.85)));
+		iconP2.setGraphicSize(Std.int(FlxMath.lerp(145, iconP2.width, 0.85)));
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
@@ -1695,6 +1695,7 @@ class PlayState extends MusicBeatState {
 		#if debug
 		if (FlxG.keys.justPressed.EIGHT)
 			FlxG.switchState(new AnimationDebug(SONG.player2));
+		//	trace('ANIMATION DEBUG SHIT');
 		#end
 
 		if (startingSong) {
@@ -2034,7 +2035,7 @@ class PlayState extends MusicBeatState {
 
 		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
 		coolText.screenCenter();
-		coolText.x = FlxG.width * 0.55;
+		coolText.x = FlxG.width * 0.35;
 
 		var rating:FlxSprite = new FlxSprite();
 		var score:Int = 350;
@@ -2082,14 +2083,8 @@ class PlayState extends MusicBeatState {
 		rating.loadGraphic(Paths.image(pixelShitPart1 + daRating + pixelShitPart2));
 		rating.screenCenter();
 		if (FlxG.save.data.ratingHUD) {
-			rating.y -= 25;
+			rating.cameras = [camHUD];
 			rating.screenCenter();
-			rating.scrollFactor.set(0.7);
-
-			var scaleX = rating.scale.x;
-			var scaleY = rating.scale.y;
-
-			rating.scale.scale(1.2);
 		}
 		rating.x = coolText.x - 40;
 		rating.y -= 60;
@@ -2101,14 +2096,8 @@ class PlayState extends MusicBeatState {
 		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2));
 		comboSpr.screenCenter();
 		if (FlxG.save.data.ratingHUD) {
-			comboSpr.y += 90;
+			comboSpr.cameras = [camHUD];
 			comboSpr.screenCenter();
-			comboSpr.scrollFactor.set(0.7);
-
-			var scaleX = rating.scale.x;
-			var scaleY = rating.scale.y;
-
-			comboSpr.scale.scale(1.2);
 		}
 		comboSpr.x = coolText.x + 55;
 		comboSpr.y += 50;
@@ -2122,8 +2111,8 @@ class PlayState extends MusicBeatState {
 			comboSpr.setGraphicSize(Std.int(comboSpr.width * 0.7));
 			comboSpr.antialiasing = FlxG.save.data.lowData;
 		} else {
-			rating.setGraphicSize(Std.int(rating.width * daPixelZoom * 0.7));
-			comboSpr.setGraphicSize(Std.int(comboSpr.width * daPixelZoom * 0.7));
+			rating.setGraphicSize(Std.int(rating.width * daPixelZoom * 0.75));
+			comboSpr.setGraphicSize(Std.int(comboSpr.width * daPixelZoom * 0.75));
 		}
 
 		comboSpr.updateHitbox();
@@ -2140,13 +2129,8 @@ class PlayState extends MusicBeatState {
 			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'num' + Std.int(i) + pixelShitPart2));
 			numScore.screenCenter();
 			if (FlxG.save.data.ratingHUD) {
-				numScore.y += 50;
-				numScore.x -= 50;
+				numScore.cameras = [camHUD];
 				numScore.screenCenter();
-				numScore.scrollFactor.set(0.7);
-
-				var scaleX = numScore.scale.x;
-				var scaleY = numScore.scale.y;
 			}
 			numScore.x = coolText.x + (43 * daLoop) - 90;
 			numScore.y += 80;
