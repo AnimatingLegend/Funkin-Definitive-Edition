@@ -8,6 +8,7 @@ import flixel.FlxG;
 #if polymod
 import polymod.format.ParseRules.TargetSignatureElement;
 #end
+import PlayState;
 
 using StringTools;
 
@@ -33,6 +34,8 @@ class Note extends FlxSprite
 	public static var BLUE_NOTE:Int = 1;
 	public static var RED_NOTE:Int = 3;
 
+	public var rating:String = "shit";
+
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
 	{
 		super();
@@ -53,7 +56,7 @@ class Note extends FlxSprite
 		var daStage:String = PlayState.curStage;
 
 		switch (daStage)
-		{
+		{	
 			case 'school' | 'schoolEvil':
 				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
 
@@ -82,22 +85,22 @@ class Note extends FlxSprite
 
 			default:
 				frames = Paths.getSparrowAtlas('NOTE_assets');
-
-				animation.addByPrefix('greenScroll', 'green0');
-				animation.addByPrefix('redScroll', 'red0');
-				animation.addByPrefix('blueScroll', 'blue0');
-				animation.addByPrefix('purpleScroll', 'purple0');
-
+		
+				animation.addByPrefix('greenScroll', 'green instance');
+				animation.addByPrefix('redScroll', 'red instance');
+				animation.addByPrefix('blueScroll', 'blue instance');
+				animation.addByPrefix('purpleScroll', 'purple instance');
+		
 				animation.addByPrefix('purpleholdend', 'pruple end hold');
 				animation.addByPrefix('greenholdend', 'green hold end');
 				animation.addByPrefix('redholdend', 'red hold end');
 				animation.addByPrefix('blueholdend', 'blue hold end');
-
+		
 				animation.addByPrefix('purplehold', 'purple hold piece');
 				animation.addByPrefix('greenhold', 'green hold piece');
 				animation.addByPrefix('redhold', 'red hold piece');
 				animation.addByPrefix('bluehold', 'blue hold piece');
-
+		
 				setGraphicSize(Std.int(width * 0.7));
 				updateHitbox();
 				antialiasing = FlxG.save.data.lowData;

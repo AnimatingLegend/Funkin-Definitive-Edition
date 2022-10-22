@@ -66,6 +66,7 @@ class ChartingState extends MusicBeatState
 
 	var curRenderedNotes:FlxTypedGroup<Note>;
 	var curRenderedSustains:FlxTypedGroup<FlxSprite>;
+	var strumColors:Array<FlxColor> = [0xFFC24B99, 0xFF00FFFF, 0xFF12FA05, 0xFFF9393F];
 
 	var gridBG:FlxSprite;
 
@@ -947,8 +948,9 @@ class ChartingState extends MusicBeatState
 			if (daSus > 0)
 			{
 				var sustainVis:FlxSprite = new FlxSprite(note.x + (GRID_SIZE / 2),
-					note.y + GRID_SIZE).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height)));
-				curRenderedSustains.add(sustainVis);
+					note.y + GRID_SIZE).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 25, -5, gridBG.height)), strumColors[daNoteInfo % 4]);
+					sustainVis.alpha = 1;
+				curRenderedSustains.add(sustainVis);	
 			}
 		}
 	}

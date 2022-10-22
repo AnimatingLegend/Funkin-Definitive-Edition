@@ -687,15 +687,15 @@ class Character extends FlxSprite
 			case 'tankman':
 				tex = Paths.getSparrowAtlas('charactersAssets/tankmanCaptain', 'shared');
 				frames = tex;
-				animation.addByPrefix('idle', "Tankman Idle Dance", 24);
-				animation.addByPrefix('singUP', 'Tankman UP note', 24, false);
-				animation.addByPrefix('singDOWN', 'Tankman DOWN note', 24, false);
-				animation.addByPrefix('singLEFT', 'Tankman Right Note', 24, false);
-				animation.addByPrefix('singRIGHT', 'Tankman Note Left', 24, false);
+				animation.addByPrefix('idle', "Tankman Idle Dance instance", 24);
+				animation.addByPrefix('singUP', 'Tankman UP note instance', 24, false);
+				animation.addByPrefix('singDOWN', 'Tankman DOWN note instance', 24, false);
+				animation.addByPrefix('singLEFT', 'Tankman Right Note instance', 24, false);
+				animation.addByPrefix('singRIGHT', 'Tankman Note Left instance', 24, false);
 	
-				animation.addByPrefix('singUP-alt', 'Tankman UP note', 24, false);
-				animation.addByPrefix('singDOWN-alt', 'PRETTY GOOD', 24, false);
-				animation.addByPrefix('ughAnim', 'TANKMAN UGH', 24, false);
+				animation.addByPrefix('singUP-alt', 'Tankman UP note instance', 24, false);
+				animation.addByPrefix('singDOWN-alt', 'PRETTY GOOD tankman instance', 24, false);
+				animation.addByPrefix('ughAnim', 'TANKMAN UGH instance', 24, false);
 
 				addOffset('idle');
 				addOffset("singUP", 54, 49);
@@ -707,7 +707,7 @@ class Character extends FlxSprite
 				addOffset("singUP-alt", 54, 49);
 				addOffset("singDOWN-alt", 2, 16);
 				playAnim('idle');
-				barColor = 0xffffd000;
+				barColor = 0xff000000;
 	 		
 				flipX = true;
 		}
@@ -749,6 +749,7 @@ class Character extends FlxSprite
 		}
 		TankmenBG.animationNotes = animationNotes;
 		animationNotes.sort(sortAnims);
+		trace(animationNotes);
 	}
 
 	function sortAnims(x, y)

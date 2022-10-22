@@ -502,7 +502,14 @@ class TitleState extends MusicBeatState
 		{
 			remove(ngSpr);
 			remove(credGroup);
-			FlxG.camera.flash(FlxColor.WHITE, 4);
+			if (FlxG.save.data.flashingLights)
+			{
+				FlxG.camera.flash(FlxColor.WHITE, 4);
+			}	
+			else
+			{
+				FlxG.camera.flash(FlxColor.BLACK, 4);
+			}	
 			skippedIntro = true;
 		}
 	}

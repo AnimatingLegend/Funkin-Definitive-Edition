@@ -445,25 +445,27 @@ class HBColorOption extends Option
 	}
 }
 
-class TimerOption extends Option
+class FlashingOption extends Option
 {
 	public function new(desc:String)
 	{
 		super();
 		description = desc;
 	}
-		
+	
 	public override function press(changeData:Bool):Bool
 	{
 		if (changeData)
-			FlxG.save.data.songPos = !FlxG.save.data.songPos;
-		acceptValues = FlxG.save.data.songPos;
+		{
+			FlxG.save.data.flashingLights = !FlxG.save.data.flashingLights;
+		}
+		acceptValues = FlxG.save.data.flashingLights;
 		display = updateDisplay();
 		return true;
 	}
-		
+	
 	private override function updateDisplay():String
 	{
-		return "Song Length";
+		return "Flashing Menu";
 	}
 }

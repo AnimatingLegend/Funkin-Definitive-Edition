@@ -1,6 +1,7 @@
 package;
 
 import Song.SwagSong;
+import flixel.FlxG;
 
 /**
  * ...
@@ -25,11 +26,16 @@ class Conductor
 
 	public static var safeFrames:Int = 10;
 	public static var safeZoneOffset:Float = (safeFrames / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
+	public static var timeScale:Float = Conductor.safeZoneOffset / 166;
 
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
 
-	public function new()
+	public function new() {}
+
+	public static function recalculateTimings()
 	{
+		Conductor.safeZoneOffset = Math.floor((Conductor.safeFrames / 60) * 1000);
+		Conductor.timeScale = Conductor.safeZoneOffset / 166;
 	}
 
 	public static function mapBPMChanges(song:SwagSong)
@@ -66,4 +72,34 @@ class Conductor
 		crochet = ((60 / bpm) * 1000);
 		stepCrochet = crochet / 4;
 	}
+}
+
+class Ratings
+{
+    public static var timingWindows = [166.0, 135.0, 90.0, 45.0];
+   
+    public static function judgeNote(noteDiff:Float)
+    {
+        var diff = Math.abs(noteDiff);
+        for (index in 0...timingWindows.length) // based on 4 timing windows, will break with anything else
+        {
+            var time = timingWindows[index] * Conductor.timeScale;
+            var nextTime = index + 1 > timingWindows.length - 1 ? 0 : timingWindows[index + 1];
+            if (diff < time && diff >= nextTime * Conductor.timeScale)
+            {
+                switch (index)
+                {
+                    case 0: // shit
+                        return "shit";
+                    case 1: // bad
+                        return "bad";
+                    case 2: // good
+                        return "good";
+                    case 3: // sick
+                        return "sick";
+                }
+            }
+        }
+        return "good";
+    }
 }

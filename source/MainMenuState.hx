@@ -37,7 +37,7 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	public static var definitiveVersion:String = '0.2.0';
+	public static var definitiveVersion:String = '0.2.1';
 	public static var updateShit:Bool = false;
 
 	override function create()
@@ -79,6 +79,10 @@ class MainMenuState extends MusicBeatState
 		magenta.visible = false;
 		magenta.antialiasing = FlxG.save.data.lowData;
 		magenta.color = 0xFFFD719B;
+		if (FlxG.save.data.flashingLights)
+		{
+			add(magenta);
+		}	
 		// magenta.scrollFactor.set();
 
 		menuItems = new MainMenuList();
@@ -118,8 +122,11 @@ class MainMenuState extends MusicBeatState
 			item.y = pos + (160 * i);
 		}
 
-		// OldFlags doing (Thanks Again !!)
+		#if desktop
 		FlxG.camera.follow(camFollow, null, 0.06 * (30 / FlxG.save.data.framerateDraw));
+		#else
+		FlxG.camera.follow(camFollow, null, 0.06);
+		#end
 
 		// FNF DEFINITIVE VERSION
 		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "FNF Definitive Edition v" + definitiveVersion, 12);

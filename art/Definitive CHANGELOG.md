@@ -70,3 +70,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Issue where character didn't go idle after their turn was over
 - The game SHOULDN'T crash after you finish playing a song in the freeplay menu
 - Issue where Winter-Horrorland stage wouldn't load - (Backend Stage-Preloading bullshit)
+------------------------------------------------------------
+## [0.2.1] - [Unreleased/Unfinished]
+### Added
+- New Options (Flashing Menu)
+- Re-Added misses to judgement counter
+
+### Changed
+- Rating/Combo Sprites are now shown in the games HUD
+- Note Assets, Tweaked Note code a lil bit
+- Animation Debug Editor can now be viewed on regular builds of the game
+- Chart Editor (Sustain notes match the color of the notes now, other fixes/changes)
+- Judge MS offsets (AKA - Rating Hit windows)
+
+### Fixed
+- Week 4 Hair physics
+- Camera tweening on HTML5 builds
+- More Stage Preloading issues
+
+### Removed
+- Health bar Color Option (they are on by default now)
