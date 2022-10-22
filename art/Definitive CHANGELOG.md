@@ -71,7 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The game SHOULDN'T crash after you finish playing a song in the freeplay menu
 - Issue where Winter-Horrorland stage wouldn't load - (Backend Stage-Preloading bullshit)
 ------------------------------------------------------------
-## [0.2.1] - [Unreleased/Unfinished]
+## [0.2.1] - [10/22/22]
 ### Added
 - New Options (Flashing Menu)
 - Re-Added misses to judgement counter
