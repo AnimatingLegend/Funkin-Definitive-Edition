@@ -24,8 +24,8 @@ import flixel.system.FlxSound;
  */
 class AnimationDebug extends FlxState
 {
-	var bf:Boyfriend;
 	var dad:Character;
+	var dadBG:Character;
 	var char:Character;
 	var textAnim:FlxText;
 	var dumbTexts:FlxTypedGroup<FlxText>;
@@ -47,10 +47,11 @@ class AnimationDebug extends FlxState
 	var offsetY:FlxUINumericStepper;
 
 	var characters:Array<String>;
+//	var flippedChars:Array<String> = ["pico"];
 
 	private var camHUD:FlxCamera;
 
-	public function new(daAnim:String = 'bf')
+	public function new(daAnim:String = 'spooky')
 	{
 		super();
 		this.daAnim = daAnim;
@@ -93,10 +94,18 @@ class AnimationDebug extends FlxState
 		dad = new Character(0, 0, daAnim);
 		dad.screenCenter();
 		dad.debugMode = true;
+		
+		dadBG = new Character(0, 0, daAnim);
+		dadBG.screenCenter();
+		dadBG.debugMode = true;
+		dadBG.alpha = 0.75;
+		dadBG.color = 0xFF000000;
+
+		add(dadBG);
 		add(dad);
 
 		char = dad;
-		dad.flipX = false;
+		dad.flipX = true;
 
 		dumbTexts = new FlxTypedGroup<FlxText>();
 		add(dumbTexts);
@@ -141,12 +150,22 @@ class AnimationDebug extends FlxState
 			dad.screenCenter();
 			dad.debugMode = true;
 			dad.flipX = false;
+
+			remove(dadBG);	
+			dadBG = new Character(0, 0, characters[Std.parseInt(character)]);
+			dadBG.screenCenter();
+			dadBG.debugMode = true;
+			dadBG.flipX = false;
+			dadBG.alpha = 0.75;
+			dadBG.color = 0xFF000000;
+
+			add(dadBG);
 			add(dad);
 	
-			replace(char, dad);
+			replace(char, dadBG);
+			char = dadBG;
 			char = dad;
 	
-		//	dumbTexts.clear();
 			genBoyOffsets(true, true);
 			updateTexts();
 		});
@@ -202,7 +221,7 @@ class AnimationDebug extends FlxState
 		Arrows : Offset Animation\n
 		Shift-Arrows : Offset Animation x10\n
 		Space : Replay Animation\n
-		Enter/ESC : Exit\n".split('\n');
+		ESC : Exit\n".split('\n');
 
 		for (i in 0...helpTextArray.length-1)
 		{
