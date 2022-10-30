@@ -76,7 +76,8 @@ class Conductor
 
 class Ratings
 {
-    public static var timingWindows = [166.0, 135.0, 90.0, 45.0];
+    public static var timingWindows = [166.0, 135.0, 90.0, 45.0]; 
+	// Rating Hit Windows -  Sick: 45ms | Good: 90ms | Bad: 135ms | Shit: 166ms
    
     public static function judgeNote(noteDiff:Float)
     {
