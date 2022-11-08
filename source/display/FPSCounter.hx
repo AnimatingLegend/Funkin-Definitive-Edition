@@ -64,6 +64,12 @@ class FPSCounter extends TextField // Updated Code a lil bit, Code originally ta
 
 		if (visible && currentCount != cacheCount)
 			text = "FPS: " + Math.round((currentCount + cacheCount) / 2) + "\n" + memInfo + "\n";
+		
+		textColor = 0xFFFFFFFF;
+
+		if (memMax > 3000 || currentCount <= FlxG.save.data.framerateDraw / 2) {
+				textColor = 0xFFFF0000;
+			}
 
 		cacheCount = currentCount;
 	}
