@@ -179,8 +179,9 @@ class ChartingState extends MusicBeatState
 		addNoteUI();
 		addAssetsUI();
 
-		add(curRenderedNotes);
+		// swap layers
 		add(curRenderedSustains);
+		add(curRenderedNotes);
 
 		changeSection();
 		super.create();
@@ -947,8 +948,8 @@ class ChartingState extends MusicBeatState
 
 			if (daSus > 0)
 			{
-				var sustainVis:FlxSprite = new FlxSprite(note.x + (GRID_SIZE / 2),
-					note.y + GRID_SIZE).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 25, -5, gridBG.height)), strumColors[daNoteInfo % 4]);
+				var sustainVis:FlxSprite = new FlxSprite(note.x - 3 + (GRID_SIZE / 2),
+					note.y - 4 + GRID_SIZE).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 25, -5, gridBG.height)), strumColors[daNoteInfo % 4]);
 					sustainVis.alpha = 1;
 				curRenderedSustains.add(sustainVis);	
 			}
