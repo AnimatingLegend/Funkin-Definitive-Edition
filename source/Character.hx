@@ -19,6 +19,7 @@ class Character extends FlxSprite
 	public var barColor:FlxColor;
 
 	public var holdTimer:Float = 0;
+	public var singDuration:Float = 4;
 
 	public var animationNotes:Array<Dynamic> = [];
 
@@ -96,10 +97,10 @@ class Character extends FlxSprite
 				addOffset("singRIGHT", 0, -20);
 				addOffset("singLEFT", 0, -19);
 				addOffset("singDOWN", 0, -20);
-				addOffset('hairBlow', 45, -8);
+				addOffset('hairBlow', 0, -9);
 				addOffset('hairFall', 0, -9);
 
-				addOffset('scared', -2, -17);
+				addOffset('scared', 0, -17);
 
 				playAnim('danceRight');
 				barColor = 0xED790135;
@@ -141,7 +142,7 @@ class Character extends FlxSprite
 				animation.addByIndices('danceLeft', 'GF Dancing at Gunpoint', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 				animation.addByIndices('danceRight', 'GF Dancing at Gunpoint', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 	
-				addOffset('sad', -2, -21);
+				addOffset('sad', 0, -27);
 				addOffset('danceLeft', 0, -9);
 				addOffset('danceRight', 0, -9);
 						
@@ -315,10 +316,10 @@ class Character extends FlxSprite
 				animation.addByPrefix('singRIGHT', 'Pico NOTE LEFT0', 24, false);
 
 				addOffset('idle');
-				addOffset("singUP", -29, 27);
-				addOffset("singRIGHT", -68, -7);
-				addOffset("singLEFT", 65, 9);
-				addOffset("singDOWN", 200, -70);
+				addOffset("singUP", -29, 23);
+				addOffset("singRIGHT", -80, -14);
+				addOffset("singLEFT", 56, -1);
+				addOffset("singDOWN", 191, -83);
 				playAnim('idle');
 				barColor = 0xFFb7d855;
 
@@ -564,14 +565,14 @@ class Character extends FlxSprite
 				addOffset('idle', 0, 0);
 				addOffset("singUP", -29, 10);
 				addOffset("singRIGHT", -41, 23);
-				addOffset("singLEFT", 12, 7);
+				addOffset("singLEFT", 12, 4);
 				addOffset("singDOWN", -10, -10);
 
 				addOffset("singUPmiss", -29, 10);
-				addOffset("singRIGHTmiss", -41, 23);
-				addOffset("singLEFTmiss", 12, 7);
+				addOffset("singRIGHTmiss", -41, 33);
+				addOffset("singLEFTmiss", 12, 4);
 				addOffset("singDOWNmiss", -10, -10);
-				addOffset("Catch", 0, 91);
+				addOffset("Catch", 10, 91);
 				playAnim('idle');
 	
 				flipX = true;
@@ -588,7 +589,7 @@ class Character extends FlxSprite
 
 				addOffset('firstDeath', 29, 25);
 				addOffset('deathLoop', 29, 8);
-				addOffset('deathConfirm', 29, 40);
+				addOffset('deathConfirm', 29, 39);
 				playAnim('firstDeath');
 
 				flipX = true;
@@ -776,14 +777,6 @@ class Character extends FlxSprite
 				dance();		
 				holdTimer = 0;
 			}
-
-			// since characters dont go idle after their part is over, this comes in handy | DONT DELETE OR CHARS GO ALL OVER THE PLACE...
-			if (animation.getByName('idle-loop') != null)
-			{
-				if (!animation.curAnim.name.startsWith('sing') && animation.curAnim.finished)
-					playAnim('idle-loop');
-			}
-	
 		}
 
 		if (!debugMode)
