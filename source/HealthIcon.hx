@@ -41,6 +41,11 @@ class HealthIcon extends FlxSprite
 		if (PlayState.storyWeek == 6 && !isOldIcon)
 		{	
 			changeIcon('bf-pixel');
+		}
+		
+		if (char != 'pico-player')
+		{
+			changeIcon('pico');
 		}	
 	}
 
