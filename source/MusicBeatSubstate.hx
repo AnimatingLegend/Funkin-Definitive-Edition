@@ -2,6 +2,8 @@ package;
 
 import Conductor.BPMChangeEvent;
 import flixel.FlxG;
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.addons.transition.TransitionData;
 import flixel.FlxSubState;
 
 class MusicBeatSubstate extends FlxSubState
