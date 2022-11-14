@@ -42,11 +42,6 @@ class HealthIcon extends FlxSprite
 		{	
 			changeIcon('bf-pixel');
 		}
-		
-		if (char != 'pico-player')
-		{
-			changeIcon('pico');
-		}	
 	}
 
 	public function changeIcon(char:String)
