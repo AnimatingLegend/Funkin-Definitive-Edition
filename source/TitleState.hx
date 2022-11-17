@@ -266,6 +266,10 @@ class TitleState extends MusicBeatState
 		else
 			initialized = true;
 
+		#if debug
+		initialized = true;
+		#end
+
 		/*if (FlxG.sound.music != null)
 		{
 			FlxG.sound.music.onComplete = function()

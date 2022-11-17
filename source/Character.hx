@@ -410,15 +410,15 @@ class Character extends FlxSprite
 				animation.addByPrefix('hey', 'BF HEY', 24, false);
 
 				addOffset('idle', -5);
-				addOffset("singUP", -29, 27);
-				addOffset("singRIGHT", -38, -7);
-				addOffset("singLEFT", 12, -6);
-				addOffset("singDOWN", -10, -50);
-				addOffset("singUPmiss", -29, 27);
-				addOffset("singRIGHTmiss", -30, 21);
-				addOffset("singLEFTmiss", 12, 24);
+				addOffset("singUP", -39, 27);
+				addOffset("singRIGHT", -51, -7);
+				addOffset("singLEFT", 5, -8);
+				addOffset("singDOWN", -12, -50);
+				addOffset("singUPmiss", -42, 27);
+				addOffset("singRIGHTmiss", -33, 19);
+				addOffset("singLEFTmiss", 8, 19);
 				addOffset("singDOWNmiss", -11, -19);
-				addOffset("hey", 7, 4);
+				addOffset("hey", -3, 5);
 				playAnim('idle');
 				barColor = 0xFF31b0d1;
 
@@ -714,6 +714,7 @@ class Character extends FlxSprite
 		}
 
 		dance();
+		animation.finish();
 
 		if (isPlayer)
 		{
@@ -816,7 +817,6 @@ class Character extends FlxSprite
 
 	private var danced:Bool = false;
 
-	
  	// FOR GF DANCING SHIT
 	public function dance()
 	{

@@ -75,6 +75,12 @@ class ControlsSubState extends MusicBeatState
                 keys[i] = defaultKeys[i];
         }
 
+        if (FlxG.sound.music != null)
+        {
+            if (!FlxG.sound.music.playing)
+                FlxG.sound.playMusic(Paths.music('settingsMenu', 'preload'), 0.5);
+        }
+
 		persistentUpdate = persistentDraw = true;
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image("menuDesat"));

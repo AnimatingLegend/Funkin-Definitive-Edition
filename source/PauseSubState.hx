@@ -18,13 +18,17 @@ class PauseSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
-	var pauseOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Toggle Practice Mode', 'Exit to menu'];
-	var difficultyChoices:Array<String> = ['EASY', 'NORMAL', 'HARD', 'BACK'];
+	public static var goToOptions:Bool = false;
+
+	var pauseOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Modifiers', 'Exit to menu'];
+	var modifiersChoices:Array<String> = ["Toggle Practice Mode", "Options Menu", "Back"];
+	var difficultyChoices:Array<String> = ['Easy', 'Normal', 'Hard', 'Back'];
 
 	var menuItems:Array<String> = [];
 	var curSelected:Int = 0;
 
 	var practiceText:FlxText;
+	var botplayText:FlxText;
 
 	var pauseMusic:FlxSound;
 
@@ -131,15 +135,25 @@ class PauseSubState extends MusicBeatSubstate
 			{
 				case "Resume":
 					close();
+
 				case "Restart Song":
 					FlxG.resetState();
+
 				case "Change Difficulty":
 					menuItems = difficultyChoices;
 					regenMenu();
 
+				case "Modifiers":
+					menuItems = modifiersChoices;
+					regenMenu();	
+
 				case "Toggle Practice Mode":
 					PlayState.practiceMode = !PlayState.practiceMode;
 					practiceText.visible = PlayState.practiceMode;
+
+				case "Options Menu":
+					OptionsMenuState.fromFreeplay = true;
+					FlxG.switchState(new OptionsMenuState());
 
 				case "Exit to menu":
 					PlayState.seenCutscene = false;
@@ -149,12 +163,12 @@ class PauseSubState extends MusicBeatSubstate
 					else
 						FlxG.switchState(new FreeplayState());
 				
-				case "EASY" | "NORMAL" | "HARD":
+				case "Easy" | "Normal" | "Hard":
 					PlayState.SONG = Song.loadFromJson(Highscore.formatSong(PlayState.SONG.song.toLowerCase(), curSelected), PlayState.SONG.song.toLowerCase());
 					PlayState.storyDifficulty = curSelected;
 					FlxG.resetState();
 
-				case "BACK":
+				case "Back":
 					menuItems = pauseOG;
 					regenMenu();
 			}

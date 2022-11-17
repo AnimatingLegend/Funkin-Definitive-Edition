@@ -21,6 +21,7 @@ class Note extends FlxSprite
 	public var canBeHit:Bool = false;
 	public var tooLate:Bool = false;
 	public var wasGoodHit:Bool = false;
+	public var ignoreNote:Bool = false;
 	public var prevNote:Note;
 	public var willMiss:Bool = false;
 	public var altNote:Bool = false;
@@ -35,6 +36,8 @@ class Note extends FlxSprite
 	public static var RED_NOTE:Int = 3;
 
 	public var rating:String = "shit";
+
+	public var hitCausesMiss:Bool = false;
 
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
 	{
@@ -170,7 +173,7 @@ class Note extends FlxSprite
 
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
 				prevNote.updateHitbox();
-			 // prevNote.setGraphicSize();
+				// prevNote.setGraphicSize();
 			}
 		}
 	}

@@ -104,6 +104,7 @@ class PlayState extends MusicBeatState {
 
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
+	public var endingSong:Bool = false;
 
 	private var iconP1:HealthIcon;
 	private var iconP2:HealthIcon;
@@ -188,6 +189,9 @@ class PlayState extends MusicBeatState {
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 
+		FlxG.cameras.reset(camGame);
+		FlxG.cameras.add(camHUD, false);
+
 		sicks = 0;
 		goods = 0;
 		bads = 0;
@@ -196,14 +200,9 @@ class PlayState extends MusicBeatState {
 		misses = 0;
 		accuracy = 0.00;
 
-		FlxG.cameras.reset(camGame);
-		FlxG.cameras.add(camHUD);
-
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 		var noteSplash0:NoteSplash = new NoteSplash(100, 100, 0);
 		grpNoteSplashes.add(noteSplash0);
-
-		FlxCamera.defaultCameras = [camGame];
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -316,12 +315,14 @@ class PlayState extends MusicBeatState {
 
 					var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.image('philly/sky', 'week3'));
 					bg.scrollFactor.set(0.1, 0.1);
+					bg.antialiasing = FlxG.save.data.lowData;
 					add(bg);
 
 					var city:FlxSprite = new FlxSprite(-10).loadGraphic(Paths.image('philly/city', 'week3'));
 					city.scrollFactor.set(0.3, 0.3);
 					city.setGraphicSize(Std.int(city.width * 0.85));
 					city.updateHitbox();
+					city.antialiasing = FlxG.save.data.lowData;
 					add(city);
 
 					phillyCityLights = new FlxTypedGroup<FlxSprite>();
@@ -338,9 +339,11 @@ class PlayState extends MusicBeatState {
 					}
 
 					var streetBehind:FlxSprite = new FlxSprite(-40, 50).loadGraphic(Paths.image('philly/behindTrain', 'week3'));
+					streetBehind.antialiasing = FlxG.save.data.lowData;
 					add(streetBehind);
 
 					phillyTrain = new FlxSprite(2000, 360).loadGraphic(Paths.image('philly/train', 'week3'));
+					phillyTrain.antialiasing = FlxG.save.data.lowData;
 					add(phillyTrain);
 
 					trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes'));
@@ -349,6 +352,7 @@ class PlayState extends MusicBeatState {
 					// var cityLights:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.win0.png);
 
 					var street:FlxSprite = new FlxSprite(-40, streetBehind.y).loadGraphic(Paths.image('philly/street', 'week3'));
+					street.antialiasing = FlxG.save.data.lowData;
 					add(street);
 				}
 			case 'limo': // Week 4
@@ -1134,9 +1138,21 @@ class PlayState extends MusicBeatState {
 		var swagCounter:Int = 0;
 
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer) {
-			dad.dance();
-			gf.dance();
-			boyfriend.playAnim('idle');
+			if (swagCounter % gfSpeed == 0) {
+				gf.dance();
+			}
+
+			if (swagCounter % 2 == 0) {
+				if (!boyfriend.animation.curAnim.name.startsWith('sing'))
+					boyfriend.playAnim('idle');
+
+				if (!dad.animation.curAnim.name.startsWith('sing'))
+					dad.dance();
+			} 
+			
+			else if (dad.curCharacter == 'spooky' && !dad.animation.curAnim.name.startsWith('sing')) {
+				dad.dance();
+			}
 
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 			introAssets.set('default', ['ready', "set", "go"]);
@@ -1233,7 +1249,7 @@ class PlayState extends MusicBeatState {
 		vocals.play();
 
 		#if desktop
-		// Song duration in a float, useful for the time left feature
+		// Song duration in a float, useful for the time left featureF
 		songLength = FlxG.sound.music.length;
 
 		// Updating Discord Rich Presence (with Time Left)
@@ -1316,6 +1332,10 @@ class PlayState extends MusicBeatState {
 					if (sustainNote.mustPress && FlxG.save.data.middlescroll) {
 						sustainNote.x += -270; // general offset
 					}
+
+					if (sustainNote.mustPress && !FlxG.save.data.middlescroll) {
+						sustainNote.x += 40; // cuz yes
+					}
 				}
 
 				swagNote.mustPress = gottaHitNote;
@@ -1328,6 +1348,10 @@ class PlayState extends MusicBeatState {
 
 				if (swagNote.mustPress && FlxG.save.data.middlescroll) {
 					swagNote.x += -270; // general offset
+				}
+
+				if (swagNote.mustPress && !FlxG.save.data.middlescroll) {
+					swagNote.x += 40; // cuz yes
 				}
 			}
 			daBeats += 1;
@@ -1453,6 +1477,10 @@ class PlayState extends MusicBeatState {
 				babyArrow.x -= 2000;
 			}
 
+			if(!FlxG.save.data.middlescroll && player == 1) {
+				babyArrow.x += 40;
+			}
+
 			babyArrow.animation.play('static');
 			babyArrow.x += 50;
 			babyArrow.x += ((FlxG.width / 2) * player);
@@ -1544,6 +1572,12 @@ class PlayState extends MusicBeatState {
 	var cameraRightSide:Bool = false;
 
 	override public function update(elapsed:Float) {
+		#if Desktop
+		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.04 * (30 / FlxG.save.data.framerateDraw));
+		#else
+		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.04);
+		#end
+
 		#if !debug
 		perfectMode = false;
 		#end
@@ -1854,9 +1888,11 @@ class PlayState extends MusicBeatState {
 						});
 					}
 
-					daNote.kill();
-					notes.remove(daNote, true);
-					daNote.destroy();
+					if (!daNote.isSustainNote) {
+						daNote.kill();
+						notes.remove(daNote, true);
+						daNote.destroy();
+					}
 				}
 
 				// WIP interpolation shit? Need to fix the pause issue
@@ -1939,7 +1975,6 @@ class PlayState extends MusicBeatState {
 
 				FlxG.switchState(new StoryMenuState());
 
-				// if ()
 				StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
 
 				if (SONG.validScore) {
@@ -1987,8 +2022,6 @@ class PlayState extends MusicBeatState {
 			FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		}
 	}
-
-	var endingSong:Bool = false;
 
 	private function popUpScore(daNote:Note):Void {
 		var noteDiff:Float;
@@ -2361,6 +2394,7 @@ class PlayState extends MusicBeatState {
 			}
 
 			updateAccuracy();
+			updateStatistic();
 		}
 	}
 
@@ -2582,8 +2616,8 @@ class PlayState extends MusicBeatState {
 			// Conductor.changeBPM(SONG.bpm);
 
 			// Dad doesnt interupt his own notes
-			if (SONG.notes[Math.floor(curStep / 16)].mustHitSection)
-				dad.dance();
+			// if (SONG.notes[Math.floor(curStep / 16)].mustHitSection)
+			// 	dad.dance();
 		}
 		// FlxG.log.add('change bpm' + SONG.notes[Std.int(curStep / 16)].changeBPM);
 		wiggleShit.update(Conductor.crochet);
@@ -2606,13 +2640,25 @@ class PlayState extends MusicBeatState {
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
-
+		
+		// Dont mind this
 		if (curBeat % gfSpeed == 0) {
 			gf.dance();
 		}
 
-		if (!boyfriend.animation.curAnim.name.startsWith("sing")) {
-			boyfriend.playAnim('idle');
+		if (curBeat % 2 == 0) {
+			if (!boyfriend.animation.curAnim.name.startsWith("sing")) {
+				boyfriend.playAnim('idle');
+			}
+	
+			if (!dad.animation.curAnim.name.startsWith("sing")) {
+				dad.dance();
+			}
+		}
+		else if (dad.curCharacter == 'spooky') {
+			if (!dad.animation.curAnim.name.startsWith("sing")) {
+				dad.dance();
+			}
 		}
 
 		// Mid Song Events start here lol

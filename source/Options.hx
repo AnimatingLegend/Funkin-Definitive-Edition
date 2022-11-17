@@ -36,7 +36,7 @@ class OptionCatagory
 		return _name;
 	}
 
-	public function new(catName:String, options:Array<Option>)
+	public function new(x:Float, y:Float, catName:String, options:Array<Option>)
 	{
 		_name = catName;
 		_options = options;

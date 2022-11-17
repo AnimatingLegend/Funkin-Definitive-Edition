@@ -191,6 +191,10 @@ class FreeplayState extends MusicBeatState
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
 
+		var shiftMult:Int = 1;
+		if(FlxG.keys.pressed.SHIFT) 
+			shiftMult = 3;
+
 		if (upP)
 		{
 			changeSelection(-1);
@@ -208,6 +212,13 @@ class FreeplayState extends MusicBeatState
 		{
 			FlxG.sound.play(Paths.sound("cancelMenu"));
 			FlxG.switchState(new MainMenuState());
+		}
+
+		if (FlxG.mouse.wheel != 0)
+		{
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
+			changeSelection(-shiftMult * FlxG.mouse.wheel);
+			changeDiff();
 		}
 
 		if (accepted)

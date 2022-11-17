@@ -90,3 +90,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Health bar Color Option (they are on by default now)
+------------------------------------------------------------
+## [0.2.2] - [11/17/22]
+### Added
+- Onion Skin to Character Editor Menu (makes it easier to offset characters)
+- Added Anti-Aliasing to philly stage (cause apparently it didnt have it before??)
+- New Modifer Menu (you can view it in the pause menu)
+
+### Changed
+- Some Character Offsets
+- Minor fps counter changes
+- You can now use your mouse wheel to scroll through songs in the Freeplay Menu
+- You can now access the Options Menu from the Pause Menu
+- Changed Option Menu music - Give a lil Bit Back
+- Backend Changes
+
+### Fixed
+- Charting note trails
+- Minor Judgement-Counter Fixes
+- Note strums being so close together
+- Game crashing when ever you go back to the Title-Screen
+- Fixed issue where characters dont play idle anim when camera is panned on them
+- Other minor fixes

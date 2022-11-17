@@ -37,7 +37,7 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	public static var definitiveVersion:String = '0.2.1';
+	public static var definitiveVersion:String = '0.2.2';
 	public static var updateShit:Bool = false;
 
 	override function create()
@@ -111,6 +111,10 @@ class MainMenuState extends MusicBeatState
 		}
 		menuItems.createItem(0, 0, "options", function()
 		{
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.fadeOut(1, 0);
+
+			FlxG.sound.music.stop();
 			startExitState(new OptionsMenuState());
 		});
 

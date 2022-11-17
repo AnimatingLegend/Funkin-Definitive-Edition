@@ -22,23 +22,24 @@ class OptionsMenuState extends MusicBeatState
 	var selector:FlxText;
 	var curSelected:Int = 0;
 
-	public static var ingame:Bool = false;
+	public static var fromFreeplay:Bool = false;
+	public static var returnedfromOptions:Bool = false;
 
 	var options:Array<OptionCatagory> = [
-		new OptionCatagory("Preferences", [
+		new OptionCatagory(50, 40, "Preferences", [
 			new NaughtyOption("If checked, any explicit content will be censored/hidden from the game."),
-			new DownscrollOption("If checked, your note strums appears on the bottom of the screen instead of up."),
 			#if !html5
 			new FramerateOption("self explanatory. use your left and right arrow keys to switch between your framerate [DEFAULT: 60]"), 
 			// HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
 			#end
+			new DownscrollOption("If checked, your note strums appears on the bottom of the screen instead of up."),
 			new MiddlescrollOption("If checked, your note strums appear in the middle of the screen, & your opponents note strums disappear."),
 			new LowDataOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
 			new FlashingOption("If unchecked, it disables flashing lights/menus"),
 			new CameraZoomOption("If unchecked, the camera won't zoom on every concurring beat hit."),
 			new FPSOption("If unchecked, your fps & memory counter gets hidden."),
 		]),
-		new OptionCatagory("Appearance", [
+		new OptionCatagory(345, 40, "Appearance", [
 			new AccuracyOption("If unchecked, it will not display your misses and accuracy, but only your song score."),
 			new JudgemntOption("If checked, it displays your judgements/ratings throughout the song."),
 			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
@@ -46,8 +47,8 @@ class OptionsMenuState extends MusicBeatState
 			new NotesplashOption("If unchecked, hitting 'Sick!' notes won't show firework particles."),
 			new OpponentLightStrums("If unchecked, your opponents note strums won't light up whenever its their turn to sing."),
 		]),
-		new OptionCatagory("Controls", []),
-		new OptionCatagory("Exit", []),
+		new OptionCatagory(640, 40, "Controls", []),
+		new OptionCatagory(935, 40, "Exit", []),
 	];
 
 	private var currentDescription:String = "";
@@ -63,6 +64,13 @@ class OptionsMenuState extends MusicBeatState
 
 	override function create()
 	{
+		if (FlxG.sound.music != null)
+		{
+			if (!FlxG.sound.music.playing)
+				FlxG.sound.playMusic(Paths.music('settingsMenu', 'preload'), 0.5);
+				trace('settings music transistion');
+		}
+
 		menuBG = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -213,8 +221,24 @@ class OptionsMenuState extends MusicBeatState
 				}
 				else if (options[curSelected].getName() == "Exit")
 				{
-					FlxG.switchState(new MainMenuState());
 					FlxG.sound.play(Paths.sound("cancelMenu"), false);
+
+					if (FlxG.sound.music != null)
+					{
+						FlxG.sound.music.fadeOut(0.5, 0);
+					}
+
+					new FlxTimer().start(0.5, function(tmr:FlxTimer)
+					{
+						FlxG.sound.music.stop();
+						if (fromFreeplay)
+						{				
+							fromFreeplay = false;
+							FlxG.switchState(new PlayState());
+						}
+						else
+							FlxG.switchState(new MainMenuState());
+					});
 				}
 				else
 				{
