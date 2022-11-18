@@ -14,7 +14,7 @@ class Main extends Sprite
 {
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	var initialState:Class<FlxState> = CachingState; // The FlxState the game starts with.
+	var initialState:Class<FlxState> = TitleState; // The FlxState the game starts with.
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 	var framerate:Int = 120; // How many frames per second the game should run at.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
@@ -51,6 +51,12 @@ class Main extends Sprite
 		if(FlxG.save.data.ratingHUD == null)
 			FlxG.save.data.ratingHUD = false;
 
+		if(FlxG.save.data.flashingLights == null)
+			FlxG.save.data.flashingLights = true;
+
+		if(FlxG.save.data.judgementCounter == null)
+			FlxG.save.data.judgementCounter = false;
+
 		if(FlxG.save.data.accuracy == null)
 			FlxG.save.data.accuracy = true;
 
@@ -62,12 +68,6 @@ class Main extends Sprite
 
 		if(FlxG.save.data.fps == null)
 			FlxG.save.data.fps = true;
-
-		if(FlxG.save.data.flashingLights == null)
-			FlxG.save.data.flashingLights = true;
-
-		if(FlxG.save.data.judgementCounter == null)
-			FlxG.save.data.judgementCounter = false;
 	}
 
 	public static function main():Void
@@ -113,8 +113,12 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
-		// for bug fixing purposes and other junk, i made it so you dont have to go through preloading hell, you're welcome. :)
-		#if debug
+		// dont mind this abombination of code.
+		#if desktop
+		initialState = CachingState;
+		#elseif debug
+		initialState = TitleState;
+		#else
 		initialState = TitleState;
 		#end
 
