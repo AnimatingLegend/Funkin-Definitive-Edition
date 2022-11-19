@@ -22,8 +22,11 @@ class Main extends Sprite
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
-	public static function setupSaveData() // False =  not enabled by default | True = enabled by default
-	{
+	public static function setupSaveData() {
+	// False =  not enabled by default | True = enabled by default
+		if(FlxG.save.data.judgementCounter == null)
+			FlxG.save.data.judgementCounter = false;
+
 		if(FlxG.save.data.downscroll == null)
 			FlxG.save.data.downscroll = false;
 
@@ -36,29 +39,26 @@ class Main extends Sprite
 		if(FlxG.save.data.ghostTapping == null)
 			FlxG.save.data.ghostTapping = false;
 
+		if(FlxG.save.data.cursingShit == null)
+			FlxG.save.data.cursingShit = false;
+
+		if(FlxG.save.data.flashingLights == null)
+			FlxG.save.data.flashingLights = true;
+
 		if(FlxG.save.data.notesplash == null)
 			FlxG.save.data.notesplash = true;
-
+		
 		if(FlxG.save.data.glowStrums == null)
 			FlxG.save.data.glowStrums = true;
 
-		if(FlxG.save.data.cursingShit == null)
-			FlxG.save.data.cursingShit = false;
+		if(FlxG.save.data.accuracy == null)
+			FlxG.save.data.accuracy = true;
 
 		if(FlxG.save.data.camhudZoom == null)
 			FlxG.save.data.camhudZoom = true;
 
 		if(FlxG.save.data.ratingHUD == null)
 			FlxG.save.data.ratingHUD = false;
-
-		if(FlxG.save.data.flashingLights == null)
-			FlxG.save.data.flashingLights = true;
-
-		if(FlxG.save.data.judgementCounter == null)
-			FlxG.save.data.judgementCounter = false;
-
-		if(FlxG.save.data.accuracy == null)
-			FlxG.save.data.accuracy = true;
 
 		if(FlxG.save.data.colors == null)
 			FlxG.save.data.colors = true;
@@ -113,12 +113,14 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
-		// dont mind this abombination of code.
+		// dont mind this code.. [Line 117 - 125]
 		#if desktop
 		initialState = CachingState;
-		#elseif debug
-		initialState = TitleState;
 		#else
+		initialState = TitleState;
+		#end
+
+		#if debug
 		initialState = TitleState;
 		#end
 
