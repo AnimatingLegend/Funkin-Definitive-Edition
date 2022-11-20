@@ -1249,7 +1249,7 @@ class PlayState extends MusicBeatState {
 		vocals.play();
 
 		#if desktop
-		// Song duration in a float, useful for the time left featureF
+		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
 
 		// Updating Discord Rich Presence (with Time Left)
@@ -1887,12 +1887,10 @@ class PlayState extends MusicBeatState {
 								spr.centerOffsets();
 						});
 					}
-
-					if (!daNote.isSustainNote) {
-						daNote.kill();
-						notes.remove(daNote, true);
-						daNote.destroy();
-					}
+					
+					daNote.kill();
+					notes.remove(daNote, true);
+					daNote.destroy();
 				}
 
 				// WIP interpolation shit? Need to fix the pause issue
