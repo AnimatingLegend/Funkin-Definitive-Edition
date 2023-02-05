@@ -488,8 +488,6 @@ class PlayState extends MusicBeatState {
 				{
 					curStage = 'school';
 
-					 defaultCamZoom = 1.3;
-
 					var bgSky = new FlxSprite().loadGraphic(Paths.image('weeb/weebSky', 'week6'));
 					bgSky.scrollFactor.set(0.1, 0.1);
 					add(bgSky);
@@ -2043,11 +2041,7 @@ class PlayState extends MusicBeatState {
 		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
 		coolText.screenCenter();
 		coolText.cameras = [camHUD];
-
-		if (FlxG.save.data.ratingHUD)
-			coolText.x = FlxG.width * 0.35;
-		else
-			coolText.x = FlxG.width * 0.55;
+		coolText.x = FlxG.width * 0.35;
 
 		var rating:FlxSprite = new FlxSprite();
 		var score:Int = 350;
@@ -2110,10 +2104,8 @@ class PlayState extends MusicBeatState {
 
 		rating.loadGraphic(Paths.image(pixelShitPart1 + daRating + pixelShitPart2));
 		rating.screenCenter();
-		if (FlxG.save.data.ratingHUD) {
-			rating.cameras = [camHUD];
-			rating.screenCenter();
-		}
+		rating.cameras = [camHUD];
+		rating.screenCenter();
 		rating.x = coolText.x - 40;
 		rating.y -= 60;
 		rating.acceleration.y = 550;
@@ -2123,10 +2115,8 @@ class PlayState extends MusicBeatState {
 
 		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2));
 		comboSpr.screenCenter();
-		if (FlxG.save.data.ratingHUD) {
-			comboSpr.cameras = [camHUD];
-			comboSpr.screenCenter();
-		}
+		comboSpr.cameras = [camHUD];
+		comboSpr.screenCenter();
 		comboSpr.x = coolText.x + 55;
 		comboSpr.y += 50;
 		comboSpr.acceleration.y = 550;
@@ -2156,10 +2146,8 @@ class PlayState extends MusicBeatState {
 		for (i in seperatedScore) {
 			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'num' + Std.int(i) + pixelShitPart2));
 			numScore.screenCenter();
-			if (FlxG.save.data.ratingHUD) {
-				numScore.cameras = [camHUD];
-				numScore.screenCenter();
-			}
+			numScore.cameras = [camHUD];
+			numScore.screenCenter();
 			numScore.x = coolText.x + (43 * daLoop) - 90;
 			numScore.y += 80;
 
@@ -2356,14 +2344,13 @@ class PlayState extends MusicBeatState {
 				gf.playAnim('sad');
 			}
 
-			/*if (combo != 0) {
+			if (combo != 0) {
 				combo = 0;
 				popUpScore(null);
-			}*/	
+			}
 
 			var pixelShitPart1:String = ""; // pixel prefixes
 			var pixelShitPart2:String = '';
-			var comboBr:FlxSprite = new FlxSprite();
 
 			if (curStage.startsWith('school')) {
 				pixelShitPart1 = 'weeb/pixelUI/';
