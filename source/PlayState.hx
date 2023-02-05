@@ -45,6 +45,9 @@ import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
+import shaderslmao.BuildingShaders.BuildingShader;
+import shaderslmao.BuildingShaders;
+import shaderslmao.ColorSwap;
 import Conductor.Ratings;
 
 using StringTools;
@@ -119,6 +122,7 @@ class PlayState extends MusicBeatState {
 	var phillyCityLights:FlxTypedGroup<FlxSprite>;
 	var phillyTrain:FlxSprite;
 	var trainSound:FlxSound;
+	var lightFadeShader:BuildingShaders;
 
 	var limo:FlxSprite;
 	var grpLimoDancers:FlxTypedGroup<BackgroundDancer>;
@@ -325,6 +329,7 @@ class PlayState extends MusicBeatState {
 					city.antialiasing = FlxG.save.data.lowData;
 					add(city);
 
+					lightFadeShader = new BuildingShaders();
 					phillyCityLights = new FlxTypedGroup<FlxSprite>();
 					add(phillyCityLights);
 
@@ -335,6 +340,7 @@ class PlayState extends MusicBeatState {
 						light.setGraphicSize(Std.int(light.width * 0.85));
 						light.updateHitbox();
 						light.antialiasing = FlxG.save.data.lowData;
+						light.shader = lightFadeShader.shader;
 						phillyCityLights.add(light);
 					}
 
@@ -482,7 +488,7 @@ class PlayState extends MusicBeatState {
 				{
 					curStage = 'school';
 
-					// defaultCamZoom = 1.3;
+					 defaultCamZoom = 1.3;
 
 					var bgSky = new FlxSprite().loadGraphic(Paths.image('weeb/weebSky', 'week6'));
 					bgSky.scrollFactor.set(0.1, 0.1);
@@ -545,7 +551,7 @@ class PlayState extends MusicBeatState {
 				}
 			case 'schoolEvil': // Week 6 - Thorns
 				{
-					defaultCamZoom = 1.0;
+					defaultCamZoom = 0.9;
 
 					curStage = 'schoolEvil';
 
@@ -1596,7 +1602,8 @@ class PlayState extends MusicBeatState {
 						trainFrameTiming = 0;
 					}
 				}
-			// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
+
+				lightFadeShader.update((Conductor.crochet / 1000) * FlxG.elapsed * 1.5);
 			case 'tank':
 				moveTank();
 		}
@@ -1629,7 +1636,7 @@ class PlayState extends MusicBeatState {
 		else if (misses >= 10)
 			ratingFC = "Clear";
 
-		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause) {
+		if (controls.PAUSE && startedCountdown && canPause) {
 			persistentUpdate = false;
 			persistentDraw = true;
 			paused = true;
@@ -2771,6 +2778,7 @@ class PlayState extends MusicBeatState {
 					trainCooldown += 1;
 
 				if (curBeat % 4 == 0) {
+					lightFadeShader.reset();
 					phillyCityLights.forEach(function(light:FlxSprite) {
 						light.visible = false;
 					});
@@ -2793,5 +2801,3 @@ class PlayState extends MusicBeatState {
 
 	var curLight:Int = 0;
 }
-
-// haha u looked!!!! ~ legend

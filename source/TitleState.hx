@@ -31,6 +31,9 @@ import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
 import openfl.Lib;
+import shaderslmao.BuildingShaders.BuildingShader;
+import shaderslmao.BuildingShaders;
+import shaderslmao.ColorSwap;
 
 using StringTools;
 
@@ -51,6 +54,7 @@ class TitleState extends MusicBeatState
 	var lastBeat:Int = 0;
 	
 	var swagShader:ColorSwap;
+	var alphaShader:BuildingShaders;
 
 	var mustUpdate:Bool;
 
@@ -79,6 +83,7 @@ class TitleState extends MusicBeatState
 		#end*/
 
 		swagShader = new ColorSwap();
+		alphaShader = new BuildingShaders();
 
 		FlxG.sound.muteKeys = [ZERO];
 
@@ -410,13 +415,13 @@ class TitleState extends MusicBeatState
 		http.request();
 	}
 
-	function createCoolText(textArray:Array<String>)
+	function createCoolText(textArray:Array<String>, ?offset:Float = 0)
 	{
 		for (i in 0...textArray.length)
 		{
 			var money:Alphabet = new Alphabet(0, 0, textArray[i], true, false);
 			money.screenCenter(X);
-			money.y += (i * 60) + 200;
+			money.y += (i * 60) + 200 + offset;
 			
 			if(credGroup != null && textGroup != null) {
 				credGroup.add(money);
@@ -425,11 +430,11 @@ class TitleState extends MusicBeatState
 		}
 	}
 
-	function addMoreText(text:String)
+	function addMoreText(text:String, ?offset:Float = 0)
 	{
 		var coolText:Alphabet = new Alphabet(0, 0, text, true, false);
 		coolText.screenCenter(X);
-		coolText.y += (textGroup.length * 60) + 200;
+		coolText.y += (textGroup.length * 60) + 200 + offset;
 		credGroup.add(coolText);
 		textGroup.add(coolText);
 	}

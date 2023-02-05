@@ -1,4 +1,4 @@
-package display;
+package ui;
 import flixel.FlxG;
 import flixel.math.FlxMath;
 import haxe.Timer;
