@@ -113,7 +113,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed issue where characters dont play idle anim when camera is panned on them
 - Other minor fixes
 ------------------------------------------------------------
-## [0.2.3] - [2/7/22]
+## [0.2.3] - [2/7/23]
 ## Starting the year off with a mini update, hope you guys enjoy!
 
 ### Added
