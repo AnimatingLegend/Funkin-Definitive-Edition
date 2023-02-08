@@ -56,10 +56,10 @@ class TitleState extends MusicBeatState
 	var swagShader:ColorSwap;
 	var alphaShader:BuildingShaders;
 
-	var mustUpdate:Bool;
 
-	var http = new haxe.Http("https://raw.githubusercontent.com/LegendLOL/Funkin-Definitive-Edition/master/gitVersion.txt");
 	var returnedData:Array<String> = [];
+
+	var mustUpdate:Bool = false;
 
 	public static var updateVersion:String = '';
 	public static var closedState:Bool = false;
@@ -362,10 +362,10 @@ class TitleState extends MusicBeatState
 
 			new FlxTimer().start(0.3, function(tmr:FlxTimer)
 			{
-				if (MainMenuState.updateShit) 
-					FlxG.switchState(new OutdatedSubState());
-				else 
-					FlxG.switchState(new MainMenuState()); 
+				if (mustUpdate)
+					FlxG.switchState(new OutdatedSubState()); 
+				else
+					FlxG.switchState(new MainMenuState());
 
 				closedState = true;
 			});
@@ -387,31 +387,24 @@ class TitleState extends MusicBeatState
 
 	function getBuildVer():Void
 	{
-		http.request();
-	
-		http.onData = function(data:String)
-		{
-			returnedData[0] = data.substring(0, data.indexOf(';'));
-			returnedData[1] = data.substring(data.indexOf('-'), data.length);
+		trace('checking for update');
+		var http = new haxe.Http("https://raw.githubusercontent.com/AnimatingLegend/Funkin-Definitive-Edition/master/gitVersion.txt");
 
-			if (!MainMenuState.definitiveVersion.contains(returnedData[0].trim()) && !OutdatedSubState.leftState)
-			{
-				trace('New version detected: ' + returnedData[0]);
-				MainMenuState.updateShit = true;
-				trace('outdated lmao! ' + returnedData[0] + ' != ' + Application.current.meta.get('version'));
-				OutdatedSubState.needVer = returnedData[0];
-			}
-			else
-			{
-				trace('Build is up to date !!! - ' + MainMenuState.definitiveVersion);
+		http.onData = function (data:String)
+		{
+			updateVersion = data.split('\n')[0].trim();
+			var curVersion:String = MainMenuState.definitiveVersion.trim();
+			trace('version online: ' + updateVersion + ', your version: ' + curVersion);
+			if(updateVersion != curVersion) {
+				trace('versions arent matching!');
+				mustUpdate = true;
 			}
 		}
-	
-		http.onError = function(error)
-		{
+
+		http.onError = function (error) {
 			trace('error: $error');
 		}
-	
+
 		http.request();
 	}
 
