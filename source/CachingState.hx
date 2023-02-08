@@ -78,7 +78,7 @@ class CachingState extends MusicBeatState
 		add(preloadStuff);
 
 		#if cpp
-		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/charactersAssets")))
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/characters")))
 		{
 			if (!i.endsWith(".png"))
 				continue;
@@ -142,7 +142,7 @@ class CachingState extends MusicBeatState
 		for (i in images)
 		{
 			var replaced = i.replace(".png","");
-			var data:BitmapData = BitmapData.fromFile("assets/shared/images/charactersAssets/" + i);
+			var data:BitmapData = BitmapData.fromFile("assets/shared/images/characters/" + i);
 			var graph = FlxGraphic.fromBitmapData(data);
 			graph.persist = true;
 			graph.destroyOnNoUse = false;
