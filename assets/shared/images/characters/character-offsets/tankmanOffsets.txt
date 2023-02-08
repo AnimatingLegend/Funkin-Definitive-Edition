@@ -1,0 +1,8 @@
+idle 0 0
+singUP 54 49
+singRIGHT -23 -31
+singLEFT 89 -12
+singDOWN 88 -100
+ughAnim -14 -8
+singUP-alt 54 49
+singDOWN-alt 2 16

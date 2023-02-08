@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - More Week 4 hair physics
 ------------------------------------------------------------
 ## [0.1.2h] - [8/17/22]
-### v0.1.2 is broken, so heres a hotfix update (sorry lol)
+## v0.1.2 is broken, so heres a hotfix update (sorry lol)
 
 ### Changed
 - Some option description's
@@ -111,4 +111,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Note strums being so close together
 - Game crashing when ever you go back to the Title-Screen
 - Fixed issue where characters dont play idle anim when camera is panned on them
+- Other minor fixes
+------------------------------------------------------------
+## [0.2.3] - [2/7/22]
+## Starting the year off with a mini update, hope you guys enjoy!
+
+### Added
+- Shaders for Week 3 buidings
+- Test song to debug builds
+
+### Changed
+- Softcoded Character Offsets (should be easier to offset a character in the game now)
+- Changed Thorns map size - 0.9
+- Options Menu Revamp
+- Backend Changes
+
+### Fixed
+- File Locations
+- Minor FPS counter glithces
 - Other minor fixes

@@ -285,8 +285,7 @@ class AlphaCharacter extends FlxSprite
 		{
 			case '.':
 				animation.addByPrefix(letter, 'period', 24);
-				
-				y += 30;
+				y += 65;
 			case "'":
 				animation.addByPrefix(letter, 'apostraphie', 24);
 			case "?":

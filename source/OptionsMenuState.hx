@@ -26,29 +26,31 @@ class OptionsMenuState extends MusicBeatState
 	public static var returnedfromOptions:Bool = false;
 
 	var options:Array<OptionCatagory> = [
-		new OptionCatagory(50, 40, "Preferences", [
-			new NaughtyOption("If checked, any explicit content will be censored/hidden from the game."),
+		new OptionCatagory("Controls", []),
+
+		new OptionCatagory("Graphics", [
+			new LowDataOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
+			new FPSOption("If unchecked, your fps & memory counter gets hidden."),
 			#if !html5
 			new FramerateOption("self explanatory. use your left and right arrow keys to switch between your framerate [DEFAULT: 60]"), 
 			// HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
 			#end
-			new DownscrollOption("If checked, your note strums appears on the bottom of the screen instead of up."),
-			new MiddlescrollOption("If checked, your note strums appear in the middle of the screen, & your opponents note strums disappear."),
-			new LowDataOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
-			new FlashingOption("If unchecked, it disables flashing lights/menus"),
-			new CameraZoomOption("If unchecked, the camera won't zoom on every concurring beat hit."),
-			new FPSOption("If unchecked, your fps & memory counter gets hidden."),
 		]),
-		new OptionCatagory(345, 40, "Appearance", [
+		new OptionCatagory("Visuals and UI", [
 			new AccuracyOption("If unchecked, it will not display your misses and accuracy, but only your song score."),
 			new JudgemntOption("If checked, it displays your judgements/ratings throughout the song."),
-			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
-			new RatingHudOption("If checked, the rating/combo sprites with appear on the games HUD."),
 			new NotesplashOption("If unchecked, hitting 'Sick!' notes won't show firework particles."),
 			new OpponentLightStrums("If unchecked, your opponents note strums won't light up whenever its their turn to sing."),
 		]),
-		new OptionCatagory(640, 40, "Controls", []),
-		new OptionCatagory(935, 40, "Exit", []),
+		new OptionCatagory("Gameplay", [
+			new NaughtyOption("If checked, any explicit content will be censored/hidden from the game."),
+			new DownscrollOption("If checked, your note strums appears on the bottom of the screen instead of up."),
+			new MiddlescrollOption("If checked, your note strums appear in the middle of the screen, & your opponents note strums disappear."),
+			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
+			new FlashingOption("If unchecked, it disables flashing lights/menus"),
+			new CameraZoomOption("If unchecked, the camera won't zoom on every concurring beat hit."),
+		]),
+		new OptionCatagory("Exit", []),
 	];
 
 	private var currentDescription:String = "";
@@ -61,6 +63,9 @@ class OptionsMenuState extends MusicBeatState
 	var camFollow:FlxObject;
 	var menuBG:FlxSprite;
 	var textBG:FlxSprite;
+
+	var selectorLeft:Alphabet;
+	var selectorRight:Alphabet;
 
 	override function create()
 	{
@@ -103,7 +108,10 @@ class OptionsMenuState extends MusicBeatState
 		descTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER);
 		descTxt.scrollFactor.set();
 
-		FlxG.camera.follow(camFollow, null, 0.06);
+		selectorLeft = new Alphabet(0, 0, '>', true);
+		add(selectorLeft);
+		selectorRight = new Alphabet(0, 0, '<', true);
+		add(selectorRight);
 
 		changeSelection(0);
 
@@ -168,6 +176,9 @@ class OptionsMenuState extends MusicBeatState
 
 			remove(textBG);
 			remove(descTxt);
+
+			add(selectorLeft);
+			add(selectorRight);
 
 			curSelected = 0;
 			changeSelection(0);
@@ -251,13 +262,6 @@ class OptionsMenuState extends MusicBeatState
 						controlLabel.isMenuItem = true;
 						controlLabel.targetY = i;
 						grpControls.add(controlLabel);
-						// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
-						/*var checkbox:CheckboxThingie = new CheckboxThingie(0, (70 * i) + 30, currentSelectedCat.getOptions()[i].getAccept());
-							checkbox.sprTracker = controlLabel;
-
-							// using a FlxGroup is too much fuss!
-							checkBoxesArray.push(checkbox);
-							add(checkbox); */
 					}
 					curSelected = 0;
 					updateCheckboxes();
@@ -266,6 +270,8 @@ class OptionsMenuState extends MusicBeatState
 
 					add(textBG);
 					add(descTxt);
+					remove(selectorLeft);
+					remove(selectorRight);
 				}
 			}
 		}
@@ -348,6 +354,10 @@ class OptionsMenuState extends MusicBeatState
 			if (item.targetY == 0)
 			{
 				item.alpha = 1;
+				selectorLeft.x = item.x - 63;
+				selectorLeft.y = item.y;
+				selectorRight.x = item.x + item.width + 15;
+				selectorRight.y = item.y;
 			}
 		}
 	}

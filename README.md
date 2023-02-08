@@ -10,6 +10,7 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 **Additions**
 - Asset overhaul: Fixed/Changed File locations, Updated Charting, ETC
 - Options menu + Ghost tapping + Down/MiddleScroll + NoteSplashes, ETC
+- Cutscene Handler (HTML, Desktop Builds soon!!!)
 - Customizable Keybindings
 - Combo Sprite, Added ratings/combo sprites to games HUD
 - Playable characters (pico)
@@ -36,10 +37,10 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 * Girlfriend does Cheering animations during Cocoa & Eggnog
 * On Winter Horrorland - the HUD is hidden during its mini cutscene
 ### Week 6:
+* On Thorns - the HUD is hidden during its mini cutscene
 * Fixed major dialogue bugs, tons of backend changes
 * Bumped up scroll speed for Roses - 2.7
-* On Thorns - the HUD is hidden during its mini cutscene
-* Tweaked map size for Thorns - 1.0
+* Tweaked map size for Thorns - 0.9
 
 ## Photos & Gifs
 ### Options Menu
