@@ -53,12 +53,10 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		var exclude = [];
 
-		randomGameover = FlxG.random.int(1, 25, exclude);
-
-		if (FlxG.save.data.cursingShit)
-		{
+		if (FlxG.save.data.explicitContent)
 			exclude = [1, 3, 8, 13, 17, 21];
-		}
+
+		randomGameover = FlxG.random.int(1, 25, exclude);
 	}
 
 	override function update(elapsed:Float)

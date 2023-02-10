@@ -43,8 +43,8 @@ class Main extends Sprite
 		if(FlxG.save.data.ghostTapping == null)
 			FlxG.save.data.ghostTapping = false;
 
-		if(FlxG.save.data.cursingShit == null)
-			FlxG.save.data.cursingShit = false;
+		if(FlxG.save.data.explicitContent == null)
+			FlxG.save.data.explicitContent = true;
 
 		if(FlxG.save.data.flashingLights == null)
 			FlxG.save.data.flashingLights = true;
@@ -63,6 +63,12 @@ class Main extends Sprite
 
 		if(FlxG.save.data.ratingHUD == null)
 			FlxG.save.data.ratingHUD = false;
+
+		if(FlxG.save.data.scrollSpeed == null)
+			FlxG.save.data.scrollSpeed = 1;
+
+		/*if(FlxG.save.data.songBar == null)
+			FlxG.save.data.songBar = false;*/
 
 		if(FlxG.save.data.colors == null)
 			FlxG.save.data.colors = true;

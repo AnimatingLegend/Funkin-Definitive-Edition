@@ -130,3 +130,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - File Locations
 - Minor FPS counter glithces
 - Other minor fixes
+------------------------------------------------------------
+## [0.3.0] - [2/10/23]
+
+### Added
+- Scroll Speed Option
+- Week 7 Cutscenes to desktop
+
+### Changed
+- Option Descriptions/Names
+- Some File locations
+- Character Offsets
+- Backend Changes
+
+### Fixed
+- Your game shouldn't crash when in the Caching menu (startup)
+- Week 7 cutscenes are now censored (when the censor option is off)
+- Outdated version backend shit
+- Tankman Mid-song event issues
+- Other minor fixes
+
+### Removed
+- Week 7 MP4 Cutscenes

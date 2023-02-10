@@ -29,7 +29,7 @@ class MainMenuState extends MusicBeatState
 	var menuItems:MainMenuList;
 
 	#if !switch
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'kickstarter', 'options'];
 	#else
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
 	#end
@@ -37,7 +37,7 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	public static var definitiveVersion:String = '0.2.3';
+	public static var definitiveVersion:String = '0.3.0';
 
 	override function create()
 	{
@@ -81,8 +81,7 @@ class MainMenuState extends MusicBeatState
 		if (FlxG.save.data.flashingLights)
 		{
 			add(magenta);
-		}	
-		// magenta.scrollFactor.set();
+		}
 
 		menuItems = new MainMenuList();
 		add(menuItems);
@@ -100,13 +99,8 @@ class MainMenuState extends MusicBeatState
 		{
 			startExitState(new FreeplayState());
 		});
-		if (VideoState.seenVideo)
 		{
 			menuItems.createItem(null, null, "kickstarter", selectDonate, true);
-		}
-		else
-		{
-			menuItems.createItem(null, null, "donate", selectDonate, true);
 		}
 		menuItems.createItem(0, 0, "options", function()
 		{

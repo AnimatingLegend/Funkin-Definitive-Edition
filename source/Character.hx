@@ -108,11 +108,11 @@ class Character extends FlxSprite
 
 			case 'gf-tankmen':
 				frames = Paths.getSparrowAtlas('characters/gfTankmen', 'shared');
-				animation.addByIndices('sad', 'GF Crying at Gunpoint ', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "", 24, false);
+				animation.addByIndices('sad', 'GF Crying at Gunpoint ', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "", 24, true);
 				animation.addByIndices('danceLeft', 'GF Dancing at Gunpoint', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 				animation.addByIndices('danceRight', 'GF Dancing at Gunpoint', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 
-				loadOffsetFile('gf');
+				loadOffsetFile(curCharacter);
 				playAnim('danceRight');
 				barColor = 0xED790135;
 
@@ -420,7 +420,7 @@ class Character extends FlxSprite
 				quickAnimAdd('singRIGHTmiss', 'BF NOTE RIGHT MISS');
 				quickAnimAdd('singUPmiss', 'BF NOTE UP MISS');
 
-				quickAnimAdd('bfCatch', 'BF catches GF');
+				quickAnimAdd('Catch', 'BF catches GF');
 
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
@@ -519,9 +519,8 @@ class Character extends FlxSprite
 				quickAnimAdd('singLEFT', 'Tankman Right Note ');
 				quickAnimAdd('singRIGHT', 'Tankman Note Left ');
 	
-				quickAnimAdd('singUP-alt', 'Tankman UP note instance');
+				quickAnimAdd('singUP-alt', 'TANKMAN UGH instance');
 				quickAnimAdd('singDOWN-alt', 'PRETTY GOOD');
-				quickAnimAdd('ughAnim', 'TANKMAN UGH instance');
 	
 				loadOffsetFile(curCharacter);
 				playAnim('idle');

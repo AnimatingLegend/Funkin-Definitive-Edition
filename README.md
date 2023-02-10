@@ -10,7 +10,7 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 **Additions**
 - Asset overhaul: Fixed/Changed File locations, Updated Charting, ETC
 - Options menu + Ghost tapping + Down/MiddleScroll + NoteSplashes, ETC
-- Cutscene Handler (HTML, Desktop Builds soon!!!)
+- Cutscene Handler (HTML & Desktop Builds)
 - Customizable Keybindings
 - Combo Sprite, Added ratings/combo sprites to games HUD
 - Playable characters (pico)
@@ -41,6 +41,8 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 * Fixed major dialogue bugs, tons of backend changes
 * Bumped up scroll speed for Roses - 2.7
 * Tweaked map size for Thorns - 0.9
+### Week 7
+* Added in-game cutscenes instead of MP4s
 
 ## Photos & Gifs
 ### Options Menu

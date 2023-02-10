@@ -9,6 +9,7 @@ import openfl.Lib;
 import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.util.FlxTimer;
+import flixel.math.FlxMath;
 
 class OptionCatagory
 {
@@ -268,8 +269,8 @@ class NaughtyOption extends Option
 	public override function press(changeData:Bool):Bool
 	{
 		if (changeData)
-			FlxG.save.data.cursingShit = !FlxG.save.data.cursingShit;
-		acceptValues = FlxG.save.data.cursingShit;
+			FlxG.save.data.explicitContent = !FlxG.save.data.explicitContent;
+		acceptValues = FlxG.save.data.explicitContent;
 		display = updateDisplay();
 		return true;
 	}
@@ -322,7 +323,7 @@ class RatingHudOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "add combo sprites to hud";
+		return "Ratings to HUD";
 	}
 }
 
@@ -345,7 +346,7 @@ class OpponentLightStrums extends Option
 
 	private override function updateDisplay():String
 	{
-		return "Opponents light strums ";
+		return "Light CPU Strums";
 	}
 }
 
@@ -416,32 +417,7 @@ class AccuracyOption extends Option
 	
 	private override function updateDisplay():String
 	{
-		return "Accuracy and Miss meter";
-	}
-}
-
-class HBColorOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-	
-	public override function press(changeData:Bool):Bool
-	{
-		if (changeData)
-		{
-			FlxG.save.data.colors = !FlxG.save.data.colors;
-		}
-		acceptValues = FlxG.save.data.colors;
-		display = updateDisplay();
-		return true;
-	}
-	
-	private override function updateDisplay():String
-	{
-		return "Health Bar Colors";
+		return "Accuracy Display";
 	}
 }
 
@@ -469,3 +445,74 @@ class FlashingOption extends Option
 		return "Flashing Menu";
 	}
 }
+
+class ScrollSpeedOption extends Option
+{
+	public function new(desc:String)
+	{
+		withoutCheckboxes = true;
+		boldDisplay = false;
+		super();
+		description = desc;
+	}
+
+	public override function press(changeData:Bool):Bool
+	{
+		withoutCheckboxes = true;
+		boldDisplay = false;
+		return true;
+	}
+
+	public override function left():Bool
+	{
+		if (FlxG.save.data.scrollSpeed > 1)
+		{
+			FlxG.save.data.scrollSpeed -= 0.1;
+		}
+		FlxG.save.data.scrollSpeed = FlxMath.roundDecimal(FlxG.save.data.scrollSpeed, 2);
+		display = updateDisplay();
+		return true;
+	}
+
+	public override function right():Bool
+	{
+		if (FlxG.save.data.scrollSpeed < 9.9)
+			FlxG.save.data.scrollSpeed += 0.1;
+		FlxG.save.data.scrollSpeed = FlxMath.roundDecimal(FlxG.save.data.scrollSpeed, 2);
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		boldDisplay = false;
+		return "Scroll Speed: " + FlxG.save.data.scrollSpeed;
+	}
+}
+
+/*
+class TimerOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+		{
+			FlxG.save.data.songBar = !FlxG.save.data.songBar;
+		}
+		acceptValues = FlxG.save.data.songBar;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Hide Song Length";
+	}
+}
+*/
