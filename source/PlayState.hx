@@ -1838,10 +1838,11 @@ class PlayState extends MusicBeatState {
 	var cameraRightSide:Bool = false;
 
 	override public function update(elapsed:Float) {
-		#if Desktop
-		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.04 * (30 / FlxG.save.data.framerateDraw));
-		#else
+
+		#if html5
 		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.04);
+		#else
+		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.04 * (30 / FlxG.save.data.framerateDraw));
 		#end
 
 		#if !debug
@@ -2613,13 +2614,9 @@ class PlayState extends MusicBeatState {
 				gf.playAnim('sad');
 			}
 
-			if (combo != 0) {
-				combo = 0;
-				popUpScore(null);
-			}
-
 			var pixelShitPart1:String = ""; // pixel prefixes
 			var pixelShitPart2:String = '';
+			var comboBreak:FlxSprite = new FlxSprite();
 
 			if (curStage.startsWith('school')) {
 				pixelShitPart1 = 'weeb/pixelUI/';
@@ -2628,6 +2625,31 @@ class PlayState extends MusicBeatState {
 
 			if (!practiceMode)
 				songScore -= 10;
+
+			comboBreak.loadGraphic(Paths.image(pixelShitPart1 + 'comboBreak' + pixelShitPart2));
+			comboBreak.screenCenter();
+			comboBreak.cameras = [camHUD];
+			comboBreak.screenCenter();
+			comboBreak.x -= 40;
+			comboBreak.y -= 60;
+			comboBreak.acceleration.y = 550;
+			comboBreak.velocity.y -= FlxG.random.int(140, 175);
+			comboBreak.velocity.x += FlxG.random.int(0, 10);
+		//	add(comboBreak);
+	
+			if (!curStage.startsWith('school')) {
+				comboBreak.setGraphicSize(Std.int(comboBreak.width * 0.7));
+				comboBreak.antialiasing = FlxG.save.data.lowData;
+			} else {
+				comboBreak.setGraphicSize(Std.int(comboBreak.width * daPixelZoom * 0.02));
+			}
+
+			if (combo > 10)
+				add(comboBreak);
+
+			FlxTween.tween(comboBreak, {alpha: 0.001}, 0.1, {
+				startDelay: Conductor.crochet * 0.001
+			});
 
 			combo = 0;
 
