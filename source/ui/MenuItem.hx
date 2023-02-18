@@ -1,6 +1,7 @@
 package ui;
 
 import flixel.FlxSprite;
+import flixel.FlxG;
 
 class MenuItem extends FlxSprite
 {
@@ -15,7 +16,7 @@ class MenuItem extends FlxSprite
 	public function new(?x:Float = 0, ?y:Float = 0, name:String, ?callback:Dynamic)
 	{
 		super(x, y);
-		antialiasing = true;
+		antialiasing = FlxG.save.data.lowData;
 		setData(name, callback);
 		idle();
 	}

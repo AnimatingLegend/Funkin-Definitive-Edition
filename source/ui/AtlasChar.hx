@@ -1,6 +1,7 @@
 package ui;
 
 import flixel.FlxSprite;
+import.flixel.FlxG;
 import flixel.graphics.frames.FlxAtlasFrames;
 
 class AtlasChar extends FlxSprite
@@ -12,7 +13,7 @@ class AtlasChar extends FlxSprite
 		super(x, y);
 		frames = atlas;
 		this.char = char;
-		antialiasing = true;
+		antialiasing = FlxG.save.data.lowData;
 	}
 
 	function set_char(char:String):String
