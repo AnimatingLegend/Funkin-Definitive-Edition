@@ -80,10 +80,10 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12)
 		{
-			#if desktop
-			FlxG.camera.follow(camFollow, LOCKON, 0.01 * (30 / FlxG.save.data.framerateDraw));
-			#else
+			#if html5
 			FlxG.camera.follow(camFollow, LOCKON, 0.01);
+			#else
+			FlxG.camera.follow(camFollow, LOCKON, 0.01 * (30 / FlxG.save.data.framerateDraw));
 			#end
 		}
 

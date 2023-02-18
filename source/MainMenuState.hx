@@ -118,11 +118,11 @@ class MainMenuState extends MusicBeatState
 			item.x = FlxG.width / 2;
 			item.y = pos + (160 * i);
 		}
-
-		#if desktop
-		FlxG.camera.follow(camFollow, null, 0.06 * (30 / FlxG.save.data.framerateDraw));
-		#else
+		
+		#if html5
 		FlxG.camera.follow(camFollow, null, 0.06);
+		#else
+		FlxG.camera.follow(camFollow, null, 0.06 * (30 / FlxG.save.data.framerateDraw));
 		#end
 
 		// FNF DEFINITIVE VERSION
