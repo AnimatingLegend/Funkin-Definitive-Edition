@@ -152,3 +152,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Week 7 MP4 Cutscenes
+------------------------------------------------------------
+## [0.3.1b] - [Unreleased/Unfinished]
+
+### TODO:
+- Add transition thingy when in preloading & Animation debug menu - WIP
+- Fix Option music for desktop builds - WIP
+- Fix Combo bullshit starting at 0 instead of 1 - WIP
+- Fix Alphabet System
+- (maybe..) some mod support? (haxe json)
+-
