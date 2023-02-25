@@ -153,12 +153,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Week 7 MP4 Cutscenes
 ------------------------------------------------------------
-## [0.3.1b] - [Unreleased/Unfinished]
+## [0.3.1] - [2/25/23]
+## Been feeding you guys good this month! Last update for a while, hope yall enjoy!
 
-### TODO:
-- Add transition thingy when in preloading & Animation debug menu - WIP
-- Fix Option music for desktop builds - WIP
-- Fix Combo bullshit starting at 0 instead of 1 - WIP
-- Fix Alphabet System
-- (maybe..) some mod support? (haxe json)
--
+### Added
+- (Re)Added ComboBreak Feature (from my [Week 7 port](https://github.com/LegendLOL/Funkin-Week7))
+- (Re)Added Rating/Combos to HUD option
+- Lane Transparency Option
+- Cool Transitioning effects to Animation Debugging Menu
+
+### Changed
+- Intro song skips to 9.4 seconds if you skipped the intro
+- Minor changes to Animation Debug Menu
+- Combo now starts at 1 instead of 0
+- Complete overhaul on Alphabet system
+- Your Camera shakes when a train is passing by on Week 3
+- Backend Changes
+
+### Fixed
+- The options music SHOULD be able to play on desktop builds
+- Camera movement due to FPS bullshit (HTML Builds)
+- StoryMenu Character's offsets (Pico is now flipped)
+- Other minor fixes
+
+### Removed
+- Modding bullshit (it may come back, idk lol)

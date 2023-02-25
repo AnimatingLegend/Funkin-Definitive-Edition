@@ -25,7 +25,12 @@ import openfl.events.IOErrorEvent;
 
 using StringTools;
 
-class AnimationDebug extends FlxState
+/**
+ * Tweaks made by OldFlag
+ * was supposed to be added in 0.2.3 but i forgot, WHOOPS!
+ */
+
+class AnimationDebug extends MusicBeatState
 {
 	var dad:Character;
 	var dadBG:Character;
@@ -50,8 +55,8 @@ class AnimationDebug extends FlxState
 	var offsetY:FlxUINumericStepper;
 
 	var characters:Array<String>;
-//	var flippedChars:Array<String> = ["pico"];
 
+	private var camOther:FlxCamera;
 	private var camHUD:FlxCamera;
 
 	public function new(daAnim:String = 'spooky')
@@ -69,26 +74,49 @@ class AnimationDebug extends FlxState
 		//FlxG.sound.music.stop();
 		FlxG.sound.playMusic(Paths.music('breakfast'), 0.5);
 
+		FlxG.cameras.reset(camOther);
+		camOther = new FlxCamera();
+
 		camHUD = new FlxCamera();
+		camHUD.bgColor.alpha = 0;
+		FlxG.cameras.add(camHUD);
+
+		FlxCamera.defaultCameras = [camOther];
 
 		// Stage Shit
-		bg = new FlxSprite(-600, -200).loadGraphic(Paths.image('stage/stageback', 'shared'));
-		stageFront = new FlxSprite(-650, 600).loadGraphic(Paths.image('stage/stagefront', 'shared'));
-		stageCurtains= new FlxSprite(-500, -300).loadGraphic(Paths.image('stage/stagecurtains', 'shared'));
-
-		bg.screenCenter(X);
-		bg.scale.set(0.7, 0.7);
-		stageFront.screenCenter(X);
-		stageFront.scale.set(0.7, 0.7);
-		stageCurtains.screenCenter(X);
-		stageCurtains.scale.set(0.7, 0.7);
-
+		var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stage/stageback', 'shared'));
+		bg.antialiasing = FlxG.save.data.lowData;
 		bg.scrollFactor.set(0.9, 0.9);
-		stageCurtains.scrollFactor.set(0.9, 0.9);
-		stageFront.scrollFactor.set(0.9, 0.9);
-
+		bg.active = false;
 		add(bg);
+
+		var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stage/stagefront', 'shared'));
+		stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
+		stageFront.updateHitbox();
+		stageFront.antialiasing = FlxG.save.data.lowData;
+		stageFront.scrollFactor.set(0.9, 0.9);
+		stageFront.active = false;
 		add(stageFront);
+
+		var stageLight:FlxSprite = new FlxSprite(-125, -100).loadGraphic(Paths.image('stage/stage_light', 'shared'));
+		stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
+		stageLight.antialiasing = FlxG.save.data.lowData;
+		stageLight.updateHitbox();
+		add(stageLight);
+
+		var stageLight:FlxSprite = new FlxSprite(1225, -100).loadGraphic(Paths.image('stage/stage_light', 'shared'));
+		stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
+		stageLight.antialiasing = FlxG.save.data.lowData;
+		stageLight.updateHitbox();
+		stageLight.flipX = true;
+		add(stageLight);
+
+		var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stage/stagecurtains', 'shared'));
+		stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
+		stageCurtains.updateHitbox();
+		stageCurtains.antialiasing = FlxG.save.data.lowData;
+		stageCurtains.scrollFactor.set(1.3, 1.3);
+		stageCurtains.active = false;
 		add(stageCurtains);
 
 		FlxG.mouse.visible = true;
@@ -129,6 +157,7 @@ class AnimationDebug extends FlxState
 
 		UI_box = new FlxUITabMenu(null, tabs, true);
 		UI_box.scrollFactor.set();
+		UI_box.cameras = [camHUD];
 		UI_box.resize(150, 70);
 		UI_box.x = FlxG.width - UI_box.width - 20;
 		UI_box.y = 20;
@@ -232,6 +261,7 @@ class AnimationDebug extends FlxState
 		{
 			var helpText:FlxText = new FlxText(FlxG.width - 320, FlxG.height - 15 - 16 * (helpTextArray.length - i), 300, helpTextArray[i], 12);
 			textAnim.cameras = [camHUD];
+			helpText.cameras = [camHUD];
 			helpText.scrollFactor.set();
 			helpText.setFormat(null, 12, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE_FAST, FlxColor.BLACK);
 			helpText.borderSize = 1;

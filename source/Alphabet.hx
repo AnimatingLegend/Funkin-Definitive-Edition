@@ -384,6 +384,8 @@ class AlphaCharacter extends FlxSprite
 	{
 		switch (letter)
 		{
+			case '-':
+				animation.addByPrefix(letter, 'bold -', 24);
 			case '.':
 				animation.addByPrefix(letter, 'PERIOD bold', 24);
 			case "'":
@@ -404,7 +406,7 @@ class AlphaCharacter extends FlxSprite
 		switch (letter)
 		{
 			case '.':
-				y += 55 * textSize;
+				y += 50 * textSize;
 			case "'":
 				y -= 20 * textSize;
 			case '-':
@@ -454,6 +456,8 @@ class AlphaCharacter extends FlxSprite
 		{
 			case '#':
 				animation.addByPrefix(letter, 'hashtag', 24);
+			case '-':
+				animation.addByPrefix(letter, '-', 24);
 			case '.':
 				animation.addByPrefix(letter, 'period', 24);
 			case "'":
@@ -477,7 +481,7 @@ class AlphaCharacter extends FlxSprite
 		switch (letter)
 		{
 			case '.':
-				y += 65;
+				y += 50;
 			case "'":
 				y -= 20;
 			case '-':

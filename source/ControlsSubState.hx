@@ -19,7 +19,7 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.input.FlxKeyManager;
 import flixel.util.FlxTimer;
-
+import flixel.addons.transition.FlxTransitionableState;
 
 using StringTools;
 
@@ -77,8 +77,10 @@ class ControlsSubState extends MusicBeatState
 
         if (FlxG.sound.music != null)
         {
-            if (!FlxG.sound.music.playing)
-                FlxG.sound.playMusic(Paths.music('settingsMenu', 'preload'), 0.5);
+            if (!FlxG.sound.music.playing) 
+            {
+                FlxG.sound.playMusic(Paths.music('settingsMenu'), 0.5, true);
+            }
         }
 
 		persistentUpdate = persistentDraw = true;

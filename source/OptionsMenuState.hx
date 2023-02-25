@@ -16,6 +16,7 @@ import lime.utils.Assets;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.util.FlxTimer;
+import flixel.addons.transition.FlxTransitionableState;
 
 class OptionsMenuState extends MusicBeatState
 {
@@ -32,25 +33,26 @@ class OptionsMenuState extends MusicBeatState
 			new LowDataOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
 			new FPSOption("If unchecked, your fps & memory counter gets hidden."),
 			#if !html5
-			new FramerateOption("self explanatory. use your left and right arrow keys to switch between your framerate [DEFAULT: 60]"), 
+			new FramerateOption("Self explanatory. Use your left and right arrow keys to switch between your framerate. [DEFAULT: 120]"), 
 			// HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
 			#end
 		]),
 		new OptionCatagory("Visuals and UI", [
 			new AccuracyOption("If unchecked, it will not display your misses and accuracy, but only your song score."),
 			new JudgemntOption("If checked, it displays your judgements/ratings throughout the song."),
+			new RatingHudOption("If unchecked, the rating/combo sprites will NOT appear on the games HUD."),
 			new NotesplashOption("If unchecked, hitting 'Sick!' notes won't show firework particles."),
-		//	new TimerOption("If checked, the bar showing how much time is left on a song will be hidden."),
 			new OpponentLightStrums("If unchecked, your opponents note strums won't light up whenever its their turn to sing."),
+			new LaneTransOption("Use your left & right arrow keys to switch the transparacny of your lane underlay. [DEFAULT: 0]"),
 		]),
 		new OptionCatagory("Gameplay", [
 			new NaughtyOption("If unchecked, any explicit content will be censored/hidden from the game."),
 			new DownscrollOption("If checked, your note strums appears on the bottom of the screen instead of up."),
 			new MiddlescrollOption("If checked, your note strums appear in the middle of the screen, & your opponents note strums disappear."),
-			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
-			new ScrollSpeedOption("Self explanatory. Use your left and right arrow keys to switch arrow speed \n[If 1 arrows speed depends on chart]"),
 			new FlashingOption("If unchecked, it disables flashing lights/menus"),
 			new CameraZoomOption("If unchecked, the camera won't zoom on every concurring beat hit."),
+			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
+			new ScrollSpeedOption("Change your scroll speed. (1 = Chart dependent)"),
 		]),
 		new OptionCatagory("Exit", []),
 	];
@@ -74,7 +76,7 @@ class OptionsMenuState extends MusicBeatState
 		if (FlxG.sound.music != null)
 		{
 			if (!FlxG.sound.music.playing)
-				FlxG.sound.playMusic(Paths.music('settingsMenu', 'preload'), 0.5);
+				FlxG.sound.playMusic(Paths.music('settingsMenu'), 0.5, true);
 				trace('settings music transistion');
 		}
 

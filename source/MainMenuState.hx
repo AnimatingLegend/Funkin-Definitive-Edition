@@ -37,7 +37,7 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	public static var definitiveVersion:String = '0.3.0';
+	public static var definitiveVersion:String = '0.3.1';
 
 	override function create()
 	{
@@ -185,7 +185,9 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		#if html5
 		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.06);
+		#end
 
 		if (FlxG.sound.music.volume < 0.8)
 		{

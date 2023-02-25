@@ -29,6 +29,7 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 ### Week 2
 * When lightning occurs, the camera zooms in slightly
 ### Week 3
+* Your Camera shakes when a train passes by
 * Boyfriend does "Hey" animation during Philly
 * Girlfriend does Cheering animations during Blammed
 ### Week 4:
@@ -39,10 +40,7 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 ### Week 6:
 * On Thorns - the HUD is hidden during its mini cutscene
 * Fixed major dialogue bugs, tons of backend changes
-* Bumped up scroll speed for Roses - 2.7
-* Tweaked map size for Thorns - 0.9
-### Week 7
-* Added in-game cutscenes instead of MP4s
+* Tweaked map size for Thorns (0.9)
 
 ## Photos & Gifs
 ### Options Menu
@@ -78,8 +76,9 @@ package;
 
 class APIStuff
 {
-	public static var API:String = "";
-	public static var EncKey:String = "";
+	inline public static var API:String = "51348:TtzK0rZ8";
+	inline public static var EncKey:String = "5NqKsSVSNKHbF9fPgZPqPg==";
+	inline public static var SESSION:String = null;
 }
 
 ```

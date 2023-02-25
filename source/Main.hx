@@ -30,6 +30,10 @@ class Main extends Sprite
 			FlxG.save.data.judgementCounter = false;
 		}
 
+		if(FlxG.save.data.laneUnderlay == null) {
+			FlxG.save.data.laneUnderlay = false;
+		}
+
 		if(FlxG.save.data.downscroll == null) {
 			FlxG.save.data.downscroll = false;
 		}
@@ -52,6 +56,10 @@ class Main extends Sprite
 
 		if(FlxG.save.data.flashingLights == null) {
 			FlxG.save.data.flashingLights = true;
+		}
+
+		if(FlxG.save.data.fullscreen == null) {
+			FlxG.save.data.fullscreen = false;
 		}
 
 		if(FlxG.save.data.notesplash == null) {

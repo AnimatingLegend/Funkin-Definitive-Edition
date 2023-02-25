@@ -398,7 +398,7 @@ class Character extends FlxSprite
 				animation.play('firstDeath');
 
 				loadOffsetFile(curCharacter);
-				playAnim('idle');
+				playAnim('firstDeath');
 
 				setGraphicSize(Std.int(width * 6)); // <-- pixel bullshit (dont mind it)
 				updateHitbox();
@@ -569,27 +569,6 @@ class Character extends FlxSprite
 		trace(animationNotes);
 	}
 
-	function sortAnims(x, y)
-	{
-		return x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0;
-	}
-
-	function quickAnimAdd(name:String, prefix:String)
-	{
-		animation.addByPrefix(name, prefix, 24, false);
-	}
-
-	private function loadOffsetFile(offsetCharacter:String)
-	{
-		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file("images/characters/character-offsets/" + offsetCharacter + "Offsets.txt"));
-	
-		for (i in daFile)
-		{
-			var splitWords:Array<String> = i.split(" ");
-			addOffset(splitWords[0], Std.parseInt(splitWords[1]), Std.parseInt(splitWords[2]));
-		}
-	}
-
 	override function update(elapsed:Float)
 	{
 		if (!isPlayer)
@@ -717,8 +696,29 @@ class Character extends FlxSprite
 		}
 	}
 
+	function sortAnims(x, y)
+	{
+		return x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0;
+	}
+
+	function quickAnimAdd(name:String, prefix:String)
+	{
+		animation.addByPrefix(name, prefix, 24, false);
+	}
+
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)
 	{
 		animOffsets[name] = [x, y];
+	}
+
+	private function loadOffsetFile(offsetCharacter:String)
+	{
+		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file("images/characters/character-offsets/" + offsetCharacter + "Offsets.txt"));
+		
+		for (i in daFile)
+		{
+			var splitWords:Array<String> = i.split(" ");
+			addOffset(splitWords[0], Std.parseInt(splitWords[1]), Std.parseInt(splitWords[2]));
+		}
 	}
 }

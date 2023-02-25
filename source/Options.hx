@@ -118,7 +118,7 @@ class FPSOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "FPS counter ";
+		return "FPS Counter ";
 	}
 }
 
@@ -135,7 +135,6 @@ class FramerateOption extends Option
 	public override function press(changeData:Bool):Bool
 	{
 		withoutCheckboxes = true;
-		boldDisplay = false;
 		return true;
 	}
 
@@ -161,8 +160,7 @@ class FramerateOption extends Option
 
 	private override function updateDisplay():String
 	{
-		boldDisplay = false;
-		return "FPS Cap: " + FlxG.drawFramerate;
+		return "FPS Cap " + FlxG.drawFramerate;
 	}
 }
 
@@ -185,7 +183,7 @@ class DownscrollOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "downscroll ";
+		return "Downscroll ";
 	}
 }
 
@@ -208,7 +206,7 @@ class MiddlescrollOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "middlescroll ";
+		return "Middlescroll ";
 	}
 }
 
@@ -231,7 +229,7 @@ class NotesplashOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "notesplashes ";
+		return "Notesplashes ";
 	}
 }
 
@@ -254,7 +252,7 @@ class GhostTappingOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "ghost tapping ";
+		return "Ghost tapping ";
 	}
 }
 
@@ -277,7 +275,7 @@ class NaughtyOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "naughtyness";
+		return "Naughtyness";
 	}
 }
 
@@ -300,7 +298,7 @@ class CameraZoomOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "camera zooming on beat";
+		return "Camera zooming on beat";
 	}
 }
 
@@ -451,7 +449,6 @@ class ScrollSpeedOption extends Option
 	public function new(desc:String)
 	{
 		withoutCheckboxes = true;
-		boldDisplay = false;
 		super();
 		description = desc;
 	}
@@ -459,7 +456,6 @@ class ScrollSpeedOption extends Option
 	public override function press(changeData:Bool):Bool
 	{
 		withoutCheckboxes = true;
-		boldDisplay = false;
 		return true;
 	}
 
@@ -485,34 +481,51 @@ class ScrollSpeedOption extends Option
 
 	private override function updateDisplay():String
 	{
-		boldDisplay = false;
-		return "Scroll Speed: " + FlxG.save.data.scrollSpeed;
+		return "Scroll Speed " + FlxG.save.data.scrollSpeed;
 	}
 }
 
-/*
-class TimerOption extends Option
+class LaneTransOption extends Option
 {
 	public function new(desc:String)
 	{
+		withoutCheckboxes = true;
 		super();
 		description = desc;
 	}
 	
 	public override function press(changeData:Bool):Bool
 	{
-		if (changeData)
+		withoutCheckboxes = true;
+		return true;
+	}
+
+	public override function left():Bool
+	{
+		if (FlxG.save.data.laneUnderlay > 0.0)
 		{
-			FlxG.save.data.songBar = !FlxG.save.data.songBar;
+			FlxG.save.data.laneUnderlay -= 0.1;
+			if(FlxG.save.data.laneUnderlay < 0.0)
+			{
+				FlxG.save.data.laneUnderlay = 0.0;
+			}
+			FlxG.save.data.laneUnderlay = FlxMath.roundDecimal(FlxG.save.data.laneUnderlay, 2);
 		}
-		acceptValues = FlxG.save.data.songBar;
 		display = updateDisplay();
 		return true;
 	}
-	
+
+	public override function right():Bool
+	{
+		if (FlxG.save.data.laneUnderlay < 1)
+			FlxG.save.data.laneUnderlay += 0.1;
+		FlxG.save.data.laneUnderlay = FlxMath.roundDecimal(FlxG.save.data.laneUnderlay, 2);
+		display = updateDisplay();
+		return true;
+	}
+
 	private override function updateDisplay():String
 	{
-		return "Hide Song Length";
+		return "Lane underlay " + FlxG.save.data.laneUnderlay;
 	}
 }
-*/
