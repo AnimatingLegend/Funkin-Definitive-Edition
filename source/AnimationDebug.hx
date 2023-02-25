@@ -84,39 +84,23 @@ class AnimationDebug extends MusicBeatState
 		FlxCamera.defaultCameras = [camOther];
 
 		// Stage Shit
-		var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stage/stageback', 'shared'));
-		bg.antialiasing = FlxG.save.data.lowData;
+		bg = new FlxSprite(-600, -200).loadGraphic(Paths.image('stage/stageback', 'shared'));
+		stageFront = new FlxSprite(-650, 600).loadGraphic(Paths.image('stage/stagefront', 'shared'));
+		stageCurtains= new FlxSprite(-500, -300).loadGraphic(Paths.image('stage/stagecurtains', 'shared'));
+
+		bg.screenCenter(X);
+		bg.scale.set(0.7, 0.7);
+		stageFront.screenCenter(X);
+		stageFront.scale.set(0.7, 0.7);
+		stageCurtains.screenCenter(X);
+		stageCurtains.scale.set(0.7, 0.7);
+
 		bg.scrollFactor.set(0.9, 0.9);
-		bg.active = false;
-		add(bg);
-
-		var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stage/stagefront', 'shared'));
-		stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
-		stageFront.updateHitbox();
-		stageFront.antialiasing = FlxG.save.data.lowData;
+		stageCurtains.scrollFactor.set(0.9, 0.9);
 		stageFront.scrollFactor.set(0.9, 0.9);
-		stageFront.active = false;
+
+		add(bg);
 		add(stageFront);
-
-		var stageLight:FlxSprite = new FlxSprite(-125, -100).loadGraphic(Paths.image('stage/stage_light', 'shared'));
-		stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
-		stageLight.antialiasing = FlxG.save.data.lowData;
-		stageLight.updateHitbox();
-		add(stageLight);
-
-		var stageLight:FlxSprite = new FlxSprite(1225, -100).loadGraphic(Paths.image('stage/stage_light', 'shared'));
-		stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
-		stageLight.antialiasing = FlxG.save.data.lowData;
-		stageLight.updateHitbox();
-		stageLight.flipX = true;
-		add(stageLight);
-
-		var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stage/stagecurtains', 'shared'));
-		stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-		stageCurtains.updateHitbox();
-		stageCurtains.antialiasing = FlxG.save.data.lowData;
-		stageCurtains.scrollFactor.set(1.3, 1.3);
-		stageCurtains.active = false;
 		add(stageCurtains);
 
 		FlxG.mouse.visible = true;
