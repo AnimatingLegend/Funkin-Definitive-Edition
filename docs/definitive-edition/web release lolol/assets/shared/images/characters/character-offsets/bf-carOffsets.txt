@@ -1,0 +1,14 @@
+singDOWN-loop -10 -50
+singRIGHTmiss -30 21
+singDOWN -10 -50
+singLEFTmiss 12 24
+singUP -29 27
+singLEFT-loop 12 -6
+singRIGHT-loop -38 -7
+idle 0 0
+idle-loop 0 0
+singDOWNmiss -11 -19
+singRIGHT -38 -7
+singLEFT 12 -6
+singUPmiss -29 27
+singUP-loop -29 27
