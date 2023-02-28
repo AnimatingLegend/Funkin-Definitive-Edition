@@ -3,7 +3,7 @@
 Everything that you see in this engine was used on my [Week 7 Port](https://github.com/LegendLOL/Funkin-Week7) project. This is intended to be a more fixed and polished version of the port.
 
 **HTML5 VERSION OUT NOW!!!**
-[PLAY IT NOW!!!!](https://animatinglegend.github.io/demo/funkin-def-edition/release/v0.3.1/)
+[PLAY IT NOW!!!!](https://animatinglegend.github.io/funkin-projects/funkin-def-edition/release/)
 
 ## Credits & Shoutouts
 - [Legend (thats me)](https://twitter.com/AnimatingLegend) - Programmer
