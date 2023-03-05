@@ -182,8 +182,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [???] - [Unreleased/Unfinished]
 
 ### Added
-N/A
+- Mini cutscene/transition to Monster
+- Antialiasing to Week 4 stage (HOW TF DID I MISS THIS...)
 ### Changed
-N/A
+- N/A
 ### Fixed
-- Sustain note trail bullshit, Week 6 debug errors
+- Week 6 debug errors
+- Sustain note trail bullshit

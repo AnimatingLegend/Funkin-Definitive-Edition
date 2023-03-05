@@ -358,8 +358,6 @@ class PlayState extends MusicBeatState {
 					trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes'));
 					FlxG.sound.list.add(trainSound);
 
-					// var cityLights:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.win0.png);
-
 					var street:FlxSprite = new FlxSprite(-40, streetBehind.y).loadGraphic(Paths.image('philly/street', 'week3'));
 					street.antialiasing = FlxG.save.data.lowData;
 					add(street);
@@ -371,6 +369,7 @@ class PlayState extends MusicBeatState {
 
 					var skyBG:FlxSprite = new FlxSprite(-120, -50).loadGraphic(Paths.image('limo/limoSunset', 'week4'));
 					skyBG.scrollFactor.set(0.1, 0.1);
+					skyBG.antialiasing = FlxG.save.data.lowData;
 					add(skyBG);
 
 					var bgLimo:FlxSprite = new FlxSprite(-200, 480);
@@ -378,6 +377,7 @@ class PlayState extends MusicBeatState {
 					bgLimo.animation.addByPrefix('drive', "background limo pink", 24);
 					bgLimo.animation.play('drive');
 					bgLimo.scrollFactor.set(0.4, 0.4);
+					bgLimo.antialiasing = FlxG.save.data.lowData;
 					add(bgLimo);
 
 					grpLimoDancers = new FlxTypedGroup<BackgroundDancer>();
@@ -391,16 +391,8 @@ class PlayState extends MusicBeatState {
 
 					var overlayShit:FlxSprite = new FlxSprite(-500, -600).loadGraphic(Paths.image('limo/limoOverlay', 'week4'));
 					overlayShit.alpha = 0.5;
-					// add(overlayShit);
-
-					// var shaderBullshit = new BlendModeEffect(new OverlayShader(), FlxColor.RED);
-
-					// FlxG.camera.setFilters([new ShaderFilter(cast shaderBullshit.shader)]);
-
-					// overlayShit.shader = shaderBullshit;
 
 					var limoTex = Paths.getSparrowAtlas('limo/limoDrive', 'week4');
-
 					limo = new FlxSprite(-120, 550);
 					limo.frames = limoTex;
 					limo.animation.addByPrefix('drive', "Limo stage", 24);
@@ -408,7 +400,7 @@ class PlayState extends MusicBeatState {
 					limo.antialiasing = FlxG.save.data.lowData;
 
 					fastCar = new FlxSprite(-300, 160).loadGraphic(Paths.image('limo/fastCarLol', 'week4'));
-					// add(limo);
+					fastCar.antialiasing = FlxG.save.data.lowData;
 				}
 			case 'mall': // Week 5 - Cocoa, Eggnog
 				{
@@ -975,6 +967,41 @@ class PlayState extends MusicBeatState {
 		if (isStoryMode && !seenCutscene) {
 			seenCutscene = true;
 			switch (curSong.toLowerCase()) {
+				case "monster":
+					var whiteScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.WHITE);
+					add(whiteScreen);
+					whiteScreen.scrollFactor.set();
+					camHUD.visible = false;
+					cameraMovement();
+
+					new FlxTimer().start(0.1, function(tmr:FlxTimer) 
+					{
+						FlxTween.tween(whiteScreen, {alpha: 0}, 1, 
+						{
+							startDelay: 0.1,
+							ease: FlxEase.linear,
+						});
+
+						FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
+						if (gf != null) gf.playAnim('scared', true);
+						boyfriend.playAnim('scared', true);
+
+
+						new FlxTimer().start(0.6, function(tmr:FlxTimer) 
+						{
+							remove(whiteScreen);
+							FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, 
+							{
+								ease: FlxEase.quadInOut,
+								onComplete: function(twn:FlxTween) 
+								{
+									startCountdown();
+									camHUD.visible = true;
+								}
+							});
+						});
+					});
+
 				case "winter-horrorland":
 					var blackScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
 					add(blackScreen);

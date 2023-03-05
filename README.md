@@ -30,6 +30,7 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 * Updated Dad's Left sing sprite
 * Girlfriend does Cheering animations during Bopeebo
 ### Week 2
+* Added mini cutscene/transition to Monster
 * When lightning occurs, the camera zooms in slightly
 ### Week 3
 * Your Camera shakes when a train passes by
