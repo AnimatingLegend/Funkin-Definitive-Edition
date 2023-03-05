@@ -178,3 +178,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Modding bullshit (it may come back, idk lol)
+------------------------------------------------------------
+## [???] - [Unreleased/Unfinished]
+
+### Added
+N/A
+### Changed
+N/A
+### Fixed
+- Sustain note trail bullshit, Week 6 debug errors

@@ -49,7 +49,7 @@ class Note extends FlxSprite
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
 
-		x += 50;
+		x += (FlxG.save.data.middlescroll) + 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
 		this.strumTime = strumTime;
@@ -109,32 +109,35 @@ class Note extends FlxSprite
 				antialiasing = FlxG.save.data.lowData;
 		}
 
-		switch (noteData)
+		/**
+		 * Code originally from psych engine; just a little twaked.
+		 * Doing this 'if' check to fix the warnings on Senpai songs
+		 */
+		x += swagWidth * (noteData % 4);
+		if (!isSustainNote) 
 		{
-			case 0:
-				x += swagWidth * 0;
-				animation.play('purpleScroll');
-			case 1:
-				x += swagWidth * 1;
-				animation.play('blueScroll');
-			case 2:
-				x += swagWidth * 2;
-				animation.play('greenScroll');
-			case 3:
-				x += swagWidth * 3;
-				animation.play('redScroll');
+			var animToPlay:String = '';	
+			switch (noteData % 4)
+			{
+				case 0:
+					animToPlay = 'purple';
+				case 1:
+					animToPlay = 'blue';
+				case 2:
+					animToPlay = 'green';
+				case 3:
+					animToPlay = 'red';
+			}
+			animation.play(animToPlay + 'Scroll');
 		}
-
-		// trace(prevNote);
 
 		if (isSustainNote && prevNote != null)
 		{
 			alpha = 0.6;
 
-			if (FlxG.save.data.downscroll)
-			{
-				angle = 180;
-			}	
+			if (FlxG.save.data.downscroll && sustainNote) {
+				flipY = true;
+			}
 
 			x += width / 2;
 
@@ -171,9 +174,12 @@ class Note extends FlxSprite
 						prevNote.animation.play('redhold');
 				}
 
-				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
+				/**
+				 * i am so sorry for this inconvenience...
+				 * it works though so whatever. shrug emoji
+				 */
+				prevNote.scale.y *= (((Conductor.stepCrochet / 100 * 1.5)) * FlxMath.roundDecimal(FlxG.save.data.scrollSpeed == 1 ? PlayState.SONG.speed : FlxG.save.data.scrollSpeed, 2));
 				prevNote.updateHitbox();
-				// prevNote.setGraphicSize();
 			}
 		}
 	}
