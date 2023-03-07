@@ -217,6 +217,13 @@ class Character extends FlxSprite
 				quickAnimAdd('singLEFT', 'Monster left note');
 				quickAnimAdd('singRIGHT', 'Monster Right note');
 
+				// loop anims
+				animation.addByIndices('idle-loop', 'monster idle', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singUP-loop', 'monster up note', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singDOWN-loop', 'monster down', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singLEFT-loop', 'monster left note', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singRIGHT-loop', 'monster Right note', [10, 11, 12, 13], '', 24, true);
+
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
 				barColor = 0xFFf3ff6e;
@@ -229,6 +236,13 @@ class Character extends FlxSprite
 				quickAnimAdd('singDOWN', 'monster down');
 				quickAnimAdd('singLEFT', 'Monster left note');
 				quickAnimAdd('singRIGHT', 'Monster Right note');
+
+				// loop anims
+				animation.addByIndices('idle-loop', 'monster idle', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singUP-loop', 'monster up note', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singDOWN-loop', 'monster down', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singLEFT-loop', 'monster left note', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singRIGHT-loop', 'monster Right note', [10, 11, 12, 13], '', 24, true);
 
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
