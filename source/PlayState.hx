@@ -52,6 +52,7 @@ import shaderslmao.BuildingShaders;
 import shaderslmao.ColorSwap;
 import Conductor.Ratings;
 import TankCutscene.CutsceneCharacter;
+import Boyfriend.Pico;
 
 using StringTools;
 
@@ -82,6 +83,7 @@ class PlayState extends MusicBeatState {
 	private var dad:Character;
 	private var gf:Character;
 	private var boyfriend:Boyfriend;
+	private var pico:Pico;
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -663,60 +665,44 @@ class PlayState extends MusicBeatState {
 				}
 		}
 
-		var gfCheck:String = 'gf';
-
-		if (SONG.gfVersion == null) {
-			switch (storyWeek) {
-				case 4:
-					gfCheck = 'gf-car';
-				case 5:
-					gfCheck = 'gf-christmas';
-				case 6:
-					gfCheck = 'gf-pixel';
-				case 7:
-					if (SONG.song == 'Stress')
-						gfCheck = 'pico-speaker';
-					else
-						gfCheck = 'gf-tankmen';
-			}
-		} else {
-			gfCheck = SONG.gfVersion;
-		}
-
-		var curGf:String = '';
-		switch (gfCheck) {
-			case 'gf-car':
-				curGf = 'gf-car';
-			case 'gf-christmas':
-				curGf = 'gf-christmas';
-			case 'gf-pixel':
-				curGf = 'gf-pixel';
-			case 'gf-tankmen':
-				curGf = 'gf-tankmen';
-			default:
-				curGf = 'gf';
+		var gfVersion:String = 'gf';
+		switch (curStage) {
+			case 'limo':
+				gfVersion = 'gf-car';
+			case 'mall' | 'mallEvil':
+				gfVersion = 'gf-christmas';
+			case 'school' | 'schoolEvil':
+				gfVersion = 'gf-pixel';
+			case 'tank':
+				gfVersion = 'gf-tankmen';
 		}
 
 		if (SONG.song.toLowerCase() == 'stress')
-			curGf = 'pico-speaker';
+			gfVersion = 'pico-speaker';
 
-		gf = new Character(400, 130, curGf);
+		gf = new Character(400, 130, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);
-		if (curGf == 'pico-speaker') {
-			gf.x -= 50;
-			gf.y -= 200;
-			var tankmen:TankmenBG = new TankmenBG(20, 500, true);
-			tankmen.strumTime = 10;
-			tankmen.resetShit(20, 600, true);
-			tankmanRun.add(tankmen);
-			for (i in 0...TankmenBG.animationNotes.length) {
-				if (FlxG.random.bool(16)) {
-					var man:TankmenBG = tankmanRun.recycle(TankmenBG);
-					man.strumTime = TankmenBG.animationNotes[i][0];
-					man.resetShit(500, 200 + FlxG.random.int(50, 100), TankmenBG.animationNotes[i][1] < 2);
-					tankmanRun.add(man);
+
+		switch (gfVersion) {
+			case 'pico-speaker':
+				gf.x -= 50;
+				gf.y -= 200;
+
+				var tempTankman:TankmenBG = new TankmenBG(20, 500, true);
+				tempTankman.strumTime = 10;
+				tempTankman.resetShit(20, 600, true);
+				tankmanRun.add(tempTankman);
+
+				for (i in 0...TankmenBG.animationNotes.length)
+				{
+					if (FlxG.random.bool(16))
+					{
+						var tankman:TankmenBG = tankmanRun.recycle(TankmenBG);
+						tankman.strumTime = TankmenBG.animationNotes[i][0];
+						tankman.resetShit(500, 200 + FlxG.random.int(50, 100), TankmenBG.animationNotes[i][1] < 2);
+						tankmanRun.add(tankman);
+					}
 				}
-			}
 		}
 
 		dad = new Character(100, 100, SONG.player2);
@@ -760,32 +746,27 @@ class PlayState extends MusicBeatState {
 			case 'tankman':
 				dad.y += 180;
 			case 'bf-pixel-opponent':
-				camPos.x += 50;
-				camPos.y -= 160;
-				dad.x += 80;
+				dad.x -= 80;
 				dad.y += 460;
-			case 'pico-player':
-				camPos.x += 600;
-				dad.y += 300;
+				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
 		}
 
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
+		pico = new Pico(100, 100, SONG.player1);
+
+		if (boyfriend.curCharacter.startsWith('pico-player')) {
+			camPos.x += 600;
+		}
 
 		// REPOSITIONING PER STAGE
 		switch (curStage) {
 			case 'spooky':
-				if (boyfriend.curCharacter.startsWith('pico-player')) {
-					boyfriend.x += 100;
-					boyfriend.y -= 60;
-				}
+				pico.x += 100;
+				pico.y -= 60;
 
 			case 'limo':
 				boyfriend.y -= 220;
 				boyfriend.x += 260;
-
-				if (boyfriend.curCharacter.startsWith('pico-player')) {
-					boyfriend.y -= 90;
-				}
 
 				resetFastCar();
 				add(fastCar);
@@ -820,7 +801,7 @@ class PlayState extends MusicBeatState {
 				dad.y += 60;
 				dad.x -= 80;
 
-				if (gfCheck != 'pico-speaker') {
+				if (gfVersion != 'pico-speaker') {
 					gf.x -= 170;
 					gf.y -= 75;
 				}
@@ -985,6 +966,10 @@ class PlayState extends MusicBeatState {
 						FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
 						if (gf != null) gf.playAnim('scared', true);
 						boyfriend.playAnim('scared', true);
+						
+						if (boyfriend.curCharacter.startsWith('pico-player')) {
+							pico.playAnim('idle', true);
+						}
 
 
 						new FlxTimer().start(0.6, function(tmr:FlxTimer) 

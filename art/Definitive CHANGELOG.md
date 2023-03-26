@@ -185,7 +185,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mini cutscene/transition to Monster
 - Antialiasing to Week 4 stage (HOW TF DID I MISS THIS...)
 ### Changed
-- N/A
+- pico-player's offsets for all of the maps, a lil bit of backend code
 ### Fixed
 - Week 6 debug errors
-- Sustain note trail bullshit
+- Choppy sustain note trails (only occurs when you have high scroll speed)
