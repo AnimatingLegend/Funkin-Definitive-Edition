@@ -136,7 +136,7 @@ class Note extends FlxSprite
 			alpha = 0.6;
 
 			if (FlxG.save.data.downscroll /* && !sustainNote */) {
-				flipY = true;
+				angle = 180;
 			}
 
 			x += width / 2;

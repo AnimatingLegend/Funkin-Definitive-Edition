@@ -2126,7 +2126,8 @@ class PlayState extends MusicBeatState {
 
 		if (generatedMusic) {
 			notes.forEachAlive(function(daNote:Note) {
-				if (daNote.y > FlxG.height) {
+				if ((FlxG.save.data.downscroll && daNote.y < -daNote.height) 
+					|| (!FlxG.save.data.downscroll && daNote.y > FlxG.height)) {
 					daNote.active = false;
 					daNote.visible = false;
 				} else {
@@ -2145,36 +2146,40 @@ class PlayState extends MusicBeatState {
 
 				// i am so fucking sorry for these if conditions
 				if (FlxG.save.data.downscroll) {
-					daNote.y = strumLine.y + 0.45 * (Conductor.songPosition - daNote.strumTime) * FlxMath.roundDecimal(speedValue, 2);
+					daNote.y = (strumLine.y + (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(speedValue, 2)));
 
-					if (daNote.isSustainNote) {
-						if (daNote.animation.curAnim.name.endsWith('end') && daNote.prevNote != null)
+					if (daNote.isSustainNote){
+						if (daNote.animation.curAnim.name.endsWith("end") && daNote.prevNote != null)
 							daNote.y += daNote.prevNote.height;
 						else
 							daNote.y += daNote.height / 2;
 
-						if (daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= center
-							&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))) {
-							var swagRect = new FlxRect(0, 0, daNote.frameWidth, daNote.frameHeight);
+						if ((!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))
+							&& daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= center)
+						{
+							// clipRect is applied to graphic itself so use frame Heights
+							var swagRect:FlxRect = new FlxRect(0, 0, daNote.frameWidth, daNote.frameHeight);
+
 							swagRect.height = (center - daNote.y) / daNote.scale.y;
 							swagRect.y = daNote.frameHeight - swagRect.height;
-
 							daNote.clipRect = swagRect;
 						}
 					}
 				} else {
-					daNote.y = strumLine.y - 0.45 * (Conductor.songPosition - daNote.strumTime) * FlxMath.roundDecimal(speedValue, 2);
+					daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(speedValue, 2)));
 
 					if (daNote.isSustainNote
-						&& daNote.y + daNote.offset.y * daNote.scale.y <= center
-						&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))) {
-						var swagRect = new FlxRect(0, 0, daNote.width / daNote.scale.x, daNote.height / daNote.scale.y);
+						&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))
+						&& daNote.y + daNote.offset.y * daNote.scale.y <= center)
+					{
+						var swagRect:FlxRect = new FlxRect(0, 0, daNote.width / daNote.scale.x, daNote.height / daNote.scale.y);
+
 						swagRect.y = (center - daNote.y) / daNote.scale.y;
 						swagRect.height -= swagRect.y;
-
 						daNote.clipRect = swagRect;
 					}
 				}
+
 				if (!daNote.mustPress && daNote.wasGoodHit) {
 					if (SONG.song != 'Tutorial')
 						camZooming = true;
@@ -2185,6 +2190,7 @@ class PlayState extends MusicBeatState {
 						if (SONG.notes[Math.floor(curStep / 16)].altAnim)
 							altAnim = '-alt';
 					}
+
 					if (daNote.altNote)
 						altAnim = '-alt';
 
@@ -2226,12 +2232,19 @@ class PlayState extends MusicBeatState {
 				// WIP interpolation shit? Need to fix the pause issue
 				// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * PlayState.SONG.speed));
 
-				var doKill = daNote.y < -daNote.height;
-				if (FlxG.save.data.downscroll)
-					doKill = daNote.y > FlxG.height;
+				if (daNote.isSustainNote && daNote.wasGoodHit) {
+					if ((FlxG.save.data.downscroll && daNote.y < -daNote.height) 
+						|| (FlxG.save.data.downscroll && daNote.y > FlxG.height)) {
+						daNote.active = false;
+						daNote.visible = false;
 
-				if (doKill) {
-					if (daNote.tooLate || !daNote.wasGoodHit) {
+						daNote.kill();
+						notes.remove(daNote, true);
+						daNote.destroy();
+					}
+				} else if (daNote.tooLate || daNote.wasGoodHit) {
+					
+					if (daNote.tooLate) {
 						health -= 0.0475;
 						vocals.volume = 0;
 					}
@@ -2252,7 +2265,6 @@ class PlayState extends MusicBeatState {
 				if (missNote && daNote.mustPress) {
 					if (daNote.tooLate || !daNote.wasGoodHit) {
 						noteMiss(daNote.noteData);
-
 						vocals.volume = 0;
 					}
 				}

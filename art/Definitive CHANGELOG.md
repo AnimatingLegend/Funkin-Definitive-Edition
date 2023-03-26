@@ -188,4 +188,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - pico-player's offsets for all of the maps, a lil bit of backend code
 ### Fixed
 - Week 6 debug errors
+- Minor downscroll issues
 - Choppy sustain note trails (only occurs when you have high scroll speed)
