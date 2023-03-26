@@ -76,8 +76,10 @@ class OptionsMenuState extends MusicBeatState
 		if (FlxG.sound.music != null)
 		{
 			if (!FlxG.sound.music.playing)
+			{
 				FlxG.sound.playMusic(Paths.music('settingsMenu'), 0.5, true);
-				trace('settings music transistion');
+			//	trace('settings music transistion');
+			}
 		}
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
@@ -157,7 +159,26 @@ class OptionsMenuState extends MusicBeatState
 			});
 		}
 
-		if (controls.BACK)
+		if (controls.BACK && !isCat)
+		{
+			FlxG.sound.play(Paths.sound("cancelMenu"), false);
+
+			if (FlxG.sound.music != null) {
+				FlxG.sound.music.fadeOut(0.5, 0);
+			}
+
+			new FlxTimer().start(0.5, function(tmr:FlxTimer)
+			{
+				FlxG.sound.music.stop();
+				if (fromFreeplay) {				
+					fromFreeplay = false;
+					FlxG.switchState(new PlayState());
+				} else {
+					FlxG.switchState(new MainMenuState());
+				}
+			});
+		}
+		else if (controls.BACK)
 		{
 			isCat = false;
 			grpControls.clear();
