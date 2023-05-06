@@ -43,10 +43,8 @@ class Boyfriend extends Character
 	}
 }
 
-class Pico extends Character //
+class Pico extends Character
 {
-	public var stunned:Bool = false;
-	public var startedDeath:Bool = true;
 
 	public function new(x:Float, y:Float, ?char:String = 'pico-player')
 	{
