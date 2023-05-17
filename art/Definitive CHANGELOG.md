@@ -145,7 +145,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Your game shouldn't crash when in the Caching menu (startup)
-- Week 7 cutscenes are now censored (when the censor option is off)
+- Week 7 cutscenes are now censored (when the censor option is on)
 - Outdated version backend shit
 - Tankman Mid-song event issues
 - Other minor fixes
@@ -165,7 +165,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Intro song skips to 9.4 seconds if you skipped the intro
 - Minor changes to Animation Debug Menu
-- Combo now starts at 1 instead of 0
+- Combo now starts at 1 instead of 10
 - Complete overhaul on Alphabet system
 - Your Camera shakes when a train is passing by on Week 3
 - Backend Changes
@@ -185,7 +185,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mini cutscene/transition to Monster
 - Antialiasing to Week 4 stage (HOW TF DID I MISS THIS...)
 ### Changed
+- Optimized week 7 cutscenes a smudge bit... (lag shouldn't be THAT bad on low-end computers)
 - pico-player's offsets for all of the maps, a lil bit of backend code
+- Backend Changes
 ### Fixed
 - Week 6 debug errors
 - Minor downscroll issues

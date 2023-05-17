@@ -67,14 +67,13 @@ class TitleState extends MusicBeatState
 	override public function create():Void
 	{
 		getBuildVer();
+		Paths.clearStoredMemory();
+		Paths.clearUnusedMemory();
+
 
 		#if desktop
 		FlxG.game.focusLostFramerate = 60;
 		#end
-
-		/*#if polymod
-		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod'], framework: OPENFL});
-		#end*/
 
 		swagShader = new ColorSwap();
 		alphaShader = new BuildingShaders();
@@ -125,12 +124,9 @@ class TitleState extends MusicBeatState
 		#end
 		#end
 
-		#if desktop
-		DiscordClient.initialize();
-		
-		Application.current.onExit.add (function (exitCode) {
-			DiscordClient.shutdown();
-		 });
+		#if Desktop
+		// Updating Discord Rich Presence
+		DiscordClient.changePresence("In TitleState.hx", null);
 		#end
 
 		#if desktop
