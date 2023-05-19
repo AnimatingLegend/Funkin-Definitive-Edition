@@ -5,4 +5,3 @@ singRIGHT -23 -31
 singUP-alt -16 -11
 singUP 54 49
 singLEFT 89 -12
-ughAnim -14 -8
