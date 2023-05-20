@@ -29,22 +29,24 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 * Added Unused stage lights
 * Updated Dad's Left sing sprite
 * Girlfriend does Cheering animations during Bopeebo
-### Week 2
+### Week 2:
 * Added mini cutscene/transition to Monster
 * When lightning occurs, the camera zooms in slightly
-### Week 3
+### Week 3:
 * Your Camera shakes when a train passes by
 * Boyfriend does "Hey" animation during Philly
 * Girlfriend does Cheering animations during Blammed
 ### Week 4:
 * Better hair physics for Mom & Boyfriend (identical to psych engines)
-### Week 5
+### Week 5:
 * Girlfriend does Cheering animations during Cocoa & Eggnog
 * On Winter Horrorland - the HUD is hidden during its mini cutscene
 ### Week 6:
 * On Thorns - the HUD is hidden during its mini cutscene
 * Fixed major dialogue bugs, tons of backend changes
 * Tweaked map size for Thorns (0.9)
+### Week 7:
+* Tankman Cutscenes are now censored
 
 ## Photos & Gifs
 ### Options Menu
