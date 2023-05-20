@@ -11,9 +11,63 @@ import flixel.graphics.FlxGraphic;
 class Paths
 {
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
+	inline public static var VIDEO_EXT = "mp4";
+
+	public static function excludeAsset(key:String) 
+	{
+		if (!dumpExclusions.contains(key))
+			dumpExclusions.push(key);
+	}
+
+	public static var dumpExclusions:Array<String> =
+	[
+		'assets/music/freakyMenu.$SOUND_EXT',
+		'assets/shared/music/breakfast.$SOUND_EXT',
+	];
+
+	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
+	public static var localTrackedAssets:Array<String> = [];
+
+	public static function clearUnusedMemory() 
+	{
+		for (key in currentTrackedAssets.keys()) 
+		{
+			if (!localTrackedAssets.contains(key) && !dumpExclusions.contains(key)) 
+			{
+				var obj = currentTrackedAssets.get(key);
+				@:privateAccess
+				if (obj != null) {
+					openfl.Assets.cache.removeBitmapData(key);
+					FlxG.bitmap._cache.remove(key);
+					obj.destroy();
+					currentTrackedAssets.remove(key);
+				}
+			}
+		}
+
+		// run the garbage collector for good measure lmfao
+		System.gc();
+	}
+
+	public static function clearStoredMemory(?cleanUnused:Bool = false) {
+		// clear anything not in the tracked assets list
+		@:privateAccess
+		for (key in FlxG.bitmap._cache.keys())
+		{
+			var obj = FlxG.bitmap._cache.get(key);
+			if (obj != null && !currentTrackedAssets.exists(key)) {
+				openfl.Assets.cache.removeBitmapData(key);
+				FlxG.bitmap._cache.remove(key);
+				obj.destroy();
+			}
+		}
+
+		// flags everything to be cleared out next unused memory clear
+		localTrackedAssets = [];
+		#if !html5 openfl.Assets.cache.clear("songs"); #end
+	}
 
 	static var currentLevel:String;
-
 	static public function setCurrentLevel(name:String)
 	{
 		currentLevel = name.toLowerCase();
@@ -123,104 +177,13 @@ class Paths
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library));
 	}
 
-	public static var dumpExclusions:Array<String> = ['assets/music/freakyMenu.$SOUND_EXT'];
-	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
-	public static var localTrackedAssets:Array<String> = [];
+	inline static public function fileExists(key:String, type:AssetType, ?ignoreMods:Bool = false, ?library:String)
+	{
+		if(OpenFlAssets.exists(file(key, type))) {
+			return true;
+		}
+		return false;
+	}
+
 	
-	public static function clearUnusedMemory() // taken from kade engine | i love optimization :]
-	{
-		// clear non local assets in the tracked assets list
-		var counter:Int = 0;
-		for (key in currentTrackedAssets.keys())
-		{
-			// if it is not currently contained within the used local assets
-			if (!localTrackedAssets.contains(key) && !dumpExclusions.contains(key))
-			{
-				// get rid of it
-				var obj = cast(currentTrackedAssets.get(key), FlxGraphic);
-				@:privateAccess
-				if (obj != null)
-				{
-					obj.persist = false;
-					obj.destroyOnNoUse = true;
-					OpenFlAssets.cache.removeBitmapData(key);
-
-					FlxG.bitmap._cache.remove(key);
-					FlxG.bitmap.removeByKey(key);
-
-					if (obj.bitmap.__texture != null)
-					{
-						obj.bitmap.__texture.dispose();
-						obj.bitmap.__texture = null;
-					}
-
-					FlxG.bitmap.remove(obj);
-
-					obj.dump();
-					obj.bitmap.disposeImage();
-					FlxDestroyUtil.dispose(obj.bitmap);
-
-					obj.bitmap = null;
-
-					obj.destroy();
-
-					obj = null;
-
-					currentTrackedAssets.remove(key);
-					counter++;
-					trace('Cleared $key form RAM');
-					trace('Cleared and removed $counter assets.');
-				}
-			}
-		}
-		// run the garbage collector for good measure lmfao
-		runGC();
-	}
-
-	public static function runGC()
-		System.gc();
-
-	public static function clearStoredMemory(?cleanUnused:Bool = false)
-	{
-		// clear anything not in the tracked assets list
-
-		var counterAssets:Int = 0;
-
-		@:privateAccess
-		for (key in FlxG.bitmap._cache.keys())
-		{
-			var obj = cast(FlxG.bitmap._cache.get(key), FlxGraphic);
-			if (obj != null && !currentTrackedAssets.exists(key))
-			{
-				obj.persist = false;
-				obj.destroyOnNoUse = true;
-
-				OpenFlAssets.cache.removeBitmapData(key);
-
-				FlxG.bitmap._cache.remove(key);
-
-				FlxG.bitmap.removeByKey(key);
-
-				if (obj.bitmap.__texture != null)
-				{
-					obj.bitmap.__texture.dispose();
-					obj.bitmap.__texture = null;
-				}
-
-				FlxG.bitmap.remove(obj);
-
-				obj.dump();
-
-				obj.bitmap.disposeImage();
-				FlxDestroyUtil.dispose(obj.bitmap);
-				obj.bitmap = null;
-
-				obj.destroy();
-				obj = null;
-				counterAssets++;
-				trace('Cleared $key from RAM');
-				trace('Cleared and removed $counterAssets cached assets.');
-			}
-		}
-	}
 }
