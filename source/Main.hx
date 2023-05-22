@@ -143,7 +143,6 @@ class Main extends Sprite
 		#end
 
 		#if cpp
-		initialState = CachingState;
 		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
 		#else
 		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);

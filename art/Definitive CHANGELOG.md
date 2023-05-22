@@ -184,11 +184,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Mini cutscene/transition to Monster
 - Antialiasing to Week 4 stage (HOW TF DID I MISS THIS...)
+
 ### Changed
 - Optimized week 7 cutscenes a smudge bit... (lag shouldn't be THAT bad on low-end computers)
-- pico-player's offsets for all of the maps, a lil bit of backend code
+- pico-player's offsets for all of the maps
 - Backend Changes
+
 ### Fixed
+- Memory shouldn't spike consistently in certain menus, or in-game
 - Week 6 debug errors
 - Minor downscroll issues
 - Choppy sustain note trails (only occurs when you have high scroll speed)
+
+### Removed
+- Caching Menu (overloads memory and crashes your game, no point in keeping it.)
