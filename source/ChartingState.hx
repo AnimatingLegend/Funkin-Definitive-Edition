@@ -1,5 +1,8 @@
 package;
 
+#if desktop
+import Discord.DiscordClient;
+#end
 import Conductor.BPMChangeEvent;
 import Section.SwagSection;
 import Song.SwagSong;
@@ -135,6 +138,11 @@ class ChartingState extends MusicBeatState
 				validScore: false
 			};
 		}
+
+		#if desktop
+		// Updating Discord Rich Presence
+		DiscordClient.changePresence("Chart Editor", StringTools.replace(_song.song, '-', ' '));
+		#end
 
 		FlxG.mouse.visible = true;
 		FlxG.save.bind('funkin', 'ninjamuffin99');

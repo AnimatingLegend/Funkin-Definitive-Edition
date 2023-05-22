@@ -114,10 +114,10 @@ class PlayState extends MusicBeatState {
 	private var startingSong:Bool = false;
 	public var endingSong:Bool = false;
 
-	private var iconP1:HealthIcon;
-	private var iconP2:HealthIcon;
-	private var camHUD:FlxCamera;
-	private var camGame:FlxCamera;
+	public var iconP1:HealthIcon;
+	public var iconP2:HealthIcon;
+	public var camHUD:FlxCamera;
+	public var camGame:FlxCamera;
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
@@ -184,7 +184,6 @@ class PlayState extends MusicBeatState {
 	#if desktop
 	// Discord RPC variables
 	var storyDifficultyText:String = "";
-	var iconRPC:String = "";
 	var songLength:Float = 0;
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
@@ -236,10 +235,24 @@ class PlayState extends MusicBeatState {
 		}
 
 		#if desktop
-		initDiscord();
+		storyDifficultyText = CoolUtil.difficultyString();
+
+		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
+		if (isStoryMode) {
+			detailsText = "Story Mode: " + storyWeek;
+		} else {
+			detailsText = "Freeplay";
+		}
+
+		// String for when the game is paused
+		detailsPausedText = "Paused - " + detailsText;
+
+		// Updating Discord Rich Presence.
+		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 		#end
 
-		if (SONG.stage == null || SONG.stage.length < 1) {
+		if (SONG.stage == null || SONG.stage.length < 1) 
+		{
 			switch (storyWeek) 
 			{
 				case 2:
@@ -249,15 +262,13 @@ class PlayState extends MusicBeatState {
 				case 4:
 					stageCheck = 'limo';
 				case 5:
-					if (SONG.song.toLowerCase() == 'winter-horrorland')
-					{
+					if (SONG.song.toLowerCase() == 'winter-horrorland') {
 						stageCheck = 'mallEvil';
 					} else {
 						stageCheck = 'mall';
 					}
 				case 6:
-					if (SONG.song.toLowerCase() == 'thorns')
-					{
+					if (SONG.song.toLowerCase() == 'thorns') {
 						stageCheck = 'schoolEvil';
 					} else {
 						stageCheck = 'school';
@@ -1492,32 +1503,6 @@ class PlayState extends MusicBeatState {
 
 	}
 
-	function initDiscord():Void
-	{
-		#if desktop
-		storyDifficultyText = CoolUtil.difficultyString();
-		iconRPC = SONG.player2;
-
-		// To avoid having duplicate images in Discord assets
-		switch (iconRPC)
-		{
-			case 'senpai-angry':
-				iconRPC = 'senpai';
-			case 'monster-christmas':
-				iconRPC = 'monster';
-			case 'mom-car':
-				iconRPC = 'mom';
-		}
-
-		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
-		detailsText = isStoryMode ? "Story Mode: Week " + storyWeek : "Freeplay";
-		detailsPausedText = "Paused - " + detailsText;
-
-		// Updating Discord Rich Presence.
-		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-		#end
-	}
-
 	var startTimer:FlxTimer;
 	var perfectMode:Bool = false;
 
@@ -1661,7 +1646,7 @@ class PlayState extends MusicBeatState {
 		songLength = FlxG.sound.music.length;
 
 		// Updating Discord Rich Presence (with Time Left)
-		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC, true, songLength);
+		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter(), true, songLength);
 		#end
 	}
 
@@ -1930,10 +1915,13 @@ class PlayState extends MusicBeatState {
 			paused = false;
 
 			#if desktop
-			if (startTimer.finished) {
-				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC, true, songLength - Conductor.songPosition);
-			} else {
-				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
+			if (startTimer != null && startTimer.finished)
+			{
+				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter(), true, songLength - Conductor.songPosition);
+			}
+			else
+			{
+				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 			}
 			#end
 		}
@@ -1945,9 +1933,9 @@ class PlayState extends MusicBeatState {
 		#if desktop
 		if (health > 0 && !paused) {
 			if (Conductor.songPosition > 0.0) {
-				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC, true, songLength - Conductor.songPosition);
+				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter(), true, songLength - Conductor.songPosition);
 			} else {
-				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
+				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 			}
 		}
 		#end
@@ -1958,7 +1946,7 @@ class PlayState extends MusicBeatState {
 	override public function onFocusLost():Void {
 		#if desktop
 		if (health > 0 && !paused) {
-			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
+			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 		}
 		#end
 
@@ -2050,7 +2038,7 @@ class PlayState extends MusicBeatState {
 				openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 			#if desktop
-			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
+			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 			#end
 		}
 
@@ -2195,7 +2183,7 @@ class PlayState extends MusicBeatState {
 
 			#if desktop
 			// Game Over doesn't get his own variable because it's only used here
-			DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
+			DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 			#end
 		}
 

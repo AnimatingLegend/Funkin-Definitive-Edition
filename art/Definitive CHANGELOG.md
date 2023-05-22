@@ -179,7 +179,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Modding bullshit (it may come back, idk lol)
 ------------------------------------------------------------
-## [???] - [Unreleased/Unfinished]
+## [0.3.2] - [5/22/23]
+## We're back with a mini update, hope yall enjoy!
 
 ### Added
 - Mini cutscene/transition to Monster
@@ -188,7 +189,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Optimized week 7 cutscenes a smudge bit... (lag shouldn't be THAT bad on low-end computers)
 - pico-player's offsets for all of the maps
-- Backend Changes
+- Backend Changes (mostly discord RPC stuff)
 
 ### Fixed
 - Memory shouldn't spike consistently in certain menus, or in-game
@@ -197,4 +198,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Choppy sustain note trails (only occurs when you have high scroll speed)
 
 ### Removed
-- Caching Menu (overloads memory and crashes your game, no point in keeping it.)
+- Caching Menu from booting screen **TEMPORARILY** (overloads memory and crashes your game, no point in keeping it.)

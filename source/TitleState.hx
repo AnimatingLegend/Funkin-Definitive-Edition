@@ -124,9 +124,12 @@ class TitleState extends MusicBeatState
 		#end
 		#end
 
-		#if Desktop
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In TitleState.hx", null);
+		#if desktop
+		DiscordClient.initialize();
+		
+		Application.current.onExit.add (function (exitCode) {
+			DiscordClient.shutdown();
+		 });
 		#end
 
 		#if desktop

@@ -1,5 +1,8 @@
 package;
 
+#if desktop
+import Discord.DiscordClient;
+#end
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -55,6 +58,7 @@ class AnimationDebug extends MusicBeatState
 	var offsetY:FlxUINumericStepper;
 
 	var characters:Array<String>;
+	var leHealthIcon:HealthIcon;
 
 	private var camOther:FlxCamera;
 	private var camHUD:FlxCamera;
@@ -202,6 +206,7 @@ class AnimationDebug extends MusicBeatState
 	
 			genBoyOffsets(true, true);
 			updateTexts();
+			updatePresence();
 		});
 	
 		player1DropDown.selectedLabel = char.curCharacter;
@@ -376,6 +381,13 @@ class AnimationDebug extends MusicBeatState
 		}
 
 		super.update(elapsed);
+	}
+
+	function updatePresence() {
+		#if desktop
+		// Updating Discord Rich Presence
+		DiscordClient.changePresence("Character Editor", "Character: " + daAnim, leHealthIcon.getCharacter());
+		#end
 	}
 
 	var _file:FileReference;

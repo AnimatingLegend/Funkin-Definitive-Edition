@@ -47,14 +47,6 @@ class CachingState extends MusicBeatState
 
 	override function create()
 	{
-		#if desktop
-		DiscordClient.initialize();
-		
-		Application.current.onExit.add (function (exitCode) {
-			DiscordClient.shutdown();
-		 });
-		#end
-
 		FlxG.mouse.visible = false;
 
 		FlxG.worldBounds.set(0,0);
