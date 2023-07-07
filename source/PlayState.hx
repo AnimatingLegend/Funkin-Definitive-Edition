@@ -1770,9 +1770,6 @@ class PlayState extends MusicBeatState {
 			daBeats += 1;
 		}
 
-		// trace(unspawnNotes.length);
-		// playerCounter += 1;
-
 		unspawnNotes.sort(sortByShit);
 
 		generatedMusic = true;
@@ -1788,7 +1785,7 @@ class PlayState extends MusicBeatState {
 
 	private function generateStaticArrows(player:Int):Void {
 		for (i in 0...4) {
-			// FlxG.log.add(i);
+			trace(i);
 			var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
 
 			switch (curStage) {
@@ -1882,16 +1879,14 @@ class PlayState extends MusicBeatState {
 					playerStrums.add(babyArrow);
 			}
 
+			if (!FlxG.save.data.middlescroll && player == 1) {
+				babyArrow.x += 40;
+			}
+
 			if (FlxG.save.data.middlescroll && player == 1) {
 				babyArrow.x -= 270;
-			}
-
-			else if (FlxG.save.data.middlescroll && player == 0) {
+			} else if (FlxG.save.data.middlescroll && player == 0) {
 				babyArrow.x -= 2000;
-			}
-
-			if(!FlxG.save.data.middlescroll && player == 1) {
-				babyArrow.x += 40;
 			}
 
 			babyArrow.animation.play('static');
@@ -2129,18 +2124,12 @@ class PlayState extends MusicBeatState {
 				if (Conductor.lastSongPos != Conductor.songPosition) {
 					songTime = (songTime + Conductor.songPosition) / 2;
 					Conductor.lastSongPos = Conductor.songPosition;
-					// Conductor.songPosition += FlxG.elapsed * 1000;
-					// trace('MISSED FRAME');
 				}
 			}
-
-			// Conductor.lastSongPos = FlxG.sound.music.time;
 		}
 
 		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null) {
 			if (curBeat % 4 == 0) {
-				// trace(PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection);
-
 				cameraRightSide = PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection;
 				cameraMovement();
 			}
@@ -2165,9 +2154,6 @@ class PlayState extends MusicBeatState {
 					gfSpeed = 2;
 				case 112:
 					gfSpeed = 1;
-				case 163:
-					// FlxG.sound.music.stop();
-					// FlxG.switchState(new TitleState());
 			}
 		}
 
@@ -2175,8 +2161,6 @@ class PlayState extends MusicBeatState {
 			switch (curBeat) {
 				case 128, 129, 130:
 					vocals.volume = 0;
-					// FlxG.sound.music.stop();
-					// FlxG.switchState(new PlayState());
 			}
 		}
 		// better streaming of shit
@@ -2357,7 +2341,10 @@ class PlayState extends MusicBeatState {
 
 				if (missNote && daNote.mustPress) {
 					if (daNote.tooLate || !daNote.wasGoodHit) {
-						noteMiss(daNote.noteData);
+						// better method then the last one i used...
+						if (FlxG.save.data.ghostTapping) {
+							noteMiss(daNote.noteData);
+						}
 						vocals.volume = 0;
 					}
 				}
@@ -2769,11 +2756,6 @@ class PlayState extends MusicBeatState {
 						goodNoteHit(possibleNote);
 					}
 				}
-			} else { // i apologize in advace
-				if (FlxG.save.data.ghostTapping) {
-					// badNoteHit();
-				} else
-					badNoteHit();
 			}
 		}
 		if (boyfriend.holdTimer > 0.004 * Conductor.stepCrochet
