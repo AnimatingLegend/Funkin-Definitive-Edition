@@ -44,7 +44,7 @@ class FreeplayState extends MusicBeatState
 
 		#if debug
 		isDebug = true;
-		addSong('Test', -1, 'bf-pixel');
+		addSong('Test', 0, 'bf-pixel');
 		#end
 
 		for (i in 0...initSonglist.length)
