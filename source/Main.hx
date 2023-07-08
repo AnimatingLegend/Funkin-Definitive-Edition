@@ -10,6 +10,16 @@ import openfl.events.Event;
 import flixel.FlxG;
 import ui.FPSCounter;
 
+#if windows
+import openfl.events.UncaughtErrorEvent;
+import haxe.CallStack;
+import haxe.io.Path;
+import sys.FileSystem;
+import sys.io.File;
+import sys.io.Process;
+import lime.app.Application;
+#end
+
 class Main extends Sprite
 {
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
@@ -150,6 +160,10 @@ class Main extends Sprite
 
 		addChild(game);
 
+		#if windows
+		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
+		#end
+
 		#if !mobile
 		fpsCounter = new FPSCounter(10, 3, 0xFFFFFF);
 		addChild(fpsCounter);
@@ -170,4 +184,37 @@ class Main extends Sprite
 	public function toggleFPS(fpsEnabled:Bool):Void {
 		fpsCounter.visible = fpsEnabled;
 	}
+
+	#if windows
+	function onCrash(e:UncaughtErrorEvent):Void
+	{
+		var errMsg:String = "";
+		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
+
+		errMsg += 'Friday Night Funkin - Definitive Edition has crashed!\n\n';
+
+		for (stackItem in callStack)
+		{
+			switch (stackItem)
+			{
+				case FilePos(s, file, line, column):
+					errMsg += "   > " + file + " (line " + line + ")\n";
+				default:
+					Sys.println(stackItem);
+			}
+		}
+
+		errMsg += "\nUncaught Error: " + e.error + "\n";
+		errMsg += "\nEngine version: " + MainMenuState.definitiveVersion;
+		errMsg += "\nFPS limit: " + FlxG.save.data.fps;
+
+		errMsg += '\n\nReport this bug here --> legend.#7654';
+
+		Sys.println(errMsg);
+
+		Application.current.window.alert(errMsg, "Error!");
+		DiscordClient.shutdown();
+		Sys.exit(1);
+	}
+	#end
 }
