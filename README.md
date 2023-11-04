@@ -1,12 +1,12 @@
 # Friday Night Funkin': Defintive Editon
 
-Everything that you see in this engine was used on my [Week 7 Port](https://github.com/LegendLOL/Funkin-Week7) project. This is intended to be a more fixed and polished version of the port.
+Everything you see in this engine was used on my [Week 7 Port](https://github.com/LegendLOL/Funkin-Week7) project. This is intended to be a more fixed and polished version of the port.
 
 **HTML5 VERSION OUT NOW!!!**
-[PLAY IT NOW!!!!](https://animatinglegend.github.io/projects/funkin-definitive-edition/)
+![PLAY IT NOW!!!!](https://animatinglegend.github.io/projects/funkin-definitive-edition/)
 
 ## Credits & Shoutouts
-- [Legend (thats me)](https://twitter.com/AnimatingLegend) - Programmer
+- [Legend (that's me)](https://twitter.com/AnimatingLegend) - Programmer
 - [OldFlag](https://github.com/ItzOldFlagDEV) - Additional Programmer
 
 ## Things added/changed in this engine
@@ -17,14 +17,14 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 - Customizable Keybindings
 - Combo Sprite, Added ratings/combo sprites to games HUD
 - Playable characters (pico)
-- Functionable Chart Editor
+- Functional Chart Editor
 
 **Changes/Fixes**
 - Made Menus more appealing & easier to browse through (options menu in particular)
 - TONS of gameplay fixes
 - Janky Input system!
 
-## there has been atleast one change/fix to just about every week:
+## There has been at least one change/fix to just about every week:
 ### Week 1:
 * Added Unused stage lights
 * Updated Dad's Left sing sprite
@@ -37,10 +37,10 @@ Everything that you see in this engine was used on my [Week 7 Port](https://gith
 * Boyfriend does "Hey" animation during Philly
 * Girlfriend does Cheering animations during Blammed
 ### Week 4:
-* Better hair physics for Mom & Boyfriend (identical to psych engines)
+* Better hair physics for Mom and boyfriend (identical to psych engines)
 ### Week 5:
 * Girlfriend does Cheering animations during Cocoa & Eggnog
-* On Winter Horrorland - the HUD is hidden during its mini cutscene
+* On Winter Horrorland - the HUD is hidden during its mini-cutscene
 ### Week 6:
 * On Thorns - the HUD is hidden during its mini cutscene
 * Fixed major dialogue bugs, tons of backend changes
