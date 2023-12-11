@@ -530,7 +530,7 @@ class Controls extends FlxActionSet
 				inline bindKeys(Control.NOTE_LEFT, [A, FlxKey.LEFT]);
 				inline bindKeys(Control.NOTE_RIGHT, [D, FlxKey.RIGHT]);
 				inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
-				inline bindKeys(Control.BACK, [X, BACKSPACE, ESCAPE]);
+				inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 				inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
 				inline bindKeys(Control.RESET, [R]);
 			case Duo(true):
@@ -543,7 +543,7 @@ class Controls extends FlxActionSet
 				inline bindKeys(Control.NOTE_LEFT, [A]);
 				inline bindKeys(Control.NOTE_RIGHT, [D]);
 				inline bindKeys(Control.ACCEPT, [G, Z]);
-				inline bindKeys(Control.BACK, [H, X]);
+				inline bindKeys(Control.BACK, [H]);
 				inline bindKeys(Control.PAUSE, [ONE]);
 				inline bindKeys(Control.RESET, [R]);
 			case Duo(false):
@@ -575,7 +575,7 @@ class Controls extends FlxActionSet
 				bindKeys(Control.NOTE_LEFT, [A, FlxKey.LEFT]);
 				bindKeys(Control.NOTE_RIGHT, [D, FlxKey.RIGHT]);
 				bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
-				bindKeys(Control.BACK, [X, BACKSPACE, ESCAPE]);
+				bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 				bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
 				bindKeys(Control.RESET, [R]);
 			case Duo(true):
@@ -588,7 +588,7 @@ class Controls extends FlxActionSet
 				bindKeys(Control.NOTE_LEFT, [A]);
 				bindKeys(Control.NOTE_RIGHT, [D]);
 				bindKeys(Control.ACCEPT, [G, Z]);
-				bindKeys(Control.BACK, [H, X]);
+				bindKeys(Control.BACK, [H]);
 				bindKeys(Control.PAUSE, [ONE]);
 				bindKeys(Control.RESET, [R]);
 			case Duo(false):
@@ -637,8 +637,6 @@ class Controls extends FlxActionSet
 			FlxG.save.data.rightBindUI = "D";
 		if(FlxG.save.data.acceptBindUI == null)
 			FlxG.save.data.acceptBindUI = "Z";
-		if(FlxG.save.data.backBindUI == null)
-			FlxG.save.data.backBindUI = "X";
 		removeKeyboard();
 			
 		inline bindKeys(Control.NOTE_UP, [FlxKey.fromString(FlxG.save.data.upBind), FlxKey.UP]);

@@ -37,7 +37,7 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	public static var definitiveVersion:String = '0.3.2';
+	public static var definitiveVersion:String = '0.3.3';
 
 	override function create()
 	{
@@ -62,7 +62,7 @@ class MainMenuState extends MusicBeatState
 		bg.setGraphicSize(Std.int(bg.width * 1.2));
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.antialiasing = FlxG.save.data.lowData;
+		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -76,7 +76,7 @@ class MainMenuState extends MusicBeatState
 		magenta.x = bg.x;
 		magenta.y = bg.y;
 		magenta.visible = false;
-		magenta.antialiasing = FlxG.save.data.lowData;
+		magenta.antialiasing = FlxG.save.data.antialiasing;
 		magenta.color = 0xFFFD719B;
 		if (FlxG.save.data.flashingLights)
 		{

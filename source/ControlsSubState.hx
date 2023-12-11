@@ -112,6 +112,7 @@ class ControlsSubState extends MusicBeatState
         var controlLabel:Alphabet = new Alphabet(0, 40 + (70 * 4) + 110, "UI", true, false);
         controlLabel.screenCenter(X);
         lables.add(controlLabel);
+
         for (i in 0...keyText.length)
         {
             var ctrl:Alphabet = new Alphabet(0, (70 * i) + 110, "", true, false);
@@ -124,8 +125,6 @@ class ControlsSubState extends MusicBeatState
             ctrl2.screenCenter(X);
             grpControls2.add(ctrl2);
         }
-
-
 
         blackBG = new FlxSprite(0, 0).makeGraphic(FlxG.width * 4, FlxG.height * 4, 0xFF000000);
         blackBG.alpha = 0.5;
@@ -172,15 +171,15 @@ class ControlsSubState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
         FlxG.camera.followLerp = CoolUtil.camLerpShit(0.06);
-        
 
-        switch(state){
-
+        switch(state)
+        {
             case "select":
                 blackBG.visible = false;
                 rebindBG.visible = false;
                 rebindText.visible = false;
                 rebindText2.visible = false;
+
                 if (controls.UI_UP_P)
 				{	
 					changeItem(-1);
@@ -248,14 +247,14 @@ class ControlsSubState extends MusicBeatState
 
         if(FlxG.keys.justPressed.ANY && !FlxG.keys.justPressed.UP && !FlxG.keys.justPressed.DOWN && !FlxG.keys.justPressed.LEFT && !FlxG.keys.justPressed.RIGHT){
 			textUpdate();
-             
         }
 
 		super.update(elapsed);
 		
 	}
 
-    public function textUpdate(){
+    public function textUpdate()
+    {
 
         
 
@@ -275,12 +274,12 @@ class ControlsSubState extends MusicBeatState
             grpControls2.add(ctrl2);
 
             changeItem(0);
-            
         }
 
     }
 
-    public function save(){
+    public function save()
+    {
 
         FlxG.save.data.upBind = keys[2];
         FlxG.save.data.downBind = keys[1];
@@ -298,29 +297,27 @@ class ControlsSubState extends MusicBeatState
         FlxG.save.flush();
 
         PlayerSettings.player1.controls.loadKeyBinds();
-
     }
 
-    public function reset(){
+    public function reset()
+    {
 
         for(i in 0...keys.length){
             keys[i] = defaultKeys[i];
         }
         quit();
-
     }
 
-    public function quit(){
-
-        state = "exiting";
-
+    public function quit()
+    {
         save();
 
+        state = "exiting";
         FlxG.switchState(new OptionsMenuState());
-
     }
 
-	function addKey(r:String){
+	function addKey(r:String)
+    {
 
         var shouldReturn:Bool = true;
 
@@ -379,8 +376,6 @@ class ControlsSubState extends MusicBeatState
 
         
         camFollow.y = grpControls.members[curSelected].getGraphicMidpoint().y + 70;
-        
-        
 
         for (item in grpControls.members)
         {

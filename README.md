@@ -9,6 +9,9 @@ Everything you see in this engine was used in my [Week 7 Port](https://github.co
 - [Legend (that's me)](https://twitter.com/AnimatingLegend) - Programmer
 - [OldFlag](https://github.com/ItzOldFlagDEV) - Additional Programmer
 
+**Special Thanks**
+- [TackDrawz](https://www.youtube.com/channel/UCAPDPJuunLWQJzOXA_3yEfw) - Made a couple of assets for the engine :]
+
 ## Things added/changed in this engine
 **Additions**
 - Asset overhaul: Fixed/Changed File locations, Updated Charting, ETC

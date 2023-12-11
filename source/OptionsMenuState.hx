@@ -30,7 +30,8 @@ class OptionsMenuState extends MusicBeatState
 		new OptionCatagory("Controls", []),
 
 		new OptionCatagory("Graphics", [
-			new LowDataOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
+			new AntialiasingOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
+			new LowDataOption("If unchecked, certain assets will be hidden for better performance."),
 			new FPSOption("If unchecked, your fps & memory counter gets hidden."),
 			#if !html5
 			new FramerateOption("Self explanatory. Use your left and right arrow keys to switch between your framerate. [DEFAULT: 120]"), 

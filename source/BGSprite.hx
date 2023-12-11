@@ -30,7 +30,7 @@ class BGSprite extends FlxSprite
 			active = false;
 		}
 		scrollFactor.set(scrollX, scrollY);
-		antialiasing = FlxG.save.data.lowData;
+		antialiasing = FlxG.save.data.antialiasing;
 	}
 
 	public function dance()

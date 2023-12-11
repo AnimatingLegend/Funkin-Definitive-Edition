@@ -93,6 +93,82 @@ class Option
 	{
 		return false;
 	}
+
+	// True = enabled by default, False = not enabled by default
+	public static function setupSaveData() 
+	{
+		if(FlxG.save.data.judgementCounter == null) {
+			FlxG.save.data.judgementCounter = false;
+		}
+
+		if(FlxG.save.data.downscroll == null) {
+			FlxG.save.data.downscroll = false;
+		}
+
+		if(FlxG.save.data.middlescroll == null) {
+			FlxG.save.data.middlescroll = false;
+		}
+		
+		if(FlxG.save.data.fullscreen == null) {
+			FlxG.save.data.fullscreen = false;
+		}
+
+		if(FlxG.save.data.laneUnderlay == null) {
+			FlxG.save.data.laneUnderlay = 0;
+		}
+
+		if(FlxG.save.data.scrollSpeed == null) {
+			FlxG.save.data.scrollSpeed = 1;
+		}
+
+		if(FlxG.save.data.framerateDraw == null) {
+			FlxG.save.data.framerateDraw = 120;
+		}
+
+		if(FlxG.save.data.ghostTapping == null) {
+			FlxG.save.data.ghostTapping = true;
+		}
+
+		if(FlxG.save.data.flashingLights == null) {
+			FlxG.save.data.flashingLights = true;
+		}
+
+		if(FlxG.save.data.explicitContent == null) {
+			FlxG.save.data.explicitContent = true;
+		}
+
+		if(FlxG.save.data.glowStrums == null) {
+			FlxG.save.data.glowStrums = true;
+		}
+
+		if(FlxG.save.data.accuracy == null) {
+			FlxG.save.data.accuracy = true;
+		}
+
+		if(FlxG.save.data.ratingHUD == null) {
+			FlxG.save.data.ratingHUD = true;
+		}
+
+		if(FlxG.save.data.notesplash == null) {
+			FlxG.save.data.notesplash = true;
+		}
+
+		if(FlxG.save.data.camhudZoom == null) {
+			FlxG.save.data.camhudZoom = true;
+		}
+
+		if(FlxG.save.data.antialiasing == null) {
+			FlxG.save.data.antialiasing = true;
+		}
+
+		if(FlxG.save.data.lowData == null) {
+			FlxG.save.data.lowData = true;
+		}
+
+		if(FlxG.save.data.timerOption == null) {
+			FlxG.save.data.timerOption = true;
+		}
+	}
 }
 
 class FPSOption extends Option
@@ -348,7 +424,30 @@ class OpponentLightStrums extends Option
 	}
 }
 
-class LowDataOption extends Option 
+class AntialiasingOption extends Option 
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.antialiasing = !FlxG.save.data.antialiasing;
+		acceptValues = FlxG.save.data.antialiasing;
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "AntiAliasing";
+	}
+}
+
+class LowDataOption extends Option
 {
 	public function new(desc:String)
 	{
@@ -367,7 +466,7 @@ class LowDataOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "Anti-Aliasing ";
+		return "Distractions";
 	}
 }
 

@@ -180,7 +180,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modding bullshit (it may come back, idk lol)
 ------------------------------------------------------------
 ## [0.3.2] - [5/22/23]
-## We're back with a mini update, hope yall enjoy!
 
 ### Added
 - Mini cutscene/transition to Monster
@@ -199,3 +198,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Caching Menu from booting screen **TEMPORARILY** (overloads memory and crashes your game, no point in keeping it.)
+------------------------------------------------------------
+## [0.3.3] - [12/10/23]
+## Sorry for the long wait... Here's a mini update to end off the year, Merry Christmas!!!
+
+### Added
+- Low-Quality Option
+- Censored version of Roses Dialogue (Week 6)
+
+### Changed
+- Tweaked Ghost-Tapping and anti-aliasing code
+- Backend Changes
+
+### Fixed
+- Stress cutscene issues
+- Mid-Song Event issues (Week3)
+- FPS issues

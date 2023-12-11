@@ -34,6 +34,7 @@ import openfl.Lib;
 import shaderslmao.BuildingShaders.BuildingShader;
 import shaderslmao.BuildingShaders;
 import shaderslmao.ColorSwap;
+import Options.Option;
 
 using StringTools;
 
@@ -87,7 +88,7 @@ class TitleState extends MusicBeatState
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
 		PlayerSettings.init();
-		Main.setupSaveData();
+		Option.setupSaveData();
 		Highscore.load();
 
 		if (FlxG.save.data.weekUnlocked != null)

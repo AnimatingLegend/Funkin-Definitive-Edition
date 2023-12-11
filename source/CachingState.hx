@@ -61,7 +61,7 @@ class CachingState extends MusicBeatState
         funkay = new FlxSprite(0, 0).loadGraphic(Paths.image('funkay'));
 		funkay.setGraphicSize(0, FlxG.height);
 		funkay.updateHitbox();
-		funkay.antialiasing = FlxG.save.data.lowData;
+		funkay.antialiasing = FlxG.save.data.antialiasing;
 		funkay.scrollFactor.set();
 		funkay.screenCenter();
 		add(funkay);

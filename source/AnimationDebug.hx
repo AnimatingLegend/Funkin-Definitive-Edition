@@ -206,7 +206,6 @@ class AnimationDebug extends MusicBeatState
 	
 			genBoyOffsets(true, true);
 			updateTexts();
-			updatePresence();
 		});
 	
 		player1DropDown.selectedLabel = char.curCharacter;
@@ -381,13 +380,6 @@ class AnimationDebug extends MusicBeatState
 		}
 
 		super.update(elapsed);
-	}
-
-	function updatePresence() {
-		#if desktop
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("Character Editor", "Character: " + daAnim, leHealthIcon.getCharacter());
-		#end
 	}
 
 	var _file:FileReference;

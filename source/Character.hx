@@ -37,7 +37,7 @@ class Character extends FlxSprite
 		var tex:FlxAtlasFrames;
 
 		// Anti-Aliasing for pixel sprites stay **FALSE**, dont change it !!!!
-		antialiasing = FlxG.save.data.lowData;
+		antialiasing = FlxG.save.data.antialiasing;
 
 		switch (curCharacter)
 		{
@@ -292,10 +292,12 @@ class Character extends FlxSprite
 				quickAnimAdd('singLEFT', 'BF NOTE LEFT0');
 				quickAnimAdd('singRIGHT', 'BF NOTE RIGHT0');
 				quickAnimAdd('singDOWN', 'BF NOTE DOWN0');
+
 				quickAnimAdd('singUPmiss', 'BF NOTE UP MISS');
 				quickAnimAdd('singLEFTmiss', 'BF NOTE LEFT MISS');
 				quickAnimAdd('singRIGHTmiss', 'BF NOTE RIGHT MISS');
 				quickAnimAdd('singDOWNmiss', 'BF NOTE DOWN MISS');
+				
 				quickAnimAdd('hey', 'BF HEY');
 
 				quickAnimAdd('firstDeath', "BF dies");
@@ -405,7 +407,7 @@ class Character extends FlxSprite
 
 			case 'bf-pixel-dead':
 				frames = Paths.getSparrowAtlas('characters/bfPixelsDEAD', 'shared');
-				quickAnimAdd('singUP', "BF Dies pixel");
+			//	quickAnimAdd('singUP', "BF Dies pixel");
 				quickAnimAdd('firstDeath', "BF Dies pixel");
 				animation.addByPrefix('deathLoop', "Retry Loop", 24, true);
 				quickAnimAdd('deathConfirm', "RETRY CONFIRM");
@@ -445,7 +447,7 @@ class Character extends FlxSprite
 			case 'bf-holding-gf-dead':
 
 				frames = Paths.getSparrowAtlas('characters/bfHoldingGF-DEAD', 'shared');
-				quickAnimAdd('singUP', 'BF Dead with GF Loop');
+			//	quickAnimAdd('singUP', 'BF Dies with GF');
 				quickAnimAdd('firstDeath', 'BF Dies with GF');
 				animation.addByPrefix('deathLoop', 'BF Dead with GF Loop', 24, true);
 				quickAnimAdd('deathConfirm', 'RETRY confirm holding gf');
@@ -580,7 +582,7 @@ class Character extends FlxSprite
 		}
 		TankmenBG.animationNotes = animationNotes;
 		animationNotes.sort(sortAnims);
-		trace(animationNotes);
+	//	trace(animationNotes);
 	}
 
 	override function update(elapsed:Float)

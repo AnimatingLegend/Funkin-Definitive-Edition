@@ -13,7 +13,7 @@ class AtlasChar extends FlxSprite
 		super(x, y);
 		frames = atlas;
 		this.char = char;
-		antialiasing = FlxG.save.data.lowData;
+		antialiasing = FlxG.save.data.antialiasing;
 	}
 
 	function set_char(char:String):String

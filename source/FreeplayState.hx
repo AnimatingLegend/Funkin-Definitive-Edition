@@ -116,7 +116,7 @@ class FreeplayState extends MusicBeatState
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 
 		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
-		scoreBG.antialiasing = FlxG.save.data.lowData;
+		scoreBG.antialiasing = FlxG.save.data.antialiasing;
 		scoreBG.alpha = 0.6;
 		add(scoreBG);
 
