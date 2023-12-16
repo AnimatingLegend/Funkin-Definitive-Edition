@@ -15,9 +15,9 @@ class CheckboxThingie extends FlxSprite
 	{
 		super(x, y);
 		frames = Paths.getSparrowAtlas('checkboxThingie');
+		animation.addByPrefix('unchecked', "Check Box unselected0", 24, false);
 		animation.addByPrefix("selecting", "Check Box selecting animation0", 24, false);
 		animation.addByPrefix("selected", "Check Box Selected Static0", 24, false);
-		animation.addByPrefix('unchecked', "Check Box unselected0", 24, false);
 		antialiasing = FlxG.save.data.antialiasing;
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
@@ -35,7 +35,7 @@ class CheckboxThingie extends FlxSprite
 			case "selecting":
 				offset.set(25, 65);
 			case "selected":
-				offset.set(35, 95);	
+				offset.set(35, -35);	
 		}
 
 		if (sprTracker != null)
