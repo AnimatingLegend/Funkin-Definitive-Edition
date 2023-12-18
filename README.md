@@ -52,14 +52,17 @@ Everything you see in this engine was used in my [Week 7 Port](https://github.co
 * Tankman Cutscenes are now censored
 
 ## Photos & Gifs
-### Options Menu
-![Windows Screenshot 2022 08 13 - 22 03 37 43](https://user-images.githubusercontent.com/83415030/184519479-e518c156-6b0e-4af5-a70a-32d5ff223af7.png)
 
 ### Chart Editor
 ![Windows Screenshot 2022 08 07 - 22 53 26 56](https://user-images.githubusercontent.com/83415030/184576058-f06ddf19-7c07-494f-8529-0739b286bead.png)
 
+### Character Editor
+![Windows Screenshot 2023 12 17 - 0 0 0 0](https://cdn.discordapp.com/attachments/707022397789831261/1186123403783065691/image.png?ex=65921a80&is=657fa580&hm=d3f4dc2108f9d55e828020cf5d2617211750b813f314fe0e7912ee4ee7c120c6&)
+
 ### Gameplay
-![ezgif-1-2b0132a422](https://user-images.githubusercontent.com/83415030/189006860-b5a84f6b-12db-4b79-ab6c-e56808a28f37.gif)
+![fnf-gameplay](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/assets/83415030/546aced4-6c30-4d3f-93ed-a70fb06314ca)
+
+
 
 ## Installation Shit
 First, you need to install Haxe and HaxeFlixel. I'm too lazy to write and keep updated with that setup (which is pretty simple). 
