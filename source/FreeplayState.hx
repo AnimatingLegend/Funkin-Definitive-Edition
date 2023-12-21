@@ -1,8 +1,5 @@
 package;
 
-#if desktop
-import Discord.DiscordClient;
-#end
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -12,6 +9,10 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
+
+#if discord_rpc
+import Discord.DiscordClient;
+#end
 
 using StringTools;
 
@@ -52,7 +53,7 @@ class FreeplayState extends MusicBeatState
 			songs.push(new SongMetadata(initSonglist[i], 0, 'gf'));
 		}
 
-		#if desktop
+		#if discord_rpc
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end

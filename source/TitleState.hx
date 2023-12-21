@@ -3,10 +3,6 @@ package;
 import openfl.display.Sprite;
 import openfl.net.NetStream;
 import openfl.media.Video;
-#if desktop
-import Discord.DiscordClient;
-import sys.thread.Thread;
-#end
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -35,6 +31,16 @@ import shaderslmao.BuildingShaders.BuildingShader;
 import shaderslmao.BuildingShaders;
 import shaderslmao.ColorSwap;
 import Options.Option;
+
+#if discord_rpc
+import Discord.DiscordClient;
+#end
+
+#if desktop
+import sys.FileSystem;
+import sys.io.File;
+import sys.thread.Thread;
+#end
 
 using StringTools;
 
@@ -114,6 +120,8 @@ class TitleState extends MusicBeatState
 		FlxG.switchState(new FreeplayState());
 		#elseif CHARTING
 		FlxG.switchState(new ChartingState());
+		#elseif OPTIONS
+		FlxG.switchState(new OptionsMenuState());
 		#else
 		#if !cpp
 		new FlxTimer().start(1, function(tmr:FlxTimer)
@@ -125,7 +133,7 @@ class TitleState extends MusicBeatState
 		#end
 		#end
 
-		#if desktop
+		#if discord_rpc
 		DiscordClient.initialize();
 		
 		Application.current.onExit.add (function (exitCode) {

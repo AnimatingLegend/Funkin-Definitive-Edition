@@ -214,3 +214,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stress cutscene issues
 - Mid-Song Event issues (Week3)
 - FPS issues
+------------------------------------------------------------
+## [???] - [Unreleased]
+
+### Added
+
+
+### Changed
+- Discord RPC tweaks n' shit
+
+### Fixed

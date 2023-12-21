@@ -1,12 +1,16 @@
 package;
 
 import Sys.sleep;
+
+#if discord_rpc
 import discord_rpc.DiscordRpc;
+#end
 
 using StringTools;
 
 class DiscordClient
 {
+	#if discord_rpc
 	public function new()
 	{
 		trace("Discord Client starting...");
@@ -87,4 +91,5 @@ class DiscordClient
 			endTimestamp: Std.int(endTimestamp / 1000)
 		});
 	}
+	#end
 }

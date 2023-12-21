@@ -5,9 +5,6 @@ import flixel.FlxState;
 import ui.MenuItem;
 import ui.MenuTypedList;
 import ui.AtlasMenuItem;
-#if desktop
-import Discord.DiscordClient;
-#end
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -21,6 +18,10 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import io.newgrounds.NG;
 import lime.app.Application;
+
+#if discord_rpc
+import Discord.DiscordClient;
+#end
 
 using StringTools;
 
@@ -41,7 +42,7 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
-		#if desktop
+		#if discord_rpc
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
