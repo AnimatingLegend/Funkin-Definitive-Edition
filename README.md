@@ -5,12 +5,12 @@ Everything you see in this engine was used in my [Week 7 Port](https://github.co
 **HTML5 VERSION OUT NOW!!!**
 [PLAY IT NOW!!!!](https://animatinglegend.github.io/projects/funkin-definitive-edition/)
 
-## Credits & Shoutouts
+## Credits
 - [Legend (that's me)](https://twitter.com/AnimatingLegend) - Programmer
-- [OldFlag](https://github.com/ItzOldFlagDEV) - Additional Programmer
 
-**Special Thanks**
-- [TackDrawz](https://www.youtube.com/channel/UCAPDPJuunLWQJzOXA_3yEfw) - Made a couple of assets for the engine :]
+**Contributors**
+- [yck](https://github.com/YckenEhh/fnf-simple-engine) - Additional Programmer
+- [TackDrawz](https://www.youtube.com/channel/UCAPDPJuunLWQJzOXA_3yEfw) - Made a couple of assets for the engine!
 
 ## Things added/changed in this engine
 **Additions**
