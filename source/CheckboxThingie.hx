@@ -35,14 +35,13 @@ class CheckboxThingie extends FlxSprite
 			case "selecting":
 				offset.set(25, 65);
 			case "selected":
-				offset.set(35, -35);	
+				offset.set(25, 65);	
 		}
 
 		if (sprTracker != null)
 			setPosition(10, sprTracker.y - 30);
 		else
 			destroy();
-
 	}
 
 	public function set_daValue(checked:Bool)

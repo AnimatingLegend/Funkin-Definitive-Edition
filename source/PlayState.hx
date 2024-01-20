@@ -2153,7 +2153,6 @@ class PlayState extends MusicBeatState
 					startSong();
 			}
 		} else {
-			// Conductor.songPosition = FlxG.sound.music.time;
 			Conductor.songPosition += FlxG.elapsed * 1000;
 
 			if (!paused) {
@@ -2345,9 +2344,6 @@ class PlayState extends MusicBeatState
 					notes.remove(daNote, true);
 					daNote.destroy();
 				}
-
-				// WIP interpolation shit? Need to fix the pause issue
-				// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * PlayState.SONG.speed));
 
 				if (daNote.isSustainNote && daNote.wasGoodHit) {
 					if ((FlxG.save.data.downscroll && daNote.y < -daNote.height) 
@@ -2686,7 +2682,6 @@ class PlayState extends MusicBeatState
 	private function cameraMovement():Void {
 		if (camFollow.x != dad.getMidpoint().x + 150 && !cameraRightSide) {
 			camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
-			// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
 
 			switch (dad.curCharacter) {
 				case 'mom':
@@ -2876,7 +2871,6 @@ class PlayState extends MusicBeatState
 			comboBreak.acceleration.y = 550;
 			comboBreak.velocity.y -= FlxG.random.int(140, 175);
 			comboBreak.velocity.x += FlxG.random.int(0, 10);
-		//	add(comboBreak);
 	
 			if (!curStage.startsWith('school')) {
 				comboBreak.setGraphicSize(Std.int(comboBreak.width * 0.7));
@@ -3055,7 +3049,12 @@ class PlayState extends MusicBeatState
 			{
 				gf.playAnim('hairBlow');
 			}
-			camera.shake(0.002, 0.1, null, true, X);
+			
+			if (FlxG.save.data.camhudZoom)
+			{
+				camera.shake(0.002, 0.1, null, true, X);
+				camHUD.shake(0.002, 0.1, null, true, X);
+			}
 		}
 
 		if (startedMoving) {
@@ -3080,6 +3079,7 @@ class PlayState extends MusicBeatState
 			gf.dance(); // Sets head to the correct position once the animation ends
 			gf.playAnim('hairFall');
 		}
+
 		phillyTrain.x = FlxG.width + 200;
 		trainMoving = false;
 
@@ -3141,14 +3141,7 @@ class PlayState extends MusicBeatState
 				Conductor.changeBPM(SONG.notes[Math.floor(curStep / 16)].bpm);
 				FlxG.log.add('CHANGED BPM!');
 			}
-			// else
-			// Conductor.changeBPM(SONG.bpm);
-
-			// Dad doesnt interupt his own notes
-			// if (SONG.notes[Math.floor(curStep / 16)].mustHitSection)
-			// 	dad.dance();
 		}
-		// FlxG.log.add('change bpm' + SONG.notes[Std.int(curStep / 16)].changeBPM);
 		wiggleShit.update(Conductor.crochet);
 
 		if (FlxG.save.data.camhudZoom) {
@@ -3320,7 +3313,6 @@ class PlayState extends MusicBeatState
 
 					curLight = FlxG.random.int(0, phillyCityLights.length - 1, [curLight]);
 					phillyCityLights.members[curLight].visible = true;
-				//	phillyCityLights.members[curLight].alpha = 0.5;
 				}
 
 				if (curBeat % 8 == 4 && FlxG.random.bool(30) && !trainMoving && trainCooldown > 8) {

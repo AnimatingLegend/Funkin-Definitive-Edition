@@ -106,11 +106,11 @@ class Note extends FlxSprite
 		
 				setGraphicSize(Std.int(width * 0.7));
 				updateHitbox();
-				antialiasing = FlxG.save.data.lowData;
+				antialiasing = FlxG.save.data.antialiasing;
 		}
 
 		/**
-		 * Code originally from psych engine; just a little twaked.
+		 * Code originally from psych engine; just a little tweaked.
 		 * Doing this 'if' check to fix the warnings on Senpai songs
 		 */
 		x += swagWidth * (noteData % 4);
@@ -178,7 +178,7 @@ class Note extends FlxSprite
 				 * i am so sorry for this inconvenience...
 				 * it works though so whatever. shrug emoji
 				 */
-				prevNote.scale.y *= (((Conductor.stepCrochet / 100 * 1.5)) * FlxMath.roundDecimal(FlxG.save.data.scrollSpeed == 1 ? PlayState.SONG.speed : FlxG.save.data.scrollSpeed, 2));
+				prevNote.scale.y *= (((Conductor.stepCrochet / 100 * 1.52)) * FlxMath.roundDecimal(FlxG.save.data.scrollSpeed == 1 ? PlayState.SONG.speed : FlxG.save.data.scrollSpeed, 2));
 				prevNote.updateHitbox();
 			}
 		}
