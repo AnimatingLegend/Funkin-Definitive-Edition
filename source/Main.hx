@@ -11,17 +11,6 @@ import flixel.FlxG;
 import ui.FPSCounter;
 import Options.Option;
 
-#if windows
-import Discord.DiscordClient;
-import openfl.events.UncaughtErrorEvent;
-import haxe.CallStack;
-import haxe.io.Path;
-import sys.FileSystem;
-import sys.io.File;
-import sys.io.Process;
-import lime.app.Application;
-#end
-
 class Main extends Sprite
 {
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
@@ -43,12 +32,9 @@ class Main extends Sprite
 	{
 		super();
 
-		if (stage != null)
-		{
+		if (stage != null) {
 			init();
-		}
-		else
-		{
+		} else {
 			addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 	}
@@ -89,21 +75,14 @@ class Main extends Sprite
 
 		addChild(game);
 
-		#if windows
-		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
-		#end
-
 		#if !mobile
+		if(FlxG.save.data.fps == null) FlxG.save.data.fps = true;
 		fpsCounter = new FPSCounter(10, 3, 0xFFFFFF);
-		addChild(fpsCounter);
-
-		if(FlxG.save.data.fps == null)
-			FlxG.save.data.fps = true;
-
 		toggleFPS(FlxG.save.data.fps);
+		addChild(fpsCounter);
 		#end
 
-		Option.setupSaveData();
+		DefinitiveData.settings();
 		Conductor.offset = FlxG.save.data.notesOffset;
 	}
 
@@ -114,36 +93,21 @@ class Main extends Sprite
 		fpsCounter.visible = fpsEnabled;
 	}
 
-	#if windows
-	function onCrash(e:UncaughtErrorEvent):Void
+	// CODE TAKEN FROM FOREVER ENGINE (optimaztion!!!!)
+	public static function dumpCache()
 	{
-		var errMsg:String = "";
-		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
-
-		errMsg += 'Friday Night Funkin - Definitive Edition has crashed!\n\n';
-
-		for (stackItem in callStack)
+		@:privateAccess
+		for (key in FlxG.bitmap._cache.keys())
 		{
-			switch (stackItem)
+			var obj = FlxG.bitmap._cache.get(key);
+			if (obj != null)
 			{
-				case FilePos(s, file, line, column):
-					errMsg += "   > " + file + " (line " + line + ")\n";
-				default:
-					Sys.println(stackItem);
+				Assets.cache.removeBitmapData(key);
+				FlxG.bitmap._cache.remove(key);
+				obj.destroy();
 			}
 		}
 
-		errMsg += "\nUncaught Error: " + e.error + "\n";
-		errMsg += "\nEngine version: " + MainMenuState.definitiveVersion;
-		errMsg += "\nFPS limit: " + FlxG.save.data.fps;
-
-		errMsg += '\n\nReport this bug here --> legend.#7654';
-
-		Sys.println(errMsg);
-
-		Application.current.window.alert(errMsg, "Error!");
-		DiscordClient.shutdown();
-		Sys.exit(1);
+		Assets.cache.clear("songs");
 	}
-	#end
 }

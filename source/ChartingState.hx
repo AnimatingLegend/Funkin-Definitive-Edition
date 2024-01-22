@@ -89,8 +89,17 @@ class ChartingState extends MusicBeatState
 	var leftIcon:HealthIcon;
 	var rightIcon:HealthIcon;
 
+	public static var mustCleanMem:Bool = false;
+
 	override function create()
 	{
+		if (mustCleanMem)
+		{
+			Paths.clearStoredMemory();
+			Paths.clearUnusedMemory();
+			mustCleanMem = false;
+		}
+
 		curSection = lastSection;
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
@@ -287,7 +296,7 @@ class ChartingState extends MusicBeatState
 			updateHeads();
 		});
 		player2DropDown.selectedLabel = _song.player2;
-	
+
 		var gfVersionDropDown = new FlxUIDropDownMenu(10, 80, FlxUIDropDownMenu.makeStrIdLabelArray(gfVersions, true), function(gfVersion:String)
 		{
 			_song.gfVersion = gfVersions[Std.parseInt(gfVersion)];
@@ -1037,6 +1046,7 @@ class ChartingState extends MusicBeatState
 	function loadJson(song:String):Void
 	{
 		PlayState.SONG = Song.loadFromJson(song.toLowerCase(), song.toLowerCase());
+		mustCleanMem = true;
 		FlxG.resetState();
 	}
 

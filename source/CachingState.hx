@@ -47,6 +47,15 @@ class CachingState extends MusicBeatState
 
 	override function create()
 	{
+		FlxG.save.bind('funkin', 'ninjamuffin99');
+
+		PlayerSettings.init();
+		DefinitiveData.settings();
+
+		FlxG.sound.muteKeys = [FlxKey.fromString(FlxG.save.data.muteBind)];
+		FlxG.sound.volumeDownKeys = [FlxKey.fromString(FlxG.save.data.volDownBind)];
+		FlxG.sound.volumeUpKeys = [FlxKey.fromString(FlxG.save.data.volUpBind)];
+
 		FlxG.mouse.visible = false;
 
 		FlxG.worldBounds.set(0,0);
@@ -73,6 +82,8 @@ class CachingState extends MusicBeatState
 		add(preloadStuff);
 
 		#if cpp
+		FlxG.log.add("caching assets & songs...");
+
 		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/characters")))
 		{
 			if (!i.endsWith(".png"))
@@ -122,18 +133,6 @@ class CachingState extends MusicBeatState
 	function cache()
 	{
 		#if !linux
-		var sound1:FlxSound;
-		sound1 = new FlxSound().loadEmbedded(Paths.voices('fresh'));
-		sound1.play();
-		sound1.volume = 0.00001;
-		FlxG.sound.list.add(sound1);
-
-		var sound2:FlxSound;
-		sound2 = new FlxSound().loadEmbedded(Paths.inst('fresh'));
-		sound2.play();
-		sound2.volume = 0.00001;
-		FlxG.sound.list.add(sound2);
-
 		for (i in images)
 		{
 			var replaced = i.replace(".png","");
@@ -142,17 +141,17 @@ class CachingState extends MusicBeatState
 			graph.persist = true;
 			graph.destroyOnNoUse = false;
 			bitmapData.set(replaced,graph);
-			trace(i);
+			// trace(i);
 		}
 
 		for (i in music)
 		{
 			FlxG.sound.cache(Paths.inst(i));
 			FlxG.sound.cache(Paths.voices(i));
-			trace(i);
+			// trace(i);
 		}
-
 		#end
+
 		FlxG.switchState(new TitleState());
 		trace('Caching Process Complete');
 	}
