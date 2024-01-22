@@ -7,39 +7,36 @@ using StringTools;
 
 class HealthIcon extends FlxSprite
 {
-	// Used for FreeplayState! If you use it elsewhere, prob gonna annoying
-
-	 public var sprTracker:FlxSprite;
-	 private var isOldIcon:Bool = false;
-	 private var isPlayer:Bool = false;
-	 private var char:String = '';
+	public var sprTracker:FlxSprite;
+	private var isOldIcon:Bool = false;
+	private var isPlayer:Bool = false;
+	private var char:String = '';
 
 	public function new(char:String = 'bf', isPlayer:Bool = false)
 	{
 		super();
 		this.isPlayer = isPlayer;
 		changeIcon(char);
-		antialiasing = FlxG.save.data.antialiasing;
 		scrollFactor.set();
+	}
+
+	override function update(elapsed:Float)
+	{
+		super.update(elapsed);
+
+		if (sprTracker != null)
+			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
 	}
 
 	public function swapOldIcon()
 	{
-		isOldIcon = !isOldIcon;
-		
-		if (isOldIcon)
-		{
+		if (isOldIcon = !isOldIcon)
 			changeIcon('bf-old');
-		}
-		else
-		{
+		else 
 			changeIcon('bf');
-		}
-		
+
 		if (PlayState.storyWeek == 6 && !isOldIcon)
-		{	
 			changeIcon('bf-pixel');
-		}
 	}
 
 	public function changeIcon(char:String)
@@ -57,17 +54,9 @@ class HealthIcon extends FlxSprite
 			animation.play(char);
 			this.char = char;
 		}
-	}
 
-	override function update(elapsed:Float)
-	{
-		super.update(elapsed);
-
-		if (sprTracker != null)
-			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
-	}
-
-	public function getCharacter():String {
-		return char;
+		antialiasing = FlxG.save.data.antialiasing;
+		if (char.endsWith('-pixel'))
+			antialiasing = false;
 	}
 }
