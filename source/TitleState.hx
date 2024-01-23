@@ -31,7 +31,7 @@ import openfl.Lib;
 import shaderslmao.BuildingShaders.BuildingShader;
 import shaderslmao.BuildingShaders;
 import shaderslmao.ColorSwap;
-import DefinitiveData;
+import Options.Option;
 
 #if discord_rpc
 import Discord.DiscordClient;
@@ -116,14 +116,10 @@ class TitleState extends MusicBeatState
 		FlxG.switchState(new OptionsMenuState());
 		#else
 		#if !cpp
-			if(!initialized) {
-				new FlxTimer().start(1, function(tmr:FlxTimer)
-				{
-					startIntro();
-				});
-			} else {
-				startIntro();
-			}
+		new FlxTimer().start(1, function(tmr:FlxTimer)
+		{
+			startIntro();
+		});
 		#else
 		startIntro();
 		#end
@@ -456,8 +452,7 @@ class TitleState extends MusicBeatState
 
 			// It always bugged me that it didn't do this before.
 			// Skip ahead in the song to the drop.
-			if(!initialized)
-				FlxG.sound.music.time = 9400; // 9.4 seconds
+			FlxG.sound.music.time = 9400; // 9.4 seconds
 
 			skippedIntro = true;
 		}
