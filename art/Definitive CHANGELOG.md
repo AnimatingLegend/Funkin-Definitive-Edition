@@ -203,7 +203,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Sorry for the long wait... Here's a mini update to end off the year, Merry Christmas!!!
 
 ### Added
-- New Options (Distractions)
+- Low-Quality Option
 - Censored version of Roses Dialogue (Week 6)
 
 ### Changed
@@ -215,41 +215,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mid-Song Event issues (Week3)
 - FPS issues
 ------------------------------------------------------------
-## [0.4.0] - [Unreleased]
-
-TODO:
-### THINGS TO ADD
-- Add Options where you can reset your progress (Story progress & Highscores)
-- Add support for system 32 builds
-- Add CrashHandler to engine
-- Add Song timer to engine
-- (Re)Add Cache menu
-
-### THINGS TO CHANGE
-- Optimize every single INCH of this engine for lower-end computers (cleaning code, & moving junk around)
-- Make a week unlocking system (The more you progress in the story, your weeks become unlocked)
-
-### THINGS TO FIX
-- Fix MAJOR stage preloading issues
-- Fix little bug with bf-pixel icon
-- Fix any other miniscule bugs i find in this engine
-------------------------------------------------------------
-## [0.4.0b] - [Unreleased]
+## [???] - [Unreleased]
 
 ### Added
-- New Option Category (Saves)
-- New Options (Shaders, Song Length (timer), Low-Quality, ETC)
-- BGSprite support to stage assets
-- (Re)Added Caching Menu
+
 
 ### Changed
-- Optimized a majority of the games menus and SOME gameplay aspects
-- You can now reset both your settings and highscore from the game
-- Discord RPC backend stuff
-- FPS/MEM Counter revamp
+- Discord RPC tweaks n' shit
 
 ### Fixed
-- Certain Assets not having antialiasing to them
-
-### Removed
-- Week 7 Cutscenes are no longer censored

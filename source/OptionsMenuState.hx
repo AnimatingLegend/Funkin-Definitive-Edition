@@ -31,15 +31,13 @@ class OptionsMenuState extends MusicBeatState
 
 		new OptionCatagory("Graphics", [
 			new AntialiasingOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
-			new LowDataOption("If checked, certain assets will be hidden for better performance."),
+			new LowDataOption("If unchecked, certain assets will be hidden for better performance."),
+			new FPSOption("If unchecked, your fps & memory counter gets hidden."),
 			#if !html5
 			new FramerateOption("Self explanatory. Use your left and right arrow keys to switch between your framerate. [DEFAULT: 120]"), 
 			// HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
 			#end
-			new FPSOption("If unchecked, your fps & memory counter will be hidden."),
-			new ShaderOption("WIP"),
 		]),
-
 		new OptionCatagory("Visuals and UI", [
 			new AccuracyOption("If unchecked, it will not display your misses and accuracy, but only your song score."),
 			new JudgemntOption("If checked, it displays your judgements/ratings throughout the song."),
@@ -47,9 +45,7 @@ class OptionsMenuState extends MusicBeatState
 			new NotesplashOption("If unchecked, hitting 'Sick!' notes won't show firework particles."),
 			new OpponentLightStrums("If unchecked, your opponents note strums won't light up whenever its their turn to sing."),
 			new LaneTransOption("Use your left & right arrow keys to switch the transparacny of your lane underlay. [DEFAULT: 0]"),
-			new UpdateCheck("If checked, your game will check and notify your when you need to update the game when it launches. (RELEASE BUILDS ONLY)"),
 		]),
-
 		new OptionCatagory("Gameplay", [
 			new NaughtyOption("If unchecked, any explicit content will be censored/hidden from the game."),
 			new DownscrollOption("If checked, your note strums appears on the bottom of the screen instead of up."),
@@ -59,14 +55,7 @@ class OptionsMenuState extends MusicBeatState
 			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
 			new ScrollSpeedOption("Change your scroll speed. (1 = Chart dependent)"),
 		]),
-		
-		new OptionCatagory("Saves", [
-		//	new LockWeeksOption("Reset your story mode progress. This is irreversible!"),
-			new ResetHighscore("Reset your score on all songs and weeks. This is irreversible!"),
-			new ResetSettings("Reset ALL your settings. This is irreversible!"),
-		]),
-
-		//new OptionCatagory("Exit", []),
+		new OptionCatagory("Exit", []),
 	];
 
 	private var currentDescription:String = "";
@@ -87,8 +76,10 @@ class OptionsMenuState extends MusicBeatState
 	{
 		if (FlxG.sound.music != null)
 		{
-			if (!FlxG.sound.music.playing) {
+			if (!FlxG.sound.music.playing)
+			{
 				FlxG.sound.playMusic(Paths.music('settingsMenu'), 0.5, true);
+			//	trace('settings music transistion');
 			}
 		}
 
@@ -99,7 +90,7 @@ class OptionsMenuState extends MusicBeatState
 		menuBG.scrollFactor.x = 0;
 		menuBG.scrollFactor.y = 0.18;
 		menuBG.screenCenter();
-		menuBG.antialiasing = FlxG.save.data.antialiasing;
+		menuBG.antialiasing = FlxG.save.data.lowData;
 		add(menuBG);
 
 		grpControls = new FlxTypedGroup<Alphabet>();
@@ -206,6 +197,7 @@ class OptionsMenuState extends MusicBeatState
 				controlLabel.screenCenter();
 				controlLabel.y += (100 * (i - (options.length / 2))) + 50;
 				grpControls.add(controlLabel);
+				// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 			}
 
 			remove(textBG);
