@@ -203,7 +203,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Sorry for the long wait... Here's a mini update to end off the year, Merry Christmas!!!
 
 ### Added
-- Low-Quality Option
+- New Options (Distractions)
 - Censored version of Roses Dialogue (Week 6)
 
 ### Changed
@@ -215,12 +215,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mid-Song Event issues (Week3)
 - FPS issues
 ------------------------------------------------------------
-## [???] - [Unreleased]
+## [0.4.0] - [1/25/24]
 
 ### Added
-
+- New Option Category (Saves)
+- New Options (Low-Quality, Shaders, & Progress Options for the Saves menu)
+- BGSprite support to stage assets
+- (Re)Added Caching Menu
 
 ### Changed
-- Discord RPC tweaks n' shit
+- Optimized a majority of the game's menus and SOME gameplay aspects
+- You can now reset both your settings and highscore from the game
+- Discord RPC backend stuff
+- FPS/MEM Counter revamp
+- Application branding has changed a bit (new icon, name update!!)
+- Your camHUD now shakes whenever a train is passing by (Week3)
 
 ### Fixed
+- Certain Assets not having antialiasing to them (I think....)
+- MAJOR Stage Preloading bugs 
+- Other miniscule fixes have been patched
+
+### Removed
+- Week 7 Cutscenes are no longer censored
+- Took down the HTML Build of the engine from github servers
+- Modifiers Option in the pause menu
+- Practice Mode from the Pause menu
+- Distractions Option

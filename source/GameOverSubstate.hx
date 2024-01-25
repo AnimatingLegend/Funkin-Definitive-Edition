@@ -9,8 +9,9 @@ import flixel.util.FlxTimer;
 
 class GameOverSubstate extends MusicBeatSubstate
 {
-	var bf:Boyfriend;
+	public var bf:Boyfriend;
 	public var dad:Character;
+
 	var camFollow:FlxObject;
 
 	var stageSuffix:String = "";
@@ -20,7 +21,9 @@ class GameOverSubstate extends MusicBeatSubstate
 
 	public function new(x:Float, y:Float)
 	{
-		var daStage = PlayState.stageCheck;
+		Paths.clearUnusedMemory();
+
+		var daStage = PlayState.curStage;
 		var daBf:String = '';
 		switch (daStage)
 		{

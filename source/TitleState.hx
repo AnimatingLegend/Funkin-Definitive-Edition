@@ -31,7 +31,7 @@ import openfl.Lib;
 import shaderslmao.BuildingShaders.BuildingShader;
 import shaderslmao.BuildingShaders;
 import shaderslmao.ColorSwap;
-import Options.Option;
+import DefinitiveData;
 
 #if discord_rpc
 import Discord.DiscordClient;
@@ -93,19 +93,6 @@ class TitleState extends MusicBeatState
 		PlayerSettings.init();
 		Highscore.load();
 		getBuildVer();
-
-		/*
-				WORK IN PROGRESS!!!!
-		if (FlxG.save.data.weekUnlocked != null)
-		{
-			StoryMenuState.weekUnlocked = FlxG.save.data.weekUnlocked;
-		}
-		*/
-
-		if (FlxG.save.data.seenVideo != null)
-		{
-			VideoState.seenVideo = FlxG.save.data.seenVideo;
-		}
 
 		FlxG.mouse.visible = false;
 		#if FREEPLAY
@@ -209,7 +196,6 @@ class TitleState extends MusicBeatState
 		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('logo'));
 		logo.antialiasing = FlxG.save.data.antialiasing;
 		logo.screenCenter();
-
 
 		credGroup = new FlxGroup();
 		add(credGroup);

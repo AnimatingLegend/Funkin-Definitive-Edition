@@ -20,7 +20,7 @@ class PauseSubState extends MusicBeatSubstate
 
 	public static var goToOptions:Bool = false;
 
-	var pauseOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Modifiers', 'Exit to menu'];
+	var pauseOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Options', 'Exit to menu'];
 	var modifiersChoices:Array<String> = ["Toggle Practice Mode", "Options Menu", "Back"];
 	var difficultyChoices:Array<String> = ['Easy', 'Normal', 'Hard', 'Back'];
 
@@ -119,13 +119,10 @@ class PauseSubState extends MusicBeatSubstate
 		var accepted = controls.ACCEPT;
 
 		if (upP)
-		{
 			changeSelection(-1);
-		}
+
 		if (downP)
-		{
 			changeSelection(1);
-		}
 
 		if (accepted)
 		{
@@ -143,15 +140,7 @@ class PauseSubState extends MusicBeatSubstate
 					menuItems = difficultyChoices;
 					regenMenu();
 
-				case "Modifiers":
-					menuItems = modifiersChoices;
-					regenMenu();	
-
-				case "Toggle Practice Mode":
-					PlayState.practiceMode = !PlayState.practiceMode;
-					practiceText.visible = PlayState.practiceMode;
-
-				case "Options Menu":
+				case "Options":
 					OptionsMenuState.fromFreeplay = true;
 					FlxG.switchState(new OptionsMenuState());
 
@@ -172,12 +161,6 @@ class PauseSubState extends MusicBeatSubstate
 					menuItems = pauseOG;
 					regenMenu();
 			}
-		}
-
-		if (FlxG.keys.justPressed.J)
-		{
-			// for reference later!
-			// PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxKey.J, null);
 		}
 	}
 
@@ -225,13 +208,9 @@ class PauseSubState extends MusicBeatSubstate
 			bullShit++;
 
 			item.alpha = 0.6;
-			// item.setGraphicSize(Std.int(item.width * 0.8));
 
 			if (item.targetY == 0)
-			{
 				item.alpha = 1;
-				// item.setGraphicSize(Std.int(item.width));
-			}
 		}
 	}
 }
