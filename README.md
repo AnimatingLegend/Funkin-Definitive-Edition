@@ -1,16 +1,19 @@
-# Friday Night Funkin': Definitive Editon
+# Friday Night Funkin' - Definitive Editon
 
 Everything you see in this engine was used in my [Week 7 Port](https://github.com/LegendLOL/Funkin-Week7) project. This is intended to be a more fixed and polished version of the port.
 
-**HTML5 VERSION OUT NOW!!!**
-[PLAY IT NOW!!!!](https://animatinglegend.github.io/projects/funkin-definitive-edition/)
+## Credits
+**Friday Night Funkin'**
+- [ninjamuffin99](https://twitter.com/ninja_muffin99) - Programming
+- [PhantomArcade3k](https://twitter.com/phantomarcade3k?lang=en) & [Evilsk8r](https://twitter.com/evilsk8r) - Art
+- [Kawaisprite](https://twitter.com/kawaisprite) - Music
 
-## Credits & Shoutouts
-- [Legend (that's me)](https://twitter.com/AnimatingLegend) - Programmer
-- [OldFlag](https://github.com/ItzOldFlagDEV) - Additional Programmer
+**Definitive Edition**
+- [Legend](https://twitter.com/AnimatingLegend) - Lead Programmer/Creator
 
-**Special Thanks**
-- [TackDrawz](https://www.youtube.com/channel/UCAPDPJuunLWQJzOXA_3yEfw) - Made a couple of assets for the engine :]
+**Shoutouts**
+- [yck](https://github.com/YckenEhh) - Additional Programmer (helped optimze a bunch of code)
+- [TackDrawz](https://www.youtube.com/channel/UCAPDPJuunLWQJzOXA_3yEfw) - Art (made a couple of assets for my engine!)
 
 ## Things added/changed in this engine
 **Additions**
@@ -61,8 +64,6 @@ Everything you see in this engine was used in my [Week 7 Port](https://github.co
 
 ### Gameplay
 ![fnf-gameplay](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/assets/83415030/546aced4-6c30-4d3f-93ed-a70fb06314ca)
-
-
 
 ## Installation Shit
 First, you need to install Haxe and HaxeFlixel. I'm too lazy to write and keep updated with that setup (which is pretty simple). 

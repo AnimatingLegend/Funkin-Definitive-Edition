@@ -93,82 +93,6 @@ class Option
 	{
 		return false;
 	}
-
-	// True = enabled by default, False = not enabled by default
-	public static function setupSaveData() 
-	{
-		if(FlxG.save.data.judgementCounter == null) {
-			FlxG.save.data.judgementCounter = false;
-		}
-
-		if(FlxG.save.data.downscroll == null) {
-			FlxG.save.data.downscroll = false;
-		}
-
-		if(FlxG.save.data.middlescroll == null) {
-			FlxG.save.data.middlescroll = false;
-		}
-		
-		if(FlxG.save.data.fullscreen == null) {
-			FlxG.save.data.fullscreen = false;
-		}
-
-		if(FlxG.save.data.laneUnderlay == null) {
-			FlxG.save.data.laneUnderlay = 0;
-		}
-
-		if(FlxG.save.data.scrollSpeed == null) {
-			FlxG.save.data.scrollSpeed = 1;
-		}
-
-		if(FlxG.save.data.framerateDraw == null) {
-			FlxG.save.data.framerateDraw = 120;
-		}
-
-		if(FlxG.save.data.ghostTapping == null) {
-			FlxG.save.data.ghostTapping = true;
-		}
-
-		if(FlxG.save.data.flashingLights == null) {
-			FlxG.save.data.flashingLights = true;
-		}
-
-		if(FlxG.save.data.explicitContent == null) {
-			FlxG.save.data.explicitContent = true;
-		}
-
-		if(FlxG.save.data.glowStrums == null) {
-			FlxG.save.data.glowStrums = true;
-		}
-
-		if(FlxG.save.data.accuracy == null) {
-			FlxG.save.data.accuracy = true;
-		}
-
-		if(FlxG.save.data.ratingHUD == null) {
-			FlxG.save.data.ratingHUD = true;
-		}
-
-		if(FlxG.save.data.notesplash == null) {
-			FlxG.save.data.notesplash = true;
-		}
-
-		if(FlxG.save.data.camhudZoom == null) {
-			FlxG.save.data.camhudZoom = true;
-		}
-
-		if(FlxG.save.data.antialiasing == null) {
-			FlxG.save.data.antialiasing = true;
-		}
-
-		if(FlxG.save.data.lowData == null) {
-			FlxG.save.data.lowData = true;
-		}
-
-		if(FlxG.save.data.timerOption == null) {
-			FlxG.save.data.timerOption = true;
-		}
-	}
 }
 
 class FPSOption extends Option
@@ -466,7 +390,7 @@ class LowDataOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "Distractions";
+		return "Low Quality";
 	}
 }
 
@@ -561,9 +485,7 @@ class ScrollSpeedOption extends Option
 	public override function left():Bool
 	{
 		if (FlxG.save.data.scrollSpeed > 1)
-		{
 			FlxG.save.data.scrollSpeed -= 0.1;
-		}
 		FlxG.save.data.scrollSpeed = FlxMath.roundDecimal(FlxG.save.data.scrollSpeed, 2);
 		display = updateDisplay();
 		return true;
@@ -626,5 +548,173 @@ class LaneTransOption extends Option
 	private override function updateDisplay():String
 	{
 		return "Lane underlay " + FlxG.save.data.laneUnderlay;
+	}
+}
+
+class ShaderOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.updateCheck = !FlxG.save.data.shaders;
+		acceptValues = FlxG.save.data.shaders;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Shaders";
+	}
+}
+
+class LockWeeksOption extends Option
+{
+	var confirm:Bool = false;
+
+	public function new(desc:String)
+	{
+		super();
+		withoutCheckboxes = true;
+		description = desc;
+	}
+
+	public override function press(changeData:Bool):Bool
+	{
+		withoutCheckboxes = true;
+
+		if (!confirm)
+		{
+			confirm = true;
+			display = updateDisplay();
+			return true;
+		}
+
+		if (changeData)
+			FlxG.save.data.weekUnlocked = !FlxG.save.data.weekUnlocked;
+
+		FlxG.save.data.weekUnlocked = 1;
+		StoryMenuState.weekUnlocked = [true, true];
+		trace('Weeks Locked');
+
+		acceptValues = FlxG.save.data.weekUnlocked;
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return confirm ? "Confirm Story Reset" : "Reset Story Progress";
+	}
+}
+
+class ResetHighscore extends Option
+{
+	var confirm:Bool = false;
+
+	public function new(desc:String)
+	{
+		super();
+		withoutCheckboxes = true;
+		description = desc;
+	}
+
+	public override function press(changeData:Bool):Bool
+	{
+		withoutCheckboxes = true;
+
+		if (!confirm)
+		{
+			confirm = true;
+			display = updateDisplay();
+			return true;
+		}
+
+		if (changeData)
+			FlxG.save.data.resetHighscore = !FlxG.save.data.resetHighscore;
+
+		FlxG.save.data.songScores = null;
+		for (key in Highscore.songScores.keys())
+		{
+			Highscore.songScores[key] = 0;
+		}
+
+		FlxG.save.data.songCombos = null;
+		trace('Highscores Wiped');
+
+		acceptValues = FlxG.save.data.resetHighscore;
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return confirm ? "Confirm Score Reset" : "Reset Score";
+	}
+}
+
+class ResetSettings extends Option
+{
+	var confirm:Bool = false;
+
+	public function new(desc:String)
+	{
+		super();
+		withoutCheckboxes = true;
+		description = desc;
+	}
+
+	public override function press(changeData:Bool):Bool
+	{
+		withoutCheckboxes = true;
+
+		if (!confirm)
+		{
+			confirm = true;
+			display = updateDisplay();
+			return true;
+		}
+
+		if (changeData)
+			FlxG.save.data.resetSettings = !FlxG.save.data.resetSettings;
+
+		FlxG.save.data.judgementCounter = null;
+		FlxG.save.data.downscroll = null;
+		FlxG.save.data.middlescroll = null;
+		FlxG.save.data.fullscreen = null;
+		FlxG.save.data.laneUnderlay = null;
+		FlxG.save.data.scrollSpeed = null;
+		FlxG.save.data.framerateDraw = null;
+		FlxG.save.data.ghostTapping = null;
+		FlxG.save.data.flashingLights = null;
+		FlxG.save.data.explicitContent = null;
+		FlxG.save.data.glowStrums = null;
+		FlxG.save.data.accuracy = null;
+		FlxG.save.data.ratingHUD = null;
+		FlxG.save.data.notesplash = null;
+		FlxG.save.data.camhudZoom = null;
+		FlxG.save.data.antialiasing = null;
+		FlxG.save.data.lowData = null;
+		FlxG.save.data.timerOption = null;
+		FlxG.save.data.weekUnlocked = null;
+		FlxG.save.data.shaders = null;
+
+		DefinitiveData.settings();
+		trace('All settings have been reset');
+
+		acceptValues = FlxG.save.data.resetSettings;
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return confirm ? "Confirm Settings Reset" : "Reset Settings";
 	}
 }

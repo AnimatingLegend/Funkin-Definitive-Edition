@@ -89,38 +89,26 @@ class AnimationDebug extends MusicBeatState
 
 		// Stage Shit
 		var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stage/stageback', 'shared'));
-		bg.antialiasing = FlxG.save.data.lowData;
-		bg.scrollFactor.set(0.9, 0.9);
-		bg.active = false;
-		add(bg);
-
 		var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stage/stagefront', 'shared'));
-		stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
-		stageFront.updateHitbox();
-		stageFront.antialiasing = FlxG.save.data.lowData;
-		stageFront.scrollFactor.set(0.9, 0.9);
-		stageFront.active = false;
-		add(stageFront);
-
-		var stageLight:FlxSprite = new FlxSprite(-125, -100).loadGraphic(Paths.image('stage/stage_light', 'shared'));
-		stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
-		stageLight.antialiasing = FlxG.save.data.lowData;
-		stageLight.updateHitbox();
-		add(stageLight);
-
-		var stageLight:FlxSprite = new FlxSprite(1225, -100).loadGraphic(Paths.image('stage/stage_light', 'shared'));
-		stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
-		stageLight.antialiasing = FlxG.save.data.lowData;
-		stageLight.updateHitbox();
-		stageLight.flipX = true;
-		add(stageLight);
-
 		var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stage/stagecurtains', 'shared'));
-		stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-		stageCurtains.updateHitbox();
-		stageCurtains.antialiasing = FlxG.save.data.lowData;
-		stageCurtains.scrollFactor.set(1.3, 1.3);
-		stageCurtains.active = false;
+		
+		bg.antialiasing = FlxG.save.data.antialiasing;
+		stageFront.antialiasing = FlxG.save.data.antialiasing;
+		stageCurtains.antialiasing = FlxG.save.data.antialiasing;
+
+		bg.screenCenter(X);
+		bg.scale.set(0.7, 0.7);
+		stageFront.screenCenter(X);
+		stageFront.scale.set(0.7, 0.7);
+		stageCurtains.screenCenter(X);
+		stageCurtains.scale.set(0.7, 0.7);
+
+		bg.scrollFactor.set(0.9, 0.9);
+		stageFront.scrollFactor.set(0.9, 0.9);
+		stageCurtains.scrollFactor.set(0.9, 0.9);
+
+		add(bg);
+		add(stageFront);
 		add(stageCurtains);
 
 		FlxG.mouse.visible = true;
@@ -251,7 +239,8 @@ class AnimationDebug extends MusicBeatState
 
 	function addHelpText():Void
 	{
-		var helpTextArray:Array<String> = "Q/E : Zoom in and out\n
+		var helpTextArray:Array<String> = "
+		Q/E : Zoom in and out\n
 		R : Resets Camerea Zoom\n
 		F : Flip Characters Sprite\n
 		I/J/K/L : Move Camera\n
@@ -294,8 +283,8 @@ class AnimationDebug extends MusicBeatState
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
 			FlxG.mouse.visible = false;
-			FlxG.switchState(new PlayState());
 			trace('Returning to PlayState');
+			FlxG.switchState(new PlayState());
 		}
 
 		if (FlxG.keys.justPressed.E)
@@ -324,19 +313,13 @@ class AnimationDebug extends MusicBeatState
 				camFollow.velocity.x = 0;
 		}
 		else
-		{
 			camFollow.velocity.set();
-		}
 
 		if (FlxG.keys.justPressed.W)
-		{
 			curAnim -= 1;
-		}
 
 		if (FlxG.keys.justPressed.S)
-		{
 			curAnim += 1;
-		}
 
 		if (curAnim < 0)
 			curAnim = animList.length - 1;

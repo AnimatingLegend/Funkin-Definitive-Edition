@@ -14,6 +14,7 @@ class OutdatedSubState extends MusicBeatState
 
 	override function create()
 	{
+		Paths.clearStoredMemory();
 		super.create();
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
@@ -44,6 +45,8 @@ class OutdatedSubState extends MusicBeatState
 			FlxG.switchState(new MainMenuState());
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
+
+		Paths.clearUnusedMemory();
 		super.update(elapsed);
 	}
 }

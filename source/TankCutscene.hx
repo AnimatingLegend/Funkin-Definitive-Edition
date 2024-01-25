@@ -69,7 +69,7 @@ class CutsceneCharacter extends FlxTypedGroup<FlxSprite>
 		cutScene.frames = Paths.getSparrowAtlas('cutscenes/' + imageShit + "-" + daNum);
 		cutScene.animation.addByPrefix('weed', arrayLMFAOOOO[daNum], 24, false);
 		cutScene.animation.play('weed');
-		cutScene.antialiasing = true;
+		cutScene.antialiasing = FlxG.save.data.antialiasing;
 
 		cutScene.animation.finishCallback = function(anim:String)
 		{

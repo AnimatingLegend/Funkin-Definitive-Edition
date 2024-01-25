@@ -30,7 +30,7 @@ class MainMenuState extends MusicBeatState
 	var menuItems:MainMenuList;
 
 	#if !switch
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'kickstarter', 'options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
 	#else
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
 	#end
@@ -38,10 +38,12 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	public static var definitiveVersion:String = '0.3.3';
+	public static var definitiveVersion:String = '0.4.0';
 
 	override function create()
 	{
+		Paths.clearStoredMemory();
+
 		#if discord_rpc
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
@@ -100,8 +102,11 @@ class MainMenuState extends MusicBeatState
 		{
 			startExitState(new FreeplayState());
 		});
+		if (FlxG.save.data.weekUnlocked == 7)
 		{
 			menuItems.createItem(null, null, "kickstarter", selectDonate, true);
+		} else {
+			menuItems.createItem(null, null, "donate", selectDonate, true);
 		}
 		menuItems.createItem(0, 0, "options", function()
 		{
@@ -139,6 +144,7 @@ class MainMenuState extends MusicBeatState
 		add(versionShit);
 
 		super.create();
+		Paths.clearUnusedMemory();
 	}
 
 	override function finishTransIn()
