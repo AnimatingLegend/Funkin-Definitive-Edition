@@ -31,13 +31,13 @@ class OptionsMenuState extends MusicBeatState
 
 		new OptionCatagory("Graphics", [
 			new LowDataOption("If checked, certain assets will be hidden for better performance."),
-			new ShaderOption("Used for some visual effects, and also CPU intensive for weaker PCs."),
 			new AntialiasingOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
 			#if !html5
 			new FramerateOption("Self explanatory. Use your left and right arrow keys to switch between your framerate. [DEFAULT: 120]"), 
 			// HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
 			#end
 			new FPSOption("If unchecked, your fps & memory counter will be hidden."),
+			new ShaderOption("If unchecked, certain visual effects will not be displayed.\n[CPU INTENSIVE]"),
 		]),
 
 		new OptionCatagory("Visuals and UI", [
@@ -84,6 +84,9 @@ class OptionsMenuState extends MusicBeatState
 
 	override function create()
 	{
+		Paths.clearStoredMemory();
+		Paths.clearUnusedMemory();
+
 		if (FlxG.sound.music != null)
 		{
 			if (!FlxG.sound.music.playing) {
@@ -371,8 +374,6 @@ class OptionsMenuState extends MusicBeatState
 
 		if (isCat)
 			currentDescription = currentSelectedCat.getOptions()[curSelected].getDescription();
-		else
-			currentDescription = 'Please select a category.';
 
 		camFollow.screenCenter();
 

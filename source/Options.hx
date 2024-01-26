@@ -562,7 +562,7 @@ class ShaderOption extends Option
 	public override function press(changeData:Bool):Bool
 	{
 		if (changeData)
-			FlxG.save.data.updateCheck = !FlxG.save.data.shaders;
+			FlxG.save.data.shaders = !FlxG.save.data.shaders;
 		acceptValues = FlxG.save.data.shaders;
 		display = updateDisplay();
 		return true;
