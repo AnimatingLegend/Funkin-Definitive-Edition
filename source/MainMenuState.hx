@@ -38,7 +38,7 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	public static var definitiveVersion:String = '0.4.0';
+	public static var definitiveVersion:String = '0.4.0h';
 
 	override function create()
 	{
@@ -102,7 +102,7 @@ class MainMenuState extends MusicBeatState
 		{
 			startExitState(new FreeplayState());
 		});
-		if (FlxG.save.data.weekUnlocked == 7)
+		if (FlxG.save.data.weekUnlocked == 7 && StoryMenuState.weekUnlocked[7])
 		{
 			menuItems.createItem(null, null, "kickstarter", selectDonate, true);
 		} else {

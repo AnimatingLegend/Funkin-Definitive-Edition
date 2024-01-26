@@ -11,9 +11,6 @@ import flixel.util.FlxTimer;
 import flixel.text.FlxText;
 import flixel.system.FlxSound;
 import lime.app.Application;
-#if desktop
-import Discord.DiscordClient;
-#end
 import openfl.display.BitmapData;
 import openfl.utils.Assets;
 import haxe.Exception;
@@ -54,16 +51,18 @@ class Caching extends MusicBeatState
 		bitmapData = new Map<String,FlxGraphic>();
 		bitmapData2 = new Map<String,FlxGraphic>();
 
-        //Caching BG
         var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xffcaff4d);
 		add(bg);
 		
         funkay = new FlxSprite(0, 0).loadGraphic(Paths.image('funkay'));
 		funkay.setGraphicSize(0, FlxG.height);
 		funkay.updateHitbox();
-		funkay.antialiasing = FlxG.save.data.lowData;
 		funkay.scrollFactor.set();
 		funkay.screenCenter();
+		if (FlxG.save.data.antialiasing != null)
+			funkay.antialiasing = FlxG.save.data.antialiasing;
+		else
+			funkay.antialiasing = false;
 		add(funkay);
 
 		preloadStuff = new FlxText(5, FlxG.height - 30, 0, "Preloading Assets", 12);
@@ -74,6 +73,13 @@ class Caching extends MusicBeatState
 
 		#if cpp
 		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/characters")))
+		{
+			if (!i.endsWith(".png"))
+				continue;
+			images.push(i);
+		}
+
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/week7/images/cutscenes")))
 		{
 			if (!i.endsWith(".png"))
 				continue;
@@ -100,17 +106,13 @@ class Caching extends MusicBeatState
 
 	function changetext() 
 	{
-		new FlxTimer().start(0.5, function(tmr:FlxTimer)
-		{
+		new FlxTimer().start(0.5, function(tmr:FlxTimer) {
 			preloadStuff.text = 'Preloading Assets';
-			new FlxTimer().start(0.5, function(tmr:FlxTimer)
-			{
+			new FlxTimer().start(0.5, function(tmr:FlxTimer) {
 				preloadStuff.text = 'Preloading Assets.';
-				new FlxTimer().start(0.5, function(tmr:FlxTimer)
-				{
+				new FlxTimer().start(0.5, function(tmr:FlxTimer) {
 					preloadStuff.text = 'Preloading Assets..';
-					new FlxTimer().start(0.5, function(tmr:FlxTimer)
-					{
+					new FlxTimer().start(0.5, function(tmr:FlxTimer) {
 						preloadStuff.text = 'Preloading Assets...';
 						changetext();
 					});
@@ -142,7 +144,7 @@ class Caching extends MusicBeatState
 			graph.persist = true;
 			graph.destroyOnNoUse = false;
 			bitmapData.set(replaced,graph);
-		//	trace(i);
+			trace(i);
 		}
 
 		for (i in music)
@@ -152,10 +154,9 @@ class Caching extends MusicBeatState
 			trace(i);
 		}
 
-
 		#end
 		FlxG.switchState(new TitleState());
-	//	trace('Caching Process Complete');
+		trace('Caching Process Complete');
 	}
 }
 #end

@@ -242,3 +242,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modifiers Option in the pause menu
 - Practice Mode from the Pause menu
 - Distractions Option
+------------------------------------------------------------
+## [0.4.0h] - [1/25/24]
+## v0.4.0 broke, so heres a quick patch up!!
+
+### Changed
+- Cutscenes are now being cached during startup
+- Some Option Descriptions
+
+### Fixed
+- Certain assets not preloading in week 7 cutscenes
+- Memory shouldn't spike when in certain menus
+- Crazy frame drops during gameplay & cutscenes
+- Other game crashing bugs

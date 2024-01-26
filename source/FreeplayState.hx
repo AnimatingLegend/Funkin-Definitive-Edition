@@ -48,6 +48,8 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+		Paths.clearStoredMemory();
+
 		#if desktop
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
@@ -139,6 +141,8 @@ class FreeplayState extends MusicBeatState
 		var swag:Alphabet = new Alphabet(1, 0, "swag");
 
 		super.create();
+
+		Paths.clearUnusedMemory();
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String)

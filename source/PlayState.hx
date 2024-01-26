@@ -321,16 +321,14 @@ class PlayState extends MusicBeatState
 					add(city);
 
 					lightFadeShader = new BuildingShaders();
-					if (!FlxG.save.data.lowData || FlxG.save.data.shaders)
-					{
-						phillyLightsColors = [0xFF31A2FD, 0xFF31FD8C, 0xFFFB33F5, 0xFFFD4531, 0xFFFBA633];
-						phillyWindow = new BGSprite('philly/window', city.x, city.y, 0.3, 0.3, 'week3');
-						phillyWindow.shader = lightFadeShader.shader;
-						phillyWindow.setGraphicSize(Std.int(phillyWindow.width * 0.85));
-						phillyWindow.updateHitbox();
-						add(phillyWindow);
-						phillyWindow.alpha = 0;
-					}
+
+					phillyLightsColors = [0xFF31A2FD, 0xFF31FD8C, 0xFFFB33F5, 0xFFFD4531, 0xFFFBA633];
+					phillyWindow = new BGSprite('philly/window', city.x, city.y, 0.3, 0.3, 'week3');
+					if (FlxG.save.data.shaders) phillyWindow.shader = lightFadeShader.shader;
+					phillyWindow.setGraphicSize(Std.int(phillyWindow.width * 0.85));
+					phillyWindow.updateHitbox();
+					add(phillyWindow);
+					phillyWindow.alpha = 0;
 
 					if(!FlxG.save.data.lowdata) {
 						var streetBehind:BGSprite = new BGSprite('philly/behindTrain', -40, 50, 'week3');
@@ -343,7 +341,7 @@ class PlayState extends MusicBeatState
 					trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes'));
 					FlxG.sound.list.add(trainSound);
 	
-					phillyStreet = new BGSprite('philly/street', -40, 50);
+					phillyStreet = new BGSprite('philly/street', -40, 50, 'week3');
 					add(phillyStreet);
 				}
 			case 'limo': // Week 4
@@ -612,6 +610,9 @@ class PlayState extends MusicBeatState
 					}
 				}
 		}
+
+		if (!isStoryMode)
+			tankIntroEnd = true;
 
 		dad = new Character(100, 100, SONG.player2);
 
@@ -1208,6 +1209,12 @@ class PlayState extends MusicBeatState
 			case 'stress':
 				inCutscene = true;
 				caching('stressCutscene', 'sound', 'week7');
+				
+				for (i in 1...3)
+					caching('cutscenes/tankTalkSong3-' + i, 'image', 'week7');
+
+				for (i in 0...7)
+					caching('cutscenes/gfHoldup-' + i, 'image', 'week7');
 
 				dad.alpha = 0.0001;
 				gf.alpha = 0.0001;
@@ -1235,7 +1242,7 @@ class PlayState extends MusicBeatState
 				for (i in 0...7)
 				{
 					var dummyLoader:FlxSprite = new FlxSprite();
-					dummyLoader.loadGraphic(Paths.image('cutscenes/gfHoldup-' + i, 'shared'));
+					dummyLoader.loadGraphic(Paths.image('cutscenes/gfHoldup-' + i, 'week7'));
 					dummyLoader.antialiasing = FlxG.save.data.antialiasing;
 					dummyLoaderShit.add(dummyLoader);
 					dummyLoader.alpha = 0.01;
@@ -1243,7 +1250,7 @@ class PlayState extends MusicBeatState
 				}
 
 				var bfCatchGf:FlxSprite = new FlxSprite(boyfriend.x - 10, boyfriend.y - 90);
-				bfCatchGf.frames = Paths.getSparrowAtlas('cutscenes/bfCatchesGF', 'shared');
+				bfCatchGf.frames = Paths.getSparrowAtlas('characters/bfAndGF', 'shared');
 				bfCatchGf.animation.addByPrefix('catch', 'BF catches GF', 24, false);
 				bfCatchGf.antialiasing = FlxG.save.data.antialiasing;
 				add(bfCatchGf);
@@ -1273,14 +1280,14 @@ class PlayState extends MusicBeatState
 
 				dad.visible = false;
 				var tankCutscene:TankCutscene = new TankCutscene(-70, 320);
-				tankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong3-pt1', 'shared');
+				tankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong3-pt1', 'week7');
 				tankCutscene.animation.addByPrefix('tankyguy', 'TANK TALK 3 P1 UNCUT', 24, false);
 				tankCutscene.animation.play('tankyguy');
 				tankCutscene.antialiasing = FlxG.save.data.antialiasing;
 				bfTankCutsceneLayer.add(tankCutscene);
 
 				var alsoTankCutscene:FlxSprite = new FlxSprite(20, 320);
-				alsoTankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong3-pt2', 'shared');
+				alsoTankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong3-pt2', 'week7');
 				alsoTankCutscene.animation.addByPrefix('swagTank', 'TANK TALK 3 P2 UNCUT', 24, false);
 				alsoTankCutscene.antialiasing = FlxG.save.data.antialiasing;
 				bfTankCutsceneLayer.add(alsoTankCutscene);
@@ -3003,7 +3010,7 @@ class PlayState extends MusicBeatState
 	{
 		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
 
-		if(!FlxG.save.data.lowdata) 
+		if(FlxG.save.data.lowdata) 
 			halloweenBG.animation.play('halloweem bg lightning strike');
 
 		lightningStrikeBeat = curBeat;
