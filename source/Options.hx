@@ -574,6 +574,75 @@ class ShaderOption extends Option
 	}
 }
 
+class PracticeOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.practiceMode = !FlxG.save.data.practiceMode;
+		acceptValues = FlxG.save.data.practiceMode;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Toggle Practice Mode";
+	}
+}
+
+class InstaKillOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.instaKill = !FlxG.save.data.instaKill;
+		acceptValues = FlxG.save.data.instaKill;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "InstaKill on Miss";
+	}
+}
+
+class BotPlayOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.botPlay = !FlxG.save.data.botPlay;
+		acceptValues = FlxG.save.data.botPlay;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Botplay";
+	}
+}
+
 class LockWeeksOption extends Option
 {
 	var confirm:Bool = false;
@@ -702,8 +771,11 @@ class ResetSettings extends Option
 		FlxG.save.data.antialiasing = null;
 		FlxG.save.data.lowData = null;
 		FlxG.save.data.timerOption = null;
-		FlxG.save.data.weekUnlocked = null;
+	//	FlxG.save.data.weekUnlocked = null;
 		FlxG.save.data.shaders = null;
+		FlxG.save.data.practiceMode = null;
+		FlxG.save.data.botPlay = null;
+		FlxG.save.data.instaKill = null;
 
 		DefinitiveData.settings();
 		trace('All settings have been reset');

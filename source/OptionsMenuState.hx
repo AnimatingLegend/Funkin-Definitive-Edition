@@ -49,6 +49,12 @@ class OptionsMenuState extends MusicBeatState
 			new LaneTransOption("Use your left & right arrow keys to switch the transparacny of your lane underlay. [DEFAULT: 0]"),
 		]),
 
+		new OptionCatagory("Modifiers", [
+			new InstaKillOption('Kinda self explanatory... You die if you miss'),
+			new PracticeOption('N/A'),
+			new BotPlayOption("If checked, a bot plays a chart for you! \n(Best if used for showcases)"),
+		]),
+
 		new OptionCatagory("Gameplay", [
 			new NaughtyOption("If unchecked, any explicit content will be censored/hidden from the game."),
 			new DownscrollOption("If checked, your note strums appears on the bottom of the screen instead of up."),
@@ -64,11 +70,9 @@ class OptionsMenuState extends MusicBeatState
 			new ResetHighscore("Reset your score on all songs and weeks. This is irreversible!"),
 			new ResetSettings("Reset ALL your settings. This is irreversible!"),
 		]),
-
-		//new OptionCatagory("Exit", []),
 	];
 
-	private var currentDescription:String = "";
+	private var currentDescription:String;
 	private var grpControls:FlxTypedGroup<Alphabet>;
 	private var checkBoxesArray:Array<CheckboxThingie> = [];
 	private var descTxt:FlxText;
@@ -374,6 +378,8 @@ class OptionsMenuState extends MusicBeatState
 
 		if (isCat)
 			currentDescription = currentSelectedCat.getOptions()[curSelected].getDescription();
+		else
+			currentDescription = 'Please select a Category.';
 
 		camFollow.screenCenter();
 

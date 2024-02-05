@@ -255,3 +255,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Memory shouldn't spike when in certain menus
 - Crazy frame drops during gameplay & cutscenes
 - Other game crashing bugs
+------------------------------------------------------------
+## [Unreleased]
+
+### Added
+- New Options (Botplay, Instakill on miss)
+- (Re)Added Modifiers category (you can now view it in options menu)
+- (Re)Added Practice Mode (you can also view this in the options menu)
+
+### Changed
+- Score/Judgement formatting
+
+### Fixed
+- Antialiasing on the countdown assets (idk how i missed this :sob:)
+- Weird framerate drops on notesplashes

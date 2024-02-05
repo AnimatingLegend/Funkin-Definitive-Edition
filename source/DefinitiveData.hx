@@ -34,7 +34,6 @@ class DefinitiveData
 					PlayState.curStage = 'tank';
 				default:
 					PlayState.curStage = 'stage';
-				
 			}
 		}
 
@@ -106,5 +105,14 @@ class DefinitiveData
 
 		if(FlxG.save.data.shaders == null)
 			FlxG.save.data.shaders = true;
+
+		if(FlxG.save.data.practiceMode == null)
+			FlxG.save.data.practiceMode = false;
+
+		if(FlxG.save.data.botPlay == null)
+			FlxG.save.data.botPlay = false;
+
+		if(FlxG.save.data.instaKill == null)
+			FlxG.save.data.instaKill = false;
     }
 }
