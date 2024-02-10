@@ -31,22 +31,29 @@ class OptionsMenuState extends MusicBeatState
 
 		new OptionCatagory("Graphics", [
 			new LowDataOption("If checked, certain assets will be hidden for better performance."),
+			new ShaderOption("If unchecked, certain visual effects will not be displayed.\n[CPU INTENSIVE]"),
 			new AntialiasingOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
+			new FPSOption("If unchecked, your fps & memory counter will be hidden."),
 			#if !html5
 			new FramerateOption("Self explanatory. Use your left and right arrow keys to switch between your framerate. [DEFAULT: 120]"), 
 			// HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
 			#end
-			new FPSOption("If unchecked, your fps & memory counter will be hidden."),
-			new ShaderOption("If unchecked, certain visual effects will not be displayed.\n[CPU INTENSIVE]"),
 		]),
 
 		new OptionCatagory("Visuals and UI", [
 			new AccuracyOption("If unchecked, it will not display your misses and accuracy, but only your song score."),
 			new JudgemntOption("If checked, it displays your judgements/ratings throughout the song."),
 			new RatingHudOption("If unchecked, the rating/combo sprites will NOT appear on the games HUD."),
+			new HideHudOption('If checked, it hides most of your game UI.'),
 			new NotesplashOption("If unchecked, hitting 'Sick!' notes won't show firework particles."),
 			new OpponentLightStrums("If unchecked, your opponents note strums won't light up whenever its their turn to sing."),
 			new LaneTransOption("Use your left & right arrow keys to switch the transparacny of your lane underlay. [DEFAULT: 0]"),
+		]),
+
+		new OptionCatagory("Modifiers", [
+			new InstaKillOption('Kinda self explanatory... You die if you miss'),
+			new PracticeOption('If checked, you can play through charts without taking health and dying.'),
+			new BotPlayOption("If checked, a bot plays a chart for you! \n(Best if used for showcases)"),
 		]),
 
 		new OptionCatagory("Gameplay", [
@@ -64,11 +71,9 @@ class OptionsMenuState extends MusicBeatState
 			new ResetHighscore("Reset your score on all songs and weeks. This is irreversible!"),
 			new ResetSettings("Reset ALL your settings. This is irreversible!"),
 		]),
-
-		//new OptionCatagory("Exit", []),
 	];
 
-	private var currentDescription:String = "";
+	private var currentDescription:String;
 	private var grpControls:FlxTypedGroup<Alphabet>;
 	private var checkBoxesArray:Array<CheckboxThingie> = [];
 	private var descTxt:FlxText;
@@ -374,6 +379,8 @@ class OptionsMenuState extends MusicBeatState
 
 		if (isCat)
 			currentDescription = currentSelectedCat.getOptions()[curSelected].getDescription();
+		else
+			currentDescription = 'Please select a Category.';
 
 		camFollow.screenCenter();
 

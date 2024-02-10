@@ -46,7 +46,8 @@ class CutsceneCharacter extends FlxTypedGroup<FlxSprite>
 	var arrayLMFAOOOO:Array<String> = [];
 	function parseOffsets()
 	{
-		var splitShit:Array<String> = CoolUtil.coolTextFile(Paths.file('images/cutscenes/' + imageShit + "CutsceneOffsets.txt"));
+		// gonna use week7 library for now to stop the tankguy cutscene errors
+		var splitShit:Array<String> = CoolUtil.coolTextFile(Paths.file('images/cutscenes/' + imageShit + "CutsceneOffsets.txt", 'week7'));
 
 		for (i in splitShit)
 		{
@@ -66,7 +67,7 @@ class CutsceneCharacter extends FlxTypedGroup<FlxSprite>
 	public function createCutscene(daNum:Int = 0)
 	{
 		var cutScene:FlxSprite = new FlxSprite(coolPos.x + animShit.get(arrayLMFAOOOO[daNum]).x, coolPos.y + animShit.get(arrayLMFAOOOO[daNum]).y);
-		cutScene.frames = Paths.getSparrowAtlas('cutscenes/' + imageShit + "-" + daNum);
+		cutScene.frames = Paths.getSparrowAtlas('cutscenes/' + imageShit + "-" + daNum, 'week7');
 		cutScene.animation.addByPrefix('weed', arrayLMFAOOOO[daNum], 24, false);
 		cutScene.animation.play('weed');
 		cutScene.antialiasing = FlxG.save.data.antialiasing;

@@ -574,6 +574,98 @@ class ShaderOption extends Option
 	}
 }
 
+class PracticeOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.practiceMode = !FlxG.save.data.practiceMode;
+		acceptValues = FlxG.save.data.practiceMode;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Toggle Practice Mode";
+	}
+}
+
+class InstaKillOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.instaKill = !FlxG.save.data.instaKill;
+		acceptValues = FlxG.save.data.instaKill;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "InstaKill on Miss";
+	}
+}
+
+class BotPlayOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.botplay = !FlxG.save.data.botplay;
+		acceptValues = FlxG.save.data.botplay;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Botplay";
+	}
+}
+
+class HideHudOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.hideHud = !FlxG.save.data.hideHud;
+		acceptValues = FlxG.save.data.hideHud;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Hide Hud";
+	}
+}
+
 class LockWeeksOption extends Option
 {
 	var confirm:Bool = false;
@@ -702,8 +794,12 @@ class ResetSettings extends Option
 		FlxG.save.data.antialiasing = null;
 		FlxG.save.data.lowData = null;
 		FlxG.save.data.timerOption = null;
-		FlxG.save.data.weekUnlocked = null;
+	//	FlxG.save.data.weekUnlocked = null;
 		FlxG.save.data.shaders = null;
+		FlxG.save.data.practiceMode = null;
+		FlxG.save.data.botplay = null;
+		FlxG.save.data.instaKill = null;
+		FlxG.save.data.hideHud = null;
 
 		DefinitiveData.settings();
 		trace('All settings have been reset');

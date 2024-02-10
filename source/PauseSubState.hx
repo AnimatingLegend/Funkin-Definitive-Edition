@@ -21,7 +21,6 @@ class PauseSubState extends MusicBeatSubstate
 	public static var goToOptions:Bool = false;
 
 	var pauseOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Options', 'Exit to menu'];
-	var modifiersChoices:Array<String> = ["Toggle Practice Mode", "Options Menu", "Back"];
 	var difficultyChoices:Array<String> = ['Easy', 'Normal', 'Hard', 'Back'];
 
 	var menuItems:Array<String> = [];
@@ -75,8 +74,16 @@ class PauseSubState extends MusicBeatSubstate
 		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
 		practiceText.updateHitbox();
 		practiceText.x = FlxG.width - (practiceText.width + 20);
-		practiceText.visible = PlayState.practiceMode;
+		practiceText.visible = FlxG.save.data.practiceMode;
 		add(practiceText);
+
+		botplayText = new FlxText(20, FlxG.height - 40, 0, "BOTPLAY", 32);
+		botplayText.scrollFactor.set();
+		botplayText.setFormat(Paths.font('vcr.ttf'), 32);
+		botplayText.x = FlxG.width - (botplayText.width + 20);
+		botplayText.updateHitbox();
+		botplayText.visible = FlxG.save.data.botplay;
+		add(botplayText);
 
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;

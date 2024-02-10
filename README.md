@@ -1,4 +1,4 @@
-# Friday Night Funkin' - Definitive Editon
+# Friday Night Funkin' - Definitive Edition
 
 Everything you see in this engine was used in my [Week 7 Port](https://github.com/LegendLOL/Funkin-Week7) project. This is intended to be a more fixed and polished version of the port.
 
@@ -51,8 +51,6 @@ Everything you see in this engine was used in my [Week 7 Port](https://github.co
 * On Thorns - the HUD is hidden during its mini cutscene
 * Fixed major dialogue bugs, tons of backend changes
 * Tweaked map size for Thorns (0.9)
-### Week 7:
-* Tankman Cutscenes are now censored
 
 ## Photos & Gifs
 
