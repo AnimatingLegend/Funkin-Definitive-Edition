@@ -114,5 +114,8 @@ class DefinitiveData
 
 		if(FlxG.save.data.instaKill == null)
 			FlxG.save.data.instaKill = false;
+
+		if(FlxG.save.data.hideHud == null)
+			FlxG.save.data.hideHud == false;
     }
 }

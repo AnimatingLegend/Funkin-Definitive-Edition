@@ -47,6 +47,7 @@ class OptionsMenuState extends MusicBeatState
 			new NotesplashOption("If unchecked, hitting 'Sick!' notes won't show firework particles."),
 			new OpponentLightStrums("If unchecked, your opponents note strums won't light up whenever its their turn to sing."),
 			new LaneTransOption("Use your left & right arrow keys to switch the transparacny of your lane underlay. [DEFAULT: 0]"),
+			new HideHudOption('N/A'),
 		]),
 
 		new OptionCatagory("Modifiers", [

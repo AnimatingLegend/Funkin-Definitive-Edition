@@ -643,6 +643,29 @@ class BotPlayOption extends Option
 	}
 }
 
+class HideHudOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.hideHud = !FlxG.save.data.hideHud;
+		acceptValues = FlxG.save.data.hideHud;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Hide Hud";
+	}
+}
+
 class LockWeeksOption extends Option
 {
 	var confirm:Bool = false;
@@ -776,6 +799,7 @@ class ResetSettings extends Option
 		FlxG.save.data.practiceMode = null;
 		FlxG.save.data.botplay = null;
 		FlxG.save.data.instaKill = null;
+		FlxG.save.data.hideHud = null;
 
 		DefinitiveData.settings();
 		trace('All settings have been reset');

@@ -802,11 +802,12 @@ class PlayState extends MusicBeatState
 		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
+		healthBarBG.visible = !FlxG.save.data.hideHud;
 		add(healthBarBG);
-		if (FlxG.save.data.downscroll) 
-			healthBarBG.y = FlxG.height * 0.1;
+		if (FlxG.save.data.downscroll) healthBarBG.y = FlxG.height * 0.1;
 
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this, 'health', 0, 2);
+		healthBar.visible = !FlxG.save.data.hideHud;
 		healthBar.scrollFactor.set();
 		add(healthBar);
 
@@ -815,23 +816,26 @@ class PlayState extends MusicBeatState
 		botPlayTxt.scrollFactor.set();
 		botPlayTxt.borderSize = 1.25;
 		botPlayTxt.cameras = [camHUD];
-		if (FlxG.save.data.botplay)
-			add(botPlayTxt);
+		botPlayTxt.visible = (FlxG.save.data.botplay && !FlxG.save.data.hideHud);
+		add(botPlayTxt);
 
 		healthBar.createFilledBar(dad.barColor, boyfriend.barColor);
 
 		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
+		iconP1.visible = !FlxG.save.data.hideHud;
 		add(iconP1);
 
 		iconP2 = new HealthIcon(SONG.player2, false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
+		iconP2.visible = !FlxG.save.data.hideHud;
 		add(iconP2);
 
 		scoreTxt = new FlxText(0, healthBarBG.y + 36, FlxG.width, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.20;
+		scoreTxt.visible = !FlxG.save.data.hideHud;
 		add(scoreTxt);
 
 		judgementCounter = new FlxText(20, 0, 0, "", 20);
@@ -841,6 +845,7 @@ class PlayState extends MusicBeatState
 		judgementCounter.scrollFactor.set();
 		judgementCounter.cameras = [camHUD];
 		judgementCounter.screenCenter(Y);
+		judgementCounter.visible = !FlxG.save.data.hideHud;
 		judgementCounter.text = 'Sicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\nMisses: ${misses}\nSussy';
 		if (FlxG.save.data.judgementCounter) {
 			add(judgementCounter);
@@ -2497,7 +2502,6 @@ class PlayState extends MusicBeatState
 		}
 
 		rating.loadGraphic(Paths.image(pixelShitPart1 + daRating + pixelShitPart2, pixelShitPart3));
-		rating.screenCenter();
 		if (FlxG.save.data.ratingHUD) 
 		{
 			rating.y -= 25;
@@ -2515,10 +2519,10 @@ class PlayState extends MusicBeatState
 		rating.acceleration.y = 550;
 		rating.velocity.y -= FlxG.random.int(140, 175);
 		rating.velocity.x += FlxG.random.int(0, 10);
+		rating.visible = !FlxG.save.data.hideHud;
 		add(rating);
 
 		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2, pixelShitPart3));
-		comboSpr.screenCenter();
 		if (FlxG.save.data.ratingHUD) 
 		{
 			comboSpr.y += 90;
@@ -2536,6 +2540,7 @@ class PlayState extends MusicBeatState
 		comboSpr.acceleration.y = 550;
 		comboSpr.velocity.y -= 150;
 		comboSpr.velocity.x += FlxG.random.int(1, 10);
+		comboSpr.visible = !FlxG.save.data.hideHud;
 
 		if (!curStage.startsWith('school')) {
 			rating.setGraphicSize(Std.int(rating.width * 0.7));
@@ -2561,7 +2566,6 @@ class PlayState extends MusicBeatState
 		var daLoop:Int = 0;
 		for (i in seperatedScore) {
 			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'num' + Std.int(i) + pixelShitPart2, pixelShitPart3));
-			numScore.screenCenter();
 			if (FlxG.save.data.ratingHUD) 
 			{
 				numScore.y += 50;
@@ -2588,6 +2592,7 @@ class PlayState extends MusicBeatState
 			numScore.acceleration.y = FlxG.random.int(200, 300);
 			numScore.velocity.y -= FlxG.random.int(140, 160);
 			numScore.velocity.x = FlxG.random.float(-5, 5);
+			numScore.visible = !FlxG.save.data.hideHud;
 			add(numScore);
 
 			if (combo >= 10 || combo == 0)
@@ -2942,7 +2947,6 @@ class PlayState extends MusicBeatState
 					}
 				});
 			}
-			/*
 			else
 			{
 				playerStrums.forEach(function(spr:FlxSprite) 
@@ -2952,7 +2956,6 @@ class PlayState extends MusicBeatState
 					}
 				});
 			}
-			*/
 
 			note.wasGoodHit = true;
 			vocals.volume = 1;

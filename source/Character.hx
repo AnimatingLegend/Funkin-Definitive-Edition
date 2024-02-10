@@ -212,6 +212,10 @@ class Character extends FlxSprite
 				quickAnimAdd('singLEFT-alt', 'Parent Left Note Mom');
 				quickAnimAdd('singRIGHT-alt', 'Parent Right Note Mom');
 
+				loadOffsetFile(curCharacter);
+				playAnim('idle');
+				barColor = 0x86f800df;
+
 			case 'monster':
 				tex = Paths.getSparrowAtlas('characters/Monster_Assets', 'shared');
 				frames = tex;
@@ -498,13 +502,9 @@ class Character extends FlxSprite
 				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
 
-				loadOffsetFile(curCharacter);
-				playAnim('idle');
 				barColor = 0xFFff3c6e;
-
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
-				barColor = 0x86f800df;
 
 			case 'tankman':
 				tex = Paths.getSparrowAtlas('characters/tankmanCaptain', 'shared');
