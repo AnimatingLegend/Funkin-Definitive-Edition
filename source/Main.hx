@@ -72,7 +72,9 @@ class Main extends Sprite
 		#end
 
 		#if cpp
+		#if !debug
 		initialState = Caching;
+		#end
 		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
 		#else
 		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
@@ -99,23 +101,5 @@ class Main extends Sprite
 	var fpsCounter:FPSCounter;
 	public function toggleFPS(fpsEnabled:Bool):Void {
 		fpsCounter.visible = fpsEnabled;
-	}
-
-	// CODE TAKEN FROM FOREVER ENGINE (optimaztion!!!!)
-	public static function dumpCache()
-	{
-		@:privateAccess
-		for (key in FlxG.bitmap._cache.keys())
-		{
-			var obj = FlxG.bitmap._cache.get(key);
-			if (obj != null)
-			{
-				Assets.cache.removeBitmapData(key);
-				FlxG.bitmap._cache.remove(key);
-				obj.destroy();
-			}
-		}
-
-		Assets.cache.clear("songs");
 	}
 }

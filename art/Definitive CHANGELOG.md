@@ -266,8 +266,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Score/Judgement formatting
 - Songs with cutscenes dont use the black transtion thingy anymore
-- Backend Changes (character assets, HTML loading times)
+- Backend Changes
 
 ### Fixed
 - Antialiasing on the countdown assets (idk how i missed this :sob:)
 - Weird framerate drops on notesplashes
+- Other miniscule fixes have been patched
