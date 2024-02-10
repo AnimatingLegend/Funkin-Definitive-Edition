@@ -28,16 +28,17 @@ class Character extends FlxSprite
 	{
 		super(x, y);
 
-		barColor = isPlayer ? 0xFF66FF33 : 0xFFFF0000;
-
 		animOffsets = new Map<String, Array<Dynamic>>();
 		curCharacter = character;
 		this.isPlayer = isPlayer;
 
 		var tex:FlxAtlasFrames;
 
-		// Anti-Aliasing for pixel sprites stay **FALSE**, dont change it !!!!
+		
 		antialiasing = FlxG.save.data.antialiasing;
+		
+		if (curCharacter.endsWith('-pixel'))
+			antialiasing = false;
 
 		switch (curCharacter)
 		{
@@ -104,7 +105,6 @@ class Character extends FlxSprite
 
 				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 				updateHitbox();
-				antialiasing = false;
 
 			case 'gf-tankmen':
 				frames = Paths.getSparrowAtlas('characters/gfTankmen', 'shared');
@@ -143,16 +143,6 @@ class Character extends FlxSprite
 				quickAnimAdd('singDOWN', 'Dad Sing Note DOWN');
 				quickAnimAdd('singLEFT', 'Dad Sing Note LEFT');
 
-			/*	animation.addByIndices('idle-loop', 'Dad idle dance', [10, 11, 12, 13], "", 24);
-				animation.addByIndices('singLEFT-loop', 'Dad Sing Note LEFT', [12, 13, 14, 15], "", 24);
-				animation.addByIndices('singRIGHT-loop', 'Dad Sing Note RIGHT', [15, 16, 17, 18], "", 24);
-				animation.addByIndices('singUP-loop', 'Dad Sing Note UP', [56, 57, 58, 59], "", 24);
-
-				addOffset('idle-loop');
-				addOffset("singUP-loop", -6, 50);
-				addOffset("singRIGHT-loop", 0, 27);
-				addOffset("singLEFT-loop", -10, 10);
-			*/	
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
 				barColor = 0xFFaf66ce;
@@ -207,6 +197,19 @@ class Character extends FlxSprite
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
 				barColor = 0xFFd8558e;
+
+			case 'parents-christmas':
+				frames = Paths.getSparrowAtlas('characters/mom_dad_christmas_assets', 'shared');
+				quickAnimAdd('idle', 'Parent Christmas Idle');
+				quickAnimAdd('singUP', 'Parent Up Note Dad');
+				quickAnimAdd('singDOWN', 'Parent Down Note Dad');
+				quickAnimAdd('singLEFT', 'Parent Left Note Dad');
+				quickAnimAdd('singRIGHT', 'Parent Right Note Dad');
+	
+				quickAnimAdd('singUP-alt', 'Parent Up Note Mom');
+				quickAnimAdd('singDOWN-alt', 'Parent Down Note Mom');
+				quickAnimAdd('singLEFT-alt', 'Parent Left Note Mom');
+				quickAnimAdd('singRIGHT-alt', 'Parent Right Note Mom');
 
 			case 'monster':
 				tex = Paths.getSparrowAtlas('characters/Monster_Assets', 'shared');
@@ -379,8 +382,6 @@ class Character extends FlxSprite
 				width -= 100;
 				height -= 100;
 
-				antialiasing = false;
-
 				flipX = true;
 				barColor = 0xFF31b0d1;
 
@@ -401,13 +402,11 @@ class Character extends FlxSprite
 				width -= 100;
 				height -= 100;
 
-				antialiasing = false;
 				flipX = true;
 				barColor = 0xFF31b0d1;
 
 			case 'bf-pixel-dead':
 				frames = Paths.getSparrowAtlas('characters/bfPixelsDEAD', 'shared');
-			//	quickAnimAdd('singUP', "BF Dies pixel");
 				quickAnimAdd('firstDeath', "BF Dies pixel");
 				animation.addByPrefix('deathLoop', "Retry Loop", 24, true);
 				quickAnimAdd('deathConfirm', "RETRY CONFIRM");
@@ -416,9 +415,9 @@ class Character extends FlxSprite
 				loadOffsetFile(curCharacter);
 				playAnim('firstDeath');
 
-				setGraphicSize(Std.int(width * 6)); // <-- pixel bullshit (dont mind it)
+				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
-				antialiasing = false;
+
 				flipX = true;
 				barColor = 0xFF31b0d1;
 
@@ -447,7 +446,6 @@ class Character extends FlxSprite
 			case 'bf-holding-gf-dead':
 
 				frames = Paths.getSparrowAtlas('characters/bfHoldingGF-DEAD', 'shared');
-			//	quickAnimAdd('singUP', 'BF Dies with GF');
 				quickAnimAdd('firstDeath', 'BF Dies with GF');
 				animation.addByPrefix('deathLoop', 'BF Dead with GF Loop', 24, true);
 				quickAnimAdd('deathConfirm', 'RETRY confirm holding gf');
@@ -473,8 +471,6 @@ class Character extends FlxSprite
 				updateHitbox();
 				barColor = 0xFFffaa6f;
 
-				antialiasing = false;
-
 			case 'senpai-angry':
 				frames = Paths.getSparrowAtlas('characters/senpai', 'shared');
 				quickAnimAdd('idle', 'Angry Senpai Idle');
@@ -490,8 +486,6 @@ class Character extends FlxSprite
 				updateHitbox();
 				barColor = 0xFFffaa6f;
 
-				antialiasing = false;
-
 			case 'spirit':
 				frames = Paths.getPackerAtlas('characters/spirit', 'shared');
 				quickAnimAdd('idle', "idle spirit_");
@@ -506,21 +500,6 @@ class Character extends FlxSprite
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
 				barColor = 0xFFff3c6e;
-
-				antialiasing = false;
-
-			case 'parents-christmas':
-				frames = Paths.getSparrowAtlas('characters/mom_dad_christmas_assets', 'shared');
-				quickAnimAdd('idle', 'Parent Christmas Idle');
-				quickAnimAdd('singUP', 'Parent Up Note Dad');
-				quickAnimAdd('singDOWN', 'Parent Down Note Dad');
-				quickAnimAdd('singLEFT', 'Parent Left Note Dad');
-				quickAnimAdd('singRIGHT', 'Parent Right Note Dad');
-
-				quickAnimAdd('singUP-alt', 'Parent Up Note Mom');
-				quickAnimAdd('singDOWN-alt', 'Parent Down Note Mom');
-				quickAnimAdd('singLEFT-alt', 'Parent Left Note Mom');
-				quickAnimAdd('singRIGHT-alt', 'Parent Right Note Mom');
 
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
@@ -582,7 +561,6 @@ class Character extends FlxSprite
 		}
 		TankmenBG.animationNotes = animationNotes;
 		animationNotes.sort(sortAnims);
-	//	trace(animationNotes);
 	}
 
 	override function update(elapsed:Float)
@@ -593,13 +571,8 @@ class Character extends FlxSprite
 			{
 				holdTimer += elapsed;
 			}
-
-			var dadVar:Float = 4;
-
-			if (curCharacter == 'dad')
-				dadVar = 6.1;
-					
-			if (holdTimer >= Conductor.stepCrochet * dadVar * 0.0011)
+	
+			if (holdTimer >= Conductor.stepCrochet  * 0.001 * singDuration)
 			{
 				dance();		
 				holdTimer = 0;
