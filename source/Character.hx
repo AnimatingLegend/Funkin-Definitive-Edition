@@ -37,7 +37,14 @@ class Character extends FlxSprite
 		
 		antialiasing = FlxG.save.data.antialiasing;
 		
-		if (curCharacter.endsWith('-pixel') || curCharacter.startsWith('senpai') || curCharacter.startsWith('spirit')) {
+		/*
+		* Pixel assets!!!
+		* Im too lazy to optimize this code so im just gonna leave it the way it is :)
+		*/
+		if (curCharacter.endsWith('-pixel') 
+			|| curCharacter.startsWith('senpai') 
+			|| curCharacter.startsWith('spirit') 
+			|| curCharacter.startsWith('bf-pixel-opponent')) {
 			antialiasing = false;
 		}
 

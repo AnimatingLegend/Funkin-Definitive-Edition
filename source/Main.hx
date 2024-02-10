@@ -15,6 +15,18 @@ import flixel.text.FlxText.FlxTextBorderStyle;
 import lime.graphics.Image;
 #end
 
+#if CRASH_HANDLER
+import openfl.events.UncaughtErrorEvent;
+import haxe.CallStack;
+import haxe.io.Path;
+import sys.FileSystem;
+import sys.io.File;
+import haxe.io.Path;
+import lime.app.Application;
+#end
+
+using StringTools;
+
 class Main extends Sprite
 {
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
@@ -93,6 +105,10 @@ class Main extends Sprite
 		var icon = Image.fromFile("icon.png");
 		#end
 
+		#if CRASH_HANDLER
+		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
+		#end
+
 		DefinitiveData.settings();
 		Conductor.offset = FlxG.save.data.notesOffset;
 	}
@@ -102,4 +118,43 @@ class Main extends Sprite
 	public function toggleFPS(fpsEnabled:Bool):Void {
 		fpsCounter.visible = fpsEnabled;
 	}
+
+	#if CRASH_HANDLER
+	function onCrash(e:UncaughtErrorEvent):Void
+	{
+		var errMsg:String = "";
+		var path:String;
+		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
+		var dateNow:String = Date.now().toString();
+
+		dateNow = dateNow.replace(" ", "_");
+		dateNow = dateNow.replace(":", "'");
+
+		path = "./crash/" + "FNF - Definitive Edition" + dateNow + ".txt";
+
+		for (stackItem in callStack)
+		{
+			switch (stackItem)
+			{
+				case FilePos(s, file, line, column):
+					errMsg += file + " (line " + line + ")\n";
+				default:
+					Sys.println(stackItem);
+			}
+		}
+
+		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/AnimatingLegend/Funkin-Definitive-Edition/issues";
+
+		if (!FileSystem.exists("./crash/"))
+			FileSystem.createDirectory("./crash/");
+
+		File.saveContent(path, errMsg + "\n");
+
+		Sys.println(errMsg);
+		Sys.println("Crash dump saved in " + Path.normalize(path));
+
+		Application.current.window.alert(errMsg, "Error!");
+		Sys.exit(1);
+	}
+	#end
 }

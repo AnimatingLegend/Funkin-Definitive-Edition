@@ -256,10 +256,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Crazy frame drops during gameplay & cutscenes
 - Other game crashing bugs
 ------------------------------------------------------------
-## [Unreleased]
+## [0.4.1] - [2/10/24]
 
 ### Added
 - New Options (Botplay, Instakill on miss, HideHUD)
+- Crash handler for window builds
 - (Re)Added Modifiers category (you can now view it in options menu)
 - (Re)Added Practice Mode (you can also view this in the options menu)
 
