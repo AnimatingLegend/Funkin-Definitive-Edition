@@ -37,8 +37,9 @@ class Character extends FlxSprite
 		
 		antialiasing = FlxG.save.data.antialiasing;
 		
-		if (curCharacter.endsWith('-pixel'))
+		if (curCharacter.endsWith('-pixel') || curCharacter.startsWith('senpai') || curCharacter.startsWith('spirit')) {
 			antialiasing = false;
+		}
 
 		switch (curCharacter)
 		{
