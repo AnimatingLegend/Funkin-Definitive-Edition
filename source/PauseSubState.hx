@@ -82,7 +82,7 @@ class PauseSubState extends MusicBeatSubstate
 		botplayText.setFormat(Paths.font('vcr.ttf'), 32);
 		botplayText.x = FlxG.width - (botplayText.width + 20);
 		botplayText.updateHitbox();
-		botplayText.visible = FlxG.save.data.botPlay;
+		botplayText.visible = FlxG.save.data.botplay;
 		add(botplayText);
 
 		levelDifficulty.alpha = 0;

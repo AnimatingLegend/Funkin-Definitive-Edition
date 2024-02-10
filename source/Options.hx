@@ -631,8 +631,8 @@ class BotPlayOption extends Option
 	public override function press(changeData:Bool):Bool
 	{
 		if (changeData)
-			FlxG.save.data.botPlay = !FlxG.save.data.botPlay;
-		acceptValues = FlxG.save.data.botPlay;
+			FlxG.save.data.botplay = !FlxG.save.data.botplay;
+		acceptValues = FlxG.save.data.botplay;
 		display = updateDisplay();
 		return true;
 	}
@@ -774,7 +774,7 @@ class ResetSettings extends Option
 	//	FlxG.save.data.weekUnlocked = null;
 		FlxG.save.data.shaders = null;
 		FlxG.save.data.practiceMode = null;
-		FlxG.save.data.botPlay = null;
+		FlxG.save.data.botplay = null;
 		FlxG.save.data.instaKill = null;
 
 		DefinitiveData.settings();
