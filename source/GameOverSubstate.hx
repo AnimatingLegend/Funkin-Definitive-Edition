@@ -15,6 +15,7 @@ class GameOverSubstate extends MusicBeatSubstate
 	var camFollow:FlxObject;
 
 	var stageSuffix:String = "";
+	var library:String = "";
 
 	var randomGameover:Int = 1;
 	var playingDeathSound:Bool = false;
@@ -29,9 +30,11 @@ class GameOverSubstate extends MusicBeatSubstate
 		{
 			case 'school' | 'schoolEvil':
 				stageSuffix = '-pixel';
+				library = 'week6';
 				daBf = 'bf-pixel-dead';
 			default:
 				daBf = 'bf';
+				library = 'shared';
 		}
 		if (PlayState.SONG.song.toLowerCase() == 'stress')
 			daBf = 'bf-holding-gf-dead';
@@ -97,7 +100,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				playingDeathSound = true;
 				bf.startedDeath = true;
 				coolStartDeath(0.2);
-				FlxG.sound.play(Paths.sound('jeffGameover/jeffGameover-' + randomGameover), 1, false, null, true, function()
+				FlxG.sound.play(Paths.sound('jeffGameover/jeffGameover-' + randomGameover, 'week7'), 1, false, null, true, function()
 				{
 					FlxG.sound.music.fadeIn(4, 0.2, 1);
 				});
@@ -119,7 +122,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 	function coolStartDeath(startVol:Float = 1)
 	{
-		FlxG.sound.playMusic(Paths.music('gameOver' + stageSuffix), startVol);
+		FlxG.sound.playMusic(Paths.music('gameOver' + stageSuffix, library), startVol);
 	}
 
 	override function beatHit()
@@ -138,7 +141,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			isEnding = true;
 			bf.playAnim('deathConfirm', true);
 			FlxG.sound.music.stop();
-			FlxG.sound.play(Paths.music('gameOverEnd' + stageSuffix));
+			FlxG.sound.play(Paths.music('gameOverEnd' + stageSuffix, library));
 			new FlxTimer().start(0.7, function(tmr:FlxTimer)
 			{
 				FlxG.camera.fade(FlxColor.BLACK, 2, false, function()

@@ -34,18 +34,17 @@ class Character extends FlxSprite
 
 		var tex:FlxAtlasFrames;
 
-		
-		antialiasing = FlxG.save.data.antialiasing;
-		
 		/*
 		* Pixel assets!!!
 		* Im too lazy to optimize this code so im just gonna leave it the way it is :)
 		*/
-		if (curCharacter.endsWith('-pixel') 
-			|| curCharacter.startsWith('senpai') 
-			|| curCharacter.startsWith('spirit') 
-			|| curCharacter.startsWith('bf-pixel-opponent')) {
+		if (curCharacter.endsWith('bf-pixel-')
+			|| curCharacter.endsWith('-pixel')
+			|| curCharacter.endsWith('senpai')
+			|| curCharacter.endsWith('spirit')) {
 			antialiasing = false;
+		} else {
+			antialiasing = FlxG.save.data.antialiasing;
 		}
 
 		switch (curCharacter)
