@@ -320,6 +320,7 @@ class PlayState extends MusicBeatState
 					phillyWindow = new BGSprite('philly/window', city.x, city.y, 0.3, 0.3, 'week3');
 					if (FlxG.save.data.shaders) phillyWindow.shader = lightFadeShader.shader;
 					phillyWindow.setGraphicSize(Std.int(phillyWindow.width * 0.85));
+					phillyWindow.antialiasing = FlxG.save.data.antialiasing;
 					phillyWindow.updateHitbox();
 					add(phillyWindow);
 					phillyWindow.alpha = 0;
@@ -2929,9 +2930,10 @@ class PlayState extends MusicBeatState
 			{
 				songScore -=10;
 				misses++;
-				updateAccuracy();
-				updateStatistic();
 			}
+
+			updateAccuracy();
+			updateStatistic();
 		}
 	}
 

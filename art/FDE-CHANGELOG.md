@@ -273,3 +273,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Antialiasing on the countdown assets (idk how i missed this :sob:)
 - Weird framerate drops on notesplashes
 - Other miniscule fixes have been patched
+------------------------------------------------------------
+## [Unreleased]
+
+### Fixed
+- Antialiasing on philly windows
+- Game Over music not playing in certain weeks (file systems can go to hell)
+- Week 6 antialiasing bullshit
