@@ -71,7 +71,7 @@ class StoryMenuState extends MusicBeatState
 
 	var flipX:Bool;
 
-	function unlockWeeks():Array<Bool>
+	public static function unlockWeeks():Array<Bool>
 	{
 		var weeks:Array<Bool> = [];
 

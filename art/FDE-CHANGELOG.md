@@ -280,3 +280,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Antialiasing on philly windows
 - Game Over music not playing in certain weeks (file systems can go to hell)
 - Week 6 antialiasing bullshit
+- Unlocked songs not appearing in the freeplay menu during startup
