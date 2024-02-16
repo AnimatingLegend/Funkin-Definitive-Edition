@@ -19,19 +19,17 @@ import haxe.io.Path;
 class LoadingState extends MusicBeatState
 {
 	inline static var MIN_TIME = 1.0;
-
+	
 	var target:FlxState;
-	var stopMusic = false;
-	var directory:String;
-	var callbacks:MultiCallback;
 	var targetShit:Float = 0;
-
-	function new(target:FlxState, stopMusic:Bool, directory:String)
+	var stopMusic = false;
+	var callbacks:MultiCallback;
+	
+	function new(target:FlxState, stopMusic:Bool)
 	{
 		super();
 		this.target = target;
 		this.stopMusic = stopMusic;
-		this.directory = directory;
 	}
 
 	var funkay:FlxSprite;
@@ -60,12 +58,18 @@ class LoadingState extends MusicBeatState
 			{
 				callbacks = new MultiCallback(onLoad);
 				var introComplete = callbacks.add("introComplete");
+				checkLoadSong(getSongPath());
+				
+				if (PlayState.SONG.needsVoices)
+					checkLoadSong(getVocalPath());
 
 				checkLibrary("shared");
-				if(directory != null && directory.length > 0 && directory != 'shared') {
-					checkLibrary(directory);
-				}
-
+				
+				if (PlayState.storyWeek > 0)
+					checkLibrary("week" + PlayState.storyWeek);
+				else
+					checkLibrary("tutorial");
+				
 				var fadeTime = 0.5;
 				FlxG.camera.fade(FlxG.camera.bgColor, fadeTime, true);
 				new FlxTimer().start(fadeTime + MIN_TIME, function(_) introComplete());
@@ -140,19 +144,14 @@ class LoadingState extends MusicBeatState
 	
 	static function getNextState(target:FlxState, stopMusic = false):FlxState
 	{
-		var directory:String = 'shared';
-
-		Paths.setCurrentLevel(directory);
-		trace('Setting asset folder to ' + directory);
-
+		Paths.setCurrentLevel("week" + PlayState.storyWeek);
 		#if NO_PRELOAD_ALL
-		var loaded:Bool = false;
-		if (PlayState.SONG != null) {
-			loaded = isSoundLoaded(getSongPath()) && (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath())) && isLibraryLoaded("shared") && isLibraryLoaded(directory);
-		}
+		var loaded = isSoundLoaded(getSongPath())
+			&& (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath()))
+			&& isLibraryLoaded("shared");
 		
 		if (!loaded)
-			return new LoadingState(target, stopMusic, directory);
+			return new LoadingState(target, stopMusic);
 		#end
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();

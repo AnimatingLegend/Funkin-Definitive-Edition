@@ -58,6 +58,7 @@ class FreeplayState extends MusicBeatState
 		var isDebug:Bool = false;
 
 		#if debug
+		addSong('test', 5, 'bf-pixel');
 		isDebug = true;
 		#end
 
@@ -74,27 +75,29 @@ class FreeplayState extends MusicBeatState
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		}
 
-		// (Re)Adding the 'isDebug' variable since weeks are locked :sob:
-		if (FlxG.save.data.weekUnlocked && StoryMenuState.weekUnlocked[1] || isDebug)
-			addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
-
-		if (FlxG.save.data.weekUnlocked && StoryMenuState.weekUnlocked[2] || isDebug)
-			addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
-
-		if (FlxG.save.data.weekUnlocked && StoryMenuState.weekUnlocked[3] || isDebug)
-			addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
-
-		if (FlxG.save.data.weekUnlocked && StoryMenuState.weekUnlocked[4] || isDebug)
-			addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
-
-		if (FlxG.save.data.weekUnlocked && StoryMenuState.weekUnlocked[5] || isDebug)
-			addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
-
-		if (FlxG.save.data.weekUnlocked && StoryMenuState.weekUnlocked[6] || isDebug)
-			addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
-		
-		if (FlxG.save.data.weekUnlocked && StoryMenuState.weekUnlocked[7] || isDebug)
-			addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman']);
+		if (!FlxG.save.data.WeekUnlocked)
+		{
+			if (StoryMenuState.weekUnlocked[1]|| isDebug)
+				addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
+	
+			if (StoryMenuState.weekUnlocked[2] || isDebug)
+				addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
+	
+			if (StoryMenuState.weekUnlocked[3] || isDebug)
+				addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
+	
+			if (StoryMenuState.weekUnlocked[4] || isDebug)
+				addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
+	
+			if (StoryMenuState.weekUnlocked[5] || isDebug)
+				addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
+	
+			if (StoryMenuState.weekUnlocked[6] || isDebug)
+				addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
+			
+			if (StoryMenuState.weekUnlocked[7] || isDebug)
+				addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman']);
+		}
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.antialiasing = FlxG.save.data.antialiasing;
@@ -186,6 +189,10 @@ class FreeplayState extends MusicBeatState
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
 
+		var shiftMult:Int = 1;
+		if(FlxG.keys.pressed.SHIFT) 
+			shiftMult = 3;
+
 		if (upP)
 		{
 			changeSelection(-1);
@@ -203,6 +210,13 @@ class FreeplayState extends MusicBeatState
 		{
 			FlxG.sound.play(Paths.sound("cancelMenu"));
 			FlxG.switchState(new MainMenuState());
+		}
+
+		if (FlxG.mouse.wheel != 0)
+		{
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
+			changeSelection(-shiftMult * FlxG.mouse.wheel);
+			changeDiff();
 		}
 
 		if (accepted)

@@ -94,6 +94,16 @@ class TitleState extends MusicBeatState
 		Highscore.load();
 		getBuildVer();
 
+		/*
+		* im on the brink of going to my nearby lowes and buying a rope im so stressed.
+		* this SHOULD save your progress instead of reseting it and other annyoing ass issues
+		*/
+		if (FlxG.save.data.weekUnlocked != null)
+		{
+			StoryMenuState.weekUnlocked = StoryMenuState.unlockWeeks();
+			FlxG.save.flush();
+		}
+
 		FlxG.mouse.visible = false;
 		#if FREEPLAY
 		FlxG.switchState(new FreeplayState());
