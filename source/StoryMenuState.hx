@@ -51,7 +51,16 @@ class StoryMenuState extends MusicBeatState
 		['tankman', 'bf', 'gf']
 	];
 
-	var weekNames:Array<String> = CoolUtil.coolTextFile(Paths.txt('weekNames'));
+	public static var weekNames:Array<String> = [
+		"Tutorial",
+		"Daddy Dearest",
+		"Spooky Month",
+		"PICO",
+		"MOMMY MUST MURDER",
+		"RED SNOW",
+		"Hating Simulator ft. Moawling",
+		"TANKMAN"
+	];
 
 	var txtWeekTitle:FlxText;
 
@@ -70,26 +79,6 @@ class StoryMenuState extends MusicBeatState
 	var rightArrow:FlxSprite;
 
 	var flipX:Bool;
-
-	public static function unlockWeeks():Array<Bool>
-	{
-		var weeks:Array<Bool> = [];
-
-		#if debug
-		for (i in 0...weekNames.length)
-			weeks.push(true);
-		return weeks;
-		#end
-
-		weeks.push(true);
-
-		for (i in 0...FlxG.save.data.weekUnlocked)
-		{
-			weeks.push(true);
-		}
-
-		return weeks;
-	}
 
 	override function create()
 	{
@@ -271,6 +260,17 @@ class StoryMenuState extends MusicBeatState
 					changeDifficulty(1);
 				if (controls.UI_LEFT_P)
 					changeDifficulty(-1);
+
+				var shiftMult:Int = 1;
+				if(FlxG.keys.pressed.SHIFT) 
+					shiftMult = 3;
+
+				if (FlxG.mouse.wheel != 0)
+				{
+					FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
+					changeWeek(-shiftMult * FlxG.mouse.wheel);
+					changeDifficulty();
+				}
 			}
 
 			if (controls.ACCEPT)
@@ -397,6 +397,26 @@ class StoryMenuState extends MusicBeatState
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 
 		updateText();
+	}
+
+	public static function unlockWeeks():Array<Bool>
+	{
+		var weeks:Array<Bool> = [];
+
+		#if debug
+		for (i in 0...weekNames.length)
+			weeks.push(true);
+		return weeks;
+		#end
+
+		weeks.push(true);
+
+		for (i in 0...FlxG.save.data.weekUnlocked)
+		{
+			weeks.push(true);
+		}
+
+		return weeks;
 	}
 
 	public static function unlockNextWeek(week:Int):Void

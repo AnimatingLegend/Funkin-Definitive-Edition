@@ -58,6 +58,7 @@ class FreeplayState extends MusicBeatState
 		var isDebug:Bool = false;
 
 		#if debug
+		addSong('test', 5, 'bf-pixel');
 		isDebug = true;
 		#end
 
@@ -74,7 +75,6 @@ class FreeplayState extends MusicBeatState
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		}
 
-		StoryMenuState.weekUnlocked = StoryMenuState.unlockWeeks();
 		if (!FlxG.save.data.WeekUnlocked)
 		{
 			if (StoryMenuState.weekUnlocked[1]|| isDebug)
@@ -97,8 +97,6 @@ class FreeplayState extends MusicBeatState
 			
 			if (StoryMenuState.weekUnlocked[7] || isDebug)
 				addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman']);
-
-			FlxG.save.flush();
 		}
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
@@ -191,6 +189,10 @@ class FreeplayState extends MusicBeatState
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
 
+		var shiftMult:Int = 1;
+		if(FlxG.keys.pressed.SHIFT) 
+			shiftMult = 3;
+
 		if (upP)
 		{
 			changeSelection(-1);
@@ -208,6 +210,13 @@ class FreeplayState extends MusicBeatState
 		{
 			FlxG.sound.play(Paths.sound("cancelMenu"));
 			FlxG.switchState(new MainMenuState());
+		}
+
+		if (FlxG.mouse.wheel != 0)
+		{
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
+			changeSelection(-shiftMult * FlxG.mouse.wheel);
+			changeDiff();
 		}
 
 		if (accepted)

@@ -33,19 +33,7 @@ class Character extends FlxSprite
 		this.isPlayer = isPlayer;
 
 		var tex:FlxAtlasFrames;
-
-		/*
-		* Pixel assets!!!
-		* Im too lazy to optimize this code so im just gonna leave it the way it is :)
-		*/
-		if (curCharacter.endsWith('bf-pixel-')
-			|| curCharacter.endsWith('-pixel')
-			|| curCharacter.endsWith('senpai')
-			|| curCharacter.endsWith('spirit')) {
-			antialiasing = false;
-		} else {
-			antialiasing = FlxG.save.data.antialiasing;
-		}
+		antialiasing = FlxG.save.data.antialiasing;
 
 		switch (curCharacter)
 		{
@@ -112,6 +100,7 @@ class Character extends FlxSprite
 
 				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 				updateHitbox();
+				antialiasing = false;
 
 			case 'gf-tankmen':
 				frames = Paths.getSparrowAtlas('characters/gfTankmen', 'shared');
@@ -395,6 +384,7 @@ class Character extends FlxSprite
 
 				flipX = true;
 				barColor = 0xFF31b0d1;
+				antialiasing = false;
 
 			case 'bf-pixel-opponent':
 				frames = Paths.getSparrowAtlas('characters/bfPixel', 'shared');
@@ -415,6 +405,7 @@ class Character extends FlxSprite
 
 				flipX = true;
 				barColor = 0xFF31b0d1;
+				antialiasing = false;
 
 			case 'bf-pixel-dead':
 				frames = Paths.getSparrowAtlas('characters/bfPixelsDEAD', 'shared');
@@ -431,6 +422,7 @@ class Character extends FlxSprite
 
 				flipX = true;
 				barColor = 0xFF31b0d1;
+				antialiasing = false;
 
 			case 'bf-holding-gf':
 				
@@ -481,6 +473,7 @@ class Character extends FlxSprite
 				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
 				barColor = 0xFFffaa6f;
+				antialiasing = false;
 
 			case 'senpai-angry':
 				frames = Paths.getSparrowAtlas('characters/senpai', 'shared');
@@ -496,6 +489,7 @@ class Character extends FlxSprite
 				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
 				barColor = 0xFFffaa6f;
+				antialiasing = false;
 
 			case 'spirit':
 				frames = Paths.getPackerAtlas('characters/spirit', 'shared');
@@ -511,6 +505,7 @@ class Character extends FlxSprite
 				barColor = 0xFFff3c6e;
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
+				antialiasing = false;
 
 			case 'tankman':
 				tex = Paths.getSparrowAtlas('characters/tankmanCaptain', 'shared');
@@ -589,7 +584,7 @@ class Character extends FlxSprite
 		if (!debugMode)
 		{
 			if(animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null)
-				playAnim(animation.curAnim.name + '-loop');		
+				playAnim(animation.curAnim.name + '-loop');
 		}
 
 		switch (curCharacter)
