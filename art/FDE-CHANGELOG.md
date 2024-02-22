@@ -279,7 +279,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Character list for character editor
 - Miniscule backend update log changes
-- You can now scroll through songs in the freeplay and story menu
+- You can now scroll through songs in the freeplay and story menu with your mouse
 - Tankman cutscenes wont play if you have toaster settings enabled
 
 ### Fixed
