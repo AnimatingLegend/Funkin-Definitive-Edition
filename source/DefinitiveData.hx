@@ -40,6 +40,26 @@ class DefinitiveData
 		PlayState.SONG.stage = PlayState.curStage;
 	}
 
+	
+	public static function charData():Void
+	{
+		switch (PlayState.curStage) 
+		{
+			case 'limo':
+				PlayState.curGF = 'gf-car';
+			case 'mall' | 'mallEvil':
+				PlayState.curGF = 'gf-christmas';
+			case 'school' | 'schoolEvil':
+				PlayState.curGF = 'gf-pixel';
+			case 'tank':
+				PlayState.curGF = 'gf-tankmen';
+		}
+
+		if (PlayState.SONG.song.toLowerCase() == 'stress')
+			PlayState.curGF = 'pico-speaker';
+	}
+	
+
     public static function settings()
     {
         if(FlxG.save.data.judgementCounter == null)

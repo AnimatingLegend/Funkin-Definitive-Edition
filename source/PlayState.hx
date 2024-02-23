@@ -61,6 +61,7 @@ using StringTools;
 class PlayState extends MusicBeatState 
 {
 	public static var curStage:String = '';
+	public static var curGF:String = '';
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
@@ -242,10 +243,7 @@ class PlayState extends MusicBeatState
 			case 'senpai':
 				dialogue = CoolUtil.coolTextFile(Paths.txt('senpai/senpaiDialogue'));
 			case 'roses':
-				if (FlxG.save.data.explicitContent)
-					dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogue'));
-				else
-					dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogueCensored'));
+				dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogue'));
 			case 'thorns':
 				dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
 		}
@@ -566,26 +564,16 @@ class PlayState extends MusicBeatState
 				}
 		}
 
-		var gfVersion:String = 'gf';
-		switch (curStage) 
-		{
-			case 'limo':
-				gfVersion = 'gf-car';
-			case 'mall' | 'mallEvil':
-				gfVersion = 'gf-christmas';
-			case 'school' | 'schoolEvil':
-				gfVersion = 'gf-pixel';
-			case 'tank':
-				gfVersion = 'gf-tankmen';
+		if (SONG.gfVersion == null) {
+			DefinitiveData.charData();
+		} else {
+			curGF = SONG.gfVersion;
 		}
 
-		if (SONG.song.toLowerCase() == 'stress')
-			gfVersion = 'pico-speaker';
-
-		gf = new Character(400, 130, gfVersion);
+		gf = new Character(400, 130, curGF);
 		gf.scrollFactor.set(0.95, 0.95);
 
-		switch (gfVersion) 
+		switch (curGF) 
 		{
 			case 'pico-speaker':
 				gf.x -= 50;
@@ -664,8 +652,8 @@ class PlayState extends MusicBeatState
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
 		pico = new Pico(100, 100, SONG.player1);
 
-		if (boyfriend.curCharacter.startsWith('pico-player')) {
-			camPos.x += 600;
+		if (pico.curCharacter.startsWith('pico-player')) {
+			camPos.x += 450;
 		}
 
 		// REPOSITIONING PER STAGE
@@ -712,7 +700,7 @@ class PlayState extends MusicBeatState
 				dad.y += 60;
 				dad.x -= 80;
 
-				if (gfVersion != 'pico-speaker') {
+				if (curGF != 'pico-speaker') {
 					gf.x -= 170;
 					gf.y -= 75;
 				}
@@ -842,7 +830,7 @@ class PlayState extends MusicBeatState
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.20;
-		scoreTxt.visible = !FlxG.save.data.hideHud;
+	//	scoreTxt.visible = !FlxG.save.data.hideHud;
 		add(scoreTxt);
 
 		judgementCounter = new FlxText(20, 0, 0, "", 20);
@@ -944,6 +932,7 @@ class PlayState extends MusicBeatState
 				case 'senpai' | 'roses' | 'thorns':
 					if(SONG.song == 'roses') FlxG.sound.play(Paths.sound('ANGRY'));
 					schoolIntro(doof);
+
 				case 'ugh' | 'guns' | 'stress':
 					if (!FlxG.save.data.lowData)
 						tankIntro();
@@ -2125,7 +2114,16 @@ class PlayState extends MusicBeatState
 
 			deathCounter += 1;
 
-			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+			if (boyfriend.curCharacter.startsWith('pico-player'))
+			{
+				FlxG.sound.play(Paths.sound('fnf_loss_sfx-pico', 'shared'));
+				FlxG.switchState(new PlayState());
+			//	trace('sweet death');
+			}
+			else
+			{
+				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+			}
 
 			#if discord_rpc
 			// Game Over doesn't get his own variable because it's only used here
@@ -2358,9 +2356,6 @@ class PlayState extends MusicBeatState
 			{
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 
-				transIn = FlxTransitionableState.defaultTransIn;
-				transOut = FlxTransitionableState.defaultTransOut;
-
 				FlxG.switchState(new StoryMenuState());
 
 				if (SONG.validScore) {
@@ -2400,23 +2395,9 @@ class PlayState extends MusicBeatState
 				} 
 				else 
 				{
-					// only songs with in game cutscenes can skip the little song transition
-					switch (SONG.song.toLowerCase())
-					{
-						case 'south' | 'monster':
-							FlxTransitionableState.skipNextTransIn = true;
-							FlxTransitionableState.skipNextTransOut = true;
-
-						case 'senpai':
-							FlxTransitionableState.skipNextTransIn = true;
-							FlxTransitionableState.skipNextTransOut = true;
-						
-						case 'ugh' | 'guns' | 'stress':
-							FlxTransitionableState.skipNextTransIn = true;
-							FlxTransitionableState.skipNextTransOut = true;
-					}
+					FlxTransitionableState.skipNextTransIn = true;
+					FlxTransitionableState.skipNextTransOut = true;
 					
-					camHUD.visible = false;
 					prevCamFollow = camFollow;
 					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
 					LoadingState.loadAndSwitchState(new PlayState());

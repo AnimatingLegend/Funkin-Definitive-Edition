@@ -187,8 +187,8 @@ class Character extends FlxSprite
 				animation.addByIndices('idle-loop', "Mom Idle", [10, 11, 12, 13], "", 24, true);
 				animation.addByIndices('singUP-loop', "Mom Up Pose", [10, 11, 12, 13], "", 24, true);
 				animation.addByIndices('singDOWN-loop', "MOM DOWN POSE", [10, 11, 12, 13], "", 24, true);
-				animation.addByIndices('singLEFT-loop', 'Mom Left Pose', [10, 11, 12, 13], "", 24, true);
-				animation.addByIndices('singRIGHT-loop', 'Mom Pose Left', [10, 11, 12, 13], "", 24, true);
+				animation.addByIndices('singLEFT-loop', 'Mom Left Pose', [5, 6, 7, 8], "", 24, true);
+				animation.addByIndices('singRIGHT-loop', 'Mom Pose Left', [5, 6, 7, 8], "", 24, true);
 				
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
@@ -574,7 +574,7 @@ class Character extends FlxSprite
 				holdTimer += elapsed;
 			}
 	
-			if (holdTimer >= Conductor.stepCrochet  * 0.001 * singDuration)
+			if (holdTimer >= Conductor.stepCrochet  * 0.0011 * singDuration)
 			{
 				dance();		
 				holdTimer = 0;

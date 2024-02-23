@@ -289,3 +289,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unlocked songs not appearing in the freeplay menu during startup
 - Kickstarter asset should pop up when you beat Week7
 - More Botplay fixes
+------------------------------------------------------------
+## [Unreleased]
+
+### Changed
+- If you play as pico-player you can instantly respawn (to lazy to make a death screen for him lol)
+
+### Fixed
+- Moms hair physics for week 5 (HOW DID I MISS THIS BUG 😭)
+- GF preloading issues
+
+### Removed
+- Censored version of the roses dialouge
