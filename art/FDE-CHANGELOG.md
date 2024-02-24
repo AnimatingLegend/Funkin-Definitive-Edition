@@ -294,9 +294,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - If you play as pico-player you can instantly respawn (to lazy to make a death screen for him lol)
+- Your score text is no longer hidden when the 'hideHUD' option is enabled
+- Backend character preloading stuff
 
 ### Fixed
 - Moms hair physics for week 5 (HOW DID I MISS THIS BUG 😭)
+- Week 2 map on loading in charting menu
+- Minor input system issues
 - GF preloading issues
 
 ### Removed

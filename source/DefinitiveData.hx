@@ -7,6 +7,16 @@ import PlayState;
 import sys.io.File;
 import sys.FileSystem;
 #end
+import Boyfriend.Pico;
+import flixel.math.FlxPoint;
+
+/**
+* IMPORTANT STATE
+* DefinitiveData is very under maintanence, but for now its main premise is to preload songs, stages, settings and gf.			
+* StageData() - More or less self explanatory, but this is used to preload stages for certain weeks or songs. If this is not applied then the game will register a dummy stage (the default week 1 stage)
+* Settings()  - False = not enabled by default | True = enabled by default
+* GFData() & CharData() - Used to both preload the character, and the stage positioning of that character | STILL A WORK IN PROGRESS
+**/
 
 class DefinitiveData
 {
@@ -40,8 +50,7 @@ class DefinitiveData
 		PlayState.SONG.stage = PlayState.curStage;
 	}
 
-	
-	public static function charData():Void
+	public static function gfData():Void
 	{
 		switch (PlayState.curStage) 
 		{
@@ -53,13 +62,140 @@ class DefinitiveData
 				PlayState.curGF = 'gf-pixel';
 			case 'tank':
 				PlayState.curGF = 'gf-tankmen';
+			default:
+				PlayState.curGF = 'gf';
 		}
 
 		if (PlayState.SONG.song.toLowerCase() == 'stress')
 			PlayState.curGF = 'pico-speaker';
+
+		switch (PlayState.curGF) 
+		{
+			case 'pico-speaker':
+				PlayState.gf.x -= 50;
+				PlayState.gf.y -= 200;
+
+				if (!FlxG.save.data.lowData)
+				{
+					var tempTankman:TankmenBG = new TankmenBG(20, 500, true);
+					tempTankman.strumTime = 10;
+					tempTankman.resetShit(20, 600, true);
+					PlayState.tankmanRun.add(tempTankman);
+	
+					for (i in 0...TankmenBG.animationNotes.length)
+					{
+						if (FlxG.random.bool(16))
+						{
+							var tankman:TankmenBG = PlayState.tankmanRun.recycle(TankmenBG);
+							tankman.strumTime = TankmenBG.animationNotes[i][0];
+							tankman.resetShit(500, 200 + FlxG.random.int(50, 100), TankmenBG.animationNotes[i][1] < 2);
+							PlayState.tankmanRun.add(tankman);
+						}
+					}
+				}
+		}
+	}
+
+	// Currently in beta!!!!
+	public static function charData():Void
+	{
+		PlayState.dad = new Character(100, 100, PlayState.SONG.player2);
+		PlayState.camPos = new FlxPoint(PlayState.dad.getGraphicMidpoint().x, PlayState.dad.getGraphicMidpoint().y);
+
+		PlayState.pico = new Pico(100, 100, PlayState.SONG.player1);
+		PlayState.boyfriend = new Boyfriend(770, 450, PlayState.SONG.player1);
+
+		if (PlayState.pico.curCharacter == 'pico-player')
+			PlayState.camPos.x += 450;
+
+		// Character Positioning
+		switch (PlayState.SONG.player2) 
+		{
+			case 'gf':
+				PlayState.dad.setPosition(PlayState.gf.x, PlayState.gf.y);
+				PlayState.gf.visible = false;
+				if (PlayState.isStoryMode) {
+					PlayState.camPos.x += 600;
+					PlayState.tweenCamIn();
+				}
+			case "spooky":
+				PlayState.dad.y += 200;
+			case "monster":
+				PlayState.dad.y += 100;
+			case 'monster-christmas':
+				PlayState.dad.y += 130;
+			case 'dad':
+				PlayState.camPos.x += 400;
+			case 'pico':
+				PlayState.camPos.x += 600;
+				PlayState.dad.y += 300;
+			case 'parents-christmas':
+				PlayState.dad.x -= 500;
+			case 'senpai':
+				PlayState.dad.x += 150;
+				PlayState.dad.y += 360;
+				PlayState.camPos.set(PlayState.dad.getGraphicMidpoint().x + 300, PlayState.dad.getGraphicMidpoint().y);
+			case 'senpai-angry':
+				PlayState.dad.x += 150;
+				PlayState.dad.y += 360;
+				PlayState.camPos.set(PlayState.dad.getGraphicMidpoint().x + 300, PlayState.dad.getGraphicMidpoint().y);
+			case 'spirit':
+				PlayState.dad.x -= 150;
+				PlayState.dad.y += 100;
+				PlayState.camPos.set(PlayState.dad.getGraphicMidpoint().x + 300, PlayState.dad.getGraphicMidpoint().y);
+			case 'tankman':
+				PlayState.dad.y += 180;
+			case 'bf-pixel-opponent':
+				PlayState.dad.x -= 80;
+				PlayState.dad.y += 460;
+				PlayState.camPos.set(PlayState.dad.getGraphicMidpoint().x + 300, PlayState.dad.getGraphicMidpoint().y);
+		}
+
+		// Stage Positioning
+		switch (PlayState.curStage) 
+		{
+			case 'spooky':
+				PlayState.pico.x += 100;
+				PlayState.pico.y -= 60;
+
+			case 'limo':
+				PlayState.boyfriend.y -= 220;
+				PlayState.boyfriend.x += 260;
+
+			case 'mall':
+				PlayState.boyfriend.x += 200;
+
+			case 'mallEvil':
+				PlayState.boyfriend.x += 320;
+				PlayState.dad.y -= 80;
+
+			case 'school':
+				PlayState.boyfriend.x += 200;
+				PlayState.boyfriend.y += 220;
+				PlayState.gf.x += 180;
+				PlayState.gf.y += 300;
+
+			case 'schoolEvil':
+				PlayState.boyfriend.x += 200;
+				PlayState.boyfriend.y += 220;
+				PlayState.gf.x += 180;
+				PlayState.gf.y += 300;
+
+			case 'tank':
+				PlayState.gf.y += 10;
+				PlayState.gf.x -= 30;
+				PlayState.boyfriend.x += 40;
+				PlayState.boyfriend.y += 0;
+				PlayState.dad.y += 60;
+				PlayState.dad.x -= 80;
+
+				if (PlayState.curGF != 'pico-speaker') {
+					PlayState.gf.x -= 170;
+					PlayState.gf.y -= 75;
+				}
+		}
 	}
 	
-
     public static function settings()
     {
         if(FlxG.save.data.judgementCounter == null)
@@ -117,9 +253,6 @@ class DefinitiveData
 		if(FlxG.save.data.lowData == null)
 			FlxG.save.data.lowData = false;
 
-		if(FlxG.save.data.timerOption == null)
-			FlxG.save.data.timerOption = true;
-
 		if(FlxG.save.data.weekUnlocked == null)
 			FlxG.save.data.weekUnlocked = 8;
 
@@ -136,6 +269,6 @@ class DefinitiveData
 			FlxG.save.data.instaKill = false;
 
 		if(FlxG.save.data.hideHud == null)
-			FlxG.save.data.hideHud == false;
+			FlxG.save.data.hideHud = false;
     }
 }

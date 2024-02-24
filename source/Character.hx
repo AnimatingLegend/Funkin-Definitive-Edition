@@ -574,9 +574,9 @@ class Character extends FlxSprite
 				holdTimer += elapsed;
 			}
 	
-			if (holdTimer >= Conductor.stepCrochet  * 0.0011 * singDuration)
+			if (holdTimer >= Conductor.stepCrochet * 0.0011 * singDuration)
 			{
-				dance();		
+				dance();
 				holdTimer = 0;
 			}
 		}
@@ -635,12 +635,13 @@ class Character extends FlxSprite
 						else
 							playAnim('danceLeft');
 					}
+				// These do nothing, just added these here so i wont get annoying debug errors
 				case 'bf-pixel-dead':
-					// do nothing, just act casual lol
+					// a
 				case 'bf-holding-gf-dead':
-					// do nothing, just act casual lol
+					// a
 				case 'pico-speaker':
-					// do nothing, just act casual lol
+					// a
 				case 'spooky':
 					danced = !danced;
 	

@@ -80,10 +80,10 @@ class PlayState extends MusicBeatState
 
 	private var vocals:FlxSound;
 
-	private var dad:Character;
-	private var gf:Character;
-	private var boyfriend:Boyfriend;
-	private var pico:Pico;
+	public static var dad:Character;
+	public static var gf:Character;
+	public static var boyfriend:Boyfriend;
+	public static var pico:Pico;
 
 	private var babyArrow:FlxSprite;
 	private var notes:FlxTypedGroup<Note>;
@@ -92,8 +92,8 @@ class PlayState extends MusicBeatState
 	private var strumLine:FlxSprite;
 	private var curSection:Int = 0;
 
-	private var camFollow:FlxObject;
-	private var camPos:FlxPoint;
+	public static var camFollow:FlxObject;
+	public static var camPos:FlxPoint;
 
 	private static var prevCamFollow:FlxObject;
 
@@ -150,8 +150,8 @@ class PlayState extends MusicBeatState
 
 	var tankWatchtower:BGSprite;
 	var tankGround:BGSprite;
-	var tankmanRun:FlxTypedGroup<TankmenBG>;
 	var foregroundSprites:FlxTypedGroup<BGSprite>;
+	public static var tankmanRun:FlxTypedGroup<TankmenBG>;
 
 	var talking:Bool = true;
 	var songScore:Int = 0;
@@ -565,7 +565,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if (SONG.gfVersion == null) {
-			DefinitiveData.charData();
+			DefinitiveData.gfData();
 		} else {
 			curGF = SONG.gfVersion;
 		}
@@ -573,137 +573,21 @@ class PlayState extends MusicBeatState
 		gf = new Character(400, 130, curGF);
 		gf.scrollFactor.set(0.95, 0.95);
 
-		switch (curGF) 
-		{
-			case 'pico-speaker':
-				gf.x -= 50;
-				gf.y -= 200;
-
-				if (!FlxG.save.data.lowData)
-				{
-					var tempTankman:TankmenBG = new TankmenBG(20, 500, true);
-					tempTankman.strumTime = 10;
-					tempTankman.resetShit(20, 600, true);
-					tankmanRun.add(tempTankman);
-	
-					for (i in 0...TankmenBG.animationNotes.length)
-					{
-						if (FlxG.random.bool(16))
-						{
-							var tankman:TankmenBG = tankmanRun.recycle(TankmenBG);
-							tankman.strumTime = TankmenBG.animationNotes[i][0];
-							tankman.resetShit(500, 200 + FlxG.random.int(50, 100), TankmenBG.animationNotes[i][1] < 2);
-							tankmanRun.add(tankman);
-						}
-					}
-				}
-		}
-
 		if (!isStoryMode)
 			tankIntroEnd = true;
 
-		dad = new Character(100, 100, SONG.player2);
+		// This a still a WIP, so if you experience game crashing bugs, this is why
+		DefinitiveData.charData();
 
-		camPos = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
-
-		switch (SONG.player2) 
+		switch (curStage)
 		{
-			case 'gf':
-				dad.setPosition(gf.x, gf.y);
-				gf.visible = false;
-				if (isStoryMode) {
-					camPos.x += 600;
-					tweenCamIn();
-				}
-
-			case "spooky":
-				dad.y += 200;
-			case "monster":
-				dad.y += 100;
-			case 'monster-christmas':
-				dad.y += 130;
-			case 'dad':
-				camPos.x += 400;
-			case 'pico':
-				camPos.x += 600;
-				dad.y += 300;
-			case 'parents-christmas':
-				dad.x -= 500;
-			case 'senpai':
-				dad.x += 150;
-				dad.y += 360;
-				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
-			case 'senpai-angry':
-				dad.x += 150;
-				dad.y += 360;
-				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
-			case 'spirit':
-				dad.x -= 150;
-				dad.y += 100;
-				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
-			case 'tankman':
-				dad.y += 180;
-			case 'bf-pixel-opponent':
-				dad.x -= 80;
-				dad.y += 460;
-				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
-		}
-
-		boyfriend = new Boyfriend(770, 450, SONG.player1);
-		pico = new Pico(100, 100, SONG.player1);
-
-		if (pico.curCharacter.startsWith('pico-player')) {
-			camPos.x += 450;
-		}
-
-		// REPOSITIONING PER STAGE
-		switch (curStage) 
-		{
-			case 'spooky':
-				pico.x += 100;
-				pico.y -= 60;
-
 			case 'limo':
-				boyfriend.y -= 220;
-				boyfriend.x += 260;
-
 				resetFastCar();
 				add(fastCar);
-
-			case 'mall':
-				boyfriend.x += 200;
-
-			case 'mallEvil':
-				boyfriend.x += 320;
-				dad.y -= 80;
-
-			case 'school':
-				boyfriend.x += 200;
-				boyfriend.y += 220;
-				gf.x += 180;
-				gf.y += 300;
-
+			
 			case 'schoolEvil':
 				var evilTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069);
 				add(evilTrail);
-
-				boyfriend.x += 200;
-				boyfriend.y += 220;
-				gf.x += 180;
-				gf.y += 300;
-
-			case 'tank':
-				gf.y += 10;
-				gf.x -= 30;
-				boyfriend.x += 40;
-				boyfriend.y += 0;
-				dad.y += 60;
-				dad.x -= 80;
-
-				if (curGF != 'pico-speaker') {
-					gf.x -= 170;
-					gf.y -= 75;
-				}
 		}
 
 		add(gf);
@@ -1833,7 +1717,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	function tweenCamIn():Void {
+	public static function tweenCamIn():Void {
 		FlxTween.tween(FlxG.camera, {zoom: 1.3}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut});
 	}
 
@@ -2689,23 +2573,15 @@ class PlayState extends MusicBeatState
 
 	private function keyShit():Void 
 	{
-		var holdingArray:Array<Bool> = [
-			controls.NOTE_LEFT, 
-			controls.NOTE_DOWN, 
-			controls.NOTE_UP, 
-			controls.NOTE_RIGHT
-		];
-		var controlArray:Array<Bool> = [
-			controls.NOTE_LEFT_P,
-			controls.NOTE_DOWN_P,
-			controls.NOTE_UP_P,
-			controls.NOTE_RIGHT_P
-		];
+		var holdingArray:Array<Bool> = [controls.NOTE_LEFT, controls.NOTE_DOWN, controls.NOTE_UP, controls.NOTE_RIGHT];
+		var controlArray:Array<Bool> = [controls.NOTE_LEFT_P, controls.NOTE_DOWN_P, controls.NOTE_UP_P, controls.NOTE_RIGHT_P];
+		var releaseArray:Array<Bool> = [controls.NOTE_LEFT_R, controls.NOTE_DOWN_R, controls.NOTE_UP_R, controls.NOTE_RIGHT_R];
 
 		if (FlxG.save.data.botplay)
 		{
 			controlArray = [false, false, false, false];
 			holdingArray = [false, false, false, false];
+			releaseArray = [false, false, false, false];
 		}
 
 		if (!boyfriend.stunned && generatedMusic)
@@ -2733,10 +2609,19 @@ class PlayState extends MusicBeatState
 						{
 							for (possibleNote in possibleNotes) 
 							{
-								if (possibleNote.noteData == daNote.noteData && daNote.strumTime < possibleNote.strumTime) 
+								// If you get jacks withen a < 10ms distance delete it
+								// BUT since thats literally impossible heres the soluition to it lol
+								// this should also help with missing whole sections of notes when trying to hit them :sob:
+								if (possibleNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - possibleNote.strumTime) < 10)
+								{ 
+									removeList.push(daNote);
+									break;
+								}
+								else if (possibleNote.noteData == daNote.noteData && daNote.strumTime < possibleNote.strumTime) 
 								{
 									possibleNotes.remove(possibleNote);
 									possibleNotes.push(daNote);
+									break;
 								}
 							}
 						} 
