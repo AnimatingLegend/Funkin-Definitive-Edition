@@ -69,31 +69,8 @@ class DefinitiveData
 		if (PlayState.SONG.song.toLowerCase() == 'stress')
 			PlayState.curGF = 'pico-speaker';
 
-		switch (PlayState.curGF) 
-		{
-			case 'pico-speaker':
-				PlayState.gf.x -= 50;
-				PlayState.gf.y -= 200;
-
-				if (!FlxG.save.data.lowData)
-				{
-					var tempTankman:TankmenBG = new TankmenBG(20, 500, true);
-					tempTankman.strumTime = 10;
-					tempTankman.resetShit(20, 600, true);
-					PlayState.tankmanRun.add(tempTankman);
-	
-					for (i in 0...TankmenBG.animationNotes.length)
-					{
-						if (FlxG.random.bool(16))
-						{
-							var tankman:TankmenBG = PlayState.tankmanRun.recycle(TankmenBG);
-							tankman.strumTime = TankmenBG.animationNotes[i][0];
-							tankman.resetShit(500, 200 + FlxG.random.int(50, 100), TankmenBG.animationNotes[i][1] < 2);
-							PlayState.tankmanRun.add(tankman);
-						}
-					}
-				}
-		}
+		PlayState.gf = new Character(400, 130, PlayState.curGF);
+		PlayState.gf.scrollFactor.set(0.95, 0.95);
 	}
 
 	// Currently in beta!!!!

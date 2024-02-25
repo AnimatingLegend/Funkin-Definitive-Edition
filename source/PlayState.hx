@@ -151,7 +151,7 @@ class PlayState extends MusicBeatState
 	var tankWatchtower:BGSprite;
 	var tankGround:BGSprite;
 	var foregroundSprites:FlxTypedGroup<BGSprite>;
-	public static var tankmanRun:FlxTypedGroup<TankmenBG>;
+	var tankmanRun:FlxTypedGroup<TankmenBG>;
 
 	var talking:Bool = true;
 	var songScore:Int = 0;
@@ -570,8 +570,31 @@ class PlayState extends MusicBeatState
 			curGF = SONG.gfVersion;
 		}
 
-		gf = new Character(400, 130, curGF);
-		gf.scrollFactor.set(0.95, 0.95);
+		switch (curGF) 
+		{
+			case 'pico-speaker':
+				gf.x -= 50;
+				gf.y -= 200;
+
+				if (!FlxG.save.data.lowData)
+				{
+					var tempTankman:TankmenBG = new TankmenBG(20, 500, true);
+					tempTankman.strumTime = 10;
+					tempTankman.resetShit(20, 600, true);
+					tankmanRun.add(tempTankman);
+	
+					for (i in 0...TankmenBG.animationNotes.length)
+					{
+						if (FlxG.random.bool(16))
+						{
+							var tankman:TankmenBG = tankmanRun.recycle(TankmenBG);
+							tankman.strumTime = TankmenBG.animationNotes[i][0];
+							tankman.resetShit(500, 200 + FlxG.random.int(50, 100), TankmenBG.animationNotes[i][1] < 2);
+							tankmanRun.add(tankman);
+						}
+					}
+				}
+		}
 
 		if (!isStoryMode)
 			tankIntroEnd = true;
