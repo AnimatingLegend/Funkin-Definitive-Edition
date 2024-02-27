@@ -51,6 +51,8 @@ Everything you see in this engine was used in my [Week 7 Port](https://github.co
 * On Thorns - the HUD is hidden during its mini cutscene
 * Fixed major dialogue bugs, tons of backend changes
 * Tweaked map size for Thorns (0.9)
+### Week 7:
+* Cutscenes can now be censored (again lol)
 
 ## Photos & Gifs
 

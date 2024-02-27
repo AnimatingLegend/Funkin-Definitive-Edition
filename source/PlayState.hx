@@ -982,8 +982,9 @@ class PlayState extends MusicBeatState
 			gf.animation.finishCallback = null;
 			dad.visible = true;
 			gf.dance();
+
+			Paths.clearUnusedMemory();
 		}
-		Paths.clearUnusedMemory();
 
 		switch (SONG.song.toLowerCase()) 
 		{
@@ -1191,6 +1192,9 @@ class PlayState extends MusicBeatState
 				var stressCutscene:FlxSound = new FlxSound().loadEmbedded(Paths.sound('stressCutscene', 'week7'));
 				FlxG.sound.list.add(stressCutscene);
 
+				var stressCutsceneCensored:FlxSound = new FlxSound().loadEmbedded(Paths.sound('song3censor', 'week7'));
+				FlxG.sound.list.add(stressCutsceneCensored);
+
 				dad.visible = false;
 				var tankCutscene:TankCutscene = new TankCutscene(-70, 320);
 				tankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong3-pt1', 'week7');
@@ -1209,7 +1213,65 @@ class PlayState extends MusicBeatState
 
 				new FlxTimer().start(0.01, function(tmr:FlxTimer) // fixes audio syncing
 				{ 
-					stressCutscene.play(true);
+					if (FlxG.save.data.explicitContent) {
+						stressCutscene.play(true);
+					} 
+					else 
+					{
+						stressCutsceneCensored.play(true);
+
+						var censor:FlxSprite = new FlxSprite();
+						censor.frames = Paths.getSparrowAtlas('cutscenes/censor', 'week7');
+						censor.animation.addByPrefix('censor', 'mouth censor', 24);
+						censor.antialiasing = FlxG.save.data.antialiasing;
+						censor.animation.play('censor');
+						add(censor);
+						censor.visible = false;
+
+						new FlxTimer().start(4.6, function(censorTimer:FlxTimer)
+						{
+							censor.visible = true;
+							censor.setPosition(dad.x + 160, dad.y + 180);
+		
+							new FlxTimer().start(0.2, function(endThing:FlxTimer)
+							{
+								censor.visible = false;
+							});
+						});
+
+						new FlxTimer().start(25.1, function(censorTimer:FlxTimer)
+						{
+							censor.visible = true;
+							censor.setPosition(dad.x + 120, dad.y + 170);
+		
+							new FlxTimer().start(0.9, function(endThing:FlxTimer)
+							{
+								censor.visible = false;
+							});
+						});
+
+						new FlxTimer().start(30.7, function(censorTimer:FlxTimer)
+						{
+							censor.visible = true;
+							censor.setPosition(dad.x + 210, dad.y + 190);
+		
+							new FlxTimer().start(0.4, function(endThing:FlxTimer)
+							{
+								censor.visible = false;
+							});
+						});
+
+						new FlxTimer().start(33.8, function(censorTimer:FlxTimer)
+						{
+							censor.visible = true;
+							censor.setPosition(dad.x + 180, dad.y + 170);
+		
+							new FlxTimer().start(0.6, function(endThing:FlxTimer)
+							{
+								censor.visible = false;
+							});
+						});
+					}
 				});
 
 				new FlxTimer().start(15.1, function(tmr:FlxTimer)

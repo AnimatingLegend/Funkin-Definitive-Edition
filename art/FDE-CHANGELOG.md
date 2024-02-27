@@ -292,6 +292,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ------------------------------------------------------------
 ## [Unreleased]
 
+### Added
+- (Re)Added censorship to tank week cutscenes
+
 ### Changed
 - If you play as pico-player you can instantly respawn (to lazy to make a death screen for him lol)
 - Your score text is no longer hidden when the 'hideHUD' option is enabled
