@@ -279,7 +279,7 @@ class StoryMenuState extends MusicBeatState
 			}
 		}
 
-		if (controls.BACK && !movedBack && !selectedWeek)
+		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE && !movedBack && !selectedWeek)
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			movedBack = true;

@@ -132,7 +132,7 @@ class MainMenuState extends MusicBeatState
 		#end
 
 		// FNF DEFINITIVE VERSION
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "FNF Definitive Edition v" + definitiveVersion, 12);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "FNF' - Definitive Edition v" + definitiveVersion, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
@@ -206,7 +206,7 @@ class MainMenuState extends MusicBeatState
 			menuItems.enabled = false;
 		}
 
-		if (controls.BACK && menuItems.enabled && !menuItems.busy)
+		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE && menuItems.enabled && !menuItems.busy)
 		{
 			FlxG.switchState(new TitleState());
 		}

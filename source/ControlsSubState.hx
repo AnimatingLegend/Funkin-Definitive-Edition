@@ -199,9 +199,11 @@ class ControlsSubState extends MusicBeatState
                     state = "input"; 
                 }
 
-                else if(controls.BACK)
+                else if(FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE)
                 {
                     FlxG.sound.play(Paths.sound('cancelMenu'));
+                    FlxTransitionableState.skipNextTransIn = true;
+					FlxTransitionableState.skipNextTransOut = true;
                     quit();
                 }
                 

@@ -176,7 +176,7 @@ class OptionsMenuState extends MusicBeatState
 			});
 		}
 
-		if (controls.BACK && !isCat)
+		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE && !isCat)
 		{
 			FlxG.sound.play(Paths.sound("cancelMenu"), false);
 
@@ -195,7 +195,7 @@ class OptionsMenuState extends MusicBeatState
 				}
 			});
 		}
-		else if (controls.BACK)
+		else if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE)
 		{
 			isCat = false;
 			grpControls.clear();
@@ -270,6 +270,8 @@ class OptionsMenuState extends MusicBeatState
 			{
 				if (options[curSelected].getName() == "Controls")
 				{
+					FlxTransitionableState.skipNextTransIn = true;
+					FlxTransitionableState.skipNextTransOut = true;
 					FlxG.switchState(new ControlsSubState());
 				}
 				else if (options[curSelected].getName() == "Exit")

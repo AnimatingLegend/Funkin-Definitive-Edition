@@ -39,7 +39,7 @@ class OutdatedSubState extends MusicBeatState
 			FlxG.camera.flash(FlxColor.WHITE, 4);
 		}
 
-		if (controls.BACK)
+		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE)
 		{
 			leftState = true;
 			FlxG.switchState(new MainMenuState());

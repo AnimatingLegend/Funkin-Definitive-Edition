@@ -75,7 +75,7 @@ class FreeplayState extends MusicBeatState
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		}
 
-		if (!FlxG.save.data.WeekUnlocked)
+		if (FlxG.save.data.weekUnlocked)
 		{
 			if (StoryMenuState.weekUnlocked[1]|| isDebug)
 				addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
@@ -206,7 +206,7 @@ class FreeplayState extends MusicBeatState
 		if (controls.UI_RIGHT_P)
 			changeDiff(1);
 
-		if (controls.BACK)
+		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE)
 		{
 			FlxG.sound.play(Paths.sound("cancelMenu"));
 			FlxG.switchState(new MainMenuState());
