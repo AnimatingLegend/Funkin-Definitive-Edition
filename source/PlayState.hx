@@ -982,14 +982,29 @@ class PlayState extends MusicBeatState
 			gf.animation.finishCallback = null;
 			dad.visible = true;
 			gf.dance();
-
-			Paths.clearUnusedMemory();
 		}
 
 		switch (SONG.song.toLowerCase()) 
 		{
 			case 'ugh':
 				inCutscene = true;
+				#if web
+				var black:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+				black.scrollFactor.set();
+				add(black);
+		
+				new FlxVideo('videos/cutscenes/tank/ughCutscene.mp4').finishCallback = function()
+				{
+					remove(black);
+					FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
+					tankManEnd();
+					Paths.clearUnusedMemory();
+				};
+		
+				FlxG.camera.zoom = defaultCamZoom * 1.2;
+				camFollow.x += 100;
+				camFollow.y += 100;
+				#else
 				camHUD.visible = false;
 				caching('wellWellWell', 'sound', 'week7');
 				caching('killYou', 'sound', 'week7');
@@ -1049,14 +1064,28 @@ class PlayState extends MusicBeatState
 						new FlxTimer().start(6.1, function(tmr:FlxTimer)
 						{
 							tankManEnd();
+							Paths.clearUnusedMemory();
 							gfCutsceneLayer.remove(tankCutscene);
 						});
 					});
 				});
+				#end
 			
 			case 'guns':
 				inCutscene = true;
-
+				#if web
+				var black:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+				black.scrollFactor.set();
+				add(black);
+		
+				new FlxVideo('videos/cutscenes/tank/gunsCutscene.mp4').finishCallback = function()
+				{
+					remove(black);
+					FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
+					tankManEnd();
+					Paths.clearUnusedMemory();
+				};
+				#else
 				new FlxTimer().start(0.5, function(tmr:FlxTimer)
 				{
 					FlxTween.tween(camHUD, {alpha: 0}, 1.5, {
@@ -1124,10 +1153,25 @@ class PlayState extends MusicBeatState
 					}
 
 					gfCutsceneLayer.remove(tankCutscene);
+					Paths.clearUnusedMemory();
 				});
+				#end
 
 			case 'stress':
 				inCutscene = true;
+				#if web
+				var black:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+				black.scrollFactor.set();
+				add(black);
+		
+				new FlxVideo('videos/cutscenes/tank/stressCutscene.mp4').finishCallback = function()
+				{
+					remove(black);
+					FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
+					tankManEnd();
+					Paths.clearUnusedMemory();
+				};
+				#else
 				caching('stressCutscene', 'sound', 'week7');
 
 				dad.alpha = 0.0001;
@@ -1338,6 +1382,8 @@ class PlayState extends MusicBeatState
 						bfTankCutsceneLayer.remove(alsoTankCutscene);
 
 						dad.alpha = 1;
+
+						Paths.clearUnusedMemory();
 					});
 				});
 
@@ -1367,8 +1413,8 @@ class PlayState extends MusicBeatState
 						FlxG.camera.focusOn(camFollow.getPosition());
 					});
 				});
+				#end
 		}
-
 	}
 
 	function initDiscord():Void
@@ -1890,7 +1936,9 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float) 
 	{
+		#if html5
 		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.04);
+		#end
 
 		#if !debug
 		perfectMode = false;
@@ -2364,8 +2412,13 @@ class PlayState extends MusicBeatState
 				} 
 				else 
 				{
+					#if html5
+					transIn = FlxTransitionableState.defaultTransIn;
+					transOut = FlxTransitionableState.defaultTransOut;
+					#else
 					FlxTransitionableState.skipNextTransIn = true;
 					FlxTransitionableState.skipNextTransOut = true;
+					#end
 					
 					prevCamFollow = camFollow;
 					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
@@ -2700,7 +2753,7 @@ class PlayState extends MusicBeatState
 								if (possibleNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - possibleNote.strumTime) < 10)
 								{ 
 									removeList.push(daNote);
-									continue;
+									break;
 								}
 								else if (possibleNote.noteData == daNote.noteData && daNote.strumTime < possibleNote.strumTime) 
 								{
