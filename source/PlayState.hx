@@ -1211,7 +1211,7 @@ class PlayState extends MusicBeatState
 				alsoTankCutscene.y = FlxG.height + 100;
 				alsoTankCutscene.visible = false;
 
-				new FlxTimer().start(0.01, function(tmr:FlxTimer) // fixes audio syncing
+				new FlxTimer().start(0.1, function(tmr:FlxTimer)
 				{ 
 					if (FlxG.save.data.explicitContent) {
 						stressCutscene.play(true);
@@ -2700,7 +2700,7 @@ class PlayState extends MusicBeatState
 								if (possibleNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - possibleNote.strumTime) < 10)
 								{ 
 									removeList.push(daNote);
-									break;
+									continue;
 								}
 								else if (possibleNote.noteData == daNote.noteData && daNote.strumTime < possibleNote.strumTime) 
 								{

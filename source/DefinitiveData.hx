@@ -10,16 +10,19 @@ import sys.FileSystem;
 import Boyfriend.Pico;
 import flixel.math.FlxPoint;
 
+
+using StringTools;
 /**
 * IMPORTANT STATE
 * DefinitiveData is very under maintanence, but for now its main premise is to preload songs, stages, settings and gf.			
 * StageData() - More or less self explanatory, but this is used to preload stages for certain weeks or songs. If this is not applied then the game will register a dummy stage (the default week 1 stage)
 * Settings()  - False = not enabled by default | True = enabled by default
-* GFData() & CharData() - Used to both preload the character, and the stage positioning of that character | STILL A WORK IN PROGRESS
+* GFData() & CharData() - Used to both preload the character, and the stage positioning of that character
 **/
 
 class DefinitiveData
 {
+	public static var forceNextDirectory:String = null;
 	public static function stageData():Void
 	{
 		if (PlayState.SONG.stage == null || PlayState.SONG.stage.length < 1)
@@ -73,7 +76,6 @@ class DefinitiveData
 		PlayState.gf.scrollFactor.set(0.95, 0.95);
 	}
 
-	// Currently in beta!!!!
 	public static function charData():Void
 	{
 		PlayState.dad = new Character(100, 100, PlayState.SONG.player2);
@@ -85,7 +87,6 @@ class DefinitiveData
 		if (PlayState.pico.curCharacter == 'pico-player')
 			PlayState.camPos.x += 450;
 
-		// Character Positioning
 		switch (PlayState.SONG.player2) 
 		{
 			case 'gf':
@@ -199,6 +200,9 @@ class DefinitiveData
 		// baby proof so you can't hard lock your copy of this engine
 		if (FlxG.save.data.framerateDraw > 240 || FlxG.save.data.framerateDraw < 60)
 			FlxG.save.data.framerateDraw = 120;
+
+		if(FlxG.save.data.fps == null)
+			FlxG.save.data.fps = true;
 
 		if(FlxG.save.data.ghostTapping == null)
 			FlxG.save.data.ghostTapping = true;

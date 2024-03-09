@@ -290,7 +290,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Kickstarter asset should pop up when you beat Week7
 - More Botplay fixes
 ------------------------------------------------------------
-## [Unreleased]
+## [0.4.2]
 
 ### Added
 - (Re)Added censorship to tank week cutscenes
@@ -302,9 +302,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Moms hair physics for week 5 (HOW DID I MISS THIS BUG 😭)
-- Week 2 map on loading in charting menu
-- Minor input system issues
 - GF preloading issues
+- Minor input system issues
+- Week 2 map not loading in charting menu
+- Issue with the game infinitely cycling back to menus (thanks to [ycken](https://github.com/YckenEhh) for pointing this out!!!)
+- Tutorial & Week 1 Directory issues for HTML5 (I hate files sm)
+- Stress cutscene not syncing up with audio
+- Memory counter not showing up during launch (I think...)
 
 ### Removed
-- Censored version of the roses dialouge
+- Censored version of the roses dialogue
