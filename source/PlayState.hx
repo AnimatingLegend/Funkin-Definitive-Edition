@@ -69,11 +69,10 @@ class PlayState extends MusicBeatState
 	public static var storyDifficulty:Int = 1;
 	public static var deathCounter:Int = 0;
 	public static var seenCutscene:Bool = false;
+	public static var ratingFC:String;
 
 	public var laneunderlay:FlxSprite;
 	public var laneunderlayOpponent:FlxSprite;
-
-	public var ratingFC:String;
 
 	public var noteData:Int = 0;
 	public var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
@@ -737,7 +736,6 @@ class PlayState extends MusicBeatState
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.20;
-	//	scoreTxt.visible = !FlxG.save.data.hideHud;
 		add(scoreTxt);
 
 		judgementCounter = new FlxText(20, 0, 0, "", 20);
@@ -849,16 +847,12 @@ class PlayState extends MusicBeatState
 					}
 		
 				default:
-					new FlxTimer().start(0.5, function(tmr:FlxTimer) {
-						startCountdown();
-					});
+					startCountdown();
 			}
 		} 
 		else 
 		{
-			new FlxTimer().start(0.5, function(tmr:FlxTimer) {
-				startCountdown();
-			});
+			startCountdown();
 		}
 
 		super.create();
@@ -1976,18 +1970,7 @@ class PlayState extends MusicBeatState
 			scoreTxt.text = "Score:" + songScore;
 		}
 
-		// Rating FC
-		ratingFC = "N/A";
-		if (sicks > 0)
-			ratingFC = "MFC";
-		if (goods > 0)
-			ratingFC = "GFC";
-		if (bads > 0 || shits > 0)
-			ratingFC = "FC";
-		if (misses > 0 && misses < 10)
-			ratingFC = "SDCB";
-		else if (misses >= 10)
-			ratingFC = "Clear";
+		Ratings.fullComboRank();
 
 		if (controls.PAUSE && startedCountdown && canPause) 
 		{
