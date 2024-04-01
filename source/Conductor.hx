@@ -110,6 +110,8 @@ class Ratings
 
 	public static function fullComboRank() 
 	{
+		PlayState.ratingFC = 'N/A';
+		
 		if (PlayState.misses == 0) 
 		{
 			if (PlayState.bads > 0 || PlayState.shits > 0) {
