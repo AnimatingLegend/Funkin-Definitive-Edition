@@ -104,6 +104,9 @@ class TitleState extends MusicBeatState
 			FlxG.save.flush();
 		}
 
+		if (FlxG.keys.justPressed.F)
+			FlxG.fullscreen = !FlxG.fullscreen;
+
 		FlxG.mouse.visible = false;
 		#if FREEPLAY
 		FlxG.switchState(new FreeplayState());
@@ -315,7 +318,6 @@ class TitleState extends MusicBeatState
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 
 			transitioning = true;
-			// FlxG.sound.music.stop();
 
 			new FlxTimer().start(0.3, function(tmr:FlxTimer)
 			{
@@ -420,13 +422,13 @@ class TitleState extends MusicBeatState
 					case 14:
 						addMoreText('Night');
 					case 15:
-						addMoreText('Funkin'); // credTextShit.text += '\nFunkin';
-				
+						addMoreText('Funkin');
 					case 16:
 						skipIntro();
 				}
 			}
 		}	
+
 		lastBeat = curBeat;
 	}
 
@@ -446,8 +448,6 @@ class TitleState extends MusicBeatState
 			else
 				FlxG.camera.flash(FlxColor.BLACK, 4);
 
-			// It always bugged me that it didn't do this before.
-			// Skip ahead in the song to the drop.
 			FlxG.sound.music.time = 9400; // 9.4 seconds
 
 			skippedIntro = true;

@@ -102,7 +102,7 @@ class MainMenuState extends MusicBeatState
 		{
 			startExitState(new FreeplayState());
 		});
-		if (!FlxG.save.data.weekUnlocked || StoryMenuState.weekUnlocked[7])
+		if (!FlxG.save.data.weekUnlocked || StoryMenuState.weekUnlocked[7] || VideoState.seenVideo)
 		{
 			menuItems.createItem(null, null, "kickstarter", selectDonate, true);
 		} else {
@@ -132,7 +132,7 @@ class MainMenuState extends MusicBeatState
 		#end
 
 		// FNF DEFINITIVE VERSION
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "FNF' - Definitive Edition v" + definitiveVersion, 12);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "FNF' Definitive Edition v" + definitiveVersion, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
