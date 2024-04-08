@@ -76,8 +76,12 @@ class Conductor
 
 class Ratings
 {
+	/**
+	* Rating Hit Windows 
+	* Sick: 45ms | Good: 90ms | Bad: 135ms | Shit: 166ms
+	**/
+
     public static var timingWindows = [166.0, 135.0, 90.0, 45.0]; 
-	// Rating Hit Windows -  Sick: 45ms | Good: 90ms | Bad: 135ms | Shit: 166ms
    
     public static function judgeNote(noteDiff:Float)
     {
@@ -90,17 +94,40 @@ class Ratings
             {
                 switch (index)
                 {
-                    case 0: // shit
+                    case 0:
                         return "shit";
-                    case 1: // bad
+                    case 1:
                         return "bad";
-                    case 2: // good
+                    case 2:
                         return "good";
-                    case 3: // sick
+                    case 3:
                         return "sick";
                 }
             }
         }
         return "good";
     }
+
+	public static function fullComboRank() 
+	{
+		PlayState.ratingFC = 'N/A';
+		
+		if (PlayState.misses == 0) 
+		{
+			if (PlayState.bads > 0 || PlayState.shits > 0) {
+				PlayState.ratingFC = 'FC';
+			} else if (PlayState.goods > 0) {
+				PlayState.ratingFC = 'GFC';
+			} else if (PlayState.sicks > 0) {
+				PlayState.ratingFC = 'MFC';
+			}
+		}
+		else
+		{
+			if (PlayState.misses < 10) 
+				PlayState.ratingFC = 'SDCB';
+			else
+				PlayState.ratingFC = 'Clear';
+		}
+	}
 }

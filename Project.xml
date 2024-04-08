@@ -50,6 +50,8 @@
 	<section if="PRELOAD_ALL">
 		<library name="songs"    preload="true" />
 		<library name="shared"   preload="true" />
+		<library name="tutorial" preload="true" if="html5"/>
+		<library name="week1" 	 preload="true" if="html5"/>
 		<library name="week2"    preload="true" />
 		<library name="week3"    preload="true" />
 		<library name="week4"    preload="true" />
@@ -61,6 +63,8 @@
 	<section if="NO_PRELOAD_ALL">
 		<library name="songs"    preload="false" />
 		<library name="shared"   preload="false" />
+		<library name="tutorial" preload="false" if="html5"/>
+		<library name="week1" 	 preload="false" if="html5"/>
 		<library name="week2"    preload="false" />
 		<library name="week3"    preload="false" />
 		<library name="week4"    preload="false" />
@@ -73,6 +77,10 @@
 	<assets path="assets/songs"    library="songs"    exclude="*.fla|*.mp3" unless="web"/>
 	<assets path="assets/shared"   library="shared"   exclude="*.fla|*.ogg" if="web"/>
 	<assets path="assets/shared"   library="shared"   exclude="*.fla|*.mp3" unless="web"/>
+	<assets path="assets/tutorial" library="tutorial" exclude="*.fla|*.ogg" if="web"/>
+	<assets path="assets/tutorial" library="tutorial" exclude="*.fla|*.mp3" unless="web"/>
+	<assets path="assets/week1"    library="week1"    exclude="*.fla|*.ogg" if="web"/>
+	<assets path="assets/week1"    library="week1"    exclude="*.fla|*.mp3" unless="web"/>
 	<assets path="assets/week2"    library="week2"    exclude="*.fla|*.ogg" if="web"/>
 	<assets path="assets/week2"    library="week2"    exclude="*.fla|*.mp3" unless="web"/>
 	<assets path="assets/week3"    library="week3"    exclude="*.fla|*.ogg" if="web"/>

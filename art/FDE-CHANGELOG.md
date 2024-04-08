@@ -279,7 +279,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Character list for character editor
 - Miniscule backend update log changes
-- You can now scroll through songs in the freeplay and story menu
+- You can now scroll through songs in the freeplay and story menu with your mouse
 - Tankman cutscenes wont play if you have toaster settings enabled
 
 ### Fixed
@@ -289,3 +289,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unlocked songs not appearing in the freeplay menu during startup
 - Kickstarter asset should pop up when you beat Week7
 - More Botplay fixes
+------------------------------------------------------------
+## [0.4.2]
+
+### Added
+- (Re)Added censorship to tank week cutscenes
+
+### Changed
+- If you play as pico-player you can instantly respawn (to lazy to make a death screen for him lol)
+- Your score text is no longer hidden when the 'hideHUD' option is enabled
+- Backend character preloading stuff
+
+### Fixed
+- Moms hair physics for week 5 (HOW DID I MISS THIS BUG 😭)
+- GF preloading issues
+- Minor input system issues
+- Week 2 map not loading in charting menu
+- Issue with the game infinitely cycling back to menus (thanks to [ycken](https://github.com/YckenEhh) for pointing this out!!!)
+- Tutorial & Week 1 Directory issues for HTML5 (I hate files sm)
+- Stress cutscene not syncing up with audio
+- Memory counter not showing up during launch (I think...)
+
+### Removed
+- Censored version of the roses dialogue

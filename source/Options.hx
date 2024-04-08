@@ -164,6 +164,33 @@ class FramerateOption extends Option
 	}
 }
 
+class FullscreenOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+		{
+			FlxG.save.data.fullscreen = !FlxG.save.data.fullscreen;
+			FlxG.fullscreen = !FlxG.fullscreen;
+		}
+
+		acceptValues = FlxG.save.data.fullscreen;
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Fullscreen ";
+	}
+}
+
 class DownscrollOption extends Option
 {
 	public function new(desc:String)

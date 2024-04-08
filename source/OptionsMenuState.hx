@@ -31,13 +31,14 @@ class OptionsMenuState extends MusicBeatState
 
 		new OptionCatagory("Graphics", [
 			new LowDataOption("If checked, certain assets will be hidden for better performance."),
-			new ShaderOption("If unchecked, certain visual effects will not be displayed.\n[CPU INTENSIVE]"),
 			new AntialiasingOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
+			new ShaderOption("If unchecked, certain visual effects will not be displayed.\n[CPU INTENSIVE]"),
 			new FPSOption("If unchecked, your fps & memory counter will be hidden."),
 			#if !html5
 			new FramerateOption("Self explanatory. Use your left and right arrow keys to switch between your framerate. [DEFAULT: 120]"), 
 			// HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
 			#end
+			new FullscreenOption('N/A'),
 		]),
 
 		new OptionCatagory("Visuals and UI", [
@@ -176,7 +177,7 @@ class OptionsMenuState extends MusicBeatState
 			});
 		}
 
-		if (controls.BACK && !isCat)
+		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE && !isCat)
 		{
 			FlxG.sound.play(Paths.sound("cancelMenu"), false);
 
@@ -195,7 +196,7 @@ class OptionsMenuState extends MusicBeatState
 				}
 			});
 		}
-		else if (controls.BACK)
+		else if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE)
 		{
 			isCat = false;
 			grpControls.clear();
@@ -270,6 +271,8 @@ class OptionsMenuState extends MusicBeatState
 			{
 				if (options[curSelected].getName() == "Controls")
 				{
+					FlxTransitionableState.skipNextTransIn = true;
+					FlxTransitionableState.skipNextTransOut = true;
 					FlxG.switchState(new ControlsSubState());
 				}
 				else if (options[curSelected].getName() == "Exit")
