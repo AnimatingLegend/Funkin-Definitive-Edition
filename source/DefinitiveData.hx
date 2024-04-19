@@ -251,5 +251,8 @@ class DefinitiveData
 
 		if(FlxG.save.data.hideHud == null)
 			FlxG.save.data.hideHud = false;
+
+		if(FlxG.save.data.timerOption == null)
+			FlxG.save.data.timerOption = true;
     }
 }

@@ -647,6 +647,29 @@ class InstaKillOption extends Option
 	}
 }
 
+class TimerOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.timerOption = !FlxG.save.data.timerOption;
+		acceptValues = FlxG.save.data.timerOption;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Song Length";
+	}
+}
+
 class BotPlayOption extends Option
 {
 	public function new(desc:String)
