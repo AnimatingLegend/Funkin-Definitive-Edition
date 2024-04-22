@@ -601,6 +601,52 @@ class ShaderOption extends Option
 	}
 }
 
+class TimerOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.timerOption = !FlxG.save.data.timerOption;
+		acceptValues = FlxG.save.data.timerOption;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Song Length";
+	}
+}
+
+class ResetButtonOption extends Option 
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.resetButton = !FlxG.save.data.resetButton;
+		acceptValues = FlxG.save.data.resetButton;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Disable Reset Button";
+	}
+}
+
 class PracticeOption extends Option
 {
 	public function new(desc:String)
@@ -644,29 +690,6 @@ class InstaKillOption extends Option
 	private override function updateDisplay():String
 	{
 		return "InstaKill on Miss";
-	}
-}
-
-class TimerOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-	
-	public override function press(changeData:Bool):Bool
-	{
-		if (changeData)
-			FlxG.save.data.timerOption = !FlxG.save.data.timerOption;
-		acceptValues = FlxG.save.data.timerOption;
-		display = updateDisplay();
-		return true;
-	}
-	
-	private override function updateDisplay():String
-	{
-		return "Song Length";
 	}
 }
 

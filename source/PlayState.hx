@@ -859,18 +859,14 @@ class PlayState extends MusicBeatState
 					if (!FlxG.save.data.lowData)
 						tankIntro();
 					else
-					{
 						startCountdown();
-					}
 		
 				default:
 					startCountdown();
 			}
 		} 
 		else 
-		{
 			startCountdown();
-		}
 
 		super.create();
 
@@ -2113,9 +2109,12 @@ class PlayState extends MusicBeatState
 		}
 
 		// RESET = Quick Game Over Screen
-		if (controls.RESET) {
-			health = 0;
-			trace("RESET = True");
+		if (!FlxG.save.data.resetButton)
+		{
+			if (controls.RESET) {
+				health = 0;
+				trace("RESET = True");
+			}
 		}
 
 		if (health <= 0 && !FlxG.save.data.practiceMode) 
@@ -2135,7 +2134,6 @@ class PlayState extends MusicBeatState
 			{
 				FlxG.sound.play(Paths.sound('fnf_loss_sfx-pico', 'shared'));
 				FlxG.switchState(new PlayState());
-			//	trace('sweet death');
 			}
 			else
 			{
@@ -2956,10 +2954,10 @@ class PlayState extends MusicBeatState
 			{
 				songScore -=10;
 				misses++;
-			}
 
-			updateAccuracy();
-			updateStatistic();
+				updateAccuracy();
+				updateStatistic();
+			}
 		}
 	}
 
@@ -3012,7 +3010,11 @@ class PlayState extends MusicBeatState
 				note.destroy();
 			}
 
-			updateAccuracy();
+			if (!FlxG.save.data.practiceMode && !FlxG.save.data.botplay) {
+				updateAccuracy();
+				updateStatistic();
+			}
+				
 		}
 	}
 

@@ -32,13 +32,13 @@ class OptionsMenuState extends MusicBeatState
 		new OptionCatagory("Graphics", [
 			new LowDataOption("If checked, certain assets will be hidden for better performance."),
 			new AntialiasingOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
+			new FullscreenOption("Check this off if you want the game to be in fullscreen mode"),
 			new ShaderOption("If unchecked, certain visual effects will not be displayed.\n[CPU INTENSIVE]"),
-			new FPSOption("If unchecked, your fps & memory counter will be hidden."),
 			#if !html5
 			new FramerateOption("Self explanatory. Use your left and right arrow keys to switch between your framerate. [DEFAULT: 120]"), 
 			// HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
 			#end
-			new FullscreenOption('N/A'),
+			new FPSOption("If unchecked, your fps & memory counter will be hidden."),
 		]),
 
 		new OptionCatagory("Visuals and UI", [
@@ -46,10 +46,10 @@ class OptionsMenuState extends MusicBeatState
 			new JudgemntOption("If checked, it displays your judgements/ratings throughout the song."),
 			new RatingHudOption("If unchecked, the rating/combo sprites will NOT appear on the games HUD."),
 			new HideHudOption('If checked, it hides most of your game UI.'),
+			new TimerOption("If unchecked, then your song timer doesn't display."),
 			new NotesplashOption("If unchecked, hitting 'Sick!' notes won't show firework particles."),
 			new OpponentLightStrums("If unchecked, your opponents note strums won't light up whenever its their turn to sing."),
 			new LaneTransOption("Use your left & right arrow keys to switch the transparacny of your lane underlay. [DEFAULT: 0]"),
-			new TimerOption("N/A"),
 		]),
 
 		new OptionCatagory("Modifiers", [
@@ -66,6 +66,7 @@ class OptionsMenuState extends MusicBeatState
 			new CameraZoomOption("If unchecked, the camera won't zoom on every concurring beat hit."),
 			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
 			new ScrollSpeedOption("Change your scroll speed. (1 = Chart dependent)"),
+			new ResetButtonOption("If checked, pressing 'Reset' won't do anything."),
 		]),
 
 		new OptionCatagory("Saves", [

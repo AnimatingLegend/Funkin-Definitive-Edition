@@ -254,5 +254,8 @@ class DefinitiveData
 
 		if(FlxG.save.data.timerOption == null)
 			FlxG.save.data.timerOption = true;
+
+		if(FlxG.save.data.resetButton == null)
+			FlxG.save.data.resetButton == false;
     }
 }
