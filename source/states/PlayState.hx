@@ -72,6 +72,7 @@ import objects.Note;
 import objects.NoteSplash;
 import objects.HealthIcon;
 
+import states.stages.StageData;
 import states.stages.backgroundsprites.BackgroundDancer;
 import states.stages.backgroundsprites.BackgroundGirls;
 import states.stages.backgroundsprites.TankmenBG;
@@ -84,7 +85,7 @@ import states.editors.AnimationDebug;
 import substates.PauseSubState;
 import substates.GameOverSubstate;
 
-import misc.GitarooPause;
+import unused.GitarooPause;
 
 using StringTools;
 
@@ -130,7 +131,7 @@ class PlayState extends MusicBeatState
 	private var playerStrums:FlxTypedGroup<FlxSprite>;
 	private var opponentStrums:FlxTypedGroup<FlxSprite>;
 
-	private var camZooming:Bool = false;
+	public static var camZooming:Bool = false;
 	private var curSong:String = "";
 
 	private var gfSpeed:Int = 1;
@@ -285,8 +286,8 @@ class PlayState extends MusicBeatState
 		initDiscord();
 		#end
 
+		StageData.songData();
 		curStage = SONG.stage;
-		DefinitiveData.stageData();
 		switch (curStage) 
 		{
 			case 'stage': // Week 1
@@ -356,8 +357,7 @@ class PlayState extends MusicBeatState
 					phillyWindow.setGraphicSize(Std.int(phillyWindow.width * 0.85));
 					phillyWindow.antialiasing = FlxG.save.data.antialiasing;
 					phillyWindow.updateHitbox();
-					if (FlxG.save.data.flashingLights)
-						add(phillyWindow);
+					add(phillyWindow);
 					phillyWindow.alpha = 0;
 
 					if(!FlxG.save.data.lowdata) {
@@ -599,7 +599,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if (SONG.gfVersion == null) {
-			DefinitiveData.gfData();
+			StageData.gfData();
 		} else {
 			curGF = SONG.gfVersion;
 		}
@@ -634,7 +634,7 @@ class PlayState extends MusicBeatState
 			tankIntroEnd = true;
 
 		// This a still a WIP, so if you experience game crashing bugs, this is why
-		DefinitiveData.charData();
+		StageData.charData();
 
 		switch (curStage)
 		{

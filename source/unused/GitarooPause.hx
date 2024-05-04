@@ -1,4 +1,4 @@
-package misc;
+package unused;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
