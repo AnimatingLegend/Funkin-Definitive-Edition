@@ -149,13 +149,13 @@ class Caching extends MusicBeatState
 
 		for (i in music)
 		{
-			FlxG.sound.cache(Paths.inst(i));
-			FlxG.sound.cache(Paths.voices(i));
+			FlxG.sound.cache(backend.Paths.inst(i));
+			FlxG.sound.cache(backend.Paths.voices(i));
 			trace(i);
 		}
 
 		#end
-		FlxG.switchState(new TitleState());
+		FlxG.switchState(new states.TitleState());
 		trace('Caching Process Complete');
 	}
 }
