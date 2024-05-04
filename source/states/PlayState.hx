@@ -72,9 +72,9 @@ import objects.Note;
 import objects.NoteSplash;
 import objects.HealthIcon;
 
-import states.stages.BackgroundDancer;
-import states.stages.BackgroundGirls;
-import states.stages.TankmenBG;
+import states.stages.backgroundsprites.BackgroundDancer;
+import states.stages.backgroundsprites.BackgroundGirls;
+import states.stages.backgroundsprites.TankmenBG;
 
 import states.FreeplayState;
 import states.StoryMenuState;
@@ -356,7 +356,8 @@ class PlayState extends MusicBeatState
 					phillyWindow.setGraphicSize(Std.int(phillyWindow.width * 0.85));
 					phillyWindow.antialiasing = FlxG.save.data.antialiasing;
 					phillyWindow.updateHitbox();
-					add(phillyWindow);
+					if (FlxG.save.data.flashingLights)
+						add(phillyWindow);
 					phillyWindow.alpha = 0;
 
 					if(!FlxG.save.data.lowdata) {
@@ -3215,9 +3216,11 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		halloweenWhite.alpha = 0.4;
-		FlxTween.tween(halloweenWhite, {alpha: 0.5}, 0.075);
-		FlxTween.tween(halloweenWhite, {alpha: 0}, 0.25, {startDelay: 0.15});
+		if (FlxG.save.data.flashingLights) {
+			halloweenWhite.alpha = 0.4;
+			FlxTween.tween(halloweenWhite, {alpha: 0.5}, 0.075);
+			FlxTween.tween(halloweenWhite, {alpha: 0}, 0.25, {startDelay: 0.15});
+		}
 	}
 
 	override function stepHit() 
@@ -3429,7 +3432,7 @@ class PlayState extends MusicBeatState
 				}
 		}
 
-		if (curStage == 'spooky' && FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset || !FlxG.save.data.flashingLights) {
+		if (curStage == 'spooky' && FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset) {
 			lightningStrikeShit();
 		}
 	}

@@ -1,4 +1,4 @@
-package states.stages;
+package states.stages.backgroundsprites;
 
 import flixel.FlxG;
 import flixel.FlxSprite;

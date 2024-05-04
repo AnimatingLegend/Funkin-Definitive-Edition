@@ -1,4 +1,4 @@
-package states.stages;
+package states.stages.backgroundsprites;
 
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;

@@ -561,7 +561,7 @@ class Character extends FlxSprite
 				animationNotes.push(note);
 			}
 		}
-		states.stages.TankmenBG.animationNotes = animationNotes;
+		states.stages.backgroundsprites.TankmenBG.animationNotes = animationNotes;
 		animationNotes.sort(sortAnims);
 	}
 
