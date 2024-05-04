@@ -1,12 +1,12 @@
-Welcome to the FDE Source Code !!!!
+# Welcome to the FDE Source Code !!!!
 As you can see a lot has been getting changed around for the past couple of days files/code wise, and I wanted to make this little instructions Manuel to make navigating the code is easy asf.
 
-**animate**
-A little system I use for the week 7 atlas cutscenes! These files only include 
+## animate
+### A little system I use for the week 7 atlas cutscenes! These files only include 
 - FlxAnimate.hx & FlxSymbol.hx
 
-**backend**
-This is probably one of the second most important folders in the source code. covers all of the behind-the-scenes things in the game like Controls, APIs, ETC. These Files include:
+## backend
+### This is probably one of the second most important folders in the source code. covers all of the behind-the-scenes things in the game like Controls, APIs, ETC. These Files include:
 - Conductor.hx
 - Controls.hx
 - CoolUtil.hx
@@ -20,14 +20,14 @@ This is probably one of the second most important folders in the source code. co
 - Section.hx
 - Song.hx
 
-**cutscenes**
-These Files Include:
+## cutscenes
+### These Files Include:
 - Dialogue.hx
 - FlxVideo.hx
 - TankCutscene.hx
 
-**objects**
-Basically, anything that has to do with assets is in this folder. these files include:
+## objects
+### Basically, anything that has to do with assets is in this folder. these files include:
 - Alphabet.hx
 - AttachedText.hx
 - BGSprite.hx
@@ -40,22 +40,22 @@ Basically, anything that has to do with assets is in this folder. these files in
 - Note.hx
 - NoteSplash.hx
 
-**options**
-Kinda self-explanatory lmao, options and shit are in here
+## options
+### Kinda self-explanatory lmao, options and shit are in here
 - ControlsSubState.hx
 - Options.hx
 - OptionsMenuState.hx
 
-**shaderslmao**
-Also self-explanatory, shaderslmao
+## shaderslmao
+### Also self-explanatory, shaderslmao
 - BlendModeEffect.hx
 - BuildingShaders.hx
 - ColorSwap.hx
 - OverlayShader.hx
 - WiggleEffect.hx
 
-**states/substates**
-This covers the frontend Part of the game, from the way it looks, to the way it acts. These files include:
+## states/substates
+### This covers the frontend Part of the game, from the way it looks, to the way it acts. These files include:
 - editors (another folder which contains the files: AnimationDebug.hx & ChartingState.hx)
 - stages (another folder which contains the files: StageData, & all of the background sprites for week 4, week 6, & week 7)
 - FreeplayState.hx
@@ -69,8 +69,8 @@ This covers the frontend Part of the game, from the way it looks, to the way it 
 - TitleState.hx
 - Video State.hx
 
-**ui**
-Anything that has to the with funkins user interface, we got it in here lmao. These files include:
+## ui
+### Anything that has to the with funkins user interface, we got it in here lmao. These files include:
 - AtlasChar.hx
 - AtlasFont.hx
 - AtlasMenuItem.hx
@@ -91,7 +91,7 @@ Anything that has to the with funkins user interface, we got it in here lmao. Th
 - TextTypedMenuItem.hx
 - WrapMode.hx
 
-**unused**
-Useless pieces of code that are still in the game. These files include:
+## unused
+### Useless pieces of code that are still in the game. These files include:
 - NGio.hx
 - GitarooPause.hx
