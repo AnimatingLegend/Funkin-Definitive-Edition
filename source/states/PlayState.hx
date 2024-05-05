@@ -141,7 +141,6 @@ class PlayState extends MusicBeatState
 	private var healthBarBG:FlxSprite;
 	private var healthBar:FlxBar;
 	private var botPlayTxt:FlxText;
-	private var timerText:FlxText;
 	
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
@@ -754,21 +753,6 @@ class PlayState extends MusicBeatState
 		botPlayTxt.visible = (FlxG.save.data.botplay && !FlxG.save.data.hideHud);
 		add(botPlayTxt);
 
-		timerText = new FlxText(0, 0, 0, "0:00", 24);
-		timerText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, RIGHT, OUTLINE, FlxColor.BLACK);
-		timerText.screenCenter(X);
-		timerText.borderQuality = 1;
-		timerText.borderSize = 1;
-		timerText.visible = FlxG.save.data.timerOption;
-		add(timerText);
-
-		if (FlxG.save.data.downscroll) {
-			timerText.y = FlxG.height - (24 + 3);
-		} else {
-			timerText.y = 3;
-		}
-
-
 		healthBar.createFilledBar(dad.barColor, boyfriend.barColor);
 
 		iconP1 = new HealthIcon(SONG.player1, true);
@@ -800,7 +784,6 @@ class PlayState extends MusicBeatState
 			add(judgementCounter);
 		}
 
-		timerText.cameras = [camHUD];
 		botPlayTxt.cameras = [camHUD];
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
@@ -1937,7 +1920,7 @@ class PlayState extends MusicBeatState
 	override public function onFocus():Void 
 	{
 		#if discord_rpc
-		if (health > 0 && !paused) {
+		if (health > 0 && !paused && FlxG.autoPause) {
 			if (Conductor.songPosition > 0.0) {
 				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC, true, songLength - Conductor.songPosition);
 			} else {
@@ -1952,7 +1935,7 @@ class PlayState extends MusicBeatState
 	override public function onFocusLost():Void 
 	{
 		#if discord_rpc
-		if (health > 0 && !paused) {
+		if (health > 0 && !paused && FlxG.autoPause) {
 			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 		}
 		#end
@@ -2370,9 +2353,6 @@ class PlayState extends MusicBeatState
 				}
 			});
 		}
-
-		timerText.text = FlxStringUtil.formatTime((FlxG.sound.music.length - FlxG.sound.music.time) / 1000);
-		timerText.screenCenter(X);
 
 		if (!inCutscene)
 			keyShit();

@@ -312,3 +312,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Censored version of the roses dialogue
+------------------------------------------------------------
+## [Unreleased]
+
+### Added
+- (Re)Added Roses censored dialogue
+- New Options (Auto Pause, Disable Reset Button)
+
+### Changed
+- Complete source code overhaul !!! (Better Optimization, Organized Files, and it's just more easier to work with)
+
+### Fixed
+- Week 2 & Week 3 Stage flashing you when you have the flashing lights option disabled

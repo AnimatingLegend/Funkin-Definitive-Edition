@@ -8,12 +8,9 @@ import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import flixel.FlxG;
-import ui.FPSCounter;
 import flixel.text.FlxText.FlxTextBorderStyle;
 
-#if html5
-import lime.graphics.Image;
-#end
+import ui.FPSCounter;
 
 #if CRASH_HANDLER
 import openfl.events.UncaughtErrorEvent;
@@ -102,7 +99,8 @@ class Main extends Sprite
 		#end
 
 		#if html5
-		var icon = Image.fromFile("icon.png");
+		FlxG.autoPause = false;
+		FlxG.mouse.visible = false;
 		#end
 
 		#if CRASH_HANDLER

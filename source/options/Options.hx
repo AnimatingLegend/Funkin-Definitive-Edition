@@ -601,7 +601,7 @@ class ShaderOption extends Option
 	}
 }
 
-class TimerOption extends Option
+class AutoPauseOption extends Option
 {
 	public function new(desc:String)
 	{
@@ -612,15 +612,21 @@ class TimerOption extends Option
 	public override function press(changeData:Bool):Bool
 	{
 		if (changeData)
-			FlxG.save.data.timerOption = !FlxG.save.data.timerOption;
-		acceptValues = FlxG.save.data.timerOption;
+		{
+			FlxG.save.data.autoPause = !FlxG.save.data.autoPause;
+
+			// Work in progress of my new settings handler system :]
+			FlxG.autoPause = DefinitiveData.prefs.autoPause;
+		}
+		
+		acceptValues = FlxG.save.data.autoPause;
 		display = updateDisplay();
 		return true;
 	}
 	
 	private override function updateDisplay():String
 	{
-		return "Song Length";
+		return "Auto Pause";
 	}
 }
 
@@ -866,7 +872,7 @@ class ResetSettings extends Option
 		FlxG.save.data.camhudZoom = null;
 		FlxG.save.data.antialiasing = null;
 		FlxG.save.data.lowData = null;
-		FlxG.save.data.timerOption = null;
+		FlxG.save.data.autoPause = null;
 	//	FlxG.save.data.weekUnlocked = null;
 		FlxG.save.data.shaders = null;
 		FlxG.save.data.practiceMode = null;

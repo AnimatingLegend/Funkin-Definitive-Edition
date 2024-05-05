@@ -1,6 +1,7 @@
 package backend;
 
 import flixel.FlxG;
+import flixel.util.FlxSave;
 import flixel.system.FlxSound;
 import states.PlayState;
 #if sys
@@ -22,8 +23,14 @@ using StringTools;
 * STAGE STUFF MOVED TO `Stage.hx`
 **/
 
+@:structInit class SaveVariables {
+	public var autoPause:Bool = true;
+}
+
 class DefinitiveData
 {
+	public static var prefs:SaveVariables = {};
+
     public static function settings()
     {
         if(FlxG.save.data.judgementCounter == null)
@@ -43,9 +50,13 @@ class DefinitiveData
 
 		if(FlxG.save.data.scrollSpeed == null)
 			FlxG.save.data.scrollSpeed = 1;
-
+		
+		#if (html5 && !switch)
 		if(FlxG.save.data.framerateDraw == null)
 			FlxG.save.data.framerateDraw = 120;
+
+		FlxG.autoPause = DefinitiveData.prefs.autoPause;
+		#end
 
 		// baby proof so you can't hard lock your copy of this engine
 		if (FlxG.save.data.framerateDraw > 240 || FlxG.save.data.framerateDraw < 60)
@@ -101,9 +112,6 @@ class DefinitiveData
 
 		if(FlxG.save.data.hideHud == null)
 			FlxG.save.data.hideHud = false;
-
-		if(FlxG.save.data.timerOption == null)
-			FlxG.save.data.timerOption = true;
 
 		if(FlxG.save.data.resetButton == null)
 			FlxG.save.data.resetButton == false;
