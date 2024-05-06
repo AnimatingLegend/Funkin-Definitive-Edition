@@ -92,7 +92,7 @@ class ControlsSubState extends MusicBeatState
         menuBG.scrollFactor.x = 0;
         menuBG.scrollFactor.y = 0.06;
 		menuBG.screenCenter();
-		menuBG.antialiasing = FlxG.save.data.lowData;
+		menuBG.antialiasing = FlxG.save.data.antialiasing;
 		add(menuBG);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -195,21 +195,17 @@ class ControlsSubState extends MusicBeatState
                 if (controls.ACCEPT)
                 {
                     FlxG.sound.play(Paths.sound("scrollMenu"), false);
-                   
                     state = "input"; 
                 }
-
                 else if(FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE)
                 {
-                    FlxG.sound.play(Paths.sound('cancelMenu'));
                     FlxTransitionableState.skipNextTransIn = true;
 					FlxTransitionableState.skipNextTransOut = true;
                     quit();
                 }
-                
-				else if (FlxG.keys.justPressed.BACKSPACE)
+				else if (FlxG.keys.justPressed.BACKSPACE || FlxG.keys.justPressed.BACKSPACE)
                 {
-                    FlxG.sound.play(Paths.sound('cancelMenu'));
+                    FlxG.sound.play(Paths.sound('cancelMenu'), true);
                     reset();
                 }
 
@@ -241,10 +237,8 @@ class ControlsSubState extends MusicBeatState
 
             case "exiting":
 
-
             default:
                 state = "select";
-
         }
 
         if(FlxG.keys.justPressed.ANY && !FlxG.keys.justPressed.UP && !FlxG.keys.justPressed.DOWN && !FlxG.keys.justPressed.LEFT && !FlxG.keys.justPressed.RIGHT){
@@ -252,14 +246,10 @@ class ControlsSubState extends MusicBeatState
         }
 
 		super.update(elapsed);
-		
 	}
 
     public function textUpdate()
     {
-
-        
-
         for(i in 0...keyText.length)
         {
             grpControls.remove(grpControls.members[i]);
@@ -277,7 +267,6 @@ class ControlsSubState extends MusicBeatState
 
             changeItem(0);
         }
-
     }
 
     public function save()
@@ -313,9 +302,9 @@ class ControlsSubState extends MusicBeatState
     public function quit()
     {
         save();
-
         state = "exiting";
         FlxG.switchState(new OptionsMenuState());
+        FlxG.sound.play(Paths.sound('cancelMenu'), true);
     }
 
 	function addKey(r:String)
@@ -325,40 +314,55 @@ class ControlsSubState extends MusicBeatState
 
         var notAllowed:Array<String> = [];
 
-        for(x in keys){
-            if(x != tempKey){notAllowed.push(x);}
-        }
-
-        for(x in blacklist){notAllowed.push(x);}
-
-        if(curSelected != 4){
-
-            for(x in keyText){
-                if(x != keyText[curSelected]){notAllowed.push(x);}
+        for(x in keys) 
+        {
+            if(x != tempKey)
+            {
+                notAllowed.push(x);
             }
-            
         }
-        else {for(x in keyText){notAllowed.push(x);}}
+
+        for(x in blacklist)
+        {
+            notAllowed.push(x);
+        }
+
+        if(curSelected != 4) 
+        {
+
+            for(x in keyText) 
+            {
+                if(x != keyText[curSelected])
+                {
+                    notAllowed.push(x);
+                }
+            } 
+        }
+        else 
+        {
+            for(x in keyText)
+            {
+                notAllowed.push(x);  
+            }
+        }
 
         trace(notAllowed);
 
         for(x in 0...keys.length)
-            {
-                var oK = keys[x];
-                if(oK == r && ((curSelected >= 4 &&  x >= 4) || (curSelected < 4 && x < 4)))
-                    keys[x] = null;
-            }
+        {
+            var oK = keys[x];
+
+            if (oK == r && ((curSelected >= 4 &&  x >= 4) || (curSelected < 4 && x < 4)))
+                keys[x] = null;
+        }
         
 
-        if(shouldReturn)
-        {
+        if(shouldReturn) {
             keys[curSelected] = r;
             FlxG.sound.play(Paths.sound("confirmMenu"), false);
-        }
-        else{
+        } else {
             keys[curSelected] = tempKey;
-            FlxG.sound.play(Paths.sound("cancelMenu"), false);
-            
+            FlxG.sound.play(Paths.sound("cancelMenu"), false);  
         }
         
         changeItem(0);

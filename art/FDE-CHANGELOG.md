@@ -290,7 +290,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Kickstarter asset should pop up when you beat Week7
 - More Botplay fixes
 ------------------------------------------------------------
-## [0.4.2]
+## [0.4.2] - [3/9/24]
 
 ### Added
 - (Re)Added censorship to tank week cutscenes
@@ -317,10 +317,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - (Re)Added Roses censored dialogue
-- New Options (Auto Pause, Disable Reset Button)
+- Video Support on Desktop Builds (WIP)
+- New Options (Auto Pause, Cutscenes, & Disable Reset Button)
 
 ### Changed
 - Complete source code overhaul !!! (Better Optimization, Organized Files, and it's just more easier to work with)
+- The `.MP4` version of the Week 7 cutscenes will play if you have the 'Cutscene' option disabled
+- Getting a 'shit' rating will get rid of your combo
 
 ### Fixed
 - Week 2 & Week 3 Stage flashing you when you have the flashing lights option disabled
+- Weird Sound transition from `ControlsSubState.hx` to `OptionsMenuState.hx`
+
+### Removed
+- Ratings to HUD option
+- Combo Asset

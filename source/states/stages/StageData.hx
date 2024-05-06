@@ -16,31 +16,18 @@ import objects.Boyfriend.Pico;
 using StringTools;
 
 /**
-* Welcome To `Stage.hx`!
-* Basically, to put it in more simpler terms, you can store pretty much a lot of data here, from Songs, to obviously stages!!!
+* Welcome To `StageData.hx`!
+* Basically, to put it in more simpler terms
 * Its Pretty jank rn, but as time moves forward it will probably be more polished and easier to understand :]
 
 ** INSTRUCTIONS **
-* `songData()` 
-* `charData()`
-* `gfData()`
+* `songData()` - Add a song 
+* `charData()` - To sum it up, this basically preloads the character, and the positioning of the stage they are on.
+* `gfData()`   - This is literally `charData()` but only for the gf assets.
 **/
 
 class StageData extends MusicBeatState
 {
-	// main callback
-	public function createPost() {}
-
-	// start/end callback functions
-	public function setStartCallback(myfn:Void->Void)
-	{
-		
-	}
-	public function setEndCallback(myfn:Void->Void)
-	{
-		
-	}
-
     public static function songData():Void
 	{
 		if (PlayState.SONG.stage == null || PlayState.SONG.stage.length < 1)

@@ -329,7 +329,7 @@ class CameraZoomOption extends Option
 	}
 }
 
-class RatingHudOption extends Option
+class AtlasCutsceneOption extends Option
 {
 	public function new(desc:String)
 	{
@@ -340,15 +340,15 @@ class RatingHudOption extends Option
 	public override function press(changeData:Bool):Bool
 	{
 		if (changeData)
-			FlxG.save.data.ratingHUD = !FlxG.save.data.ratingHUD;
-		acceptValues = FlxG.save.data.ratingHUD;
+			FlxG.save.data.cutscenes = !FlxG.save.data.cutscenes;
+		acceptValues = FlxG.save.data.cutscenes;
 		display = updateDisplay();
 		return true;
 	}
 
 	private override function updateDisplay():String
 	{
-		return "Ratings to HUD";
+		return "Cutscenes";
 	}
 }
 
@@ -879,6 +879,7 @@ class ResetSettings extends Option
 		FlxG.save.data.botplay = null;
 		FlxG.save.data.instaKill = null;
 		FlxG.save.data.hideHud = null;
+		FlxG.save.data.cutscenes = null;
 
 		DefinitiveData.settings();
 		trace('All settings have been reset');

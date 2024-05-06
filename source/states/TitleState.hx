@@ -29,6 +29,11 @@ import lime.app.Application;
 import openfl.Assets;
 import openfl.Lib;
 
+import options.OptionsMenuState;
+
+import states.FreeplayState;
+import states.editors.ChartingState;
+
 import shaderslmao.BuildingShaders.BuildingShader;
 import shaderslmao.BuildingShaders;
 import shaderslmao.ColorSwap;
@@ -450,13 +455,13 @@ class TitleState extends MusicBeatState
 			remove(ngSpr);
 			remove(credGroup);
 			
-			if (FlxG.save.data.flashingLights) 
+			if (FlxG.save.data.flashingLights) {
 				FlxG.camera.flash(FlxColor.WHITE, 4);
-			else
+			} else {
 				FlxG.camera.flash(FlxColor.BLACK, 4);
+			}
 
 			FlxG.sound.music.time = 9400; // 9.4 seconds
-
 			skippedIntro = true;
 		}
 	}

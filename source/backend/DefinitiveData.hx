@@ -80,9 +80,6 @@ class DefinitiveData
 		if(FlxG.save.data.accuracy == null)
 			FlxG.save.data.accuracy = true;
 
-		if(FlxG.save.data.ratingHUD == null)
-			FlxG.save.data.ratingHUD = true;
-
 		if(FlxG.save.data.notesplash == null)
 			FlxG.save.data.notesplash = true;
 
@@ -115,5 +112,8 @@ class DefinitiveData
 
 		if(FlxG.save.data.resetButton == null)
 			FlxG.save.data.resetButton == false;
+
+		if(FlxG.save.data.cutscenes == null)
+			FlxG.save.data.cutscenes == true;
     }
 }

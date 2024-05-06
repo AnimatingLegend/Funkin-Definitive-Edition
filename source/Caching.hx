@@ -22,6 +22,9 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
+import states.TitleState;
+import backend.Paths;
+
 using StringTools;
 
 class Caching extends MusicBeatState
@@ -149,13 +152,13 @@ class Caching extends MusicBeatState
 
 		for (i in music)
 		{
-			FlxG.sound.cache(backend.Paths.inst(i));
-			FlxG.sound.cache(backend.Paths.voices(i));
+			FlxG.sound.cache(Paths.inst(i));
+			FlxG.sound.cache(Paths.voices(i));
 			trace(i);
 		}
 
 		#end
-		FlxG.switchState(new states.TitleState());
+		FlxG.switchState(new TitleState());
 		trace('Caching Process Complete');
 	}
 }

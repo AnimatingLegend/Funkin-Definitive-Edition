@@ -43,6 +43,10 @@ import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
 
+#if desktop
+import hxcodec.flixel.FlxVideo;
+#end
+
 import shaderslmao.BuildingShaders.BuildingShader;
 import shaderslmao.BuildingShaders;
 import shaderslmao.ColorSwap;
@@ -873,10 +877,7 @@ class PlayState extends MusicBeatState
 					schoolIntro(doof);
 
 				case 'ugh' | 'guns' | 'stress':
-					if (!FlxG.save.data.lowData)
-						tankIntro();
-					else
-						startCountdown();
+					tankIntro();
 		
 				default:
 					startCountdown();
@@ -1012,432 +1013,458 @@ class PlayState extends MusicBeatState
 		{
 			case 'ugh':
 				inCutscene = true;
-				#if web
-				var black:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
-				black.scrollFactor.set();
-				add(black);
-		
-				new FlxVideo('videos/cutscenes/tank/ughCutscene.mp4').finishCallback = function()
+				if (!FlxG.save.data.cutscenes)
 				{
-					remove(black);
-					FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
-					tankManEnd();
-					Paths.clearUnusedMemory();
-				};
-		
-				FlxG.camera.zoom = defaultCamZoom * 1.2;
-				camFollow.x += 100;
-				camFollow.y += 100;
-				#else
-				camHUD.visible = false;
-				caching('wellWellWell', 'sound', 'week7');
-				caching('killYou', 'sound', 'week7');
-				caching('bfBeep', 'sound', 'week7');
+					var black:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+					black.scrollFactor.set();
+					add(black);
+	
+					var ughCutscene:FlxVideo = new FlxVideo('videos/cutscenes/ughCutscene.mp4');
 
-				FlxG.sound.playMusic(Paths.music('DISTORTO', 'week7'));
-				FlxG.sound.music.fadeIn(5, 0, 0.5);
+					ughCutscene.finishCallback = function() {
+						remove(black);
+						FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
+						tankManEnd();
+						Paths.clearUnusedMemory();
+					}
 
-				var wellWellWell:FlxSound = new FlxSound().loadEmbedded(Paths.sound('wellWellWell', 'week7'));
-				FlxG.sound.list.add(wellWellWell);
-		
-				dad.visible = false;
-				var tankCutscene:TankCutscene = new TankCutscene(-20, 320);
-				tankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong1', 'week7');
-				tankCutscene.animation.addByPrefix('wellWell', 'TANK TALK 1 P1', 24, false);
-				tankCutscene.animation.addByPrefix('killYou', 'TANK TALK 1 P2', 24, false);
-				tankCutscene.animation.play('wellWell');
-				tankCutscene.antialiasing = FlxG.save.data.antialiasing;
-				gfCutsceneLayer.add(tankCutscene);
-
-				FlxG.camera.zoom *= 1.2;
-				camFollow.x = 436.5;
-				camFollow.y = 534.5;
-		
-				// Well well well, what do we got here?
-				new FlxTimer().start(0.1, function(tmr:FlxTimer)
+					FlxG.camera.zoom = defaultCamZoom * 1.2;
+					camFollow.x += 100;
+					camFollow.y += 100;
+				}
+				else
 				{
-					wellWellWell.play(true);
-				});
-
-				// Move camera to BF
-				new FlxTimer().start(3, function(tmr:FlxTimer)
-				{
-					camFollow.x += 700;
-					camFollow.y += 90;
-					
-					// Beep!
-					new FlxTimer().start(1.5, function(tmr:FlxTimer)
+					camHUD.visible = false;
+					caching('wellWellWell', 'sound', 'week7');
+					caching('killYou', 'sound', 'week7');
+					caching('bfBeep', 'sound', 'week7');
+	
+					FlxG.sound.playMusic(Paths.music('DISTORTO', 'week7'));
+					FlxG.sound.music.fadeIn(5, 0, 0.5);
+	
+					var wellWellWell:FlxSound = new FlxSound().loadEmbedded(Paths.sound('wellWellWell', 'week7'));
+					FlxG.sound.list.add(wellWellWell);
+			
+					dad.visible = false;
+					var tankCutscene:TankCutscene = new TankCutscene(-20, 320);
+					tankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong1', 'week7');
+					tankCutscene.animation.addByPrefix('wellWell', 'TANK TALK 1 P1', 24, false);
+					tankCutscene.animation.addByPrefix('killYou', 'TANK TALK 1 P2', 24, false);
+					tankCutscene.animation.play('wellWell');
+					tankCutscene.antialiasing = FlxG.save.data.antialiasing;
+					gfCutsceneLayer.add(tankCutscene);
+	
+					FlxG.camera.zoom *= 1.2;
+					camFollow.x = 436.5;
+					camFollow.y = 534.5;
+			
+					// Well well well, what do we got here?
+					new FlxTimer().start(0.1, function(tmr:FlxTimer)
 					{
-						boyfriend.playAnim('singUP', true);
-						FlxG.sound.play(Paths.sound('bfBeep', 'week7'), function()
-						{
-							boyfriend.playAnim('idle', false);
-						});
+						wellWellWell.play(true);
 					});
-
-					// Move camera to Tankman
+	
+					// Move camera to BF
 					new FlxTimer().start(3, function(tmr:FlxTimer)
 					{
-						camFollow.x = 436.5;
-						camFollow.y = 534.5;
-						boyfriend.dance();
-						tankCutscene.animation.play('killYou');
-						FlxG.sound.play(Paths.sound('killYou', 'week7'));
-
-						// We should just kill you but... what the hell, it's been a boring day... let's see what you've got!
-						new FlxTimer().start(6.1, function(tmr:FlxTimer)
+						camFollow.x += 700;
+						camFollow.y += 90;
+						
+						// Beep!
+						new FlxTimer().start(1.5, function(tmr:FlxTimer)
 						{
-							tankManEnd();
-							Paths.clearUnusedMemory();
-							gfCutsceneLayer.remove(tankCutscene);
+							boyfriend.playAnim('singUP', true);
+							FlxG.sound.play(Paths.sound('bfBeep', 'week7'), function()
+							{
+								boyfriend.playAnim('idle', false);
+							});
+						});
+	
+						// Move camera to Tankman
+						new FlxTimer().start(3, function(tmr:FlxTimer)
+						{
+							camFollow.x = 436.5;
+							camFollow.y = 534.5;
+							boyfriend.dance();
+							tankCutscene.animation.play('killYou');
+							FlxG.sound.play(Paths.sound('killYou', 'week7'));
+	
+							// We should just kill you but... what the hell, it's been a boring day... let's see what you've got!
+							new FlxTimer().start(6.1, function(tmr:FlxTimer)
+							{
+								tankManEnd();
+								Paths.clearUnusedMemory();
+								gfCutsceneLayer.remove(tankCutscene);
+							});
 						});
 					});
-				});
-				#end
-			
+				}
 			case 'guns':
 				inCutscene = true;
-				#if web
-				var black:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
-				black.scrollFactor.set();
-				add(black);
-		
-				new FlxVideo('videos/cutscenes/tank/gunsCutscene.mp4').finishCallback = function()
+				if (!FlxG.save.data.cutscenes)
 				{
-					remove(black);
-					FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
-					tankManEnd();
-					Paths.clearUnusedMemory();
-				};
-				#else
-				new FlxTimer().start(0.5, function(tmr:FlxTimer)
+					var black:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+					black.scrollFactor.set();
+					add(black);
+
+					var gunsCutscene = new FlxVideo('videos/cutscenes/gunsCutscene.mp4');
+
+					gunsCutscene.finishCallback = function() {
+						remove(black);
+						FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
+						tankManEnd();
+						Paths.clearUnusedMemory();
+					}
+				}
+				else
 				{
-					FlxTween.tween(camHUD, {alpha: 0}, 1.5, {
-						ease: FlxEase.quadInOut,
-						onComplete: function(twn:FlxTween)
-						{
-							camHUD.visible = false;
-							camHUD.alpha = 1;
-						}
-					});
-				});
-
-				FlxG.sound.playMusic(Paths.music('DISTORTO', 'week7'), 0, false);
-				FlxG.sound.music.fadeIn(5, 0, 0.5);
-
-				camFollow.setPosition(camPos.x, camPos.y);
-				caching('tankSong2', 'sound', 'week7');
-
-				var tightBars:FlxSound = new FlxSound().loadEmbedded(Paths.sound('tankSong2', 'week7'));
-				FlxG.sound.list.add(tightBars);
-
-				new FlxTimer().start(0.01, function(tmr:FlxTimer)
-				{
-					tightBars.play(true);
-				});
-
-				camFollow.y += 100;
-				FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.3}, 4, {ease: FlxEase.quadInOut});
-		
-				dad.visible = false;
-				var tankCutscene:TankCutscene = new TankCutscene(20, 320);
-				tankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong2', 'week7');
-				tankCutscene.animation.addByPrefix('tankyguy', 'TANK TALK 2', 24, false);
-				tankCutscene.animation.play('tankyguy');
-				tankCutscene.antialiasing = FlxG.save.data.antialiasing;
-				gfCutsceneLayer.add(tankCutscene);
-				boyfriend.animation.curAnim.finish();
-		
-
-				new FlxTimer().start(4.1, function(tmr:FlxTimer)
-				{
-					FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.4}, 0.4, {ease: FlxEase.quadOut});
-					FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.3}, 0.7, {ease: FlxEase.quadInOut, startDelay: 0.45});
-
-					if (gf != null)
+					new FlxTimer().start(0.5, function(tmr:FlxTimer)
 					{
-						gf.playAnim('sad', true);
-						gf.animation.finishCallback = function(name:String)
+						FlxTween.tween(camHUD, {alpha: 0}, 1.5, {
+							ease: FlxEase.quadInOut,
+							onComplete: function(twn:FlxTween)
+							{
+								camHUD.visible = false;
+								camHUD.alpha = 1;
+							}
+						});
+					});
+		
+					FlxG.sound.playMusic(Paths.music('DISTORTO', 'week7'), 0, false);
+					FlxG.sound.music.fadeIn(5, 0, 0.5);
+		
+					camFollow.setPosition(camPos.x, camPos.y);
+					caching('tankSong2', 'sound', 'week7');
+		
+					var tightBars:FlxSound = new FlxSound().loadEmbedded(Paths.sound('tankSong2', 'week7'));
+					FlxG.sound.list.add(tightBars);
+		
+					new FlxTimer().start(0.01, function(tmr:FlxTimer)
+					{
+						tightBars.play(true);
+					});
+		
+					camFollow.y += 100;
+					FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.3}, 4, {ease: FlxEase.quadInOut});
+				
+					dad.visible = false;
+					var tankCutscene:TankCutscene = new TankCutscene(20, 320);
+					tankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong2', 'week7');
+					tankCutscene.animation.addByPrefix('tankyguy', 'TANK TALK 2', 24, false);
+					tankCutscene.animation.play('tankyguy');
+					tankCutscene.antialiasing = FlxG.save.data.antialiasing;
+					gfCutsceneLayer.add(tankCutscene);
+					boyfriend.animation.curAnim.finish();
+				
+		
+					new FlxTimer().start(4.1, function(tmr:FlxTimer)
+					{
+						FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.4}, 0.4, {ease: FlxEase.quadOut});
+						FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.3}, 0.7, {ease: FlxEase.quadInOut, startDelay: 0.45});
+		
+						if (gf != null)
 						{
 							gf.playAnim('sad', true);
-						};
-					}
-				});
-
-				new FlxTimer().start(11.6, function(tmr:FlxTimer)
-				{
-					camFollow.x = 440;
-					camFollow.y = 534.5;
-					tankManEnd();
-
-					if (gf != null)
+							gf.animation.finishCallback = function(name:String)
+							{
+								gf.playAnim('sad', true);
+							};
+						}
+					});
+		
+					new FlxTimer().start(11.6, function(tmr:FlxTimer)
 					{
-						gf.dance();
-						gf.animation.finishCallback = null;
-					}
-
-					gfCutsceneLayer.remove(tankCutscene);
-					Paths.clearUnusedMemory();
-				});
-				#end
+						camFollow.x = 440;
+						camFollow.y = 534.5;
+						tankManEnd();
+		
+						if (gf != null)
+						{
+							gf.dance();
+							gf.animation.finishCallback = null;
+						}
+		
+						gfCutsceneLayer.remove(tankCutscene);
+						Paths.clearUnusedMemory();
+					});
+				}
 
 			case 'stress':
 				inCutscene = true;
-				#if web
-				var black:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
-				black.scrollFactor.set();
-				add(black);
-		
-				new FlxVideo('videos/cutscenes/tank/stressCutscene.mp4').finishCallback = function()
+				if (!FlxG.save.data.cutscenes)
 				{
-					remove(black);
-					FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
-					tankManEnd();
-					Paths.clearUnusedMemory();
-				};
-				#else
-				caching('stressCutscene', 'sound', 'week7');
+					var black:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+					black.scrollFactor.set();
+					add(black);
 
-				dad.alpha = 0.0001;
-				gf.alpha = 0.0001;
-
-				if (!FlxG.save.data.lowData)
-				{
-					dummyGF.frames = Paths.getSparrowAtlas('characters/gfTankmen', 'shared');
-					dummyGF.animation.addByPrefix('loop', 'GF Dancing at Gunpoint', 24, true);
-					dummyGF.animation.play('loop');
-					dummyGF.antialiasing = FlxG.save.data.antialiasing;
-					gfCutsceneLayer.add(dummyGF);
-				}
-
-				boyfriend.visible = false;
-				var dummyBF:FlxSprite = new FlxSprite(boyfriend.x + 5, boyfriend.y + 20);
-				dummyBF.frames = Paths.getSparrowAtlas('characters/BOYFRIEND', 'shared');
-				dummyBF.animation.addByPrefix('loop', 'BF idle dance', 24, false);
-				dummyBF.animation.play('loop');
-				dummyBF.antialiasing = FlxG.save.data.antialiasing;
-				bfTankCutsceneLayer.add(dummyBF);
-				
-				var dummyLoaderShit:FlxGroup = new FlxGroup();
-				add(dummyLoaderShit);
-		
-				for (i in 0...7)
-				{
-					var dummyLoader:FlxSprite = new FlxSprite();
-					dummyLoader.loadGraphic(Paths.image('cutscenes/gfHoldup-' + i, 'week7'));
-					dummyLoader.antialiasing = FlxG.save.data.antialiasing;
-					dummyLoaderShit.add(dummyLoader);
-					dummyLoader.alpha = 0.01;
-					dummyLoader.y = FlxG.height - 20;
-				}
-
-				var bfCatchGf:FlxSprite = new FlxSprite(boyfriend.x - 10, boyfriend.y - 90);
-				bfCatchGf.frames = Paths.getSparrowAtlas('characters/bfAndGF', 'shared');
-				bfCatchGf.animation.addByPrefix('catch', 'BF catches GF', 24, false);
-				bfCatchGf.antialiasing = FlxG.save.data.antialiasing;
-				add(bfCatchGf);
-				bfCatchGf.visible = false;
-
-				new FlxTimer().start(0.5, function(tmr:FlxTimer)
-				{
-					FlxTween.tween(camHUD, {alpha: 0}, 1.5, {
-						ease: FlxEase.quadInOut,
-						onComplete: function(twn:FlxTween)
-						{
-							camHUD.visible = false;
-							camHUD.alpha = 1;
-						}
-					});
-				});
-
-				new FlxTimer().start(1, function(tmr:FlxTimer)
-				{
-					camFollow.x = 436.5;
-					camFollow.y = 534.5;
-					FlxTween.tween(FlxG.camera, {zoom: 0.9 * 1.2}, 1, {ease: FlxEase.quadInOut});
-				});
-
-				var stressCutscene:FlxSound = new FlxSound().loadEmbedded(Paths.sound('stressCutscene', 'week7'));
-				FlxG.sound.list.add(stressCutscene);
-
-				var stressCutsceneCensored:FlxSound = new FlxSound().loadEmbedded(Paths.sound('song3censor', 'week7'));
-				FlxG.sound.list.add(stressCutsceneCensored);
-
-				dad.visible = false;
-				var tankCutscene:TankCutscene = new TankCutscene(-70, 320);
-				tankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong3-pt1', 'week7');
-				tankCutscene.animation.addByPrefix('tankyguy', 'TANK TALK 3 P1 UNCUT', 24, false);
-				tankCutscene.animation.play('tankyguy');
-				tankCutscene.antialiasing = FlxG.save.data.antialiasing;
-				bfTankCutsceneLayer.add(tankCutscene);
-
-				var alsoTankCutscene:FlxSprite = new FlxSprite(20, 320);
-				alsoTankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong3-pt2', 'week7');
-				alsoTankCutscene.animation.addByPrefix('swagTank', 'TANK TALK 3 P2 UNCUT', 24, false);
-				alsoTankCutscene.antialiasing = FlxG.save.data.antialiasing;
-				bfTankCutsceneLayer.add(alsoTankCutscene);
-				alsoTankCutscene.y = FlxG.height + 100;
-				alsoTankCutscene.visible = false;
-
-				new FlxTimer().start(0.1, function(tmr:FlxTimer)
-				{ 
-					if (FlxG.save.data.explicitContent) {
-						stressCutscene.play(true);
-					} 
-					else 
+					if (FlxG.save.data.explicitContent)
 					{
-						stressCutsceneCensored.play(true);
-
-						var censor:FlxSprite = new FlxSprite();
-						censor.frames = Paths.getSparrowAtlas('cutscenes/censor', 'week7');
-						censor.animation.addByPrefix('censor', 'mouth censor', 24);
-						censor.antialiasing = FlxG.save.data.antialiasing;
-						censor.animation.play('censor');
-						add(censor);
-						censor.visible = false;
-
-						new FlxTimer().start(4.6, function(censorTimer:FlxTimer)
+						var stressCutscene = new FlxVideo('videos/cutscenes/stressCutscene.mp4');
+						stressCutscene.finishCallback = function()
 						{
-							censor.visible = true;
-							censor.setPosition(dad.x + 160, dad.y + 180);
-		
-							new FlxTimer().start(0.2, function(endThing:FlxTimer)
-							{
-								censor.visible = false;
-							});
-						});
-
-						new FlxTimer().start(25.1, function(censorTimer:FlxTimer)
-						{
-							censor.visible = true;
-							censor.setPosition(dad.x + 120, dad.y + 170);
-		
-							new FlxTimer().start(0.9, function(endThing:FlxTimer)
-							{
-								censor.visible = false;
-							});
-						});
-
-						new FlxTimer().start(30.7, function(censorTimer:FlxTimer)
-						{
-							censor.visible = true;
-							censor.setPosition(dad.x + 210, dad.y + 190);
-		
-							new FlxTimer().start(0.4, function(endThing:FlxTimer)
-							{
-								censor.visible = false;
-							});
-						});
-
-						new FlxTimer().start(33.8, function(censorTimer:FlxTimer)
-						{
-							censor.visible = true;
-							censor.setPosition(dad.x + 180, dad.y + 170);
-		
-							new FlxTimer().start(0.6, function(endThing:FlxTimer)
-							{
-								censor.visible = false;
-							});
-						});
+							remove(black);
+							FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
+							tankManEnd();
+							Paths.clearUnusedMemory();
+						}
 					}
-				});
-
-				new FlxTimer().start(15.1, function(tmr:FlxTimer)
-				{
-					camFollow.y -= 170;
-					camFollow.x += 200;
-					FlxTween.tween(FlxG.camera, {zoom: FlxG.camera.zoom * 1.3}, 2.1, {
-						ease: FlxEase.quadInOut
-					});
-			
-					new FlxTimer().start(2.2, function(swagTimer:FlxTimer)
+					else
 					{
-						FlxG.camera.zoom = 0.8;
-						boyfriend.visible = false;
-
-						bfCatchGf.visible = true;
-						bfCatchGf.animation.play('catch');
-			
-						bfTankCutsceneLayer.remove(dummyBF);
-						bfCatchGf.animation.finishCallback = function(anim:String)
+						// this cutscene is just a placeholder... i'll make a more nice and polished one when i get time
+						var stressCutsceneCensored = new FlxVideo('videos/cutscenes/stressCutsceneCensored.mp4');
+						stressCutsceneCensored.finishCallback = function()
 						{
-							bfCatchGf.visible = false;
-							boyfriend.visible = true;
-						};
-			
-						new FlxTimer().start(3, function(weedShitBaby:FlxTimer)
-						{
-							camFollow.y += 180;
-							camFollow.x -= 80;
-						});
-			
-						new FlxTimer().start(2.3, function(gayLol:FlxTimer)
-						{
-							bfTankCutsceneLayer.remove(tankCutscene);
-							
-							alsoTankCutscene.visible = true;
-							alsoTankCutscene.y = 320;
-							alsoTankCutscene.animation.play('swagTank');
-						});
-					});
-
-					gf.visible = false;
-					dad.visible = false;
-					var cutsceneShit:CutsceneCharacter = new CutsceneCharacter(210, 70, 'gfHoldup');
-					gfCutsceneLayer.add(cutsceneShit);
-					gfCutsceneLayer.remove(dummyGF);
-
-					cutsceneShit.onFinish = function()
-					{
-						gf.alpha = 1;
-						gf.visible = true;
-						dad.visible = true;
-					};
-
-					new FlxTimer().start(20, function(alsoTmr:FlxTimer)
-					{
-						tankManEnd();
-
-						remove(dummyLoaderShit);
-						dummyLoaderShit.destroy();
-						dummyLoaderShit = null;
-
-						gfCutsceneLayer.remove(cutsceneShit);
-						bfTankCutsceneLayer.remove(alsoTankCutscene);
-
-						dad.alpha = 1;
-
-						Paths.clearUnusedMemory();
-					});
-				});
-
-				new FlxTimer().start(31.2, function(tmr:FlxTimer)
-				{
-					boyfriend.playAnim('singUPmiss', true);
-					boyfriend.animation.finishCallback = function(name:String)
-					{
-						if (name == 'singUPmiss')
-						{
-							boyfriend.playAnim('idle', true);
-							boyfriend.animation.curAnim.finish();
+							remove(black);
+							FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
+							tankManEnd();
+							Paths.clearUnusedMemory();
 						}
-					};
+					}
+				}
+				else
+				{
+					caching('stressCutscene', 'sound', 'week7');
 
-					camFollow.x += 400;
-					camFollow.y += 150;
-					FlxG.camera.zoom = defaultCamZoom * 1.4;
-					FlxG.camera.focusOn(camFollow.getPosition());
-					FlxTween.tween(FlxG.camera, {zoom: FlxG.camera.zoom + 0.1}, 0.5, {ease: FlxEase.elasticOut});
-
+					dad.alpha = 0.0001;
+					gf.alpha = 0.0001;
+	
+					if (!FlxG.save.data.lowData)
+					{
+						dummyGF.frames = Paths.getSparrowAtlas('characters/gfTankmen', 'shared');
+						dummyGF.animation.addByPrefix('loop', 'GF Dancing at Gunpoint', 24, true);
+						dummyGF.animation.play('loop');
+						dummyGF.antialiasing = FlxG.save.data.antialiasing;
+						gfCutsceneLayer.add(dummyGF);
+					}
+	
+					boyfriend.visible = false;
+					var dummyBF:FlxSprite = new FlxSprite(boyfriend.x + 5, boyfriend.y + 20);
+					dummyBF.frames = Paths.getSparrowAtlas('characters/BOYFRIEND', 'shared');
+					dummyBF.animation.addByPrefix('loop', 'BF idle dance', 24, false);
+					dummyBF.animation.play('loop');
+					dummyBF.antialiasing = FlxG.save.data.antialiasing;
+					bfTankCutsceneLayer.add(dummyBF);
+					
+					var dummyLoaderShit:FlxGroup = new FlxGroup();
+					add(dummyLoaderShit);
+			
+					for (i in 0...7)
+					{
+						var dummyLoader:FlxSprite = new FlxSprite();
+						dummyLoader.loadGraphic(Paths.image('cutscenes/gfHoldup-' + i, 'week7'));
+						dummyLoader.antialiasing = FlxG.save.data.antialiasing;
+						dummyLoaderShit.add(dummyLoader);
+						dummyLoader.alpha = 0.01;
+						dummyLoader.y = FlxG.height - 20;
+					}
+	
+					var bfCatchGf:FlxSprite = new FlxSprite(boyfriend.x - 10, boyfriend.y - 90);
+					bfCatchGf.frames = Paths.getSparrowAtlas('characters/bfAndGF', 'shared');
+					bfCatchGf.animation.addByPrefix('catch', 'BF catches GF', 24, false);
+					bfCatchGf.antialiasing = FlxG.save.data.antialiasing;
+					add(bfCatchGf);
+					bfCatchGf.visible = false;
+	
+					new FlxTimer().start(0.5, function(tmr:FlxTimer)
+					{
+						FlxTween.tween(camHUD, {alpha: 0}, 1.5, {
+							ease: FlxEase.quadInOut,
+							onComplete: function(twn:FlxTween)
+							{
+								camHUD.visible = false;
+								camHUD.alpha = 1;
+							}
+						});
+					});
+	
 					new FlxTimer().start(1, function(tmr:FlxTimer)
 					{
-						camFollow.x -= 400;
-						camFollow.y -= 150;
-						FlxG.camera.zoom /= 1.4;
-						FlxG.camera.focusOn(camFollow.getPosition());
+						camFollow.x = 436.5;
+						camFollow.y = 534.5;
+						FlxTween.tween(FlxG.camera, {zoom: 0.9 * 1.2}, 1, {ease: FlxEase.quadInOut});
 					});
-				});
-				#end
+	
+					var stressCutscene:FlxSound = new FlxSound().loadEmbedded(Paths.sound('stressCutscene', 'week7'));
+					FlxG.sound.list.add(stressCutscene);
+	
+					var stressCutsceneCensored:FlxSound = new FlxSound().loadEmbedded(Paths.sound('song3censor', 'week7'));
+					FlxG.sound.list.add(stressCutsceneCensored);
+	
+					dad.visible = false;
+					var tankCutscene:TankCutscene = new TankCutscene(-70, 320);
+					tankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong3-pt1', 'week7');
+					tankCutscene.animation.addByPrefix('tankyguy', 'TANK TALK 3 P1 UNCUT', 24, false);
+					tankCutscene.animation.play('tankyguy');
+					tankCutscene.antialiasing = FlxG.save.data.antialiasing;
+					bfTankCutsceneLayer.add(tankCutscene);
+	
+					var alsoTankCutscene:FlxSprite = new FlxSprite(20, 320);
+					alsoTankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong3-pt2', 'week7');
+					alsoTankCutscene.animation.addByPrefix('swagTank', 'TANK TALK 3 P2 UNCUT', 24, false);
+					alsoTankCutscene.antialiasing = FlxG.save.data.antialiasing;
+					bfTankCutsceneLayer.add(alsoTankCutscene);
+					alsoTankCutscene.y = FlxG.height + 100;
+					alsoTankCutscene.visible = false;
+	
+					new FlxTimer().start(0.1, function(tmr:FlxTimer)
+					{ 
+						if (FlxG.save.data.explicitContent) {
+							stressCutscene.play(true);
+						} 
+						else 
+						{
+							stressCutsceneCensored.play(true);
+	
+							var censor:FlxSprite = new FlxSprite();
+							censor.frames = Paths.getSparrowAtlas('cutscenes/censor', 'week7');
+							censor.animation.addByPrefix('censor', 'mouth censor', 24);
+							censor.antialiasing = FlxG.save.data.antialiasing;
+							censor.animation.play('censor');
+							add(censor);
+							censor.visible = false;
+	
+							new FlxTimer().start(4.6, function(censorTimer:FlxTimer)
+							{
+								censor.visible = true;
+								censor.setPosition(dad.x + 160, dad.y + 180);
+			
+								new FlxTimer().start(0.2, function(endThing:FlxTimer)
+								{
+									censor.visible = false;
+								});
+							});
+	
+							new FlxTimer().start(25.1, function(censorTimer:FlxTimer)
+							{
+								censor.visible = true;
+								censor.setPosition(dad.x + 120, dad.y + 170);
+			
+								new FlxTimer().start(0.9, function(endThing:FlxTimer)
+								{
+									censor.visible = false;
+								});
+							});
+	
+							new FlxTimer().start(30.7, function(censorTimer:FlxTimer)
+							{
+								censor.visible = true;
+								censor.setPosition(dad.x + 210, dad.y + 190);
+			
+								new FlxTimer().start(0.4, function(endThing:FlxTimer)
+								{
+									censor.visible = false;
+								});
+							});
+	
+							new FlxTimer().start(33.8, function(censorTimer:FlxTimer)
+							{
+								censor.visible = true;
+								censor.setPosition(dad.x + 180, dad.y + 170);
+			
+								new FlxTimer().start(0.6, function(endThing:FlxTimer)
+								{
+									censor.visible = false;
+								});
+							});
+						}
+					});
+	
+					new FlxTimer().start(15.1, function(tmr:FlxTimer)
+					{
+						camFollow.y -= 170;
+						camFollow.x += 200;
+						FlxTween.tween(FlxG.camera, {zoom: FlxG.camera.zoom * 1.3}, 2.1, {
+							ease: FlxEase.quadInOut
+						});
+				
+						new FlxTimer().start(2.2, function(swagTimer:FlxTimer)
+						{
+							FlxG.camera.zoom = 0.8;
+							boyfriend.visible = false;
+	
+							bfCatchGf.visible = true;
+							bfCatchGf.animation.play('catch');
+				
+							bfTankCutsceneLayer.remove(dummyBF);
+							bfCatchGf.animation.finishCallback = function(anim:String)
+							{
+								bfCatchGf.visible = false;
+								boyfriend.visible = true;
+							};
+				
+							new FlxTimer().start(3, function(weedShitBaby:FlxTimer)
+							{
+								camFollow.y += 180;
+								camFollow.x -= 80;
+							});
+				
+							new FlxTimer().start(2.3, function(gayLol:FlxTimer)
+							{
+								bfTankCutsceneLayer.remove(tankCutscene);
+								
+								alsoTankCutscene.visible = true;
+								alsoTankCutscene.y = 320;
+								alsoTankCutscene.animation.play('swagTank');
+							});
+						});
+	
+						gf.visible = false;
+						dad.visible = false;
+						var cutsceneShit:CutsceneCharacter = new CutsceneCharacter(210, 70, 'gfHoldup');
+						gfCutsceneLayer.add(cutsceneShit);
+						gfCutsceneLayer.remove(dummyGF);
+	
+						cutsceneShit.onFinish = function()
+						{
+							gf.alpha = 1;
+							gf.visible = true;
+							dad.visible = true;
+						};
+	
+						new FlxTimer().start(20, function(alsoTmr:FlxTimer)
+						{
+							tankManEnd();
+	
+							remove(dummyLoaderShit);
+							dummyLoaderShit.destroy();
+							dummyLoaderShit = null;
+	
+							gfCutsceneLayer.remove(cutsceneShit);
+							bfTankCutsceneLayer.remove(alsoTankCutscene);
+	
+							dad.alpha = 1;
+	
+							Paths.clearUnusedMemory();
+						});
+					});
+	
+					new FlxTimer().start(31.2, function(tmr:FlxTimer)
+					{
+						boyfriend.playAnim('singUPmiss', true);
+						boyfriend.animation.finishCallback = function(name:String)
+						{
+							if (name == 'singUPmiss')
+							{
+								boyfriend.playAnim('idle', true);
+								boyfriend.animation.curAnim.finish();
+							}
+						};
+	
+						camFollow.x += 400;
+						camFollow.y += 150;
+						FlxG.camera.zoom = defaultCamZoom * 1.4;
+						FlxG.camera.focusOn(camFollow.getPosition());
+						FlxTween.tween(FlxG.camera, {zoom: FlxG.camera.zoom + 0.1}, 0.5, {ease: FlxEase.elasticOut});
+	
+						new FlxTimer().start(1, function(tmr:FlxTimer)
+						{
+							camFollow.x -= 400;
+							camFollow.y -= 150;
+							FlxG.camera.zoom /= 1.4;
+							FlxG.camera.focusOn(camFollow.getPosition());
+						});
+					});
+				}
 		}
 	}
 
@@ -2484,11 +2511,7 @@ class PlayState extends MusicBeatState
 		var placement:String = Std.string(combo);
 
 		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
-		if (FlxG.save.data.ratingHUD) {
-			coolText.x = FlxG.width * 0.35;
-		} else {
-			coolText.x = FlxG.width * 0.55;
-		}
+		coolText.x = FlxG.width * 0.20;
 		coolText.screenCenter();
 
 		var rating:FlxSprite = new FlxSprite();
@@ -2500,9 +2523,10 @@ class PlayState extends MusicBeatState
 		switch (daRating) 
 		{
 			case 'shit':
+				shits++;
+				combo = 0;
 				score = -300;
 				health -= 0.1;
-				shits++;
 				totalRatingsHit -= 1;
 				doSplash = false;
 				updateStatistic();
@@ -2525,13 +2549,11 @@ class PlayState extends MusicBeatState
 				updateStatistic();
 
 			case 'sick':
-				if (health < 2)
-					health += 0.04;
-				if (FlxG.save.data.notesplash)
-					doSplash = true;
 				sicks++;
 				totalRatingsHit += 1;
 				updateStatistic();
+				if (health < 2) health += 0.04;
+				if (FlxG.save.data.notesplash) doSplash = true;
 		}
 
 		if (doSplash) {
@@ -2554,20 +2576,13 @@ class PlayState extends MusicBeatState
 		}
 
 		rating.loadGraphic(Paths.image(pixelShitPart1 + daRating + pixelShitPart2, pixelShitPart3));
-		if (FlxG.save.data.ratingHUD) 
-		{
-			rating.y -= 25;
-			rating.screenCenter();
-			rating.scrollFactor.set(0.7);
-
-			var scaleX = rating.scale.x;
-			var scaleY = rating.scale.y;
-
-			rating.scale.scale(1.2);
-		}
+		var scaleX = rating.scale.x;
+		var scaleY = rating.scale.y;
+		rating.y -= 25;
+		rating.scrollFactor.set(0.7);
+		rating.scale.scale(1.2);
 		rating.screenCenter();
 		rating.x = coolText.x - 40;
-		rating.y -= 60;
 		rating.acceleration.y = 550;
 		rating.velocity.y -= FlxG.random.int(140, 175);
 		rating.velocity.x += FlxG.random.int(0, 10);
@@ -2575,20 +2590,13 @@ class PlayState extends MusicBeatState
 		add(rating);
 
 		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2, pixelShitPart3));
-		if (FlxG.save.data.ratingHUD) 
-		{
-			comboSpr.y += 90;
-			comboSpr.screenCenter();
-			comboSpr.scrollFactor.set(0.7);
-
-			var scaleX = rating.scale.x;
-			var scaleY = rating.scale.y;
-
-			comboSpr.scale.scale(1.2);
-		}
+		var scaleX = rating.scale.x;
+		var scaleY = rating.scale.y;
+		comboSpr.scrollFactor.set(0.7);
+		comboSpr.scale.scale(1.2);
 		comboSpr.screenCenter();
 		comboSpr.x = coolText.x + 55;
-		comboSpr.y += 50;
+		comboSpr.y += 90;
 		comboSpr.acceleration.y = 550;
 		comboSpr.velocity.y -= 150;
 		comboSpr.velocity.x += FlxG.random.int(1, 10);
@@ -2619,19 +2627,14 @@ class PlayState extends MusicBeatState
 		for (i in seperatedScore) 
 		{
 			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'num' + Std.int(i) + pixelShitPart2, pixelShitPart3));
-			if (FlxG.save.data.ratingHUD) 
-			{
-				numScore.y += 50;
-				numScore.x -= 50;
-				numScore.screenCenter();
-				numScore.scrollFactor.set(0.7);
-
-				var scaleX = numScore.scale.x;
-				var scaleY = numScore.scale.y;
-			}
+			var scaleX = numScore.scale.x;
+			var scaleY = numScore.scale.y;
 			numScore.screenCenter();
+			numScore.y += 50;
+			numScore.x -= 50;
+			numScore.scrollFactor.set(0.7);
 			numScore.x = coolText.x + (43 * daLoop) - 90;
-			numScore.y += 80;
+			numScore.y += 50;
 
 			if (!curStage.startsWith('school')) {
 				numScore.antialiasing = FlxG.save.data.antialiasing;
@@ -2646,10 +2649,12 @@ class PlayState extends MusicBeatState
 			numScore.velocity.y -= FlxG.random.int(140, 160);
 			numScore.velocity.x = FlxG.random.float(-5, 5);
 			numScore.visible = !FlxG.save.data.hideHud;
-			add(numScore);
 
-			if (combo >= 10 || combo == 0)
-				add(comboSpr);
+			if (combo >= 10 || combo == 0) {
+				add(numScore);
+			//	add(comboSpr);
+			}
+				
 
 			FlxTween.tween(numScore, {alpha: 0}, 0.2, {
 				onComplete: function(tween:FlxTween) {

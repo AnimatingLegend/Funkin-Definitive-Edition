@@ -16,9 +16,15 @@ import flixel.FlxObject;
 import flixel.util.FlxTimer;
 import flixel.addons.transition.FlxTransitionableState;
 
-import objects.CheckboxThingie;
-import options.Options;
 import backend.Controls.Control;
+
+import objects.CheckboxThingie;
+
+import options.Options;
+import options.ControlsSubState;
+
+import states.MainMenuState;
+import states.PlayState;
 
 class OptionsMenuState extends MusicBeatState
 {
@@ -41,14 +47,13 @@ class OptionsMenuState extends MusicBeatState
 			#end
 			new FPSOption("If unchecked, your fps & memory counter will be hidden."),
 			new FullscreenOption("Check this off if you want the game to be in fullscreen mode"),
+			new AtlasCutsceneOption('If unchecked, your cutscenes will get converted into .MP4 \n[RECOMMENDED]'),
 		]),
 
 		new OptionCatagory("Visuals and UI", [
 			new AccuracyOption("If unchecked, it will not display your misses and accuracy, but only your song score."),
 			new JudgemntOption("If checked, it displays your judgements/ratings throughout the song."),
-			new RatingHudOption("If unchecked, the rating/combo sprites will NOT appear on the games HUD."),
 			new HideHudOption('If checked, it hides most of your game UI.'),
-		//	new TimerOption("If unchecked, then your song timer doesn't display."),
 			new NotesplashOption("If unchecked, hitting 'Sick!' notes won't show firework particles."),
 			new OpponentLightStrums("If unchecked, your opponents note strums won't light up whenever its their turn to sing."),
 			new LaneTransOption("Use your left & right arrow keys to switch the transparacny of your lane underlay. [DEFAULT: 0]"),
@@ -221,6 +226,8 @@ class OptionsMenuState extends MusicBeatState
 				grpControls.add(controlLabel);
 			}
 
+			FlxG.sound.play(Paths.sound("cancelMenu"), false);
+
 			remove(textBG);
 			remove(descTxt);
 
@@ -295,10 +302,10 @@ class OptionsMenuState extends MusicBeatState
 						if (fromFreeplay)
 						{				
 							fromFreeplay = false;
-							FlxG.switchState(new states.PlayState());
+							FlxG.switchState(new PlayState());
 						}
 						else
-							FlxG.switchState(new states.MainMenuState());
+							FlxG.switchState(new MainMenuState());
 					});
 				}
 				else
@@ -376,7 +383,7 @@ class OptionsMenuState extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound("scrollMenu"), 0.5, false);
+		FlxG.sound.play(Paths.sound('scrollMenu'));
 
 		curSelected += change;
 
