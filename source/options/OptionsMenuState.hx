@@ -34,6 +34,8 @@ class OptionsMenuState extends MusicBeatState
 	public static var fromFreeplay:Bool = false;
 	public static var returnedfromOptions:Bool = false;
 
+	public static var fromControlsMenu:Bool = false;
+
 	var options:Array<OptionCatagory> = [
 		new OptionCatagory("Controls", []),
 
@@ -383,7 +385,12 @@ class OptionsMenuState extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'));
+		if (fromControlsMenu == true) {
+			fromControlsMenu = false;
+			FlxG.sound.play(Paths.sound('cancelMenu'));
+		} else {
+			FlxG.sound.play(Paths.sound('scrollMenu'));
+		}
 
 		curSelected += change;
 

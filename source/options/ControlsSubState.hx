@@ -199,13 +199,12 @@ class ControlsSubState extends MusicBeatState
                 }
                 else if(FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE)
                 {
-                    FlxTransitionableState.skipNextTransIn = true;
-					FlxTransitionableState.skipNextTransOut = true;
+                    FlxG.sound.play(Paths.sound('cancelMenu'), false);
                     quit();
                 }
 				else if (FlxG.keys.justPressed.BACKSPACE || FlxG.keys.justPressed.BACKSPACE)
                 {
-                    FlxG.sound.play(Paths.sound('cancelMenu'), true);
+                    FlxG.sound.play(Paths.sound('cancelMenu'), false);
                     reset();
                 }
 
@@ -224,7 +223,6 @@ class ControlsSubState extends MusicBeatState
                 {
                     keys[curSelected] = tempKey;
                     state = "select";
-                    FlxG.sound.play(Paths.sound("cancelMenu"), false);
                 }
 
                 else if(FlxG.keys.justPressed.ANY && !FlxG.keys.justPressed.UP && !FlxG.keys.justPressed.DOWN && !FlxG.keys.justPressed.LEFT && !FlxG.keys.justPressed.RIGHT)
@@ -292,10 +290,10 @@ class ControlsSubState extends MusicBeatState
 
     public function reset()
     {
-
-        for(i in 0...keys.length){
+        for(i in 0...keys.length) {
             keys[i] = defaultKeys[i];
         }
+
         quit();
     }
 
@@ -303,8 +301,12 @@ class ControlsSubState extends MusicBeatState
     {
         save();
         state = "exiting";
+
+        FlxTransitionableState.skipNextTransIn = true;
+		FlxTransitionableState.skipNextTransOut = true;
+
+        OptionsMenuState.fromControlsMenu = true;
         FlxG.switchState(new OptionsMenuState());
-        FlxG.sound.play(Paths.sound('cancelMenu'), true);
     }
 
 	function addKey(r:String)
