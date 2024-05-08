@@ -227,14 +227,28 @@ class TitleState extends MusicBeatState
 	
 		credTextShit = new Alphabet(0, 0, "", true);
 		credTextShit.screenCenter();
-	
-		ngSpr = new FlxSprite(0, FlxG.height * 0.55).loadGraphic(Paths.image('newgrounds_logo'));
-		add(ngSpr);
-		ngSpr.visible = false;
-		ngSpr.setGraphicSize(Std.int(ngSpr.width * 0.8));
+		
+		ngSpr = new FlxSprite(0, FlxG.height * 0.55);
+		// 1 / 1000 chance of this asset popping up
+		if (FlxG.random.bool(0.1)) 
+		{
+			ngSpr.loadGraphic(Paths.image('newgrounds_logo_animated'), true, 600);
+			ngSpr.animation.add('idle', [0, 1], 4);
+			ngSpr.animation.play('idle');
+			ngSpr.setGraphicSize(Std.int(ngSpr.width * 0.55));
+			ngSpr.y += 25;
+		}
+		else
+		{
+			ngSpr.loadGraphic(Paths.image('newgrounds_logo'));
+			ngSpr.setGraphicSize(Std.int(ngSpr.width * 0.8));
+		}
+
 		ngSpr.updateHitbox();
 		ngSpr.screenCenter(X);
 		ngSpr.antialiasing = FlxG.save.data.antialiasing;
+		add(ngSpr);
+		ngSpr.visible = false;
 
 		if (initialized)
 			skipIntro();
@@ -390,12 +404,14 @@ class TitleState extends MusicBeatState
 	{
 		super.beatHit();
 
-		if(logoBl != null)
+		if(logoBl != null && logoBl.animation != null) {
 			logoBl.animation.play('bump', true);
+		}
 
-		if(gfDance != null) 
+		danceLeft = !danceLeft;
+
+		if(gfDance != null && gfDance.animation != null) 
 		{
-			danceLeft = !danceLeft;
 
 			if (danceLeft)
 				gfDance.animation.play('danceRight');
@@ -412,17 +428,17 @@ class TitleState extends MusicBeatState
 					case 1:
 						createCoolText(['The', 'Funkin Inc Crew']);
 					case 3:
-						addMoreText('present');
+						addMoreText('presents');
 					case 4:
 						deleteCoolText();
 					case 5:
 						createCoolText(['In association', 'with']);
 					case 7:
 						addMoreText('newgrounds');
-						ngSpr.visible = true;
+						if (ngSpr != null) ngSpr.visible = true;
 					case 8:
 						deleteCoolText();
-						ngSpr.visible = false;
+						if (ngSpr != null) ngSpr.visible = false;
 					case 9:
 						createCoolText([curWacky[0]]);
 					case 11:
@@ -456,9 +472,9 @@ class TitleState extends MusicBeatState
 			remove(credGroup);
 			
 			if (FlxG.save.data.flashingLights) {
-				FlxG.camera.flash(FlxColor.WHITE, 4);
+				FlxG.camera.flash(FlxColor.WHITE, initialized ? 1 : 4);
 			} else {
-				FlxG.camera.flash(FlxColor.BLACK, 4);
+				FlxG.camera.flash(FlxColor.BLACK, initialized ? 1 : 4);
 			}
 
 			FlxG.sound.music.time = 9400; // 9.4 seconds
