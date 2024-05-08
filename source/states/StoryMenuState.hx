@@ -64,7 +64,7 @@ class StoryMenuState extends MusicBeatState
 		"MOMMY MUST MURDER",
 		"RED SNOW",
 		"Hating Simulator ft. Moawling",
-		"Tankman Ft. Johnny Utah"
+		"Tankman ft. JohnnyUtah"
 	];
 
 	var txtWeekTitle:FlxText;
