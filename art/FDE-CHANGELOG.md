@@ -325,10 +325,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete source code overhaul !!! (Better Optimization, Organized Files, and it's just more easier to work with)
 - The `.MP4` version of the Week 7 cutscenes will play if you have the 'Cutscene' option disabled
 - 
-- **Major Combo Changes**
-- Your combo now starts count at 10 instead of 1, 
-- If you get a 'bad' or a 'shit' rating, then your lose your combo 
-- The combo asset only appears if you lose your combo
+- Major Combo Changes
+ - Your combo now starts count at 10 instead of 1, 
+ - If you get a 'bad' or a 'shit' rating, then your lose your combo 
+ - The combo asset only appears if you lose your combo
 - TONS of backend changes
 
 ### Fixed
