@@ -317,18 +317,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - (Re)Added Roses censored dialogue
-- Video Support on Desktop Builds (WIP)
-- New Options (Auto Pause, Cutscenes, & Disable Reset Button)
+- New Options (Auto Pause, Cutscenes, Disable Reset Button, & HealthDrain)
+- NG title easter egg !!! (you have an 1 in 1000 chance of getting it)
+- `.MP4` Support for Desktop Builds (taken from [PolyMod](https://github.com/polybiusproxy/PolyEngine))
 
 ### Changed
 - Complete source code overhaul !!! (Better Optimization, Organized Files, and it's just more easier to work with)
 - The `.MP4` version of the Week 7 cutscenes will play if you have the 'Cutscene' option disabled
-- Getting a 'shit' rating will get rid of your combo
+- 
+- **Major Combo Changes**
+- Your combo now starts count at 10 instead of 1, 
+- If you get a 'bad' or a 'shit' rating, then your lose your combo 
+- The combo asset only appears if you lose your combo
+- TONS of backend changes
 
 ### Fixed
 - Week 2 & Week 3 Stage flashing you when you have the flashing lights option disabled
 - Weird Sound transition from `ControlsSubState.hx` to `OptionsMenuState.hx`
+- Issue where the input system stops registering hits after you miss a note
+- Weird camera glitches in the tank week cutscenes - TODO
 
 ### Removed
 - Ratings to HUD option
-- Combo Asset
+- ComboBreak Asset

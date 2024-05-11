@@ -77,6 +77,13 @@ class Paths
 		currentLevel = name.toLowerCase();
 	}
 
+	public static function stripLibrary(path:String):String
+	{
+		var parts:Array<String> = path.split(':');
+		if (parts.length < 2) return path;
+		return parts[1];
+	}
+
 	static public function getPath(file:String, type:AssetType, library:Null<String>)
 	{
 		if (library != null)
@@ -166,9 +173,9 @@ class Paths
 		return 'assets/fonts/$key';
 	}
 
-	inline static public function video(key:String, ?library:String)
+	inline static public function video(key:String)
 	{
-		return getPath('videos/cutscenes/$key.mp4', TEXT, library);
+		return 'assets/videos/$key.$VIDEO_EXT';
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)
