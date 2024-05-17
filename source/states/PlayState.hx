@@ -62,6 +62,8 @@ import backend.Ratings;
 
 #if (VIDEOS_ALLOWED || desktop)
 import hxcodec.flixel.FlxVideo;
+#else
+import cutscenes.FlxVideo;
 #end
 import cutscenes.DialogueBox;
 import cutscenes.TankCutscene;
@@ -74,6 +76,7 @@ import objects.Boyfriend.Pico;
 import objects.Note;
 import objects.NoteSplash;
 import objects.HealthIcon;
+import objects.ComboMilestone;
 
 import states.stages.StageData;
 import states.stages.backgroundsprites.BackgroundDancer;
@@ -223,6 +226,8 @@ class PlayState extends MusicBeatState
 	private var totalRatings:Int = 0;
 	private var totalPlayed:Int = 0;
 
+	public var scrollSpeed:Float = 1.0;
+
 	#if discord_rpc
 	// Discord RPC variables
 	var storyDifficultyText:String = "";
@@ -269,6 +274,11 @@ class PlayState extends MusicBeatState
 
 		if (SONG == null)
 			SONG = Song.loadFromJson('tutorial');
+
+		if (FlxG.save.data.scrollSpeed == 1)
+			scrollSpeed = SONG.speed;
+		else
+			scrollSpeed = FlxG.save.data.scrollSpeed;
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
@@ -883,17 +893,8 @@ class PlayState extends MusicBeatState
 					if (FlxG.save.data.cutscenes)
 						tankIntro();
 					else
-					{
-						#if VIDEOS_ALLOWED
-						startVideo('videos/${SONG.song}_cutscene');
+						startCountdown();
 
-						if (SONG.song == 'stress' && FlxG.save.data.explicitContent) {
-							startVideo('videos/stress_cutscene');
-						} else {
-							startVideo('videos/stress_cutscene_censored');
-						}
-						#end
-					}
 		
 				default:
 					startCountdown();
@@ -1409,61 +1410,6 @@ class PlayState extends MusicBeatState
 						FlxG.camera.focusOn(camFollow.getPosition());
 					});
 				});
-		}
-	}
-
-	public function startVideo(name:String):Void 
-	{
-		#if VIDEOS_ALLOWED
-		inCutscene = true;
-		var foundFile:Bool = false;
-		var fileName:String = Paths.video(name);
-		#if sys
-		if(FileSystem.exists(fileName)) {
-			foundFile = true;
-		}
-		#end
-
-		if(!foundFile) 	
-		{
-			fileName = Paths.video(name);
-			#if sys
-			if(FileSystem.exists(fileName)) {
-			#else
-			if(OpenFlAssets.exists(fileName)) {
-			#end
-				foundFile = true;
-			}
-		}
-
-		if(foundFile) 
-		{
-			inCutscene = true;
-			var bg = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
-			bg.scrollFactor.set();
-			add(bg);
-
-			(new FlxVideo(fileName)).finishCallback = function() {
-				remove(bg);
-
-				if (storyWeek == 7) {
-					tankIntroEnd = true;
-					startCountdown();
-				} else {
-					startCountdown();	
-				}
-			}
-			return;
-		} else {
-			FlxG.log.warn('Couldnt find video file: ' + fileName);
-		}
-		#end
-		
-		if (storyWeek == 7) {
-			tankIntroEnd = true;
-			startCountdown();
-		} else {
-			startCountdown();	
 		}
 	}
 
@@ -2037,9 +1983,9 @@ class PlayState extends MusicBeatState
 			// 1 / 1000 chance for Gitaroo Man easter egg
 			if (FlxG.random.bool(0.1)) {
 				// gitaroo man easter egg
-				FlxG.switchState(new GitarooPause());
+				FlxG.switchState(new unused.GitarooPause());
 			} else
-				openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				openSubState(new substates.PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 			#if discord_rpc
 			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
@@ -2215,18 +2161,12 @@ class PlayState extends MusicBeatState
 				}
 	
 				var center = strumLine.y + (Note.swagWidth / 2);
-				var speedValue:Float = 1;
-	
-				if (FlxG.save.data.scrollSpeed != 1) {
-					speedValue = FlxG.save.data.scrollSpeed;
-				} else if (FlxG.save.data.scrollSpeed == 1) {
-					speedValue = SONG.speed;
-				}
-	
+				var leSpeed = scrollSpeed == 1 ? SONG.speed : scrollSpeed;
+		
 				// i am so fucking sorry for these if conditions
 				if (FlxG.save.data.downscroll) 
 				{
-					daNote.y = (strumLine.y + (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(speedValue, 2))); 
+					daNote.y = (strumLine.y + (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(leSpeed, 2))); 
 	
 					if (daNote.isSustainNote)
 					{
@@ -2249,7 +2189,7 @@ class PlayState extends MusicBeatState
 				} 
 				else 
 				{
-					daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(speedValue, 2)));
+					daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(leSpeed, 2)));
 	
 					if (daNote.isSustainNote && (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))) && daNote.y + daNote.offset.y * daNote.scale.y <= center) 
 					{
@@ -3203,6 +3143,7 @@ class PlayState extends MusicBeatState
 				FlxG.log.add('CHANGED BPM!');
 			}
 		}
+
 		wiggleShit.update(Conductor.crochet);
 
 		if (FlxG.save.data.camhudZoom) {
@@ -3223,8 +3164,21 @@ class PlayState extends MusicBeatState
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
+
+		if (curBeat % 8 == 7 && SONG.notes[Math.floor(curStep / 16)].mustHitSection && combo > 5 && !SONG.notes[Math.floor(curStep / 16) + 1].mustHitSection) {
+			var animShit:ComboMilestone = new ComboMilestone(-100, 300, combo);
+			animShit.scrollFactor.set(0.7);
+			animShit.x = 50;
+			animShit.screenCenter();
+			add(animShit);
+
+			var frameShit:Float = (1 / 24) * 2; // equals 2 frames in the animation
+			new FlxTimer().start(((Conductor.crochet / 1000) * 1.25) - frameShit, function(tmr)
+			{
+				animShit.forceFinish();
+			});
+		}
 		
-		// Dont mind this
 		if (curBeat % gfSpeed == 0) {
 			gf.dance();
 		}

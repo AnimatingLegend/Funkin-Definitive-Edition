@@ -317,25 +317,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - (Re)Added Roses censored dialogue
-- New Options (Auto Pause, Cutscenes, Disable Reset Button, & HealthDrain)
+- New Options (Auto Pause, Cutscenes, Disable Reset Button, & HealthDrain **TODO**)
 - NG title easter egg !!! (you have an 1 in 1000 chance of getting it)
-- `.MP4` Support for Desktop Builds (taken from [PolyMod](https://github.com/polybiusproxy/PolyEngine))
+- `.MP4` Support for Desktop Builds (taken from [PolyMod](https://github.com/polybiusproxy/PolyEngine)) - **TODO**
+- Note Combo Asset
 
 ### Changed
 - Complete source code overhaul !!! (Better Optimization, Organized Files, and it's just more easier to work with)
-- The `.MP4` version of the Week 7 cutscenes will play if you have the 'Cutscene' option disabled
-- 
+- The `.MP4` version of the Week 7 cutscenes will play if you have the 'Cutscene' option disabled - **TODO**
 - Major Combo Changes
- - Your combo now starts count at 10 instead of 1, 
- - If you get a 'bad' or a 'shit' rating, then your lose your combo 
- - The combo asset only appears if you lose your combo
+  - Your combo now starts count at 10 instead of 1
+  - If your combo is 10 or higher, note combo asset pops up
+  - If you get a 'bad' or a 'shit' rating, then your lose your combo 
+  - The combo asset only appears if you lose your combo
 - TONS of backend changes
 
 ### Fixed
 - Week 2 & Week 3 Stage flashing you when you have the flashing lights option disabled
 - Weird Sound transition from `ControlsSubState.hx` to `OptionsMenuState.hx`
 - Issue where the input system stops registering hits after you miss a note
-- Weird camera glitches in the tank week cutscenes - TODO
+- Weird camera glitches in the tank week cutscenes - **TODO**
+- Issue where miss sprites weren't working when you had the default scroll speed -**TODO**
 
 ### Removed
 - Ratings to HUD option
