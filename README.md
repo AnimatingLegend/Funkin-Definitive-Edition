@@ -78,6 +78,13 @@ flixel-ui
 hscript
 newgrounds
 ```
+If you want to add videos into the game then you can add these to the cmd windows also
+```
+haxelib install actuate
+haxelib git extension-webm https://github.com/KadeDev/extension-webm
+lime rebuild extension-webm windows
+```
+
 **Ignored Git & Compiling Files**
 I gitignore the API keys for the game so that no one can nab them and post fake high scores on the leaderboards. But because of that the game
 doesn't compile without it.
@@ -96,3 +103,5 @@ class APIStuff
 
 ```
 if you want to learn more about compiling this game then [read here!](https://github.com/ninjamuffin99/Funkin/blob/master/README.md#compiling-game)
+
+

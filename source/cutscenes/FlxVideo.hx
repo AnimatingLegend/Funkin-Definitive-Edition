@@ -1,138 +1,196 @@
 package cutscenes;
 
-#if web
-import openfl.net.NetConnection;
-import openfl.net.NetStream;
+import motion.Actuate;
+import openfl.display.Sprite;
+import openfl.events.AsyncErrorEvent;
+import openfl.events.MouseEvent;
 import openfl.events.NetStatusEvent;
 import openfl.media.Video;
-#else
-import openfl.events.Event;
-import vlc.VlcBitmap;
-#end
-import flixel.FlxBasic;
+import openfl.net.NetConnection;
+import openfl.net.NetStream;
 import flixel.FlxG;
 
-class FlxVideo extends FlxBasic 
+using StringTools;
+
+
+
+class FlxVideo
 {
-	#if VIDEOS_ALLOWED
-	public var finishCallback:Void->Void = null;
+	public var netStream:NetStream;
+	public var video:Video;
+	public var isReady:Bool = false;
+	public var addOverlay:Bool = false;
+	public var vidPath:String = "";
+	public var ignoreShit:Bool = false;
 	
-	#if desktop
-	public static var vlcBitmap:VlcBitmap;
-	#end
-
-	public function new(name:String) 
+	public function new()
 	{
-		super();
-
+		isReady = false;
+	}
+	
+	public function source(?vPath:String):Void
+	{
+		if (vPath != null && vPath.length > 0)
+		{
+		vidPath = vPath;
+		}
+	}
+	
+	public function init1():Void
+	{
+		isReady = false;
+		video = new Video();
+		video.visible = false;
+	}
+	
+	public function init2():Void
+	{
 		#if web
-		var player:Video = new Video();
-		player.x = 0;
-		player.y = 0;
-		FlxG.addChildBelowMouse(player);
-		var netConnect = new NetConnection();
-		netConnect.connect(null);
-		var netStream = new NetStream(netConnect);
-		netStream.client = 
-		{
-			onMetaData: function() {
-				player.attachNetStream(netStream);
-				player.width = FlxG.width;
-				player.height = FlxG.height;
-			}
-		};
+		var netConnection = new NetConnection ();
+		netConnection.connect (null);
+		
+		netStream = new NetStream (netConnection);
+		netStream.client = { onMetaData: client_onMetaData };
+		netStream.addEventListener (AsyncErrorEvent.ASYNC_ERROR, netStream_onAsyncError);
 
-		netConnect.addEventListener(NetStatusEvent.NET_STATUS, function(event:NetStatusEvent) 
-		{
-			if(event.info.code == "NetStream.Play.Complete") {
-				netStream.dispose();
-				if(FlxG.game.contains(player)) FlxG.game.removeChild(player);
-
-				if(finishCallback != null) finishCallback();
-			}
-		});
-		netStream.play(name);
-
-		#elseif desktop
-
-		vlcBitmap = new VlcBitmap();
-		vlcBitmap.set_height(FlxG.stage.stageHeight);
-		vlcBitmap.set_width(FlxG.stage.stageHeight * (16 / 9));
-
-		vlcBitmap.onComplete = onVLCComplete;
-		vlcBitmap.onError = onVLCError;
-
-		FlxG.stage.addEventListener(Event.ENTER_FRAME, fixVolume);
-		vlcBitmap.repeat = 0;
-		vlcBitmap.inWindow = false;
-		vlcBitmap.fullscreen = false;
-		fixVolume(null);
-
-		FlxG.addChildBelowMouse(vlcBitmap);
-		vlcBitmap.play(checkFile(name));
+		netConnection.addEventListener (NetStatusEvent.NET_STATUS, netConnection_onNetStatus);
+		netConnection.addEventListener (NetStatusEvent.NET_STATUS, onPlay);
+		netConnection.addEventListener (NetStatusEvent.NET_STATUS, onEnd);
 		#end
 	}
-
-	#if desktop
-	function checkFile(fileName:String):String
-	{
-		var pDir = "";
-		var appDir = "file:///" + Sys.getCwd() + "/";
-
-		if (fileName.indexOf(":") == -1) // Not a path
-			pDir = appDir;
-		else if (fileName.indexOf("file://") == -1 || fileName.indexOf("http") == -1) // C:, D: etc? ..missing "file:///" ?
-			pDir = "file:///";
-
-		return pDir + fileName;
+	
+	public function client_onMetaData (metaData:Dynamic) {
+		
+		video.attachNetStream (netStream);
+		
+		video.width = FlxG.width;
+		video.height = FlxG.height;
+		
 	}
 	
-	public static function onFocus() {
-		if(vlcBitmap != null) {
-			vlcBitmap.resume();
+	
+	public function netStream_onAsyncError (event:AsyncErrorEvent):Void {
+		
+		trace ("Error loading video");
+		
+	}
+	
+	
+	public function netConnection_onNetStatus (event:NetStatusEvent):Void {
+		trace (event.info.code);
+	}
+	
+	public function play():Void
+	{
+		#if web
+		ignoreShit = true;
+		netStream.close();
+		init2();
+		netStream.play(vidPath);
+		ignoreShit = false;
+		#end
+		trace(vidPath);
+	}
+	
+	public function stop():Void
+	{
+		netStream.close();
+		onStop();
+	}
+	
+	public function restart():Void
+	{
+		play();
+		onRestart();
+	}
+	
+	public function update(elapsed:Float):Void
+	{
+		video.x = GlobalVideo.calc(0);
+		video.y = GlobalVideo.calc(1);
+		video.width = GlobalVideo.calc(2);
+		video.height = GlobalVideo.calc(3);
+	}
+	
+	public var stopped:Bool = false;
+	public var restarted:Bool = false;
+	public var played:Bool = false;
+	public var ended:Bool = false;
+	public var paused:Bool = false;
+	
+	public function pause():Void
+	{
+		netStream.pause();
+		paused = true;
+	}
+	
+	public function resume():Void
+	{
+		netStream.resume();
+		paused = false;
+	}
+	
+	public function togglePause():Void
+	{
+		if (paused)
+		{
+			resume();
+		} else {
+			pause();
 		}
 	}
 	
-	public static function onFocusLost() {
-		if(vlcBitmap != null) {
-			vlcBitmap.pause();
-		}
-	}
-
-	function fixVolume(e:Event)
+	public function clearPause():Void
 	{
-		// shitty volume fix
-		vlcBitmap.volume = 0;
-		if(!FlxG.sound.muted && FlxG.sound.volume > 0.01) { //Kind of fixes the volume being too low when you decrease it
-			vlcBitmap.volume = FlxG.sound.volume * 0.5 + 0.5;
-		}
+		paused = false;
 	}
-
-	public function onVLCComplete()
+	
+	public function onStop():Void
 	{
-		vlcBitmap.stop();
-
-		// Clean player, just in case!
-		vlcBitmap.dispose();
-
-		if (FlxG.game.contains(vlcBitmap))
+		if (!ignoreShit)
 		{
-			FlxG.game.removeChild(vlcBitmap);
-		}
-
-		if (finishCallback != null)
-		{
-			finishCallback();
+			stopped = true;
 		}
 	}
-
-	function onVLCError()
+	
+	public function onRestart():Void
 	{
-		trace("An error has occured while trying to load the video.\nPlease, check if the file you're loading exists.");
-		if (finishCallback != null) {
-			finishCallback();
+		restarted = true;
+	}
+	
+	public function onPlay(event:NetStatusEvent):Void
+	{
+		if (event.info.code == "NetStream.Play.Start")
+		{
+			played = true;
 		}
 	}
-	#end
-	#end
+	
+	public function onEnd(event:NetStatusEvent):Void
+	{
+		if (event.info.code == "NetStream.Play.Complete")
+		{
+			ended = true;
+		}
+	}
+	
+	public function alpha():Void
+	{
+		video.alpha = GlobalVideo.daAlpha1;
+	}
+	
+	public function unalpha():Void
+	{
+		video.alpha = GlobalVideo.daAlpha2;
+	}
+	
+	public function hide():Void
+	{
+		video.visible = false;
+	}
+	
+	public function show():Void
+	{
+		video.visible = true;
+	}
 }

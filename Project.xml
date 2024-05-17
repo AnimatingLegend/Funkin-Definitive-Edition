@@ -94,10 +94,6 @@
 	<assets path="assets/week7"    library="week7"    exclude="*.fla|*.ogg" if="web"/>
 	<assets path="assets/week7"    library="week7"    exclude="*.fla|*.mp3" unless="web"/>
 
-	<assets path="plugins/"        rename=''          if="VIDEOS_ALLOWED windows" />
-	<assets path="dlls/"           rename=''          if="VIDEOS_ALLOWED windows" />
-	<assets path="assets/videos"   library="videos"   if="VIDEOS_ALLOWED"/>
-
 	<!-- Turn on Crash Handler -->
 	<define name="CRASH_HANDLER" if="desktop" />
 
@@ -121,10 +117,10 @@
 	<haxelib name="faxe" if='switch'/>
 	<haxelib name="polymod"/>
 	<haxelib name="discord_rpc" if="desktop"/>
-	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
+	<haxelib name="actuate" />
+	<haxelib name="extension-webm"/>
 	
 	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
-	<haxedef name="HXC_LIBVLC_LOGGING" if="VIDEOS_ALLOWED debug" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
