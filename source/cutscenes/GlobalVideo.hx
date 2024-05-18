@@ -4,19 +4,19 @@ import openfl.Lib;
 
 class GlobalVideo
 {
-	private static var video:FlxVideo;
+	private static var video:VideoHandler;
 	private static var webm:WebmHandler;
 	public static var isWebm:Bool = false;
 	public static var isAndroid:Bool = false;
 	public static var daAlpha1:Float = 0.2;
 	public static var daAlpha2:Float = 1;
 
-	public static function setVid(vid:FlxVideo):Void
+	public static function setVid(vid:VideoHandler):Void
 	{
 		video = vid;
 	}
 	
-	public static function getVid():FlxVideo
+	public static function getVid():VideoHandler
 	{
 		return video;
 	}
@@ -47,8 +47,8 @@ class GlobalVideo
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 
-		var width:Int = 1280;
-		var height:Int = 720;
+		var width:Float = GameDimensions.width;
+		var height:Float = GameDimensions.height;
 
 		var ratioX:Float = height / width;
 		var ratioY:Float = width / height;

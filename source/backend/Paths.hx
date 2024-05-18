@@ -11,7 +11,6 @@ import flixel.graphics.FlxGraphic;
 class Paths
 {
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
-	inline public static var VIDEO_EXT = "mp4";
 
 	public static function excludeAsset(key:String) 
 	{
@@ -171,11 +170,6 @@ class Paths
 	inline static public function font(key:String)
 	{
 		return 'assets/fonts/$key';
-	}
-
-	inline static public function video(key:String)
-	{
-		return 'assets/videos/$key.$VIDEO_EXT';
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)

@@ -77,6 +77,8 @@ class VideoState extends MusicBeatState
 			}
 		}
 
+		trace(leSource == null ? 'Webm video Source is returning NULL NOOOOO.' : 'Webm video Source looks like ass B)');
+
 		GlobalVideo.get().source(leSource);
 		GlobalVideo.get().clearPause();
 		if (GlobalVideo.isWebm)
@@ -90,24 +92,11 @@ class VideoState extends MusicBeatState
 		} else {
 			GlobalVideo.get().play();
 		}
-		
-		/*if (useSound)
-		{*/
-			//vidSound = FlxG.sound.play(leSource.replace(".webm", ".ogg"));
-		
-			/*new FlxTimer().start(0.1, function(tmr:FlxTimer)
-			{*/
-				vidSound.time = vidSound.length * soundMultiplier;
-				/*new FlxTimer().start(1.2, function(tmr:FlxTimer)
-				{
-					if (useSound)
-					{
-						vidSound.time = vidSound.length * soundMultiplier;
-					}
-				}, 0);*/
-				doShit = true;
-			//}, 1);
-		//}
+
+		if (vidSound != null)
+			vidSound.time = vidSound.length * soundMultiplier;
+
+		doShit = true;
 	}
 	
 	override function update(elapsed:Float)
@@ -118,7 +107,7 @@ class VideoState extends MusicBeatState
 		{
 			var wasFuckingHit = GlobalVideo.get().webm.wasHitOnce;
 			soundMultiplier = GlobalVideo.get().webm.renderedCount / videoFrames;
-			
+
 			if (soundMultiplier > 1)
 			{
 				soundMultiplier = 1;
@@ -130,26 +119,29 @@ class VideoState extends MusicBeatState
 			if (doShit)
 			{
 				var compareShit:Float = 50;
-				if (vidSound.time >= (vidSound.length * soundMultiplier) + compareShit || vidSound.time <= (vidSound.length * soundMultiplier) - compareShit)
+				if (vidSound.time >= (vidSound.length * soundMultiplier) + compareShit
+					|| vidSound.time <= (vidSound.length * soundMultiplier) - compareShit)
 					vidSound.time = vidSound.length * soundMultiplier;
 			}
 			if (wasFuckingHit)
 			{
-			if (soundMultiplier == 0)
-			{
-				if (prevSoundMultiplier != 0)
+				if (soundMultiplier == 0)
 				{
-					vidSound.pause();
-					vidSound.time = 0;
+					if (prevSoundMultiplier != 0)
+					{
+						vidSound.pause();
+						vidSound.time = 0;
+					}
 				}
-			} else {
-				if (prevSoundMultiplier == 0)
+				else
 				{
-					vidSound.resume();
-					vidSound.time = vidSound.length * soundMultiplier;
+					if (prevSoundMultiplier == 0)
+					{
+						vidSound.resume();
+						vidSound.time = vidSound.length * soundMultiplier;
+					}
 				}
-			}
-			prevSoundMultiplier = soundMultiplier;
+				prevSoundMultiplier = soundMultiplier;
 			}
 		}
 		

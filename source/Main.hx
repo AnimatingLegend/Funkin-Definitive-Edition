@@ -96,7 +96,7 @@ class Main extends Sprite
 
 		#if web
         var str1:String = "HTML CRAP";
-        var vHandler = new cutscenes.FlxVideo();
+        var vHandler = new VideoHandler();
         vHandler.init1();
         vHandler.video.name = str1;
         addChild(vHandler.video);
@@ -136,8 +136,28 @@ class Main extends Sprite
 
 	var game:FlxGame;
 	var fpsCounter:FPSCounter;
+
 	public function toggleFPS(fpsEnabled:Bool):Void {
 		fpsCounter.visible = fpsEnabled;
+	}
+
+	// taken from kade engine :]
+	public static function dumpCache()
+	{
+		///* SPECIAL THANKS TO HAYA
+		@:privateAccess
+		for (key in FlxG.bitmap._cache.keys())
+		{
+			var obj = FlxG.bitmap._cache.get(key);
+			if (obj != null)
+			{
+				Assets.cache.removeBitmapData(key);
+				FlxG.bitmap._cache.remove(key);
+				obj.destroy();
+			}
+		}
+		Assets.cache.clear("songs");
+		// */
 	}
 
 	#if CRASH_HANDLER

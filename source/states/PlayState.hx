@@ -60,11 +60,12 @@ import backend.Conductor;
 import backend.Section.SwagSection;
 import backend.Ratings;
 
-#if (VIDEOS_ALLOWED || desktop)
-import hxcodec.flixel.FlxVideo;
-#else
-import cutscenes.FlxVideo;
+#if desktop
+import webm.WebmPlayer;
 #end
+import cutscenes.VideoHandler;
+import cutscenes.GlobalVideo;
+import cutscenes.WebmHandler;
 import cutscenes.DialogueBox;
 import cutscenes.TankCutscene;
 import cutscenes.TankCutscene.CutsceneCharacter;
@@ -152,7 +153,9 @@ class PlayState extends MusicBeatState
 	
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
+
 	public var endingSong:Bool = false;
+	public var songStarted:Bool = false;
 
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
@@ -237,8 +240,15 @@ class PlayState extends MusicBeatState
 	var detailsPausedText:String = "";
 	#end
 
+	// video stuff 
+	public var stopUpdate = false;
+	public var removedVideo = false;
+
 	override public function create() 
 	{
+		FlxG.mouse.visible = false;
+		instance = this;
+
 		Paths.clearStoredMemory();
 
 		if (FlxG.sound.music != null)
@@ -254,7 +264,8 @@ class PlayState extends MusicBeatState
 		if (curSong != SONG.song)
 		{
 			curSong = SONG.song;
-			Paths.clearStoredMemory();
+			Main.dumpCache();
+		//	Paths.clearStoredMemory();
 		}
 
 		sicks = 0;
@@ -264,6 +275,8 @@ class PlayState extends MusicBeatState
 
 		misses = 0;
 		accuracy = 0.00;
+
+		removedVideo = false;
 
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 		var noteSplash0:NoteSplash = new NoteSplash(100, 100, 0);
@@ -894,8 +907,6 @@ class PlayState extends MusicBeatState
 						tankIntro();
 					else
 						startCountdown();
-
-		
 				default:
 					startCountdown();
 			}
@@ -2345,6 +2356,15 @@ class PlayState extends MusicBeatState
 
 		if (isStoryMode) 
 		{
+			// make it when html builds do the black tranistion thingy instead of desktop builds
+			#if html5
+			transIn = FlxTransitionableState.defaultTransIn;
+			transOut = FlxTransitionableState.defaultTransOut;
+			#else
+			FlxTransitionableState.skipNextTransIn = true;
+			FlxTransitionableState.skipNextTransOut = true;
+			#end
+
 			campaignScore += songScore;
 			campaignMisses += misses;
 
@@ -2389,22 +2409,26 @@ class PlayState extends MusicBeatState
 						PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
 						LoadingState.loadAndSwitchState(new PlayState());
 					});
-				} 
-				else 
-				{
-					// make it when html builds do the black tranistion thingy instead of desktop builds
-					#if html5
-					transIn = FlxTransitionableState.defaultTransIn;
-					transOut = FlxTransitionableState.defaultTransOut;
-					#else
-					FlxTransitionableState.skipNextTransIn = true;
-					FlxTransitionableState.skipNextTransOut = true;
-					#end
-					
-					prevCamFollow = camFollow;
-					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
-					LoadingState.loadAndSwitchState(new PlayState());
 				}
+
+				prevCamFollow = camFollow;
+				PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
+				FlxG.sound.music.stop();
+
+				if (storyWeek == 7 && (!FlxG.save.data.cutscenes))
+				{
+					switch(SONG.song.toLowerCase())
+					{
+						case 'guns':
+							LoadingState.loadAndSwitchState(new cutscenes.VideoState("assets/videos/cutscenes/guns_cutscene.webm", new PlayState()));
+						case 'stress':
+							LoadingState.loadAndSwitchState(new cutscenes.VideoState("assets/videos/cutscenes/stress_cutscene.webm", new PlayState()));
+						default:
+							LoadingState.loadAndSwitchState(new PlayState());
+					}
+				}
+				else
+					LoadingState.loadAndSwitchState(new PlayState());
 			}
 		} else {
 			trace('WENT BACK TO FREEPLAY??');
@@ -3164,7 +3188,8 @@ class PlayState extends MusicBeatState
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
-
+	
+	/*
 		if (curBeat % 8 == 7 && SONG.notes[Math.floor(curStep / 16)].mustHitSection && combo > 5 && !SONG.notes[Math.floor(curStep / 16) + 1].mustHitSection) {
 			var animShit:ComboMilestone = new ComboMilestone(-100, 300, combo);
 			animShit.scrollFactor.set(0.7);
@@ -3178,6 +3203,7 @@ class PlayState extends MusicBeatState
 				animShit.forceFinish();
 			});
 		}
+	*/
 		
 		if (curBeat % gfSpeed == 0) {
 			gf.dance();
