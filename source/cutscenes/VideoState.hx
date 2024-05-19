@@ -93,6 +93,8 @@ class VideoState extends MusicBeatState
 			GlobalVideo.get().play();
 		}
 
+		vidSound = FlxG.sound.play(leSource.replace(".webm", ".ogg"));
+
 		if (vidSound != null)
 			vidSound.time = vidSound.length * soundMultiplier;
 
@@ -118,7 +120,7 @@ class VideoState extends MusicBeatState
 			}
 			if (doShit)
 			{
-				var compareShit:Float = 50;
+				var compareShit:Float = 85;
 				if (vidSound.time >= (vidSound.length * soundMultiplier) + compareShit
 					|| vidSound.time <= (vidSound.length * soundMultiplier) - compareShit)
 					vidSound.time = vidSound.length * soundMultiplier;

@@ -63,6 +63,7 @@ class LoadingState extends MusicBeatState
 				if (PlayState.SONG.needsVoices)
 					checkLoadSong(getVocalPath());
 
+				checkLibrary("videos");
 				checkLibrary("shared");
 				
 				if (PlayState.storyWeek > 0)

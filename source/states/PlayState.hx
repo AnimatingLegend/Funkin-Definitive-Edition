@@ -265,7 +265,7 @@ class PlayState extends MusicBeatState
 		{
 			curSong = SONG.song;
 			Main.dumpCache();
-		//	Paths.clearStoredMemory();
+			Paths.clearStoredMemory();
 		}
 
 		sicks = 0;
