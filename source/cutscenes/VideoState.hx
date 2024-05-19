@@ -70,11 +70,15 @@ class VideoState extends MusicBeatState
 
 		if (GlobalVideo.isWebm)
 		{
+			/*
 			if (Assets.exists(leSource.replace(".webm", ".ogg"), MUSIC) || Assets.exists(leSource.replace(".webm", ".ogg"), SOUND))
 			{
+				*/
 				useSound = true;
 				vidSound = FlxG.sound.play(leSource.replace(".webm", ".ogg"));
+				/*
 			}
+			*/
 		}
 
 		trace(leSource == null ? 'Webm video Source is returning NULL NOOOOO.' : 'Webm video Source looks like ass B)');
@@ -98,7 +102,6 @@ class VideoState extends MusicBeatState
 		if (vidSound != null)
 			vidSound.time = vidSound.length * soundMultiplier;
 
-		doShit = true;
 	}
 	
 	override function update(elapsed:Float)
