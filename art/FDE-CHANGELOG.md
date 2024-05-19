@@ -320,14 +320,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New Options (Auto Pause, Cutscenes, Disable Reset Button, & HealthDrain **TODO**)
 - NG title easter egg !!! (you have an 1 in 1000 chance of getting it)
 - Video (`.Webm`) Support for Desktop Builds (taken from [Kade Engine](https://github.com/Kade-github/Kade-Engine))
-- Note Combo Asset
 
 ### Changed
 - Complete source code overhaul !!! (Better Optimization, Organized Files, and it's just more easier to work with)
 - The `.WEBM` versions of the Week 7 cutscenes will play if you have the 'Cutscene' option disabled
 - Major Combo Changes
   - Your combo now starts count at 10 instead of 1
-  - If your combo is 10 or higher, note combo asset pops up
   - If you get a 'bad' or a 'shit' rating, then your lose your combo 
   - The combo asset only appears if you lose your combo
 - TONS of backend changes

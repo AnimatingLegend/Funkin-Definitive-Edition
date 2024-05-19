@@ -3188,22 +3188,6 @@ class PlayState extends MusicBeatState
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
-	
-	/*
-		if (curBeat % 8 == 7 && SONG.notes[Math.floor(curStep / 16)].mustHitSection && combo > 5 && !SONG.notes[Math.floor(curStep / 16) + 1].mustHitSection) {
-			var animShit:ComboMilestone = new ComboMilestone(-100, 300, combo);
-			animShit.scrollFactor.set(0.7);
-			animShit.x = 50;
-			animShit.screenCenter();
-			add(animShit);
-
-			var frameShit:Float = (1 / 24) * 2; // equals 2 frames in the animation
-			new FlxTimer().start(((Conductor.crochet / 1000) * 1.25) - frameShit, function(tmr)
-			{
-				animShit.forceFinish();
-			});
-		}
-	*/
 		
 		if (curBeat % gfSpeed == 0) {
 			gf.dance();
