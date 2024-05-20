@@ -128,7 +128,7 @@ class StageData extends MusicBeatState
 				PlayState.camPos.set(PlayState.dad.getGraphicMidpoint().x + 300, PlayState.dad.getGraphicMidpoint().y);
 			case 'tankman':
 				PlayState.dad.y += 180;
-			case 'bf-pixel-opponent':
+			case 'bf-pixel':
 				PlayState.dad.x -= 80;
 				PlayState.dad.y += 460;
 				PlayState.camPos.set(PlayState.dad.getGraphicMidpoint().x + 300, PlayState.dad.getGraphicMidpoint().y);

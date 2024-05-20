@@ -365,36 +365,24 @@ class Character extends FlxSprite
 				frames = Paths.getSparrowAtlas('characters/bfPixel', 'shared');
 				quickAnimAdd('idle', 'BF IDLE');
 				quickAnimAdd('singUP', 'BF UP NOTE');
-				quickAnimAdd('singLEFT', 'BF LEFT NOTE');
-				quickAnimAdd('singRIGHT', 'BF RIGHT NOTE');
+				if (!isPlayer)
+				{
+					quickAnimAdd('singRIGHT', 'BF LEFT NOTE');
+					quickAnimAdd('singLEFT', 'BF RIGHT NOTE');
+				}
+				else
+				{
+					quickAnimAdd('singLEFT', 'BF LEFT NOTE');
+					quickAnimAdd('singRIGHT', 'BF RIGHT NOTE');
+
+					quickAnimAdd('singUPmiss', 'BF UP MISS');
+					quickAnimAdd('singLEFTmiss', 'BF LEFT MISS');
+					quickAnimAdd('singRIGHTmiss', 'BF RIGHT MISS');
+					quickAnimAdd('singDOWNmiss', 'BF DOWN MISS');
+				}
 				quickAnimAdd('singDOWN', 'BF DOWN NOTE');
-				quickAnimAdd('singUPmiss', 'BF UP MISS');
-				quickAnimAdd('singLEFTmiss', 'BF LEFT MISS');
-				quickAnimAdd('singRIGHTmiss', 'BF RIGHT MISS');
-				quickAnimAdd('singDOWNmiss', 'BF DOWN MISS');
 
 				setGraphicSize(Std.int(width * 6));
-				updateHitbox();
-
-				loadOffsetFile(curCharacter);
-				playAnim('idle');
-
-				width -= 100;
-				height -= 100;
-
-				flipX = true;
-				barColor = 0xFF31b0d1;
-				antialiasing = false;
-
-			case 'bf-pixel-opponent':
-				frames = Paths.getSparrowAtlas('characters/bfPixel', 'shared');
-				quickAnimAdd('idle', 'BF IDLE');
-				quickAnimAdd('singUP', 'BF UP NOTE');
-				quickAnimAdd('singRIGHT', 'BF LEFT NOTE');
-				quickAnimAdd('singLEFT', 'BF RIGHT NOTE');
-				quickAnimAdd('singDOWN', 'BF DOWN NOTE');
-
-				setGraphicSize(Std.int(width * 7));
 				updateHitbox();
 
 				loadOffsetFile(curCharacter);
@@ -703,7 +691,7 @@ class Character extends FlxSprite
 		animOffsets[name] = [x, y];
 	}
 
-	private function loadOffsetFile(offsetCharacter:String)
+	public function loadOffsetFile(offsetCharacter:String)
 	{
 		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file("images/characters/character-offsets/" + offsetCharacter + "Offsets.txt"));
 		
