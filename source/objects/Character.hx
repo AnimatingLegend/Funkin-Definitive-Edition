@@ -555,7 +555,7 @@ class Character extends FlxSprite
 
 	override function update(elapsed:Float)
 	{
-		if (!isPlayer || !debugMode)
+		if (!isPlayer)
 		{
 			if (animation.curAnim.name.startsWith('sing'))
 			{
@@ -568,8 +568,15 @@ class Character extends FlxSprite
 				holdTimer = 0;
 			}
 
-			if (animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null) {
-				playAnim(animation.curAnim.name + '-loop');
+			/**
+				* adding this if condition here SHOULD help with mom-car & bf-car not going back to their idle poses
+				* apparently this has been an issue since v0.3.0 but ive never noticed it until now :sob:
+			**/
+			if (!debugMode)
+			{
+				if (animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null) {
+					playAnim(animation.curAnim.name + '-loop');
+				}
 			}
 		}
 
