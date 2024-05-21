@@ -229,12 +229,12 @@ class TitleState extends MusicBeatState
 		credTextShit.screenCenter();
 		
 		ngSpr = new FlxSprite(0, FlxG.height * 0.55);
-		if (FlxG.random.bool(0.1)) // 1 / 1000 chance of this asset popping up
+		if (FlxG.random.bool(50)) // 1 / 50th chance of this asset popping up
 		{
 			ngSpr.loadGraphic(Paths.image('newgrounds_logo_animated'), true, 600);
 			ngSpr.animation.add('idle', [0, 1], 4);
 			ngSpr.animation.play('idle');
-			ngSpr.setGraphicSize(Std.int(ngSpr.width * 0.55));
+			ngSpr.setGraphicSize(Std.int(ngSpr.width * 0.4));
 			ngSpr.y += 25;
 		}
 		else
