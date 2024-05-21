@@ -555,7 +555,7 @@ class Character extends FlxSprite
 
 	override function update(elapsed:Float)
 	{
-		if (!isPlayer)
+		if (!isPlayer || !debugMode)
 		{
 			if (animation.curAnim.name.startsWith('sing'))
 			{
@@ -567,12 +567,10 @@ class Character extends FlxSprite
 				dance();
 				holdTimer = 0;
 			}
-		}
 
-		if (!debugMode)
-		{
-			if(animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null)
+			if (animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null) {
 				playAnim(animation.curAnim.name + '-loop');
+			}
 		}
 
 		switch (curCharacter)
