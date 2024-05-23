@@ -43,7 +43,7 @@
 
 	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web"/>
 	<assets path="assets/preload" rename="assets" exclude="*.mp3" unless="web"/>
-	
+ 
 	<define name="PRELOAD_ALL" unless="web" />
 	<define name="NO_PRELOAD_ALL" unless="PRELOAD_ALL"/>
 	
@@ -58,6 +58,7 @@
 		<library name="week5"    preload="true" />
 		<library name="week6"    preload="true" />
 		<library name="week7"    preload="true" />
+		<library name="videos"   preload="true" />
 	</section>
 	
 	<section if="NO_PRELOAD_ALL">
@@ -71,6 +72,7 @@
 		<library name="week5"    preload="false" />
 		<library name="week6"    preload="false" />
 		<library name="week7"    preload="false" />
+		<library name="videos"   preload="false" />
 	</section>
 	
 	<assets path="assets/songs"    library="songs"    exclude="*.fla|*.ogg" if="web"/>
@@ -108,8 +110,8 @@
 	<haxedev set='webgl' />
 
 	<!--In case you want to use the addons package-->
+	<haxelib name="hscript"/>
 	<haxelib name="flixel-addons" />
-	<haxelib name="hscript" />
 
 	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui" />
@@ -117,7 +119,10 @@
 	<haxelib name="faxe" if='switch'/>
 	<haxelib name="polymod"/>
 	<haxelib name="discord_rpc" if="desktop"/>
-	<haxelib name="hxcpp-debug-server" if="desktop"/>
+	<haxelib name="actuate" />
+	<haxelib name="extension-webm"/>
+	<haxelib name="hxCodec"/>
+	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 

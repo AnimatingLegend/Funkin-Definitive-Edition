@@ -22,6 +22,9 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
+import states.TitleState;
+import backend.Paths;
+
 using StringTools;
 
 class Caching extends MusicBeatState

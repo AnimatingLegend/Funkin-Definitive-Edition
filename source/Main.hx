@@ -1,5 +1,6 @@
 package;
 
+import webm.WebmPlayer;
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
@@ -8,12 +9,9 @@ import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import flixel.FlxG;
-import ui.FPSCounter;
 import flixel.text.FlxText.FlxTextBorderStyle;
 
-#if html5
-import lime.graphics.Image;
-#end
+import ui.FPSCounter;
 
 #if CRASH_HANDLER
 import openfl.events.UncaughtErrorEvent;
@@ -31,7 +29,7 @@ class Main extends Sprite
 {
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	var initialState:Class<FlxState> = TitleState; // The FlxState the game starts with.
+	var initialState:Class<FlxState> = states.TitleState; // The FlxState the game starts with.
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 	var framerate:Int = 120; // How many frames per second the game should run at.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
@@ -94,6 +92,28 @@ class Main extends Sprite
 
 		addChild(game);
 
+		var videoWarning:String = 'assets/videos/DO NOT DELETE OR GAME WILL BREAK/dontDelete.webm';
+
+		#if web
+        var str1:String = "HTML CRAP";
+        var vHandler = new VideoHandler();
+        vHandler.init1();
+        vHandler.video.name = str1;
+        addChild(vHandler.video);
+        vHandler.init2();
+        cutscenes.GlobalVideo.setVid(vHandler);
+        vHandler.source(videoWarning);
+        #elseif desktop
+		WebmPlayer.SKIP_STEP_LIMIT = 90; // haxelib git extension-webm https://github.com/ThatRozebudDude/extension-webm
+        var str1:String = "WEBM SHIT"; 
+        var webmHandle = new cutscenes.WebmHandler();
+        webmHandle.source(videoWarning);
+        webmHandle.makePlayer();
+        webmHandle.webm.name = str1;
+        addChild(webmHandle.webm);
+		cutscenes.GlobalVideo.setWebm(webmHandle);
+        #end 
+
 		#if !mobile
 		if(FlxG.save.data.fps == null) FlxG.save.data.fps = true;
 		fpsCounter = new FPSCounter(10, 3, FlxTextBorderStyle.OUTLINE);
@@ -102,7 +122,8 @@ class Main extends Sprite
 		#end
 
 		#if html5
-		var icon = Image.fromFile("icon.png");
+		FlxG.autoPause = false;
+		FlxG.mouse.visible = false;
 		#end
 
 		#if CRASH_HANDLER
@@ -115,8 +136,28 @@ class Main extends Sprite
 
 	var game:FlxGame;
 	var fpsCounter:FPSCounter;
+
 	public function toggleFPS(fpsEnabled:Bool):Void {
 		fpsCounter.visible = fpsEnabled;
+	}
+
+	// taken from kade engine :]
+	public static function dumpCache()
+	{
+		///* SPECIAL THANKS TO HAYA
+		@:privateAccess
+		for (key in FlxG.bitmap._cache.keys())
+		{
+			var obj = FlxG.bitmap._cache.get(key);
+			if (obj != null)
+			{
+				Assets.cache.removeBitmapData(key);
+				FlxG.bitmap._cache.remove(key);
+				obj.destroy();
+			}
+		}
+		Assets.cache.clear("songs");
+		// */
 	}
 
 	#if CRASH_HANDLER

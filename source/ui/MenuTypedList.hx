@@ -69,7 +69,7 @@ class MenuTypedList<T:MenuItem> extends FlxTypedGroup<T>
 		super.update(elapsed);
 		if (enabled && !busy)
 		{
-			var controls:Controls = PlayerSettings.player1.controls;
+			var controls:Controls = backend.PlayerSettings.player1.controls;
 			var wrapHorizontal:Bool;
 			var wrapVertical:Bool;
 			var nextIndex:Int;

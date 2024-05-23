@@ -290,7 +290,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Kickstarter asset should pop up when you beat Week7
 - More Botplay fixes
 ------------------------------------------------------------
-## [0.4.2]
+## [0.4.2] - [3/9/24]
 
 ### Added
 - (Re)Added censorship to tank week cutscenes
@@ -312,3 +312,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Censored version of the roses dialogue
+------------------------------------------------------------
+## [0.5.0] - [5/23/24]
+
+### Added
+- (Re)Added Roses censored dialogue
+- New Options (Auto Pause, Cutscenes, Disable Reset Button)
+- NG title easter egg !!! (you have an 1 in 100th chance of seeing it)
+- Video (`.Webm`) Support for Desktop Builds (taken from [Tricky v2 Mod](https://github.com/Kade-github/trickster))
+- Highest Combo to the judgement counter
+- Cool HUD transition at the end of 'winter-horrorland' cutscene 7 the tank week flxanimate cutscenes
+
+### Changed
+- Complete source code overhaul !!! (Better Optimization, Organized Files, and it's just more easier to work with)
+- The `.Webm` versions of the Week 7 cutscenes will play if you have the 'Cutscene' option disabled
+- Tweaked the singDuration for dad, gf, and spooky assets
+- Major Combo Changes
+  - Your combo now starts count at 10 instead of 1
+  - If you get a 'bad' or a 'shit' rating, then your lose your combo 
+  - The combo asset only appears if you lose your combo
+- Note & Health Stuff
+  - Health lerp stuff (cool and awesome healthbar tweening)
+- TONS of backend changes
+
+### Fixed
+- Week 2 & Week 3 Stage flashing you when you have the flashing lights option disabled
+- Weird Sound transition from `ControlsSubState.hx` to `OptionsMenuState.hx`
+- Input System Issues
+  - Issue where the input system stops registering hits after you miss a note
+- Issue where monsters sprites were flipped
+- Issue where bfs car varient loop doesnt end after he hits a note
+
+### Removed
+- Ratings to HUD option (its just a default thing now)
+- ComboBreak Asset
