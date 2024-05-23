@@ -23,8 +23,12 @@ As you can see a lot has been getting changed around for the past couple of days
 ## cutscenes
 ### These Files Include:
 - Dialogue.hx
-- FlxVideo.hx
+- GameDimensions.hx
+- GlobalVideo.hx
 - TankCutscene.hx
+- VideoHandler.hx
+- VideoState.hx
+- WebmHandler.hx
 
 ## objects
 ### Basically, anything that has to do with assets is in this folder. these files include:
@@ -67,7 +71,6 @@ As you can see a lot has been getting changed around for the past couple of days
 - PlayState.hx (the most important one)
 - StoryMenuState.hx
 - TitleState.hx
-- Video State.hx
 
 ## ui
 ### Anything that has to the with funkins user interface, we got it in here lmao. These files include:

@@ -65,43 +65,6 @@ Everything you see in this engine was used in my [Week 7 Port](https://github.co
 ### Gameplay
 ![fnf-gameplay](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/assets/83415030/546aced4-6c30-4d3f-93ed-a70fb06314ca)
 
-## Installation Shit
-First, you need to install Haxe and HaxeFlixel. I'm too lazy to write and keep updated with that setup (which is pretty simple). 
-1. [Install Haxe 4.1.5](https://haxe.org/download/version/4.1.5/) (Download 4.1.5 instead of 4.2.0 because 4.2.0 is broken and is not working with gits properly...)
-2. [Install HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/) after downloading Haxe
 
-Other installations you'd need are the additional libraries, a fully updated list will be in `Project.xml` in the project root. Currently, these are all of the things you need to install:
-```
-flixel
-flixel-addons
-flixel-ui
-hscript
-newgrounds
-```
-If you want to add videos into the game then you can add these to the cmd windows also
-```
-haxelib install actuate
-haxelib git extension-webm https://github.com/KadeDev/extension-webm
-lime rebuild extension-webm windows
-```
-
-**Ignored Git & Compiling Files**
-I gitignore the API keys for the game so that no one can nab them and post fake high scores on the leaderboards. But because of that the game
-doesn't compile without it.
-
-Just make a file in `/source` and call it `APIStuff.hx`, and copy & paste this into it
-
-```haxe
-package;
-
-class APIStuff
-{
-	inline public static var API:String = "51348:TtzK0rZ8";
-	inline public static var EncKey:String = "5NqKsSVSNKHbF9fPgZPqPg==";
-	inline public static var SESSION:String = null;
-}
-
-```
-if you want to learn more about compiling this game then [read here!](https://github.com/ninjamuffin99/Funkin/blob/master/README.md#compiling-game)
-
-
+### Building the game
+if you want to learn how to compile the game on your own then [click here]()!
