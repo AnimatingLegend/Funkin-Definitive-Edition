@@ -67,4 +67,4 @@ Everything you see in this engine was used in my [Week 7 Port](https://github.co
 
 
 ### Building the game
-if you want to learn how to compile the game on your own then [click here]()!
+if you want to learn how to compile the game on your own then [click here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/blob/experimental/docs/guides/building.md)!
