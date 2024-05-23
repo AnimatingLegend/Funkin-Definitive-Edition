@@ -217,15 +217,17 @@ class Character extends FlxSprite
 				quickAnimAdd('idle', 'monster idle');
 				quickAnimAdd('singUP', 'monster up note');
 				quickAnimAdd('singDOWN', 'monster down');
-				quickAnimAdd('singLEFT', 'Monster left note');
-				quickAnimAdd('singRIGHT', 'Monster Right note');
+				// the poses are flipped ya idiot !!!!
+				quickAnimAdd('singLEFT', 'Monster Right note');
+				quickAnimAdd('singRIGHT', 'Monster left note');
 
 				// loop anims
 				animation.addByIndices('idle-loop', 'monster idle', [10, 11, 12, 13], '', 24, true);
 				animation.addByIndices('singUP-loop', 'monster up note', [10, 11, 12, 13], '', 24, true);
 				animation.addByIndices('singDOWN-loop', 'monster down', [10, 11, 12, 13], '', 24, true);
-				animation.addByIndices('singLEFT-loop', 'monster left note', [10, 11, 12, 13], '', 24, true);
-				animation.addByIndices('singRIGHT-loop', 'monster Right note', [10, 11, 12, 13], '', 24, true);
+				// the poses are flipped ya idiot !!!!
+				animation.addByIndices('singLEFT-loop', 'monster Right note', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singRIGHT-loop', 'monster left note', [10, 11, 12, 13], '', 24, true);
 
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
@@ -237,15 +239,17 @@ class Character extends FlxSprite
 				quickAnimAdd('idle', 'monster idle');
 				quickAnimAdd('singUP', 'monster up note');
 				quickAnimAdd('singDOWN', 'monster down');
-				quickAnimAdd('singLEFT', 'Monster left note');
-				quickAnimAdd('singRIGHT', 'Monster Right note');
+				// the poses are flipped ya idiot !!!!
+				quickAnimAdd('singLEFT', 'Monster Right note');
+				quickAnimAdd('singRIGHT', 'Monster left note');
 
 				// loop anims
 				animation.addByIndices('idle-loop', 'monster idle', [10, 11, 12, 13], '', 24, true);
 				animation.addByIndices('singUP-loop', 'monster up note', [10, 11, 12, 13], '', 24, true);
 				animation.addByIndices('singDOWN-loop', 'monster down', [10, 11, 12, 13], '', 24, true);
-				animation.addByIndices('singLEFT-loop', 'monster left note', [10, 11, 12, 13], '', 24, true);
-				animation.addByIndices('singRIGHT-loop', 'monster Right note', [10, 11, 12, 13], '', 24, true);
+				// the poses are flipped ya idiot !!!!
+				animation.addByIndices('singLEFT-loop', 'monster Right note', [10, 11, 12, 13], '', 24, true);
+				animation.addByIndices('singRIGHT-loop', 'monster left note', [10, 11, 12, 13], '', 24, true);
 
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
@@ -568,13 +572,21 @@ class Character extends FlxSprite
 				holdTimer = 0;
 			}
 
-			/**
-				* adding this if condition here SHOULD help with mom-car & bf-car not going back to their idle poses
-				* apparently this has been an issue since v0.3.0 but ive never noticed it until now :sob:
-			**/
-			if (!debugMode)
+			// some characters need to hold their poses longer because it looks weird to me....
+			switch (curCharacter)
 			{
-				if (animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null) {
+				case 'dad':
+					singDuration = 6.1;
+				case 'gf' | 'spooky':
+					singDuration = 4.2; // to fix the double dances
+			}
+		}
+
+		if (!debugMode)
+		{
+			if (animation.getByName(animation.curAnim.name + '-loop') != null) 
+			{
+				if (animation.curAnim.finished) {
 					playAnim(animation.curAnim.name + '-loop');
 				}
 			}

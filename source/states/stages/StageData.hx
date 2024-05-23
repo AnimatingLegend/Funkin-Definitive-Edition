@@ -17,11 +17,11 @@ using StringTools;
 
 /**
 * Welcome To `StageData.hx`!
-* Basically, to put it in more simpler terms
+* Basically, to put it in more simpler terms all the backend stuff for stages goes here, from songs, to the characters position on stages.
 * Its Pretty jank rn, but as time moves forward it will probably be more polished and easier to understand :]
 
-** INSTRUCTIONS **
-* `songData()` - Add a song 
+** FUNCTION BREAK DOWN **
+* `songData()` - Add a list of songs, and whatever stage you want to preload it to, add that!
 * `charData()` - To sum it up, this basically preloads the character, and the positioning of the stage they are on.
 * `gfData()`   - This is literally `charData()` but only for the gf assets.
 **/
@@ -177,5 +177,7 @@ class StageData extends MusicBeatState
 					PlayState.gf.y -= 75;
 				}
 		}
+
+		
 	}
 }

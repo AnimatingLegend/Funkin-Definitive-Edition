@@ -1,6 +1,9 @@
 # Building The Game
 
-*Warning: In order compile the game for Windows you will need 6GB+ of space, so if you have NO space left then you should clear up some space !*
+### Warning
+**In order compile the game for Windows you will need 6GB+ of space, so if you have NO space left then you should clear up some space !**
+
+**Also note that this is a guide to build the game on your own. If you just want to play Funkin-Definitive-Edition then [download it here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases) or [play on browser](animatinglegend.github.io). But if you want to build the game yourself, then continue reading.**
 
 ### Stuff Needed
 - [Git](https://git-scm.com/) (required)
@@ -37,7 +40,10 @@ lime rebuild extension-webm windows
 ```
 
 ### Compiling the game
-If everthing is installed perfectly then you should be able to compile the game nicely. You just need to run ```lime test html5 -debug``` to build the HTML5 version of the game. if you want to run the game on desktop then you can do ```lime test <ie. windows, linux, mac>```. The build will be in ```Funkin-Definitive-Edition/export/<target>/bin``` (target being the desktop the game was built in. ie. ```Funkin-Definitive-Edition/export/windows/bin```)
+If everthing is installed perfectly then you are ready to compile the game! Follow these steps on how to do it:
+- Run ```lime test <target>```, replacing ```<target>``` with the platform you want to build your game in like ```windows```, ```mac```, ```linux```, & ```html5```. (ie. ```lime test windows```)
+- *side note* - If you want to run the debug build of the game, then follow step 1 but put ```-debug``` after it. (ie. ```lime test windows -debug```)
+- The build will be in ```Funkin-Definitive-Edition/export/release/<target>/bin```, with ```<target>``` also being the platform you're building the game in. (ie ```Funkin-Definitive-Edition/export/windows/release/bin```)
 
 ### Additional Guides
 If you want a better guide on how to use the command line then follow [ninjamuffin's haxeflixel tips guide](https://ninjamuffin99.newgrounds.com/news/post/1090480).

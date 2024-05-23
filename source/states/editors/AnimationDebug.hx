@@ -88,7 +88,7 @@ class AnimationDebug extends MusicBeatState
 		camHUD.bgColor.alpha = 0;
 		FlxG.cameras.add(camHUD);
 
-	//	FlxCamera.defaultCameras = [camOther];
+		FlxCamera.defaultCameras = [camOther];
 
 		// Stage Shit
 		var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stage/stageback', 'shared'));

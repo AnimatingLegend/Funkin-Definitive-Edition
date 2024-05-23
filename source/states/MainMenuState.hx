@@ -38,7 +38,7 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	public static var definitiveVersion:String = '0.4.2';
+	public static var definitiveVersion:String = '0.5.0';
 
 	override function create()
 	{
@@ -82,9 +82,7 @@ class MainMenuState extends MusicBeatState
 		magenta.antialiasing = FlxG.save.data.antialiasing;
 		magenta.color = 0xFFFD719B;
 		if (FlxG.save.data.flashingLights)
-		{
 			add(magenta);
-		}
 
 		menuItems = new MainMenuList();
 		add(menuItems);
