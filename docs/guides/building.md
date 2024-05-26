@@ -3,7 +3,7 @@
 ### Warning
 **In order compile the game for Windows you will need 6GB+ of space, so if you have NO space left then you should clear up some space !**
 
-**Also note that this is a guide to build the game on your own. If you just want to play Funkin-Definitive-Edition then [download it here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases) or [play on browser](animatinglegend.github.io). But if you want to build the game yourself, then continue reading.**
+**Also note that this is a guide to build the game on your own. If you just want to play Funkin-Definitive-Edition then [download it here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases) or [play on browser](https://animatinglegend.github.io/). But if you want to build the game yourself, then continue reading.**
 
 ### Stuff Needed
 - [Git](https://git-scm.com/) (required)
