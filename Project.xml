@@ -100,7 +100,7 @@
 	<define name="CRASH_HANDLER" if="desktop" />
 
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
-	<assets path='art/FDE-CHANGELOG.md' rename='changelog.txt' />
+	<assets path='docs/FDE-CHANGELOG.md' rename='changelog.txt' />
 
 	<assets path="assets/fonts" embed='true'/>
 
