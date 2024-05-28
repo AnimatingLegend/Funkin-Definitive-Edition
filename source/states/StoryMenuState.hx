@@ -1,13 +1,6 @@
 package states;
 
-#if desktop
-import backend.Discord.DiscordClient;
-#end
-import objects.MenuItem;
-import objects.MenuCharacter;
-
-import backend.Highscore;
-
+import flixel.graphics.FlxGraphic;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
@@ -20,6 +13,15 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.net.curl.CURLCode;
+
+import backend.Highscore;
+
+import objects.MenuItem;
+import objects.MenuCharacter;
+
+#if discord_rpc
+import backend.Discord.DiscordClient;
+#end
 
 using StringTools;
 
@@ -82,8 +84,7 @@ class StoryMenuState extends MusicBeatState
 	var sprDifficulty:FlxSprite;
 	var leftArrow:FlxSprite;
 	var rightArrow:FlxSprite;
-
-	var flipX:Bool;
+	var diffsThatExists:Array<String>;
 
 	override function create()
 	{
@@ -109,7 +110,7 @@ class StoryMenuState extends MusicBeatState
 		txtWeekTitle.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, RIGHT);
 		txtWeekTitle.alpha = 0.7;
 
-		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
+		var ui_tex = Paths.getSparrowAtlas('storymenu/ui/campaign_menu_UI_assets');
 		var yellowBG:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFF9CF51);
 
 		grpWeekText = new FlxTypedGroup<MenuItem>();
@@ -170,23 +171,23 @@ class StoryMenuState extends MusicBeatState
 		leftArrow.animation.addByPrefix('idle', "arrow left");
 		leftArrow.animation.addByPrefix('press', "arrow push left");
 		leftArrow.animation.play('idle');
+		leftArrow.antialiasing = FlxG.save.data.antialiasing;
 		difficultySelectors.add(leftArrow);
 
-		sprDifficulty = new FlxSprite(leftArrow.x + 130, leftArrow.y);
-		sprDifficulty.frames = ui_tex;
-		sprDifficulty.animation.addByPrefix('easy', 'EASY');
-		sprDifficulty.animation.addByPrefix('normal', 'NORMAL');
-		sprDifficulty.animation.addByPrefix('hard', 'HARD');
-		sprDifficulty.animation.play('easy');
+		sprDifficulty = new FlxSprite(0, leftArrow.y);
+		sprDifficulty.antialiasing = FlxG.save.data.antialiasing;
+
+		cleanDifficulties();
 		changeDifficulty();
 
 		difficultySelectors.add(sprDifficulty);
 
-		rightArrow = new FlxSprite(sprDifficulty.x + sprDifficulty.width + 50, leftArrow.y);
+		rightArrow = new FlxSprite(leftArrow.x + sprDifficulty.width + 68, leftArrow.y);
 		rightArrow.frames = ui_tex;
 		rightArrow.animation.addByPrefix('idle', 'arrow right');
 		rightArrow.animation.addByPrefix('press', "arrow push right", 24, false);
 		rightArrow.animation.play('idle');
+		rightArrow.antialiasing = FlxG.save.data.antialiasing;
 		difficultySelectors.add(rightArrow);
 
 		trace("Line 150");
@@ -349,28 +350,80 @@ class StoryMenuState extends MusicBeatState
 		}
 	}
 
+	/**
+		* lord please forgive me for my sins....
+		* this is obviously subject to change, but its gonna stay like this for a little bit :/
+	**/
+	function cleanDifficulties()
+	{
+		var diffList:Array<String> = CoolUtil.coolTextFile(Paths.txt('weeksDifficulties'));
+		diffsThatExists = [];
+
+		try
+		{
+			// yandere dev moment :(
+
+			var splitDiffs:Array<String> = diffList[curWeek].split(':');
+
+			if (splitDiffs[0].contains('easy'))
+				diffsThatExists.push('easy');
+			else if (splitDiffs[0].contains('normal'))
+				diffsThatExists.push('normal');
+			else if (splitDiffs[0].contains('hard'))
+				diffsThatExists.push('hard');
+
+			if (splitDiffs[1].contains('easy'))
+				diffsThatExists.push('easy');
+			else if (splitDiffs[1].contains('normal'))
+				diffsThatExists.push('normal');
+			else if (splitDiffs[1].contains('hard'))
+				diffsThatExists.push('hard');
+
+			if (splitDiffs[2].contains('easy'))
+				diffsThatExists.push('easy');
+			else if (splitDiffs[2].contains('normal'))
+				diffsThatExists.push('normal');
+			else if (splitDiffs[2].contains('hard'))
+				diffsThatExists.push('hard');
+		}
+		catch (e)
+		{
+			FlxG.log.warn(e);
+		}
+
+		if (diffsThatExists.length == 0)
+			diffsThatExists = ["easy", "normal", "hard"];
+	}
+
+	var tweenDifficulty:FlxTween;
+
 	function changeDifficulty(change:Int = 0):Void
 	{
 		curDifficulty += change;
 
 		if (curDifficulty < 0)
-			curDifficulty = 2;
-		if (curDifficulty > 2)
+			curDifficulty = diffsThatExists.length - 1;
+		if (curDifficulty > diffsThatExists.length - 1)
 			curDifficulty = 0;
 
-		sprDifficulty.offset.x = 0;
+		var newImage:FlxGraphic = Paths.loadImage('storymenu/difficulties/${diffsThatExists[curDifficulty]}');
 
-		switch (curDifficulty)
+		if (sprDifficulty.graphic != newImage)
 		{
-			case 0:
-				sprDifficulty.animation.play('easy');
-				sprDifficulty.offset.x = 20;
-			case 1:
-				sprDifficulty.animation.play('normal');
-				sprDifficulty.offset.x = 70;
-			case 2:
-				sprDifficulty.animation.play('hard');
-				sprDifficulty.offset.x = 20;
+			sprDifficulty.loadGraphic(newImage);
+			sprDifficulty.x = leftArrow.x + 60;
+			sprDifficulty.x += (308 - sprDifficulty.width) / 3;
+			sprDifficulty.alpha = 0;
+			sprDifficulty.y = leftArrow.y - 15;
+
+			if (tweenDifficulty != null)
+				tweenDifficulty.cancel();
+			tweenDifficulty = FlxTween.tween(sprDifficulty, {y: leftArrow.y + 15, alpha: 1}, 0.07, {
+				onComplete: function(twn:FlxTween)
+				{
+					tweenDifficulty = null;
+				}
+			});
 		}
 
 		sprDifficulty.alpha = 0;
@@ -393,9 +446,11 @@ class StoryMenuState extends MusicBeatState
 	{
 		curWeek += change;
 
+		cleanDifficulties();
+		changeDifficulty();
+
 		if (curWeek >= weekData().length)
 			curWeek = 0;
-
 		if (curWeek < 0)
 			curWeek = weekData().length - 1;
 

@@ -167,6 +167,35 @@ class Paths
 		return getPath('images/$key.png', IMAGE, library);
 	}
 
+	static public function loadImage(key:String, ?library:String):FlxGraphic 
+	{
+		var path = image(key, library);
+
+		#if desktop
+		if (Caching.bitmapData != null)
+		{
+			if (Caching.bitmapData.exists(key))
+			{
+				trace('Loading image from bitmap cache: $key');
+				
+				// Get data from cache.
+				return Caching.bitmapData.get(key);
+			}
+		}
+		#end
+
+		if (OpenFlAssets.exists(path, IMAGE))
+		{
+			var bitmap = OpenFlAssets.getBitmapData(path);
+			return FlxGraphic.fromBitmapData(bitmap);
+		}
+		else
+		{
+			FlxG.log.warn('Could not find image at path $path');
+			return null;
+		}
+	}
+
 	inline static public function font(key:String)
 	{
 		return 'assets/fonts/$key';
