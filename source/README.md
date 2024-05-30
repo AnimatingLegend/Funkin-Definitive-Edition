@@ -74,24 +74,12 @@ As you can see a lot has been getting changed around for the past couple of days
 
 ## ui
 ### Anything that has to the with funkins user interface, we got it in here lmao. These files include:
-- AtlasChar.hx
-- AtlasFont.hx
 - AtlasMenuItem.hx
-- AtlasMenuList.hx
-- AtlasText.hx
-- ButtonStyle.hx
-- Case.hx
 - FPSCounter.hx
 - InputItem.hx
 - MenuItem.hx
 - MenuTypedItem.hx
 - NavControls.hx
-- Page.hx
-- PageName.hx
-- Prompt.hx
-- TextMenuItem.hx
-- TextMenuList.hx
-- TextTypedMenuItem.hx
 - WrapMode.hx
 
 ## unused
