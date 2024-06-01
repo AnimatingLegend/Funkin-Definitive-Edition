@@ -10,6 +10,8 @@ import sys.FileSystem;
 #end
 import flixel.math.FlxPoint;
 
+import openfl.Lib;
+
 import objects.Character;
 import objects.Boyfriend;
 import objects.Boyfriend.Pico;
@@ -17,10 +19,7 @@ import objects.Boyfriend.Pico;
 
 using StringTools;
 /**
-* DISCLAIMER - IMPORTANT STATE (well one of them, think of this as a Main.hx part 2 but instead of using components trying to build the game its components IN the game to make it run better and more easier to navigate and use.)
-* Settings()  - False = not enabled by default | True = enabled by default
-
-* STAGE STUFF MOVED TO `Stage.hx`
+* Stuff here is subject to change.
 **/
 
 @:structInit class SaveVariables {
@@ -51,12 +50,8 @@ class DefinitiveData
 		if(FlxG.save.data.scrollSpeed == null)
 			FlxG.save.data.scrollSpeed = 1;
 		
-		#if (html5 && !switch)
 		if(FlxG.save.data.framerateDraw == null)
 			FlxG.save.data.framerateDraw = 120;
-
-		FlxG.autoPause = DefinitiveData.prefs.autoPause;
-		#end
 
 		// baby proof so you can't hard lock your copy of this engine
 		if (FlxG.save.data.framerateDraw > 240 || FlxG.save.data.framerateDraw < 60)

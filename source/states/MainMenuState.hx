@@ -103,7 +103,9 @@ class MainMenuState extends MusicBeatState
 		if (!FlxG.save.data.weekUnlocked || StoryMenuState.weekUnlocked[7])
 		{
 			menuItems.createItem(null, null, "kickstarter", selectDonate, true);
-		} else {
+		} 
+		else 
+		{
 			menuItems.createItem(null, null, "donate", selectDonate, true);
 		}
 		menuItems.createItem(0, 0, "options", function()

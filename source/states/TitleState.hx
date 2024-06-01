@@ -97,6 +97,10 @@ class TitleState extends MusicBeatState
 
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
+		#if desktop
+		FlxG.game.focusLostFramerate = 60;
+		#end
+
 		DefinitiveData.settings();
 		PlayerSettings.init();
 		Highscore.load();
@@ -111,6 +115,14 @@ class TitleState extends MusicBeatState
 			StoryMenuState.weekUnlocked = StoryMenuState.unlockWeeks();
 			FlxG.save.flush();
 		}
+		
+		#if desktop
+		if(FlxG.save.data.framerateDraw != null)
+		{
+			FlxG.updateFramerate = FlxG.save.data.framerateDraw;
+			FlxG.drawFramerate = FlxG.save.data.framerateDraw;
+		}
+		#end
 
 		if (FlxG.keys.justPressed.F)
 			FlxG.fullscreen = !FlxG.fullscreen;
@@ -410,7 +422,6 @@ class TitleState extends MusicBeatState
 
 		if(gfDance != null && gfDance.animation != null) 
 		{
-
 			if (danceLeft)
 				gfDance.animation.play('danceRight');
 			else

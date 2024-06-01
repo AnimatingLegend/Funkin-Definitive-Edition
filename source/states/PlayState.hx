@@ -214,7 +214,7 @@ class PlayState extends MusicBeatState
 	// how big to stretch the pixel art assets
 	public static var daPixelZoom:Float = 6;
 
-	var inCutscene:Bool = false;
+	public static var inCutscene:Bool = false;
 
 	// Ratings shit
 	public static var sicks:Int = 0;
@@ -859,7 +859,6 @@ class PlayState extends MusicBeatState
 							pico.playAnim('idle', true);
 						}
 
-
 						new FlxTimer().start(0.6, function(tmr:FlxTimer) 
 						{
 							remove(whiteScreen);
@@ -870,6 +869,8 @@ class PlayState extends MusicBeatState
 								{
 									startCountdown();
 									camHUD.visible = true;
+									camHUD.alpha = 0;
+									FlxTween.tween(camHUD, {alpha: 1}, 1, {ease: FlxEase.quadInOut, onComplete: function(twn:FlxTween){camHUD.visible = true; camHUD.alpha = 1;}});
 								}
 							});
 						});
@@ -1025,6 +1026,7 @@ class PlayState extends MusicBeatState
 	public var tankIntroEnd:Bool = false;
 	function tankIntro():Void
 	{
+		inCutscene = true;
 		var dummyGF:FlxSprite = new FlxSprite(210, 70);
 
 		dad.visible = false;
@@ -1049,7 +1051,7 @@ class PlayState extends MusicBeatState
 		switch (SONG.song.toLowerCase()) 
 		{
 			case 'ugh':
-				inCutscene = true;
+			//	inCutscene = true;
 				camHUD.visible = false;
 				caching('wellWellWell', 'sound', 'week7');
 				caching('killYou', 'sound', 'week7');
@@ -1116,7 +1118,7 @@ class PlayState extends MusicBeatState
 				});
 			
 			case 'guns':
-				inCutscene = true;
+			//	inCutscene = true;
 				new FlxTimer().start(0.5, function(tmr:FlxTimer)
 				{
 					FlxTween.tween(camHUD, {alpha: 0}, 1, {
@@ -1188,7 +1190,7 @@ class PlayState extends MusicBeatState
 				});
 
 			case 'stress':
-				inCutscene = true;
+			//	inCutscene = true;
 				caching('stressCutscene', 'sound', 'week7');
 
 				dad.alpha = 0.0001;
@@ -1880,6 +1882,8 @@ class PlayState extends MusicBeatState
 
 			if (!startTimer.finished)
 				startTimer.active = false;
+
+			paused = true;
 		}
 
 		super.openSubState(SubState);
@@ -1891,10 +1895,13 @@ class PlayState extends MusicBeatState
 		{
 			if (FlxG.sound.music != null && !startingSong) {
 				resyncVocals();
+			} else if (inCutscene) {
+
 			}
 
 			if (!startTimer.finished)
 				startTimer.active = true;
+
 			paused = false;
 
 			#if discord_rpc
@@ -2012,6 +2019,17 @@ class PlayState extends MusicBeatState
 			#if discord_rpc
 			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 			#end
+		}
+		else if (inCutscene)
+		{
+			if (controls.PAUSE && canPause)
+			{
+				persistentUpdate = false;
+				persistentDraw = true;
+				paused = true;
+
+				openSubState(new substates.PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+			}
 		}
 
 		if (FlxG.keys.justPressed.SEVEN) 
@@ -2441,9 +2459,9 @@ class PlayState extends MusicBeatState
 						switch(SONG.song.toLowerCase())
 						{
 							case 'guns':
-								LoadingState.loadAndSwitchState(new cutscenes.VideoState("assets/videos/cutscenes/guns_cutscene.webm", new PlayState()));
+								LoadingState.loadAndSwitchState(new cutscenes.VideoState("assets/videos/week7/guns_cutscene.webm", new PlayState()));
 							case 'stress':
-								LoadingState.loadAndSwitchState(new cutscenes.VideoState("assets/videos/cutscenes/stress_cutscene.webm", new PlayState()));
+								LoadingState.loadAndSwitchState(new cutscenes.VideoState("assets/videos/week7/stress_cutscene.webm", new PlayState()));
 							default:
 								LoadingState.loadAndSwitchState(new PlayState());
 						}
@@ -2492,18 +2510,6 @@ class PlayState extends MusicBeatState
 			noteDiff = -(daNote.strumTime - Conductor.songPosition);
 		else
 			noteDiff = Conductor.safeZoneOffset; // Assumed SHIT if no note was given
-		
-		
-		if (daNote != null)
-			noteDiff = -(daNote.strumTime - Conductor.songPosition);
-		else
-			noteDiff = Conductor.safeZoneOffset;
-
-
-		if (daNote != null)
-			noteDiff = -(daNote.strumTime - Conductor.songPosition);
-		else
-			noteDiff = Conductor.safeZoneOffset;
 
 		vocals.volume = 1;
 
