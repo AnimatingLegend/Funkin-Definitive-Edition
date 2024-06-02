@@ -1,6 +1,10 @@
 package;
 
+#if desktop
 import webm.WebmPlayer;
+#else
+import cutscenes.VideoHandler;
+#end
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
