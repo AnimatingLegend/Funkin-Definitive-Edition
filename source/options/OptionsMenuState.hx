@@ -57,6 +57,7 @@ class OptionsMenuState extends MusicBeatState
 			new JudgemntOption("If checked, it displays your judgements/ratings throughout the song."),
 			new HideHudOption('If checked, it hides most of your game UI.'),
 			new NotesplashOption("If unchecked, hitting 'Sick!' notes won't show firework particles."),
+			new WatermarkOption("If unchecked,  "),
 			new OpponentLightStrums("If unchecked, your opponents note strums won't light up whenever its their turn to sing."),
 			new LaneTransOption("Use your left & right arrow keys to switch the transparacny of your lane underlay. [DEFAULT: 0]"),
 		]),

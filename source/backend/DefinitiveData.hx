@@ -110,5 +110,8 @@ class DefinitiveData
 
 		if(FlxG.save.data.cutscenes == null)
 			FlxG.save.data.cutscenes == true;
+
+		if(FlxG.save.data.watermark == null)
+			FlxG.save.data.watermark == true;
     }
 }

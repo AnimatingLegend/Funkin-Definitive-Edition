@@ -601,6 +601,29 @@ class ShaderOption extends Option
 	}
 }
 
+class WatermarkOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.watermark = !FlxG.save.data.watermark;
+		acceptValues = FlxG.save.data.watermark;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Watermark";
+	}
+}
+
 class AutoPauseOption extends Option
 {
 	public function new(desc:String)
