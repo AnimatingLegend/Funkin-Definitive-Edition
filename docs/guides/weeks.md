@@ -84,7 +84,7 @@ public static var weekNames:Array<String> = [
 	];
 ```
 ------------------------------------------------------------
-6. Displaying a week icon for your custom week is as simple as dropping a ```.png``` into ```assets/preload/images/storymenu.``` Rename the file to ```week7.png```, ```week8.png```, etc.
+6. Displaying a week icon for your custom week is as simple as dropping a ```.png``` into ```assets/preload/images/storymenu/titles.``` Rename the file to ```week7.png```, ```week8.png```, etc.
 ------------------------------------------------------------
 ### Example
 ![Screenshot_1](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/assets/83415030/8e1b57a6-928f-4f4d-9138-eb28ff01f275)
