@@ -77,7 +77,7 @@ class OptionsMenuState extends MusicBeatState
 			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
 			new ScrollSpeedOption("Change your scroll speed. (1 = Chart dependent)"),
 			new ResetButtonOption("If checked, pressing 'Reset' won't do anything."),
-			new AutoPauseOption("If checked, the game autmatically pauses if the screen isn't in focus."),
+			new AutoPauseOption("If checked, the game automatically pauses if the screen isn't in focus."),
 		]),
 
 		new OptionCatagory("Saves", [

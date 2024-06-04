@@ -22,14 +22,8 @@ using StringTools;
 * Stuff here is subject to change.
 **/
 
-@:structInit class SaveVariables {
-	public var autoPause:Bool = true;
-}
-
 class DefinitiveData
 {
-	public static var prefs:SaveVariables = {};
-
     public static function settings()
     {
         if(FlxG.save.data.judgementCounter == null)
@@ -113,5 +107,10 @@ class DefinitiveData
 
 		if(FlxG.save.data.watermark == null)
 			FlxG.save.data.watermark == true;
+
+		if (FlxG.save.data.autoPause == null) {
+			FlxG.save.data.autoPause = true;
+			FlxG.autoPause = true;
+		} 
     }
 }

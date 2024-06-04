@@ -637,9 +637,7 @@ class AutoPauseOption extends Option
 		if (changeData)
 		{
 			FlxG.save.data.autoPause = !FlxG.save.data.autoPause;
-
-			// Work in progress of my new settings handler system :]
-			FlxG.autoPause = DefinitiveData.prefs.autoPause;
+			FlxG.autoPause;
 		}
 		
 		acceptValues = FlxG.save.data.autoPause;
