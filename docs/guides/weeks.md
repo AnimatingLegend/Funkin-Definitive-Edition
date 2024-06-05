@@ -80,7 +80,7 @@ public static var weekNames:Array<String> = [
 		"RED SNOW",
 		"Hating Simulator ft. Moawling",
 		"Tankman ft. JohnnyUtah",
-        "Darnell"
+        	"Darnell"
 	];
 ```
 ------------------------------------------------------------
