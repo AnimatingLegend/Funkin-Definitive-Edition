@@ -75,7 +75,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			endBullshit();
 		}
 
-		if (controls.BACK)
+		if (FlxG.keys.justPressed.BACKSPACE || FlxG.keys.justPressed.ESCAPE)
 		{
 			FlxG.sound.music.stop();
 

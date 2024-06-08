@@ -631,20 +631,20 @@ class AutoPauseOption extends Option
 		super();
 		description = desc;
 	}
-	
+ 
 	public override function press(changeData:Bool):Bool
 	{
 		if (changeData)
 		{
-			FlxG.save.data.autoPause = !FlxG.save.data.autoPause;
-			FlxG.autoPause;
+		//	FlxG.save.data.autoPause = !FlxG.save.data.autoPause;
+			FlxG.autoPause = !FlxG.autoPause;
 		}
-		
-		acceptValues = FlxG.save.data.autoPause;
+  
+		acceptValues = FlxG.autoPause;
 		display = updateDisplay();
 		return true;
 	}
-	
+ 
 	private override function updateDisplay():String
 	{
 		return "Auto Pause";
@@ -671,75 +671,6 @@ class ResetButtonOption extends Option
 	private override function updateDisplay():String
 	{
 		return "Disable Reset Button";
-	}
-}
-
-class PracticeOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-	
-	public override function press(changeData:Bool):Bool
-	{
-		if (changeData)
-			FlxG.save.data.practiceMode = !FlxG.save.data.practiceMode;
-		acceptValues = FlxG.save.data.practiceMode;
-		display = updateDisplay();
-		return true;
-	}
-	
-	private override function updateDisplay():String
-	{
-		return "Toggle Practice Mode";
-	}
-}
-
-class InstaKillOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-	
-	public override function press(changeData:Bool):Bool
-	{
-		if (changeData)
-			FlxG.save.data.instaKill = !FlxG.save.data.instaKill;
-		acceptValues = FlxG.save.data.instaKill;
-		display = updateDisplay();
-		return true;
-	}
-	
-	private override function updateDisplay():String
-	{
-		return "InstaKill on Miss";
-	}
-}
-
-class BotPlayOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-	
-	public override function press(changeData:Bool):Bool
-	{
-		if (changeData)
-			FlxG.save.data.botplay = !FlxG.save.data.botplay;
-		acceptValues = FlxG.save.data.botplay;
-		display = updateDisplay();
-		return true;
-	}
-	
-	private override function updateDisplay():String
-	{
-		return "Botplay";
 	}
 }
 

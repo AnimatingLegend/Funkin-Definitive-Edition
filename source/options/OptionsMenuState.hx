@@ -43,13 +43,13 @@ class OptionsMenuState extends MusicBeatState
 			new LowDataOption("If checked, certain assets will be hidden for better performance."),
 			new AntialiasingOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
 			new ShaderOption("If unchecked, certain visual effects will not be displayed.\n[CPU INTENSIVE]"),
+			new AtlasCutsceneOption('If unchecked, your cutscenes will get converted into a video format.'),
 			#if !html5
 			new FramerateOption("Self explanatory. Use your left and right arrow keys to switch between your framerate. [DEFAULT: 120]"), 
 			// HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
 			#end
 			new FPSOption("If unchecked, your fps & memory counter will be hidden."),
 			new FullscreenOption("Check this off if you want the game to be in fullscreen mode"),
-			new AtlasCutsceneOption('If unchecked, your cutscenes will get converted into .MP4 \n[RECOMMENDED]'),
 		]),
 
 		new OptionCatagory("Visuals and UI", [
@@ -62,22 +62,16 @@ class OptionsMenuState extends MusicBeatState
 			new LaneTransOption("Use your left & right arrow keys to switch the transparacny of your lane underlay. [DEFAULT: 0]"),
 		]),
 
-		new OptionCatagory("Modifiers", [
-			new InstaKillOption("Kinda self explanatory... You die if you miss"),
-			new PracticeOption("If checked, you can play through charts without taking health and dying."),
-			new BotPlayOption("If checked, a bot plays a chart for you! \n(Best if used for showcases)"),
-		]),
-
 		new OptionCatagory("Gameplay", [
 			new NaughtyOption("If unchecked, any explicit content will be censored/hidden from the game."),
 			new DownscrollOption("If checked, your note strums appears on the bottom of the screen instead of up."),
 			new MiddlescrollOption("If checked, your note strums appear in the middle of the screen, & your opponents note strums disappear."),
 			new FlashingOption("If unchecked, it disables flashing lights/menus"),
 			new CameraZoomOption("If unchecked, the camera won't zoom on every concurring beat hit."),
+			new AutoPauseOption("If checked, the game automatically pauses if the screen isn't in focus."),
 			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
 			new ScrollSpeedOption("Change your scroll speed. (1 = Chart dependent)"),
 			new ResetButtonOption("If checked, pressing 'Reset' won't do anything."),
-			new AutoPauseOption("If checked, the game automatically pauses if the screen isn't in focus."),
 		]),
 
 		new OptionCatagory("Saves", [
@@ -400,10 +394,10 @@ class OptionsMenuState extends MusicBeatState
 		if (curSelected >= grpControls.length)
 			curSelected = 0;
 
-		if (isCat)
-			currentDescription = currentSelectedCat.getOptions()[curSelected].getDescription();
-		else
+		if (!isCat)
 			currentDescription = 'Please select a Category.';
+		else
+			currentDescription = currentSelectedCat.getOptions()[curSelected].getDescription();
 
 		camFollow.screenCenter();
 

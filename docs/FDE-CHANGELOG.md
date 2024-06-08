@@ -349,3 +349,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ------------------------------------------------------------
 ## [Unreleased]
 
+### Added
+- (Re)Added Modifiers menu to pause menu
+- Cool HUD transition to monster (forgot to add it last update lol)
+
+### Changed
+- Made it so where you only gain a *little* bit of health after hitting notes
+- Softcoded Story Mode Characters
+
+### Fixed
+- Issue where miss sprites didnt occur when you had default scroll speed
+- Issue where FPS Cap would hard lock to 120 everytime you open the game
+- Auto Pause option not doing its intended purpose :sob:
+- Made the num-1 asset look more like a 1 than a 7
+
+### Removed
+- Modifiers Category from Options Menu

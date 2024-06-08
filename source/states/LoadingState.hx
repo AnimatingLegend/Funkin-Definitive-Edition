@@ -34,6 +34,7 @@ class LoadingState extends MusicBeatState
 
 	var funkay:FlxSprite;
 	var loadBar:FlxSprite;
+
 	override function create()
 	{
 		var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xffcaff4d);
@@ -114,10 +115,18 @@ class LoadingState extends MusicBeatState
 			funkay.updateHitbox();
 		}
 
-		if(callbacks != null) {
+		if(callbacks != null) 
+		{
 			targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
-			loadBar.scale.x += 0.5 * (targetShit - loadBar.scale.x);
+
+			var lerpWidth:Int = Std.int(FlxMath.lerp(loadBar.width, FlxG.width * targetShit, 0.2));
+			loadBar.setGraphicSize(lerpWidth, FlxG.height);
+			loadBar.updateHitbox();
 		}
+
+		#if debug
+		if (FlxG.keys.justPressed.SPACE) trace('fired: ' + callbacks.getFired() + ' unfired:' + callbacks.getUnfired());
+		#end
 	}
 	
 	function onLoad()
