@@ -50,6 +50,9 @@ class PauseSubState extends MusicBeatSubstate
 		'Back'
 	];
 
+	var stageSuffix:String = "";
+	var daStage:String = states.PlayState.curStage;
+
 	var menuItems:Array<String> = [];
 	var curSelected:Int = 0;
 
@@ -65,7 +68,13 @@ class PauseSubState extends MusicBeatSubstate
 
 		menuItems = pauseOG;
 
-		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
+		switch (daStage)
+		{
+			case 'school' | 'schoolEvil':
+				stageSuffix = '-pixel';
+		}
+
+		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast/breakfast' + stageSuffix, 'shared'), true, true);
 		pauseMusic.volume = 0;
 		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
 

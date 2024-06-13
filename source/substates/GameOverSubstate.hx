@@ -33,7 +33,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		{
 			case 'school' | 'schoolEvil':
 				stageSuffix = '-pixel';
-				library = 'week6';
+				library = 'shared';
 				daBf = 'bf-pixel-dead';
 			default:
 				daBf = 'bf';
@@ -125,7 +125,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 	function coolStartDeath(startVol:Float = 1)
 	{
-		FlxG.sound.playMusic(Paths.music('gameOver' + stageSuffix, library), startVol);
+		FlxG.sound.playMusic(Paths.music('gameOver/gameOver' + stageSuffix, library), startVol);
 	}
 
 	override function beatHit()
@@ -144,7 +144,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			isEnding = true;
 			bf.playAnim('deathConfirm', true);
 			FlxG.sound.music.stop();
-			FlxG.sound.play(Paths.music('gameOverEnd' + stageSuffix, library));
+			FlxG.sound.play(Paths.music('gameOver/gameOverEnd' + stageSuffix, library));
 			new FlxTimer().start(0.7, function(tmr:FlxTimer)
 			{
 				FlxG.camera.fade(FlxColor.BLACK, 2, false, function()
