@@ -644,7 +644,7 @@ class Controls extends FlxActionSet
 		inline bindKeys(Control.NOTE_LEFT, [FlxKey.fromString(FlxG.save.data.leftBind), FlxKey.LEFT]);
 		inline bindKeys(Control.NOTE_RIGHT, [FlxKey.fromString(FlxG.save.data.rightBind), FlxKey.RIGHT]);
 		inline bindKeys(Control.ACCEPT, [FlxKey.fromString(FlxG.save.data.acceptBindUI), SPACE, ENTER]);
-		inline bindKeys(Control.BACK, [FlxKey.fromString(FlxG.save.data.backBindUI), BACKSPACE, ESCAPE]);
+	//	inline bindKeys(Control.BACK, [FlxKey.fromString(FlxG.save.data.backBindUI), BACKSPACE, ESCAPE]);
 		inline bindKeys(Control.PAUSE, [FlxKey.fromString(FlxG.save.data.pauseBindUI), ENTER, ESCAPE]);
 		inline bindKeys(Control.RESET, [FlxKey.fromString(FlxG.save.data.killBind)]);
 		inline bindKeys(Control.UI_UP, [FlxKey.fromString(FlxG.save.data.upBindUI), FlxKey.UP]);

@@ -3,11 +3,11 @@
 ### Warning
 **In order compile the game for Windows you will need 6GB+ of space, so if you have NO space left then you should clear up some space !**
 
-**Also note that this is a guide to build the game on your own. If you just want to play Funkin-Definitive-Edition then [download it here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases) or [play on browser](animatinglegend.github.io). But if you want to build the game yourself, then continue reading.**
+**Also note that this is a guide to build the game on your own. If you just want to play Funkin-Definitive-Edition then [download it here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases) or [play on browser](https://animatinglegend.github.io/). But if you want to build the game yourself, then continue reading.**
 
 ### Stuff Needed
 - [Git](https://git-scm.com/) (required)
-- [Haxe 4.1.5](https://haxe.org/download/version/4.1.5/) (required)
+- [Haxe 4.1.5](https://haxe.org/download/version/4.1.5/) (this version is recommended because their latest versions have issues running this engine)
     - [HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/) (required)
 - [Visual Community](https://visualstudio.microsoft.com/)
      - Visual Community Components (Required/Setup.bat)
@@ -24,6 +24,7 @@ flixel
 flixel-addons
 flixel-ui
 hscript
+hxCodec
 newgrounds
 actuate
 ```
@@ -35,8 +36,6 @@ If you installed Git or Lime then you would need to install these libraries also
 haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addon
 haxelib git polymod https://github.com/larsiusprime/polymod.git
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
-haxelib git extension-webm https://github.com/KadeDev/extension-webm
-lime rebuild extension-webm windows
 ```
 
 ### Compiling the game

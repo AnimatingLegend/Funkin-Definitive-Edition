@@ -43,28 +43,23 @@ class OptionsMenuState extends MusicBeatState
 			new LowDataOption("If checked, certain assets will be hidden for better performance."),
 			new AntialiasingOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
 			new ShaderOption("If unchecked, certain visual effects will not be displayed.\n[CPU INTENSIVE]"),
+			new AtlasCutsceneOption("If unchecked, your cutscenes will be converted into a video format."),
 			#if !html5
 			new FramerateOption("Self explanatory. Use your left and right arrow keys to switch between your framerate. [DEFAULT: 120]"), 
 			// HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
 			#end
 			new FPSOption("If unchecked, your fps & memory counter will be hidden."),
 			new FullscreenOption("Check this off if you want the game to be in fullscreen mode"),
-			new AtlasCutsceneOption('If unchecked, your cutscenes will get converted into .MP4 \n[RECOMMENDED]'),
 		]),
 
 		new OptionCatagory("Visuals and UI", [
 			new AccuracyOption("If unchecked, it will not display your misses and accuracy, but only your song score."),
 			new JudgemntOption("If checked, it displays your judgements/ratings throughout the song."),
-			new HideHudOption('If checked, it hides most of your game UI.'),
+			new HideHudOption("If checked, it hides most of your game UI."),
 			new NotesplashOption("If unchecked, hitting 'Sick!' notes won't show firework particles."),
+			new WatermarkOption("If unchecked, anything 'FDE' themed will revert back to the 'FNF' theme. \ni.e watermarks & title messages"),
 			new OpponentLightStrums("If unchecked, your opponents note strums won't light up whenever its their turn to sing."),
 			new LaneTransOption("Use your left & right arrow keys to switch the transparacny of your lane underlay. [DEFAULT: 0]"),
-		]),
-
-		new OptionCatagory("Modifiers", [
-			new InstaKillOption("Kinda self explanatory... You die if you miss"),
-			new PracticeOption("If checked, you can play through charts without taking health and dying."),
-			new BotPlayOption("If checked, a bot plays a chart for you! \n(Best if used for showcases)"),
 		]),
 
 		new OptionCatagory("Gameplay", [
@@ -73,10 +68,11 @@ class OptionsMenuState extends MusicBeatState
 			new MiddlescrollOption("If checked, your note strums appear in the middle of the screen, & your opponents note strums disappear."),
 			new FlashingOption("If unchecked, it disables flashing lights/menus"),
 			new CameraZoomOption("If unchecked, the camera won't zoom on every concurring beat hit."),
+			new AutoPauseOption("If checked, the game automatically pauses if the screen isn't in focus."),
 			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
 			new ScrollSpeedOption("Change your scroll speed. (1 = Chart dependent)"),
 			new ResetButtonOption("If checked, pressing 'Reset' won't do anything."),
-			new AutoPauseOption("If checked, the game autmatically pauses if the screen isn't in focus."),
+			new HitsoundOption("If checked, a little 'tick' sound will play everytime you hit a note."),
 		]),
 
 		new OptionCatagory("Saves", [
@@ -399,10 +395,10 @@ class OptionsMenuState extends MusicBeatState
 		if (curSelected >= grpControls.length)
 			curSelected = 0;
 
-		if (isCat)
-			currentDescription = currentSelectedCat.getOptions()[curSelected].getDescription();
-		else
+		if (!isCat)
 			currentDescription = 'Please select a Category.';
+		else
+			currentDescription = currentSelectedCat.getOptions()[curSelected].getDescription();
 
 		camFollow.screenCenter();
 

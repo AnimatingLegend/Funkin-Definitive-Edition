@@ -601,7 +601,7 @@ class ShaderOption extends Option
 	}
 }
 
-class AutoPauseOption extends Option
+class WatermarkOption extends Option
 {
 	public function new(desc:String)
 	{
@@ -612,18 +612,39 @@ class AutoPauseOption extends Option
 	public override function press(changeData:Bool):Bool
 	{
 		if (changeData)
-		{
-			FlxG.save.data.autoPause = !FlxG.save.data.autoPause;
-
-			// Work in progress of my new settings handler system :]
-			FlxG.autoPause = DefinitiveData.prefs.autoPause;
-		}
-		
-		acceptValues = FlxG.save.data.autoPause;
+			FlxG.save.data.watermark = !FlxG.save.data.watermark;
+		acceptValues = FlxG.save.data.watermark;
 		display = updateDisplay();
 		return true;
 	}
 	
+	private override function updateDisplay():String
+	{
+		return "Watermark";
+	}
+}
+
+class AutoPauseOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+ 
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+		{
+			FlxG.save.data.autoPause = !FlxG.save.data.autoPause;
+			FlxG.autoPause = !FlxG.autoPause;
+		}
+  
+		acceptValues = FlxG.autoPause;
+		display = updateDisplay();
+		return true;
+	}
+ 
 	private override function updateDisplay():String
 	{
 		return "Auto Pause";
@@ -653,75 +674,6 @@ class ResetButtonOption extends Option
 	}
 }
 
-class PracticeOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-	
-	public override function press(changeData:Bool):Bool
-	{
-		if (changeData)
-			FlxG.save.data.practiceMode = !FlxG.save.data.practiceMode;
-		acceptValues = FlxG.save.data.practiceMode;
-		display = updateDisplay();
-		return true;
-	}
-	
-	private override function updateDisplay():String
-	{
-		return "Toggle Practice Mode";
-	}
-}
-
-class InstaKillOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-	
-	public override function press(changeData:Bool):Bool
-	{
-		if (changeData)
-			FlxG.save.data.instaKill = !FlxG.save.data.instaKill;
-		acceptValues = FlxG.save.data.instaKill;
-		display = updateDisplay();
-		return true;
-	}
-	
-	private override function updateDisplay():String
-	{
-		return "InstaKill on Miss";
-	}
-}
-
-class BotPlayOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-	
-	public override function press(changeData:Bool):Bool
-	{
-		if (changeData)
-			FlxG.save.data.botplay = !FlxG.save.data.botplay;
-		acceptValues = FlxG.save.data.botplay;
-		display = updateDisplay();
-		return true;
-	}
-	
-	private override function updateDisplay():String
-	{
-		return "Botplay";
-	}
-}
-
 class HideHudOption extends Option
 {
 	public function new(desc:String)
@@ -742,6 +694,29 @@ class HideHudOption extends Option
 	private override function updateDisplay():String
 	{
 		return "Hide Hud";
+	}
+}
+
+class HitsoundOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.hitsounds = !FlxG.save.data.hitsounds;
+		acceptValues = FlxG.save.data.hitsounds;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Hitsounds";
 	}
 }
 
@@ -873,15 +848,15 @@ class ResetSettings extends Option
 		FlxG.save.data.antialiasing = null;
 		FlxG.save.data.lowData = null;
 		FlxG.save.data.autoPause = null;
-	//	FlxG.save.data.weekUnlocked = null;
 		FlxG.save.data.shaders = null;
 		FlxG.save.data.practiceMode = null;
 		FlxG.save.data.botplay = null;
 		FlxG.save.data.instaKill = null;
 		FlxG.save.data.hideHud = null;
 		FlxG.save.data.cutscenes = null;
+		FlxG.save.data.hitsounds = null;
 
-		DefinitiveData.settings();
+		backend.DefinitiveData.settings();
 		trace('All settings have been reset');
 
 		acceptValues = FlxG.save.data.resetSettings;

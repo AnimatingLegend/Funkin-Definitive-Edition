@@ -98,7 +98,7 @@ class Character extends FlxSprite
 				playAnim('danceRight');
 				barColor = 0xED790135;
 
-				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
+				setGraphicSize(Std.int(width * states.PlayState.daPixelZoom));
 				updateHitbox();
 				antialiasing = false;
 
@@ -150,6 +150,7 @@ class Character extends FlxSprite
 				quickAnimAdd('singDOWN', 'spooky DOWN note');
 				quickAnimAdd('singLEFT', 'note sing left');
 				quickAnimAdd('singRIGHT', 'spooky sing right');
+				quickAnimAdd('singUP-alt', 'spooky kids YEAH!!');
 				animation.addByIndices('danceLeft', 'spooky dance idle', [0, 2, 6], "", 12, false);
 				animation.addByIndices('danceRight', 'spooky dance idle', [8, 10, 12, 14], "", 12, false);
 
@@ -305,7 +306,7 @@ class Character extends FlxSprite
 				quickAnimAdd('singRIGHTmiss', 'BF NOTE RIGHT MISS');
 				quickAnimAdd('singDOWNmiss', 'BF NOTE DOWN MISS');
 				
-				quickAnimAdd('hey', 'BF HEY');
+				quickAnimAdd('hey!', 'BF HEY');
 
 				quickAnimAdd('firstDeath', "BF dies");
 				animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
@@ -331,7 +332,7 @@ class Character extends FlxSprite
 				quickAnimAdd('singLEFTmiss', 'BF NOTE LEFT MISS');
 				quickAnimAdd('singRIGHTmiss', 'BF NOTE RIGHT MISS');
 				quickAnimAdd('singDOWNmiss', 'BF NOTE DOWN MISS');
-				quickAnimAdd('hey', 'BF HEY');
+				quickAnimAdd('hey!', 'BF HEY');
 
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
@@ -624,7 +625,7 @@ class Character extends FlxSprite
 	private var danced:Bool = false;
 
  	// FOR GF DANCING SHIT
-	public function dance()
+	public function dance(forced:Bool = false, altAnim:Bool = false)
 	{
 		if (!debugMode)
 		{
@@ -642,11 +643,11 @@ class Character extends FlxSprite
 					}
 				// These do nothing, just added these here so i wont get annoying debug errors
 				case 'bf-pixel-dead':
-					// a
+					// guacamole
 				case 'bf-holding-gf-dead':
-					// a
+					// CENSORED
 				case 'pico-speaker':
-					// a
+					// peenus
 				case 'spooky':
 					danced = !danced;
 	
@@ -658,7 +659,10 @@ class Character extends FlxSprite
 					if (!animation.curAnim.name.endsWith('DOWN-alt'))
 						playAnim('idle');
 				default:
-					playAnim('idle');
+					if (altAnim && animation.getByName('idle-alt') != null)
+						playAnim('idle-alt', forced);
+					else
+						playAnim('idle', forced);
 			}
 		}
 	}
@@ -710,7 +714,7 @@ class Character extends FlxSprite
 
 	public function loadOffsetFile(offsetCharacter:String)
 	{
-		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file("images/characters/character-offsets/" + offsetCharacter + "Offsets.txt"));
+		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file("images/characters/character-offsets/" + offsetCharacter + "Offsets.txt", 'shared'));
 		
 		for (i in daFile)
 		{

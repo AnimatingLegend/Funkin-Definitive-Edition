@@ -1,6 +1,5 @@
 package;
 
-import webm.WebmPlayer;
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
@@ -92,34 +91,13 @@ class Main extends Sprite
 
 		addChild(game);
 
-		var videoWarning:String = 'assets/videos/DO NOT DELETE OR GAME WILL BREAK/dontDelete.webm';
-
-		#if web
-        var str1:String = "HTML CRAP";
-        var vHandler = new VideoHandler();
-        vHandler.init1();
-        vHandler.video.name = str1;
-        addChild(vHandler.video);
-        vHandler.init2();
-        cutscenes.GlobalVideo.setVid(vHandler);
-        vHandler.source(videoWarning);
-        #elseif desktop
-		WebmPlayer.SKIP_STEP_LIMIT = 90; // haxelib git extension-webm https://github.com/ThatRozebudDude/extension-webm
-        var str1:String = "WEBM SHIT"; 
-        var webmHandle = new cutscenes.WebmHandler();
-        webmHandle.source(videoWarning);
-        webmHandle.makePlayer();
-        webmHandle.webm.name = str1;
-        addChild(webmHandle.webm);
-		cutscenes.GlobalVideo.setWebm(webmHandle);
-        #end 
-
 		#if !mobile
 		if(FlxG.save.data.fps == null) FlxG.save.data.fps = true;
 		fpsCounter = new FPSCounter(10, 3, FlxTextBorderStyle.OUTLINE);
 		toggleFPS(FlxG.save.data.fps);
 		addChild(fpsCounter);
 		#end
+
 
 		#if html5
 		FlxG.autoPause = false;
@@ -130,7 +108,7 @@ class Main extends Sprite
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 		#end
 
-		DefinitiveData.settings();
+		backend.DefinitiveData.settings();
 		Conductor.offset = FlxG.save.data.notesOffset;
 	}
 

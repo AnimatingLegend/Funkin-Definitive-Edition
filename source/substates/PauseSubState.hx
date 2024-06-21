@@ -5,6 +5,7 @@ import backend.Song;
 
 import options.OptionsMenuState;
 
+import states.PlayState;
 import states.StoryMenuState;
 import states.FreeplayState;
 
@@ -27,14 +28,38 @@ class PauseSubState extends MusicBeatSubstate
 
 	public static var goToOptions:Bool = false;
 
-	var pauseOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Options', 'Exit to menu'];
-	var difficultyChoices:Array<String> = ['Easy', 'Normal', 'Hard', 'Back'];
+	var pauseOG:Array<String> = [
+		'Resume', 
+		'Restart Song', 
+		'Change Difficulty',
+		'Modifiers',
+		'Options', 
+		'Exit to menu'
+	];
+
+	var modifierChoices:Array<String> = [
+		"Toggle Practice Mode",
+		"InstaKill on Miss",
+		"Botplay",
+		"Back"
+	];
+
+	var difficultyChoices:Array<String> = [
+		'Easy', 
+		'Normal', 
+		'Hard', 
+		'Back'
+	];
+
+	var stageSuffix:String = "";
+	var daStage:String = states.PlayState.curStage;
 
 	var menuItems:Array<String> = [];
 	var curSelected:Int = 0;
 
 	var practiceText:FlxText;
 	var botplayText:FlxText;
+	var instaKillText:FlxText;
 
 	var pauseMusic:FlxSound;
 
@@ -44,9 +69,15 @@ class PauseSubState extends MusicBeatSubstate
 
 		menuItems = pauseOG;
 
-		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
-		pauseMusic.volume = 0;
+		switch (daStage)
+		{
+			case 'school' | 'schoolEvil':
+				stageSuffix = '-pixel';
+		}
+
+		pauseMusic = new FlxSound().loadEmbedded(Paths.music('pauseMusic/breakfast' + stageSuffix, 'shared'), true, true);
 		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
+		pauseMusic.volume = 0;
 
 		FlxG.sound.list.add(pauseMusic);
 
@@ -81,15 +112,23 @@ class PauseSubState extends MusicBeatSubstate
 		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
 		practiceText.updateHitbox();
 		practiceText.x = FlxG.width - (practiceText.width + 20);
-		practiceText.visible = FlxG.save.data.practiceMode;
+		practiceText.visible = PlayState.practiceMode;
 		add(practiceText);
+
+		instaKillText = new FlxText(20, 14 + 120, 0, "INSTAKILL ON", 32);
+		instaKillText.scrollFactor.set();
+		instaKillText.setFormat(Paths.font('vcr.ttf'), 32);
+		instaKillText.updateHitbox();
+		instaKillText.x = FlxG.width - (practiceText.width + 20);
+		instaKillText.visible = PlayState.instaKill;
+		add(instaKillText);
 
 		botplayText = new FlxText(20, FlxG.height - 40, 0, "BOTPLAY", 32);
 		botplayText.scrollFactor.set();
 		botplayText.setFormat(Paths.font('vcr.ttf'), 32);
 		botplayText.x = FlxG.width - (botplayText.width + 20);
 		botplayText.updateHitbox();
-		botplayText.visible = FlxG.save.data.botplay;
+		botplayText.visible = PlayState.botplay;
 		add(botplayText);
 
 		levelDifficulty.alpha = 0;
@@ -154,6 +193,27 @@ class PauseSubState extends MusicBeatSubstate
 					menuItems = difficultyChoices;
 					regenMenu();
 
+				case "Easy" | "Normal" | "Hard":
+					PlayState.SONG = Song.loadFromJson(backend.Highscore.formatSong(PlayState.SONG.song.toLowerCase(), curSelected), PlayState.SONG.song.toLowerCase());
+					PlayState.storyDifficulty = curSelected;
+					FlxG.resetState();
+
+				case "Modifiers":
+					menuItems = modifierChoices;
+					regenMenu();
+
+				case "Toggle Practice Mode":
+					PlayState.practiceMode = !PlayState.practiceMode;
+					practiceText.visible = PlayState.practiceMode;
+
+				case "InstaKill on Miss":
+					PlayState.instaKill = !PlayState.instaKill;
+					instaKillText.visible = PlayState.instaKill;
+
+				case "Botplay":
+					PlayState.botplay = !PlayState.botplay;
+					botplayText.visible = PlayState.botplay;
+
 				case "Options":
 					OptionsMenuState.fromFreeplay = true;
 					FlxG.switchState(new options.OptionsMenuState());
@@ -165,11 +225,6 @@ class PauseSubState extends MusicBeatSubstate
 						FlxG.switchState(new states.StoryMenuState());
 					else
 						FlxG.switchState(new states.FreeplayState());
-				
-				case "Easy" | "Normal" | "Hard":
-					PlayState.SONG = Song.loadFromJson(backend.Highscore.formatSong(PlayState.SONG.song.toLowerCase(), curSelected), PlayState.SONG.song.toLowerCase());
-					PlayState.storyDifficulty = curSelected;
-					FlxG.resetState();
 
 				case "Back":
 					menuItems = pauseOG;

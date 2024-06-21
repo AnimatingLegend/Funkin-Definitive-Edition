@@ -97,6 +97,10 @@ class TitleState extends MusicBeatState
 
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
+		#if desktop
+		FlxG.game.focusLostFramerate = 60;
+		#end
+
 		DefinitiveData.settings();
 		PlayerSettings.init();
 		Highscore.load();
@@ -111,6 +115,14 @@ class TitleState extends MusicBeatState
 			StoryMenuState.weekUnlocked = StoryMenuState.unlockWeeks();
 			FlxG.save.flush();
 		}
+		
+		#if desktop
+		if(FlxG.save.data.framerateDraw != null)
+		{
+			FlxG.updateFramerate = FlxG.save.data.framerateDraw;
+			FlxG.drawFramerate = FlxG.save.data.framerateDraw;
+		}
+		#end
 
 		if (FlxG.keys.justPressed.F)
 			FlxG.fullscreen = !FlxG.fullscreen;
@@ -144,6 +156,7 @@ class TitleState extends MusicBeatState
 
 	function getBuildVer()
     {
+		#if !debug
 		trace('checking for update');
 		var http = new haxe.Http("https://raw.githubusercontent.com/AnimatingLegend/Funkin-Definitive-Edition/master/gitVersion.txt");
 	
@@ -166,6 +179,7 @@ class TitleState extends MusicBeatState
 		}
 	
 		http.request();
+		#end
 	}
 
 	var logoBl:FlxSprite;
@@ -229,7 +243,7 @@ class TitleState extends MusicBeatState
 		credTextShit.screenCenter();
 		
 		ngSpr = new FlxSprite(0, FlxG.height * 0.55);
-		if (FlxG.random.bool(1.00)) // 1 / 100 chance of this asset popping up
+		if (FlxG.random.bool(0.09)) // 9% chance
 		{
 			ngSpr.loadGraphic(Paths.image('newgrounds_logo_animated'), true, 600);
 			ngSpr.animation.add('idle', [0, 1], 4);
@@ -359,6 +373,15 @@ class TitleState extends MusicBeatState
 			skipIntro();
 		}
 
+		#if desktop
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			Sys.exit(0);
+
+			trace("exiting game...");
+		}
+		#end
+
 		if(swagShader != null)
 		{
 			if(controls.UI_LEFT) swagShader.hue -= elapsed * 0.1;
@@ -410,7 +433,6 @@ class TitleState extends MusicBeatState
 
 		if(gfDance != null && gfDance.animation != null) 
 		{
-
 			if (danceLeft)
 				gfDance.animation.play('danceRight');
 			else
