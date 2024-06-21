@@ -636,7 +636,7 @@ class AutoPauseOption extends Option
 	{
 		if (changeData)
 		{
-		//	FlxG.save.data.autoPause = !FlxG.save.data.autoPause;
+			FlxG.save.data.autoPause = !FlxG.save.data.autoPause;
 			FlxG.autoPause = !FlxG.autoPause;
 		}
   
@@ -694,6 +694,29 @@ class HideHudOption extends Option
 	private override function updateDisplay():String
 	{
 		return "Hide Hud";
+	}
+}
+
+class HitsoundOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	
+	public override function press(changeData:Bool):Bool
+	{
+		if (changeData)
+			FlxG.save.data.hitsounds = !FlxG.save.data.hitsounds;
+		acceptValues = FlxG.save.data.hitsounds;
+		display = updateDisplay();
+		return true;
+	}
+	
+	private override function updateDisplay():String
+	{
+		return "Hitsounds";
 	}
 }
 
@@ -825,15 +848,15 @@ class ResetSettings extends Option
 		FlxG.save.data.antialiasing = null;
 		FlxG.save.data.lowData = null;
 		FlxG.save.data.autoPause = null;
-	//	FlxG.save.data.weekUnlocked = null;
 		FlxG.save.data.shaders = null;
 		FlxG.save.data.practiceMode = null;
 		FlxG.save.data.botplay = null;
 		FlxG.save.data.instaKill = null;
 		FlxG.save.data.hideHud = null;
 		FlxG.save.data.cutscenes = null;
+		FlxG.save.data.hitsounds = null;
 
-		DefinitiveData.settings();
+		backend.DefinitiveData.settings();
 		trace('All settings have been reset');
 
 		acceptValues = FlxG.save.data.resetSettings;

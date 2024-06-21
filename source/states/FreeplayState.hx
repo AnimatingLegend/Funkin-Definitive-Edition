@@ -8,6 +8,8 @@ import backend.Song;
 
 import objects.HealthIcon;
 
+import states.PlayState;
+
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -22,7 +24,7 @@ using StringTools;
 
 class FreeplayState extends MusicBeatState
 {
-	var songs:Array<SongMetadata> = [];
+	public static var songs:Array<SongMetadata> = [];
 
 	var selector:FlxText;
 	var curSelected:Int = 0;
@@ -34,6 +36,8 @@ class FreeplayState extends MusicBeatState
 	var diffText:FlxText;
 	var lerpScore:Float = 0;
 	var intendedScore:Int = 0;
+
+	var isDebug:Bool = false;
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var coolColors = [
@@ -60,48 +64,28 @@ class FreeplayState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		var isDebug:Bool = false;
+		songs = [];
+
+		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
 		#if debug
 		addSong('test', 5, 'bf-pixel');
 		isDebug = true;
 		#end
 
-		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
-
-		for (i in 0...initSonglist.length)
+		if (FlxG.save.data.weekUnlocked)
 		{
-			songs.push(new SongMetadata(initSonglist[i], 0, 'gf'));
+			for (i in 0...initSonglist.length)
+			{
+				var data:Array<String> = initSonglist[i].split(':');
+				songs.push(new SongMetadata(data[0], Std.parseInt(data[2]), data[1]));
+			}
 		}
 
 		if (FlxG.sound.music != null)
 		{
 			if (!FlxG.sound.music.playing)
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
-		}
-
-		if (FlxG.save.data.weekUnlocked)
-		{
-			if (StoryMenuState.weekUnlocked[1]|| isDebug)
-				addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
-	
-			if (StoryMenuState.weekUnlocked[2] || isDebug)
-				addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
-	
-			if (StoryMenuState.weekUnlocked[3] || isDebug)
-				addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
-	
-			if (StoryMenuState.weekUnlocked[4] || isDebug)
-				addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
-	
-			if (StoryMenuState.weekUnlocked[5] || isDebug)
-				addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
-	
-			if (StoryMenuState.weekUnlocked[6] || isDebug)
-				addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
-			
-			if (StoryMenuState.weekUnlocked[7] || isDebug)
-				addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman']);
 		}
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
@@ -120,8 +104,6 @@ class FreeplayState extends MusicBeatState
 
 			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
 			icon.sprTracker = songText;
-
-			// using a FlxGroup is too much fuss!
 			iconArray.push(icon);
 			add(icon);
 		}
@@ -138,6 +120,9 @@ class FreeplayState extends MusicBeatState
 		add(diffText);
 
 		add(scoreText);
+
+		if(curSelected >= songs.length) 
+			curSelected = 0;
 
 		changeSelection();
 		changeDiff();
@@ -290,14 +275,15 @@ class FreeplayState extends MusicBeatState
 			if (item.targetY == 0)
 				item.alpha = 1;
 		}
+
+		changeDiff();
 	}
 
-	function positionHighscore()
-	{
+	private function positionHighscore() {
 		scoreText.x = FlxG.width - scoreText.width - 6;
 		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
-		scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
-		diffText.x = scoreBG.x + scoreBG.width / 2;
+		scoreBG.x = FlxG.width - (scoreBG.scale.x / 2);
+		diffText.x = Std.int(scoreBG.x + (scoreBG.width / 2));
 		diffText.x -= diffText.width / 2;
 	}
 }

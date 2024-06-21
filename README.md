@@ -24,8 +24,10 @@ Everything you see in this engine was used in my [Funkin': Week 7](https://githu
     - Ghost Tapping
     - Custom Scroll Speed
     - Toggleable Accuracy Meter
+    - & Plenty More!!!
 - Playable Characters
     - Pico
+    - tankman (coming soon!!!)
 - Source Code/Asset Overhaul
     - Fixed/Changed File locations
     - Up-to-date Charting
@@ -64,13 +66,20 @@ Everything you see in this engine was used in my [Funkin': Week 7](https://githu
 ### Week 6:
 * On Thorns - the HUD is hidden during its mini cutscene
 * Pixel Variation of the pause music
+* Pixel Variation of notesplashes
 ### Week 7:
 * On Stress - Certain parts of the cutscene can now be Censored
 
 ## Photos & Gifs
 
-# PHOTOS ARE SOON TO RETURN !!!!!
+### Character Editor
+![Base Profile Screenshot 2024 06 18 - 19 52 27 04](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/assets/83415030/7c0889a2-dd9a-41c8-a717-e4a09617293d)
 
+### Chart Editor
+![Base Profile Screenshot 2024 06 18 - 20 03 03 20](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/assets/83415030/8f7fab48-6ccb-4ea9-becb-9e2f5d3139ce)
+
+### Gameplay
+![GITHUB GIF](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/assets/83415030/2ca560d3-23c8-417d-838b-0372c2944e52)
 
 ### Building the game
 if you want to learn how to compile the game on your own then [click here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/blob/experimental/docs/guides/building.md)!

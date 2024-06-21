@@ -38,7 +38,11 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	public static var definitiveVersion:String = '0.5.0';
+	#if !debug
+	public static var definitiveVersion:String = '0.5.1';
+	#else
+	public static var definitiveVersion:String = '0.5.1 (DEBUG : BETA TESTING AREA)';
+	#end
 
 	override function create()
 	{
@@ -131,14 +135,14 @@ class MainMenuState extends MusicBeatState
 		FlxG.camera.follow(camFollow, null, 0.06 * (30 / FlxG.save.data.framerateDraw));
 		#end
 
-		if (FlxG.save.data.watermark)
+		if (FlxG.save.data.watermark) 
 		{
 			var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "FNF' Definitive Edition - v" + definitiveVersion, 12);
 			versionShit.scrollFactor.set();
 			versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			add(versionShit);
-		}
-		else
+		} 
+		else 
 		{
 			var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' - v" + Application.current.meta.get('version'), 12);
 			versionShit.scrollFactor.set();

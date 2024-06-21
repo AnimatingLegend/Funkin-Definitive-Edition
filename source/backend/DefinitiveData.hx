@@ -100,8 +100,11 @@ class DefinitiveData
 			FlxG.save.data.watermark == true;
 
 		if (FlxG.save.data.autoPause == null) {
-			FlxG.save.data.autoPause = true;
-			FlxG.autoPause = true;
+		//	FlxG.save.data.autoPause = true;
+			FlxG.autoPause;
 		}
+
+		if(FlxG.save.data.hitsounds == null)
+			FlxG.save.data.hitsounds == false;
     }
 }

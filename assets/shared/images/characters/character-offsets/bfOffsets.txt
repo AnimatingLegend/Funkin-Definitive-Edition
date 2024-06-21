@@ -6,7 +6,7 @@ singLEFTmiss 12 24
 singUP -29 27
 deathConfirm 37 69
 firstDeath 37 11
-hey -4 5
+hey! -4 5
 idle -5 0
 singDOWNmiss -11 -19
 singRIGHT -38 -7

@@ -62,10 +62,7 @@ class Caching extends MusicBeatState
 		funkay.updateHitbox();
 		funkay.scrollFactor.set();
 		funkay.screenCenter();
-		if (FlxG.save.data.antialiasing != null)
-			funkay.antialiasing = FlxG.save.data.antialiasing;
-		else
-			funkay.antialiasing = false;
+		funkay.antialiasing = FlxG.save.data.antialiasing;
 		add(funkay);
 
 		preloadStuff = new FlxText(5, FlxG.height - 30, 0, "Preloading Assets", 12);

@@ -3,7 +3,7 @@
 	<!-- _________________________ Application Settings _________________________ -->
 
 	<!-- For some reason if you change the file name the game starts tweaking out so be careful with that if you ever decide to change it :sob: -->
-	<app title="Friday Night Funkin' - Definitive Edition" file="Funkin" packageName="com.AnimatingLegend.FDE" package="com.AnimatingLegend.FDE" main="Main" version="0.2.8" company="AnimatingLegend" />
+	<app title="Friday Night Funkin' - Definitive Edition" file="FNF - Definitive Edition" packageName="com.AnimatingLegend.FDE" package="com.AnimatingLegend.FDE" main="Main" version="0.2.8" company="AnimatingLegend" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
@@ -120,9 +120,9 @@
 	<haxelib name="polymod"/>
 	<haxelib name="discord_rpc" if="desktop"/>
 	<haxelib name="actuate" />
-	<haxelib name="extension-webm"/>
-	<haxelib name="hxCodec"/>
+	<haxelib name="hxCodec" if="windows"/>
 	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
+	<!-- <haxelib name="extension-webm"/> -->
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 

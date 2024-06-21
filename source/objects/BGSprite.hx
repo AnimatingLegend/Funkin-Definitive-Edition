@@ -30,11 +30,12 @@ class BGSprite extends FlxSprite
 
 			active = false;
 		}
+		
 		scrollFactor.set(scrollX, scrollY);
 		antialiasing = FlxG.save.data.antialiasing;
 	}
 
-	public function dance()
+	public function dance(?forcePlay:Bool = false)
 	{
 		if (idleAnim != null)
 			animation.play(idleAnim);

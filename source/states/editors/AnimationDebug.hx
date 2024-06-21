@@ -79,7 +79,7 @@ class AnimationDebug extends MusicBeatState
 		//add(gridBG);
 
 		//FlxG.sound.music.stop();
-		FlxG.sound.playMusic(Paths.music('breakfast'), 0.5);
+		FlxG.sound.playMusic(Paths.music('pauseMusic/breakfast', 'shared'), 0.5);
 
 		camOther = new FlxCamera();
 		FlxG.cameras.reset(camOther);

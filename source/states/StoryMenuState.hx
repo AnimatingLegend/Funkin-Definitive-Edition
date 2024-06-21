@@ -333,19 +333,7 @@ class StoryMenuState extends MusicBeatState
 			PlayState.campaignScore = 0;		
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
-				if (!FlxG.save.data.cutscenes)
-				{
-					switch (curWeek)
-					{
-						case 7:
-							LoadingState.loadAndSwitchState(new cutscenes.VideoState("assets/videos/week7/ugh_cutscene.webm", new PlayState()));
-							FlxG.sound.music.stop();
-						default:
-							LoadingState.loadAndSwitchState(new PlayState(), true);
-					}
-				}
-				else
-					LoadingState.loadAndSwitchState(new PlayState(), true);
+				LoadingState.loadAndSwitchState(new PlayState(), true);
 			});
 		}
 	}

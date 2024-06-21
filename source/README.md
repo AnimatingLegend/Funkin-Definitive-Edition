@@ -17,18 +17,15 @@ As you can see a lot has been getting changed around for the past couple of days
 - MusicBeatState & MusicBeatSubState.hx
 - Paths.hx
 - PlayerSettings.hx
+- Ratings.hx
 - Section.hx
 - Song.hx
 
 ## cutscenes
 ### These Files Include:
-- Dialogue.hx
-- GameDimensions.hx
-- GlobalVideo.hx
-- TankCutscene.hx
-- VideoHandler.hx
-- VideoState.hx
-- WebmHandler.hx
+- TankCutscene & CutsceneCharacter.hx
+- FlxVideo.hx
+
 
 ## objects
 ### Basically, anything that has to do with assets is in this folder. these files include:
@@ -38,6 +35,7 @@ As you can see a lot has been getting changed around for the past couple of days
 - Boyfriend.hx
 - Character.hx
 - CheckboxThingie.hx
+- DialogueBox.hx
 - HealthIcon.hx
 - MenuCharacter.hx
 - MenuItem.hx
@@ -63,7 +61,7 @@ As you can see a lot has been getting changed around for the past couple of days
 - editors (another folder which contains the files: AnimationDebug.hx & ChartingState.hx)
 - stages (another folder which contains the files: StageData, & all of the background sprites for week 4, week 6, & week 7)
 - FreeplayState.hx
-- GameOverState & GameOverSubState.hx
+- GameOverSubState.hx
 - LoadingState.hx
 - MainMenuState.hx
 - OutdatedSubState.hx
@@ -76,6 +74,7 @@ As you can see a lot has been getting changed around for the past couple of days
 ### Anything that has to the with funkins user interface, we got it in here lmao. These files include:
 - AtlasMenuItem.hx
 - FPSCounter.hx
+- GitarooPause.hx
 - InputItem.hx
 - MenuItem.hx
 - MenuTypedItem.hx
@@ -85,4 +84,4 @@ As you can see a lot has been getting changed around for the past couple of days
 ## unused
 ### Useless pieces of code that are still in the game. These files include:
 - NGio.hx
-- GitarooPause.hx
+- GameOverState

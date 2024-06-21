@@ -23,7 +23,6 @@ using StringTools;
 ** FUNCTION BREAK DOWN **
 * `songData()` - Add a list of songs, and whatever stage you want to preload it to, add that!
 * `charData()` - To sum it up, this basically preloads the character, and the positioning of the stage they are on.
-* `gfData()`   - This is literally `charData()` but only for the gf assets.
 **/
 
 class StageData extends MusicBeatState
@@ -35,7 +34,7 @@ class StageData extends MusicBeatState
 			switch (PlayState.SONG.song.toLowerCase())
 			{
 				case 'spookeez' | 'south' | 'monster':
-					PlayState.curStage = 'spooky';
+					PlayState.curStage = 'spookyMansion';
 				case 'pico' | 'philly' | 'blammed':
 					PlayState.curStage = 'philly';
 				case 'satin-panties' | 'high' | 'milf':
@@ -56,29 +55,6 @@ class StageData extends MusicBeatState
 		}
 
 		PlayState.SONG.stage = PlayState.curStage;
-	}
-
-    public static function gfData():Void
-	{
-		switch (PlayState.curStage) 
-		{
-			case 'limo':
-				PlayState.curGF = 'gf-car';
-			case 'mall' | 'mallEvil':
-				PlayState.curGF = 'gf-christmas';
-			case 'school' | 'schoolEvil':
-				PlayState.curGF = 'gf-pixel';
-			case 'tank':
-				PlayState.curGF = 'gf-tankmen';
-			default:
-				PlayState.curGF = 'gf';
-		}
-
-		if (PlayState.SONG.song.toLowerCase() == 'stress')
-			PlayState.curGF = 'pico-speaker';
-
-		PlayState.gf = new Character(400, 130, PlayState.curGF);
-		PlayState.gf.scrollFactor.set(0.95, 0.95);
 	}
 
     public static function charData():Void
@@ -114,11 +90,7 @@ class StageData extends MusicBeatState
 				PlayState.dad.y += 300;
 			case 'parents-christmas':
 				PlayState.dad.x -= 500;
-			case 'senpai':
-				PlayState.dad.x += 150;
-				PlayState.dad.y += 360;
-				PlayState.camPos.set(PlayState.dad.getGraphicMidpoint().x + 300, PlayState.dad.getGraphicMidpoint().y);
-			case 'senpai-angry':
+			case 'senpai' | 'senpai-angry':
 				PlayState.dad.x += 150;
 				PlayState.dad.y += 360;
 				PlayState.camPos.set(PlayState.dad.getGraphicMidpoint().x + 300, PlayState.dad.getGraphicMidpoint().y);
@@ -137,7 +109,7 @@ class StageData extends MusicBeatState
 		// Stage Positioning
 		switch (PlayState.curStage) 
 		{
-			case 'spooky':
+			case 'spookyMansion':
 				PlayState.pico.x += 100;
 				PlayState.pico.y -= 60;
 
@@ -152,32 +124,12 @@ class StageData extends MusicBeatState
 				PlayState.boyfriend.x += 320;
 				PlayState.dad.y -= 80;
 
-			case 'school':
+			case 'school' | 'schoolEvil':
 				PlayState.boyfriend.x += 200;
 				PlayState.boyfriend.y += 220;
 				PlayState.gf.x += 180;
 				PlayState.gf.y += 300;
-
-			case 'schoolEvil':
-				PlayState.boyfriend.x += 200;
-				PlayState.boyfriend.y += 220;
-				PlayState.gf.x += 180;
-				PlayState.gf.y += 300;
-
-			case 'tank':
-				PlayState.gf.y += 10;
-				PlayState.gf.x -= 30;
-				PlayState.boyfriend.x += 40;
-				PlayState.boyfriend.y += 0;
-				PlayState.dad.y += 60;
-				PlayState.dad.x -= 80;
-
-				if (PlayState.curGF != 'pico-speaker') {
-					PlayState.gf.x -= 170;
-					PlayState.gf.y -= 75;
-				}
 		}
 
-		
 	}
 }

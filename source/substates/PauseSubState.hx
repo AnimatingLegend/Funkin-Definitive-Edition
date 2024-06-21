@@ -5,6 +5,7 @@ import backend.Song;
 
 import options.OptionsMenuState;
 
+import states.PlayState;
 import states.StoryMenuState;
 import states.FreeplayState;
 
@@ -74,9 +75,9 @@ class PauseSubState extends MusicBeatSubstate
 				stageSuffix = '-pixel';
 		}
 
-		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast/breakfast' + stageSuffix, 'shared'), true, true);
-		pauseMusic.volume = 0;
+		pauseMusic = new FlxSound().loadEmbedded(Paths.music('pauseMusic/breakfast' + stageSuffix, 'shared'), true, true);
 		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
+		pauseMusic.volume = 0;
 
 		FlxG.sound.list.add(pauseMusic);
 

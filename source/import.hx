@@ -1,18 +1,10 @@
 package;
-
 #if !macro
 
 #if discord_rpc
 import backend.Discord;
+import backend.Discord.DiscordClient;
 #end
-
-#if sys
-import sys.*;
-import sys.io.*;
-#elseif js
-import js.html.*;
-#end
-
 import backend.Paths;
 import backend.Controls;
 import backend.CoolUtil;
@@ -21,12 +13,20 @@ import backend.MusicBeatSubstate;
 import backend.DefinitiveData;
 import backend.Conductor;
 
+#if (windows && !html5)
+import hxcodec.flixel.FlxVideo as VideoHandler;
+import hxcodec.flixel.FlxVideoSprite as VideoSprite;
+#else
+import cutscenes.FlxVideo;
+#end
+
 import objects.Alphabet;
 import objects.BGSprite;
 
 import states.PlayState;
 import states.LoadingState;
 
+import flixel.system.FlxSound;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
@@ -39,7 +39,6 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.graphics.FlxGraphic;
 
 using StringTools;
 #end

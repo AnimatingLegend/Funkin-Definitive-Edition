@@ -319,13 +319,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (Re)Added Roses censored dialogue
 - New Options (Auto Pause, Cutscenes, Disable Reset Button)
 - NG title easter egg !!! (you have an 1 in 100th chance of seeing it)
-- Video (`.Webm`) Support for Desktop Builds (taken from [Tricky v2 Mod](https://github.com/Kade-github/trickster))
+- Video (`.Webm`) Support for Desktop Builds (taken from [Tricky v2 Mod](https://github.com/Kade-github/trickster)) - THIS IS TEMPORARY !!!!
 - Highest Combo to the judgement counter
 - Cool HUD transition at the end of 'winter-horrorland' cutscene 7 the tank week flxanimate cutscenes
 
 ### Changed
 - Complete source code overhaul !!! (Better Optimization, Organized Files, and it's just more easier to work with)
-- The `.Webm` versions of the Week 7 cutscenes will play if you have the 'Cutscene' option disabled
+- The `.Webm` versions of the Week 7 cutscenes will play if you have the 'Cutscene' option disabled - THIS IS TEMPORARY !!!!
 - Tweaked the singDuration for dad, gf, and spooky assets
 - Major Combo Changes
   - Your combo now starts count at 10 instead of 1
@@ -347,21 +347,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ratings to HUD option (its just a default thing now)
 - ComboBreak Asset
 ------------------------------------------------------------
-## [Unreleased]
+## [0.5.1] - [6/20/24]
 
 ### Added
 - (Re)Added Modifiers menu to pause menu
 - Cool HUD transition to monster (forgot to add it last update lol)
+- New Options (Watermark, Hitsounds)
+- Pause music for week 6
+- MP4 Support for cutscenes
 
 ### Changed
-- Made it so where you only gain a *little* bit of health after hitting notes
-- Softcoded Story Mode Characters
+- Charting Editor Revamp
+  - Added Hitsounds for players and opponents
+  - Added a little description on how to use the chart editor
+  - You can now change the difficulity of a song by typing it in
+  - You can change the editor song speed
+  - & Plenty More !!!!
+- Tweaked some charting
+  - Spookeez (spookyKids can now do their cheer animation)
+  - Cocoa (fixed an issue with mom and dads alt animation)
+  - Guns (hard charting)
+  - Stress (camera issues)
+- Num-1 asset
+- Made it so you can only gain a *little* bit of health after hitting notes instead of a lot
+- Improved mashing (a tad bit)
+- Thorns map size is now 1
+- Made it so if you press 'ESCAPE' in the TitleScreen your game closes
+- Tweaked the chances of getting the NG title easter egg slimmer
+- Softcoded the freeplay songs (they can now be viewed in ``assets/data/freeplaySonglist.txt``)
+- Botplay changes
+  - Score updates to botplay watermark when enabled
+  - boyfriend stays in his singing pose a *little* bit longer instead of instantly going back to idle
+- Tweaked the cameras on the week7 atlas cutscenes
+- Instead of returning to MainMenu when you get the gitaroo easter egg, it takes you to whatever menu you were recently in
+- Notesplashes are now pixelized !! (view in week 6)
 
 ### Fixed
 - Issue where miss sprites didnt occur when you had default scroll speed
 - Issue where FPS Cap would hard lock to 120 everytime you open the game
+- Issue where judgement stats weren't synced with your combo when using botplay
+- Issue where notes would stop registering after you miss once (i thought i fixed this issue last update but i didn't?)
+- Issue where gf varients wouldn't pop up in the chart data
 - Auto Pause option not doing its intended purpose :sob:
-- Made the num-1 asset look more like a 1 than a 7
 
 ### Removed
+- Webm Support for cutscenes
 - Modifiers Category from Options Menu

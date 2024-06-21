@@ -43,7 +43,7 @@ class OptionsMenuState extends MusicBeatState
 			new LowDataOption("If checked, certain assets will be hidden for better performance."),
 			new AntialiasingOption("If unchecked, disables anti-aliasing, increases performance at the cost of sharper, & smooth visuals."),
 			new ShaderOption("If unchecked, certain visual effects will not be displayed.\n[CPU INTENSIVE]"),
-			new AtlasCutsceneOption('If unchecked, your cutscenes will get converted into a video format.'),
+			new AtlasCutsceneOption("If unchecked, your cutscenes will be converted into a video format."),
 			#if !html5
 			new FramerateOption("Self explanatory. Use your left and right arrow keys to switch between your framerate. [DEFAULT: 120]"), 
 			// HTML5 has some Vsync enabled by default so this option is pretty much useless on web builds
@@ -55,9 +55,9 @@ class OptionsMenuState extends MusicBeatState
 		new OptionCatagory("Visuals and UI", [
 			new AccuracyOption("If unchecked, it will not display your misses and accuracy, but only your song score."),
 			new JudgemntOption("If checked, it displays your judgements/ratings throughout the song."),
-			new HideHudOption('If checked, it hides most of your game UI.'),
+			new HideHudOption("If checked, it hides most of your game UI."),
 			new NotesplashOption("If unchecked, hitting 'Sick!' notes won't show firework particles."),
-			new WatermarkOption("If unchecked,  "),
+			new WatermarkOption("If unchecked, anything 'FDE' themed will revert back to the 'FNF' theme. \ni.e watermarks & title messages"),
 			new OpponentLightStrums("If unchecked, your opponents note strums won't light up whenever its their turn to sing."),
 			new LaneTransOption("Use your left & right arrow keys to switch the transparacny of your lane underlay. [DEFAULT: 0]"),
 		]),
@@ -72,6 +72,7 @@ class OptionsMenuState extends MusicBeatState
 			new GhostTappingOption("If checked, you won't get misses from mashing keys while there are no notes to hit."),
 			new ScrollSpeedOption("Change your scroll speed. (1 = Chart dependent)"),
 			new ResetButtonOption("If checked, pressing 'Reset' won't do anything."),
+			new HitsoundOption("If checked, a little 'tick' sound will play everytime you hit a note."),
 		]),
 
 		new OptionCatagory("Saves", [
