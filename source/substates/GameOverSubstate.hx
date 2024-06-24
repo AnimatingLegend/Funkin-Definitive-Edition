@@ -41,6 +41,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				daBf = 'bf';
 				library = 'shared';
 		}
+
 		if (PlayState.SONG.song.toLowerCase() == 'stress')
 			daBf = 'bf-holding-gf-dead';
 
@@ -64,7 +65,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		var exclude = [];
 
-		if (FlxG.save.data.explicitContent)
+		if (DefinitiveData.naughtyness)
 			exclude = [1, 3, 8, 13, 17, 21];
 
 		randomGameover = FlxG.random.int(1, 25, exclude);

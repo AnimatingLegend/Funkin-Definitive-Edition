@@ -101,28 +101,11 @@ class TitleState extends MusicBeatState
 		FlxG.game.focusLostFramerate = 60;
 		#end
 
-		DefinitiveData.settings();
+		DefinitiveData.loadSettings();
 		PlayerSettings.init();
 		Highscore.load();
 		getBuildVer();
 
-		/*
-		* im on the brink of going to my nearby lowes and buying a rope im so stressed.
-		* this SHOULD save your progress instead of reseting it and other annyoing ass issues
-		*/
-		if (FlxG.save.data.weekUnlocked != null)
-		{
-			StoryMenuState.weekUnlocked = StoryMenuState.unlockWeeks();
-			FlxG.save.flush();
-		}
-		
-		#if desktop
-		if(FlxG.save.data.framerateDraw != null)
-		{
-			FlxG.updateFramerate = FlxG.save.data.framerateDraw;
-			FlxG.drawFramerate = FlxG.save.data.framerateDraw;
-		}
-		#end
 
 		if (FlxG.keys.justPressed.F)
 			FlxG.fullscreen = !FlxG.fullscreen;
@@ -194,12 +177,12 @@ class TitleState extends MusicBeatState
 		persistentUpdate = true;
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		bg.antialiasing = FlxG.save.data.antialiasing;
+		bg.antialiasing = DefinitiveData.antialiasing;
 		add(bg);
 
 		logoBl = new FlxSprite(-150, -100);
 		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
-		logoBl.antialiasing = FlxG.save.data.antialiasing;
+		logoBl.antialiasing = DefinitiveData.antialiasing;
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logoBl.animation.play('bump');
 		logoBl.updateHitbox();
@@ -209,7 +192,7 @@ class TitleState extends MusicBeatState
 		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-		gfDance.antialiasing = FlxG.save.data.antialiasing;
+		gfDance.antialiasing = DefinitiveData.antialiasing;
 		add(gfDance);
 		add(logoBl);
 
@@ -223,13 +206,13 @@ class TitleState extends MusicBeatState
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
 		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
 		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
-		titleText.antialiasing = FlxG.save.data.antialiasing;
+		titleText.antialiasing = DefinitiveData.antialiasing;
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
 		add(titleText);
 
 		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('logo'));
-		logo.antialiasing = FlxG.save.data.antialiasing;
+		logo.antialiasing = DefinitiveData.antialiasing;
 		logo.screenCenter();
 
 		credGroup = new FlxGroup();
@@ -258,7 +241,7 @@ class TitleState extends MusicBeatState
 		}
 		ngSpr.updateHitbox();
 		ngSpr.screenCenter(X);
-		ngSpr.antialiasing = FlxG.save.data.antialiasing;
+		ngSpr.antialiasing = DefinitiveData.antialiasing;
 		add(ngSpr);
 		ngSpr.visible = false;
 

@@ -69,7 +69,7 @@ class MainMenuState extends MusicBeatState
 		bg.setGraphicSize(Std.int(bg.width * 1.2));
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.antialiasing = FlxG.save.data.antialiasing;
+		bg.antialiasing = DefinitiveData.antialiasing;
 		add(bg);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -83,7 +83,7 @@ class MainMenuState extends MusicBeatState
 		magenta.x = bg.x;
 		magenta.y = bg.y;
 		magenta.visible = false;
-		magenta.antialiasing = FlxG.save.data.antialiasing;
+		magenta.antialiasing = DefinitiveData.antialiasing;
 		magenta.color = 0xFFFD719B;
 		if (FlxG.save.data.flashingLights)
 			add(magenta);

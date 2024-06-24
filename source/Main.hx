@@ -108,7 +108,7 @@ class Main extends Sprite
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 		#end
 
-		backend.DefinitiveData.settings();
+		backend.DefinitiveData.loadSettings();
 		Conductor.offset = FlxG.save.data.notesOffset;
 	}
 
@@ -149,7 +149,7 @@ class Main extends Sprite
 		dateNow = dateNow.replace(" ", "_");
 		dateNow = dateNow.replace(":", "'");
 
-		path = "./crash/" + "FNF - Definitive Edition" + dateNow + ".txt";
+		path = "./crash/" + "FNF - Definitive Edition " + dateNow + ".txt";
 
 		for (stackItem in callStack)
 		{

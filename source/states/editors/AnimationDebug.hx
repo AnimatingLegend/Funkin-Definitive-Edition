@@ -95,9 +95,9 @@ class AnimationDebug extends MusicBeatState
 		var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stage/stagefront', 'shared'));
 		var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stage/stagecurtains', 'shared'));
 		
-		bg.antialiasing = FlxG.save.data.antialiasing;
-		stageFront.antialiasing = FlxG.save.data.antialiasing;
-		stageCurtains.antialiasing = FlxG.save.data.antialiasing;
+		bg.antialiasing = DefinitiveData.antialiasing;
+		stageFront.antialiasing = DefinitiveData.antialiasing;
+		stageCurtains.antialiasing = DefinitiveData.antialiasing;
 
 		bg.screenCenter(X);
 		bg.scale.set(0.7, 0.7);

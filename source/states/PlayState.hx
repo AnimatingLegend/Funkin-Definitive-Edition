@@ -396,7 +396,7 @@ class PlayState extends MusicBeatState
 					phillyWindow = new BGSprite('philly/window', city.x, city.y, 0.3, 0.3, 'week3');
 					if (FlxG.save.data.shaders) phillyWindow.shader = lightFadeShader.shader;
 					phillyWindow.setGraphicSize(Std.int(phillyWindow.width * 0.85));
-					phillyWindow.antialiasing = FlxG.save.data.antialiasing;
+					phillyWindow.antialiasing = DefinitiveData.antialiasing;
 					phillyWindow.updateHitbox();
 					add(phillyWindow);
 					phillyWindow.alpha = 0;
@@ -969,7 +969,8 @@ class PlayState extends MusicBeatState
 					{
 						#if windows
 						startVideo('week7/${SONG.song.toLowerCase()}_cutscene');
-						FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.crochet / 1000) * 5, {ease: FlxEase.quadInOut});
+						/*if (SONG.song.toLowerCase() == 'stress' && !DefinitiveData.naugtyness)
+							startVideo('week7/stress_censored_cutscene');*/
 						#else
 						startCountdown();
 						#end
@@ -1119,7 +1120,7 @@ class PlayState extends MusicBeatState
 				tankCutscene.animation.addByPrefix('wellWell', 'TANK TALK 1 P1', 24, false);
 				tankCutscene.animation.addByPrefix('killYou', 'TANK TALK 1 P2', 24, false);
 				tankCutscene.animation.play('wellWell');
-				tankCutscene.antialiasing = FlxG.save.data.antialiasing;
+				tankCutscene.antialiasing = DefinitiveData.antialiasing;
 				gfCutsceneLayer.add(tankCutscene);
 
 				FlxG.camera.zoom *= 1.2;
@@ -1204,7 +1205,7 @@ class PlayState extends MusicBeatState
 				tankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong2', 'week7');
 				tankCutscene.animation.addByPrefix('tankyguy', 'TANK TALK 2', 24, false);
 				tankCutscene.animation.play('tankyguy');
-				tankCutscene.antialiasing = FlxG.save.data.antialiasing;
+				tankCutscene.antialiasing = DefinitiveData.antialiasing;
 				gfCutsceneLayer.add(tankCutscene);
 				boyfriend.animation.curAnim.finish();
 		
@@ -1251,7 +1252,7 @@ class PlayState extends MusicBeatState
 					dummyGF.frames = Paths.getSparrowAtlas('characters/gfTankmen', 'shared');
 					dummyGF.animation.addByPrefix('loop', 'GF Dancing at Gunpoint', 24, true);
 					dummyGF.animation.play('loop');
-					dummyGF.antialiasing = FlxG.save.data.antialiasing;
+					dummyGF.antialiasing = DefinitiveData.antialiasing;
 					gfCutsceneLayer.add(dummyGF);
 				}
 
@@ -1260,7 +1261,7 @@ class PlayState extends MusicBeatState
 				dummyBF.frames = Paths.getSparrowAtlas('characters/BOYFRIEND', 'shared');
 				dummyBF.animation.addByPrefix('loop', 'BF idle dance', 24, false);
 				dummyBF.animation.play('loop');
-				dummyBF.antialiasing = FlxG.save.data.antialiasing;
+				dummyBF.antialiasing = DefinitiveData.antialiasing;
 				bfTankCutsceneLayer.add(dummyBF);
 				
 				var dummyLoaderShit:FlxGroup = new FlxGroup();
@@ -1270,7 +1271,7 @@ class PlayState extends MusicBeatState
 				{
 					var dummyLoader:FlxSprite = new FlxSprite();
 					dummyLoader.loadGraphic(Paths.image('cutscenes/gfHoldup-' + i, 'week7'));
-					dummyLoader.antialiasing = FlxG.save.data.antialiasing;
+					dummyLoader.antialiasing = DefinitiveData.antialiasing;
 					dummyLoaderShit.add(dummyLoader);
 					dummyLoader.alpha = 0.01;
 					dummyLoader.y = FlxG.height - 20;
@@ -1279,7 +1280,7 @@ class PlayState extends MusicBeatState
 				var bfCatchGf:FlxSprite = new FlxSprite(boyfriend.x - 10, boyfriend.y - 90);
 				bfCatchGf.frames = Paths.getSparrowAtlas('characters/bfAndGF', 'shared');
 				bfCatchGf.animation.addByPrefix('catch', 'BF catches GF', 24, false);
-				bfCatchGf.antialiasing = FlxG.save.data.antialiasing;
+				bfCatchGf.antialiasing = DefinitiveData.antialiasing;
 				add(bfCatchGf);
 				bfCatchGf.visible = false;
 
@@ -1313,20 +1314,20 @@ class PlayState extends MusicBeatState
 				tankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong3-pt1', 'week7');
 				tankCutscene.animation.addByPrefix('tankyguy', 'TANK TALK 3 P1 UNCUT', 24, false);
 				tankCutscene.animation.play('tankyguy');
-				tankCutscene.antialiasing = FlxG.save.data.antialiasing;
+				tankCutscene.antialiasing = DefinitiveData.antialiasing;
 				bfTankCutsceneLayer.add(tankCutscene);
 
 				var alsoTankCutscene:FlxSprite = new FlxSprite(20, 320);
 				alsoTankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong3-pt2', 'week7');
 				alsoTankCutscene.animation.addByPrefix('swagTank', 'TANK TALK 3 P2 UNCUT', 24, false);
-				alsoTankCutscene.antialiasing = FlxG.save.data.antialiasing;
+				alsoTankCutscene.antialiasing = DefinitiveData.antialiasing;
 				bfTankCutsceneLayer.add(alsoTankCutscene);
 				alsoTankCutscene.y = FlxG.height + 100;
 				alsoTankCutscene.visible = false;
 
 				new FlxTimer().start(0.1, function(tmr:FlxTimer)
 				{ 
-					if (FlxG.save.data.explicitContent) {
+					if (DefinitiveData.naughtyness) {
 						stressCutscene.play(true);
 					} 
 					else 
@@ -1336,7 +1337,7 @@ class PlayState extends MusicBeatState
 						var censor:FlxSprite = new FlxSprite();
 						censor.frames = Paths.getSparrowAtlas('cutscenes/censor', 'week7');
 						censor.animation.addByPrefix('censor', 'mouth censor', 24);
-						censor.antialiasing = FlxG.save.data.antialiasing;
+						censor.antialiasing = DefinitiveData.antialiasing;
 						censor.animation.play('censor');
 						add(censor);
 						censor.visible = false;
@@ -1587,7 +1588,7 @@ class PlayState extends MusicBeatState
 			var introAlts:Array<String> = introAssets.get('default');
 			var altSuffix:String = "";
 			var week6Bullshit:String = null;
-			var aliasing:Bool = FlxG.save.data.antialiasing;
+			var aliasing:Bool = DefinitiveData.antialiasing;
 
 			for (value in introAssets.keys()) {
 				if (value == curStage) {
@@ -1849,7 +1850,7 @@ class PlayState extends MusicBeatState
 					babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
 					babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
 
-					babyArrow.antialiasing = FlxG.save.data.antialiasing;
+					babyArrow.antialiasing = DefinitiveData.antialiasing;
 					babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
 
 					switch (Math.abs(i))
@@ -2664,9 +2665,9 @@ class PlayState extends MusicBeatState
 
 		if (!curStage.startsWith('school')) {
 			rating.setGraphicSize(Std.int(rating.width * 0.7));
-			rating.antialiasing = FlxG.save.data.antialiasing;
+			rating.antialiasing = DefinitiveData.antialiasing;
 			comboSpr.setGraphicSize(Std.int(comboSpr.width * 0.7));
-			comboSpr.antialiasing = FlxG.save.data.antialiasing;
+			comboSpr.antialiasing = DefinitiveData.antialiasing;
 		} else {
 			rating.setGraphicSize(Std.int(rating.width * daPixelZoom * 0.75));
 			comboSpr.setGraphicSize(Std.int(comboSpr.width * daPixelZoom * 0.75));
@@ -2698,7 +2699,7 @@ class PlayState extends MusicBeatState
 			numScore.y += 50;
 
 			if (!curStage.startsWith('school')) {
-				numScore.antialiasing = FlxG.save.data.antialiasing;
+				numScore.antialiasing = DefinitiveData.antialiasing;
 				numScore.setGraphicSize(Std.int(numScore.width * 0.5));
 			} else {
 				numScore.setGraphicSize(Std.int(numScore.width * daPixelZoom));
@@ -2931,30 +2932,6 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	// stolen from psych engine :]
-	function set_scrollSpeed(value:Float):Float 
-	{
-		if (generatedMusic)
-		{
-			var ratio:Float = value / scrollSpeed;
-
-			for (note in notes)
-			{
-				if (note.animation.curAnim != null)
-				{
-					if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end')) {
-						note.scale.y *= ratio;
-						note.updateHitbox();
-					}
-				}
-			}
-		}
-
-		scrollSpeed = value;
-		noteKillOffset = Math.max(Conductor.stepCrochet, 350 / scrollSpeed /* * playbackRate*/);
-		return value;
-	}
-
 	function comboBreak(direction:Int = 1):Void 
 	{
 		if (!boyfriend.stunned) 
@@ -3141,6 +3118,8 @@ class PlayState extends MusicBeatState
 			{
 				remove(netStream);
 				remove(bg);
+
+
 				startAndEnd();
 			}
 			#end
@@ -3483,7 +3462,8 @@ class PlayState extends MusicBeatState
 				});
 
 			case 'school':
-				if (bgGirls != null) bgGirls.dance();
+				if (bgGirls != null) 
+					bgGirls.dance();
 
 			case 'mall':
 				if (!FlxG.save.data.lowData) {
@@ -3497,7 +3477,8 @@ class PlayState extends MusicBeatState
 				if (!FlxG.save.data.lowData)
 				{
 					grpLimoDancers.forEach(function(dancer:BackgroundDancer) {
-						dancer.dance();
+						if (dancer != null)
+							dancer.dance();
 					});
 				}
 
