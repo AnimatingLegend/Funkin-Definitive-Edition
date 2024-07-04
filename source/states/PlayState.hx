@@ -64,7 +64,7 @@ import backend.Ratings;
 
 import cutscenes.FlxVideo;
 import cutscenes.TankCutscene;
-import cutscenes.TankCutscene.CutsceneCharacter;
+import cutscenes.CutsceneCharacter;
 
 import objects.BGSprite;
 import objects.Boyfriend;
