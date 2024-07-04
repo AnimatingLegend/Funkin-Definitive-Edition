@@ -61,15 +61,15 @@ class FPSCounter extends TextField // Updated Code a lil bit, Code originally ta
 		if (mem > memMax) 
 			memMax = mem;
 
-		var memInfo = (FlxG.save.data.fps ? "MEM: " + mem + " MB" + "\n"
-		+ "MEM PEAK: " + memMax + " MB" : "");
+		var memInfo = ("MEM: " + mem + " MB" + "\n"
+		+ "MEM PEAK: " + memMax + " MB");
 
-		if (visible && currentCount != cacheCount) {
+		if (FlxG.save.data.fps && currentCount != cacheCount) {
 			text = "FPS: " + Math.round((currentCount + cacheCount) / 2) 
 			+ "\n" + memInfo 
 			+ "\n";
 		}
-		
+
 		textColor = 0xFFFFFFFF;
 
 		if (memMax > 3000 || currentCount <= FlxG.save.data.framerateDraw / 2) {
