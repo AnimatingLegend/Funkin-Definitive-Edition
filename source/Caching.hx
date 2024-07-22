@@ -1,6 +1,6 @@
 #if sys
 package;
-import flixel.FlxG;
+
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.graphics.FlxGraphic;
@@ -62,7 +62,7 @@ class Caching extends MusicBeatState
 		funkay.updateHitbox();
 		funkay.scrollFactor.set();
 		funkay.screenCenter();
-		funkay.antialiasing = FlxG.save.data.antialiasing;
+		funkay.antialiasing = DefinitiveData.antialiasing;
 		add(funkay);
 
 		preloadStuff = new FlxText(5, FlxG.height - 30, 0, "Preloading Assets", 12);

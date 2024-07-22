@@ -856,7 +856,7 @@ class ResetSettings extends Option
 		FlxG.save.data.cutscenes = null;
 		FlxG.save.data.hitsounds = null;
 
-		backend.DefinitiveData.settings();
+		backend.DefinitiveData.loadSettings();
 		trace('All settings have been reset');
 
 		acceptValues = FlxG.save.data.resetSettings;

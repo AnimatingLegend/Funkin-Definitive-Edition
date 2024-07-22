@@ -139,7 +139,7 @@ class StoryMenuState extends MusicBeatState
 			grpWeekText.add(weekThing);
 
 			weekThing.screenCenter(X);
-			weekThing.antialiasing = FlxG.save.data.antialiasing;
+			weekThing.antialiasing = DefinitiveData.antialiasing;
 
 			// Needs an offset thingie
 			if (!weekUnlocked[i])
@@ -150,7 +150,7 @@ class StoryMenuState extends MusicBeatState
 				lock.animation.addByPrefix('lock', 'lock');
 				lock.animation.play('lock');
 				lock.ID = i;
-				lock.antialiasing = FlxG.save.data.antialiasing;
+				lock.antialiasing = DefinitiveData.antialiasing;
 				grpLocks.add(lock);
 			}
 		}
@@ -171,11 +171,11 @@ class StoryMenuState extends MusicBeatState
 		leftArrow.animation.addByPrefix('idle', "arrow left");
 		leftArrow.animation.addByPrefix('press', "arrow push left");
 		leftArrow.animation.play('idle');
-		leftArrow.antialiasing = FlxG.save.data.antialiasing;
+		leftArrow.antialiasing = DefinitiveData.antialiasing;
 		difficultySelectors.add(leftArrow);
 
 		sprDifficulty = new FlxSprite(0, leftArrow.y);
-		sprDifficulty.antialiasing = FlxG.save.data.antialiasing;
+		sprDifficulty.antialiasing = DefinitiveData.antialiasing;
 
 		cleanDifficulties();
 		changeDifficulty();
@@ -187,7 +187,7 @@ class StoryMenuState extends MusicBeatState
 		rightArrow.animation.addByPrefix('idle', 'arrow right');
 		rightArrow.animation.addByPrefix('press', "arrow push right", 24, false);
 		rightArrow.animation.play('idle');
-		rightArrow.antialiasing = FlxG.save.data.antialiasing;
+		rightArrow.antialiasing = DefinitiveData.antialiasing;
 		difficultySelectors.add(rightArrow);
 
 		trace("Line 150");
@@ -481,7 +481,7 @@ class StoryMenuState extends MusicBeatState
 
 	public static function unlockNextWeek(week:Int):Void
 	{
-		if (week <= weekData().length - 1)
+		if (week <= weekData().length - 1 || !PlayState.botplay)
 		{
 			weekUnlocked.push(true);
 			trace('Week ' + week + ' beat (Week ' + (week + 1) + ' unlocked)');
