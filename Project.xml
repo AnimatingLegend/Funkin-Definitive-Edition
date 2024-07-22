@@ -58,6 +58,7 @@
 		<library name="week5"    preload="true" />
 		<library name="week6"    preload="true" />
 		<library name="week7"    preload="true" />
+		<library name="weekend1" preload="true" />
 		<library name="videos"   preload="true" />
 	</section>
 	
@@ -72,6 +73,7 @@
 		<library name="week5"    preload="false" />
 		<library name="week6"    preload="false" />
 		<library name="week7"    preload="false" />
+		<library name="weekend1" preload="false" />
 		<library name="videos"   preload="false" />
 	</section>
 	
@@ -95,6 +97,8 @@
 	<assets path="assets/week6"    library="week6"    exclude="*.fla|*.mp3" unless="web"/>
 	<assets path="assets/week7"    library="week7"    exclude="*.fla|*.ogg" if="web"/>
 	<assets path="assets/week7"    library="week7"    exclude="*.fla|*.mp3" unless="web"/>
+	<assets path="assets/weekend1" library="weekend1" exclude="*.fla|*.ogg" if="web"/>
+	<assets path="assets/weekend1" library="weekend1" exclude="*.fla|*.mp3" unless="web"/>
 
 	<!-- Turn on Crash Handler -->
 	<define name="CRASH_HANDLER" if="desktop" />
