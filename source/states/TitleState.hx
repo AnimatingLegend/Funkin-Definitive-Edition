@@ -111,6 +111,7 @@ class TitleState extends MusicBeatState
 			FlxG.fullscreen = !FlxG.fullscreen;
 
 		FlxG.mouse.visible = false;
+		
 		#if FREEPLAY
 		FlxG.switchState(new FreeplayState());
 		#elseif CHARTING
@@ -118,14 +119,14 @@ class TitleState extends MusicBeatState
 		#elseif OPTIONS
 		FlxG.switchState(new OptionsMenuState());
 		#else
-		#if !cpp
-		new FlxTimer().start(1, function(tmr:FlxTimer)
+		if (!initialized) 
 		{
+			new FlxTimer().start(1, function(tmr:FlxTimer) {
+				startIntro();
+			});
+		} 
+		else
 			startIntro();
-		});
-		#else
-		startIntro();
-		#end
 		#end
 
 		#if discord_rpc
@@ -435,10 +436,21 @@ class TitleState extends MusicBeatState
 					case 4:
 						deleteCoolText();
 					case 5:
-						createCoolText(['In association', 'with']);
+						if (FlxG.save.data.watermark)
+							createCoolText(['FNF Definitive Edition', 'by']);
+						else
+							createCoolText(['In association', 'with']);
+
 					case 7:
-						addMoreText('newgrounds');
-						if (ngSpr != null) ngSpr.visible = true;
+						if (FlxG.save.data.watermark)
+							addMoreText('Legend :]');
+						else
+						{
+							addMoreText('newgrounds');
+
+							if (ngSpr != null) 
+								ngSpr.visible = true;
+						}
 					case 8:
 						deleteCoolText();
 						if (ngSpr != null) ngSpr.visible = false;

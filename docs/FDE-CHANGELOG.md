@@ -379,7 +379,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Score updates to botplay watermark when enabled
   - boyfriend stays in his singing pose a *little* bit longer instead of instantly going back to idle
 - Tweaked the cameras on the week7 atlas cutscenes
-- Instead of returning to MainMenu when you get the gitaroo easter egg, it takes you to whatever menu you were recently in
+- Instead of returning you to the Main Menu when you get the Gitaroo Easter Egg, it takes you to whatever menu you were recently in (i.e if you were selected a song from the freeplay menu, and you get the easter egg, it returns you to that menu)
 - Notesplashes are now pixelized !! (view in week 6)
 
 ### Fixed
