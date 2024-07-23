@@ -854,20 +854,6 @@ class PlayState extends MusicBeatState
 		if (FlxG.save.data.judgementCounter)
 			add(judgementCounter);
 
-		if (FlxG.save.data.watermark)
-		{
-			#if debug
-			watermark = new FlxText (4, healthBarBG.y + 50, 0, 'v' + states.MainMenuState.definitiveVersion, 16);
-			watermark.cameras = [camHUD];
-			watermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			watermark.scrollFactor.set();
-			add(watermark);
-	
-			if (FlxG.save.data.downscroll)
-				watermark.y = FlxG.height * 0.9 + 45;
-			#end
-		}
-
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
 		grpNoteSplashPixel.cameras = [camHUD];
