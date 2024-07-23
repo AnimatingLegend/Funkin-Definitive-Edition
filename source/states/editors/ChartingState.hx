@@ -129,7 +129,7 @@ class ChartingState extends MusicBeatState
 
 		var bg = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
-		bg.antialiasing = DefinitiveData.antialiasing;
+		bg.antialiasing = FlxG.save.data.antialiasing;
 		bg.screenCenter();
 		bg.scrollFactor.set();
 		bg.color = 0xFF222222;

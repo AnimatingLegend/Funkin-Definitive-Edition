@@ -65,7 +65,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		var exclude = [];
 
-		if (DefinitiveData.naughtyness)
+		if (FlxG.save.data.explicitContent)
 			exclude = [1, 3, 8, 13, 17, 21];
 
 		randomGameover = FlxG.random.int(1, 25, exclude);

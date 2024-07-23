@@ -108,7 +108,7 @@ class Main extends Sprite
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 		#end
 
-		backend.DefinitiveData.loadSettings();
+		backend.DefinitiveData.settings();
 		Conductor.offset = FlxG.save.data.notesOffset;
 	}
 

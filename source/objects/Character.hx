@@ -33,7 +33,7 @@ class Character extends FlxSprite
 		this.isPlayer = isPlayer;
 
 		var tex:FlxAtlasFrames;
-		antialiasing = DefinitiveData.antialiasing;
+		antialiasing = FlxG.save.data.antialiasing;
 
 		switch (curCharacter)
 		{

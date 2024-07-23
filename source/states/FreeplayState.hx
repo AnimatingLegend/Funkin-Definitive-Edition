@@ -89,7 +89,7 @@ class FreeplayState extends MusicBeatState
 		}
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.antialiasing = DefinitiveData.antialiasing;
+		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
