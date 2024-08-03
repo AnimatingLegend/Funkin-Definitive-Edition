@@ -508,9 +508,14 @@ class Character extends FlxSprite
 				quickAnimAdd('singDOWN', 'Tankman DOWN note ');
 				quickAnimAdd('singLEFT', 'Tankman Right Note ');
 				quickAnimAdd('singRIGHT', 'Tankman Note Left ');
+
+				quickAnimAdd('singUP-miss', 'Tankman UP note MISS');
+				quickAnimAdd('singDOWN-miss', 'Tankman DOWN note MISS');
+				quickAnimAdd('singLEFT-miss', 'Tankman Note Left MISS');
+				quickAnimAdd('singRIGHT-miss', 'Tankman Right Note MISS');
 	
-				quickAnimAdd('singUP-alt', 'TANKMAN UGH instance');
-				quickAnimAdd('singDOWN-alt', 'PRETTY GOOD');
+				quickAnimAdd('singUP-alt', 'TANKMAN UGH');
+				quickAnimAdd('singDOWN-alt', 'PRETTY GOOD tankman');
 	
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
@@ -641,13 +646,12 @@ class Character extends FlxSprite
 						else
 							playAnim('danceLeft');
 					}
-				// These do nothing, just added these here so i wont get annoying debug errors
 				case 'bf-pixel-dead':
-					// guacamole
+					// -- ERROR -- \\
 				case 'bf-holding-gf-dead':
-					// CENSORED
+					// -- ERROR -- \\
 				case 'pico-speaker':
-					// peenus
+					// -- ERROR -- \\
 				case 'spooky':
 					danced = !danced;
 	
