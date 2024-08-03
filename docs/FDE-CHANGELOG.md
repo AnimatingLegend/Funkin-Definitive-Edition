@@ -393,3 +393,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Webm Support for cutscenes
 - Modifiers Category from Options Menu
+------------------------------------------------------------
+## [Unreleased] - [?/?/24]
+
+### Added
+- Tankman is now playable
+- Github API (tells you what specfic branch you're in, and the commit code)

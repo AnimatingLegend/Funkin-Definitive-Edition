@@ -1,1 +1,0 @@
-dont mind these folders, these are only here for the html build of the game & im too lazy to actually change the way how directories work in html.
