@@ -334,28 +334,28 @@ class PlayState extends MusicBeatState
 			case 'stage': // Week 1
 				{
 					defaultCamZoom = 0.9;
-					var bg:BGSprite = new BGSprite('stage/stageback', -600, -200, 0.9, 0.9, 'shared');
+					var bg:BGSprite = new BGSprite('stage/stageback', -600, -200, 0.9, 0.9, 'week1');
 					add(bg);
 
-					var stageFront:BGSprite = new BGSprite('stage/stagefront', -650, 600, 0.9, 0.9, 'shared');
+					var stageFront:BGSprite = new BGSprite('stage/stagefront', -650, 600, 0.9, 0.9, 'week1');
 					stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
 					stageFront.updateHitbox();
 					add(stageFront);
 
 					if (!FlxG.save.data.lowData) 
 					{
-						var stageLight:BGSprite = new BGSprite('stage/stage_light', -125, -100, 0.9, 0.9, 'shared');
+						var stageLight:BGSprite = new BGSprite('stage/stage_light', -125, -100, 0.9, 0.9, 'week1');
 						stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
 						stageLight.updateHitbox();
 						add(stageLight);
 
-						var stageLight:BGSprite = new BGSprite('stage/stage_light', 1225, -100, 0.9, 0.9, 'shared');
+						var stageLight:BGSprite = new BGSprite('stage/stage_light', 1225, -100, 0.9, 0.9, 'week1');
 						stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
 						stageLight.updateHitbox();
 						stageLight.flipX = true;
 						add(stageLight);
 
-						var stageCurtains:BGSprite = new BGSprite('stage/stagecurtains', -500, -300, 1.3, 1.3, 'shared');
+						var stageCurtains:BGSprite = new BGSprite('stage/stagecurtains', -500, -300, 1.3, 1.3, 'week1');
 						stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
 						stageCurtains.updateHitbox();
 						add(stageCurtains);
@@ -3126,10 +3126,6 @@ class PlayState extends MusicBeatState
 			startCountdown();
 	}
 
-	/**
-		* dumpster where i cache assets in playState
-		* dont mind this :]
-	**/
 	function cacheArea() 
 	{
 		Paths.clearUnusedMemory();
@@ -3145,43 +3141,41 @@ class PlayState extends MusicBeatState
 		caching('alphabet', 'image', null);
 	}
 
-	var fastCarCanDrive:Bool = true;
-
-	function resetFastCar():Void 
+	function lightningStrikeShit():Void 
 	{
-		fastCar.x = -12600;
-		fastCar.y = FlxG.random.int(140, 250);
-		fastCar.velocity.x = 0;
-		fastCarCanDrive = true;
-	}
+		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
 
-	function fastCarDrive()
-	{
-		FlxG.sound.play(Paths.soundRandom('carPass', 0, 1), 0.7);
+		if(FlxG.save.data.lowdata) 
+			halloweenBG.animation.play('halloweem bg lightning strike');
 
-		fastCar.velocity.x = (FlxG.random.int(170, 220) / FlxG.elapsed) * 3;
-		fastCarCanDrive = false;
-		new FlxTimer().start(2, function(tmr:FlxTimer) {
-			resetFastCar();
-		});
-	}
+		lightningStrikeBeat = curBeat;
+		lightningOffset = FlxG.random.int(8, 24);
 
-	var tankResetShit:Bool = false;
-	var tankMoving:Bool = false;
-	var tankAngle:Float = FlxG.random.int(-90, 45);
-	var tankSpeed:Float = FlxG.random.float(5, 7);
-	var tankX:Float = 400;
+		if (boyfriend.curCharacter.startsWith('pico-player')) {
+			boyfriend.playAnim('idle', true);
+		} else {
+			if (boyfriend.curCharacter.startsWith('bf')) {
+				boyfriend.playAnim('scared', true);
+			}
+		}
 
-	function moveTank():Void
-	{
-		if (!inCutscene) 
-		{
-			var daAngleOffset:Float = 1;
-			tankAngle += FlxG.elapsed * tankSpeed;
-			tankGround.angle = tankAngle - 90 + 15;
-	
-			tankGround.x = tankX + Math.cos(FlxAngle.asRadians((tankAngle * daAngleOffset) + 180)) * 1500;
-			tankGround.y = 1300 + Math.sin(FlxAngle.asRadians((tankAngle * daAngleOffset) + 180)) * 1100;
+		gf.playAnim('scared', true);
+
+		// taken from psych engine teehee
+		if (FlxG.save.data.camhudZoom) {
+			FlxG.camera.zoom += 0.015;
+			camHUD.zoom += 0.03;
+
+			if (!camZooming) { // Just a way for preventing it to be permanently zoomed until Skid & Pump hits a note ~ Shadow Mario
+				FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 0.5);
+				FlxTween.tween(camHUD, {zoom: 1}, 0.5);
+			}
+		}
+
+		if (FlxG.save.data.flashingLights) {
+			halloweenWhite.alpha = 0.4;
+			FlxTween.tween(halloweenWhite, {alpha: 0.5}, 0.075);
+			FlxTween.tween(halloweenWhite, {alpha: 0}, 0.25, {startDelay: 0.15});
 		}
 	}
 
@@ -3249,41 +3243,43 @@ class PlayState extends MusicBeatState
 		startedMoving = false;
 	}
 
-	function lightningStrikeShit():Void 
+	var fastCarCanDrive:Bool = true;
+
+	function resetFastCar():Void 
 	{
-		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
+		fastCar.x = -12600;
+		fastCar.y = FlxG.random.int(140, 250);
+		fastCar.velocity.x = 0;
+		fastCarCanDrive = true;
+	}
 
-		if(FlxG.save.data.lowdata) 
-			halloweenBG.animation.play('halloweem bg lightning strike');
+	function fastCarDrive()
+	{
+		FlxG.sound.play(Paths.soundRandom('carPass', 0, 1), 0.7);
 
-		lightningStrikeBeat = curBeat;
-		lightningOffset = FlxG.random.int(8, 24);
+		fastCar.velocity.x = (FlxG.random.int(170, 220) / FlxG.elapsed) * 3;
+		fastCarCanDrive = false;
+		new FlxTimer().start(2, function(tmr:FlxTimer) {
+			resetFastCar();
+		});
+	}
 
-		if (boyfriend.curCharacter.startsWith('pico-player')) {
-			boyfriend.playAnim('idle', true);
-		} else {
-			if (boyfriend.curCharacter.startsWith('bf')) {
-				boyfriend.playAnim('scared', true);
-			}
-		}
+	var tankResetShit:Bool = false;
+	var tankMoving:Bool = false;
+	var tankAngle:Float = FlxG.random.int(-90, 45);
+	var tankSpeed:Float = FlxG.random.float(5, 7);
+	var tankX:Float = 400;
 
-		gf.playAnim('scared', true);
-
-		// taken from psych engine teehee
-		if (FlxG.save.data.camhudZoom) {
-			FlxG.camera.zoom += 0.015;
-			camHUD.zoom += 0.03;
-
-			if (!camZooming) { // Just a way for preventing it to be permanently zoomed until Skid & Pump hits a note ~ Shadow Mario
-				FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 0.5);
-				FlxTween.tween(camHUD, {zoom: 1}, 0.5);
-			}
-		}
-
-		if (FlxG.save.data.flashingLights) {
-			halloweenWhite.alpha = 0.4;
-			FlxTween.tween(halloweenWhite, {alpha: 0.5}, 0.075);
-			FlxTween.tween(halloweenWhite, {alpha: 0}, 0.25, {startDelay: 0.15});
+	function moveTank():Void
+	{
+		if (!inCutscene) 
+		{
+			var daAngleOffset:Float = 1;
+			tankAngle += FlxG.elapsed * tankSpeed;
+			tankGround.angle = tankAngle - 90 + 15;
+	
+			tankGround.x = tankX + Math.cos(FlxAngle.asRadians((tankAngle * daAngleOffset) + 180)) * 1500;
+			tankGround.y = 1300 + Math.sin(FlxAngle.asRadians((tankAngle * daAngleOffset) + 180)) * 1100;
 		}
 	}
 
@@ -3439,37 +3435,9 @@ class PlayState extends MusicBeatState
 
 		switch (curStage) 
 		{
-			case 'tank':
-				if (!FlxG.save.data.lowData)
-					tankWatchtower.dance();
-				
-				foregroundSprites.forEach(function(spr:BGSprite) {
-					spr.dance();
-				});
-
-			case 'school':
-				if (bgGirls != null) 
-					bgGirls.dance();
-
-			case 'mall':
-				if (!FlxG.save.data.lowData) {
-					upperBoppers.dance(true);
-				}
-
-				bottomBoppers.dance(true);
-				santa.dance(true);
-
-			case 'limo':
-				if (!FlxG.save.data.lowData)
-				{
-					grpLimoDancers.forEach(function(dancer:BackgroundDancer) {
-						if (dancer != null)
-							dancer.dance();
-					});
-				}
-
-				if (FlxG.random.bool(10) && fastCarCanDrive)
-					fastCarDrive();
+			case 'spookyMansion':
+				if (FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset)
+					lightningStrikeShit();
 
 			case "philly":
 				if (!trainMoving)
@@ -3492,10 +3460,38 @@ class PlayState extends MusicBeatState
 					trainCooldown = FlxG.random.int(-4, 0);
 					trainStart();
 				}
-		}
 
-		if (curStage == 'spookyMansion' && FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset) {
-			lightningStrikeShit();
+			case 'limo':
+				if (!FlxG.save.data.lowData)
+				{
+					grpLimoDancers.forEach(function(dancer:BackgroundDancer) {
+						if (dancer != null)
+							dancer.dance();
+					});
+				}
+
+				if (FlxG.random.bool(10) && fastCarCanDrive)
+					fastCarDrive();
+
+			case 'mall':
+				if (!FlxG.save.data.lowData) {
+					upperBoppers.dance(true);
+				}
+
+				bottomBoppers.dance(true);
+				santa.dance(true);
+
+			case 'school':
+				if (bgGirls != null) 
+					bgGirls.dance();
+
+			case 'tank':
+				if (!FlxG.save.data.lowData)
+					tankWatchtower.dance();
+				
+				foregroundSprites.forEach(function(spr:BGSprite) {
+					spr.dance();
+				});
 		}
 	}
 
