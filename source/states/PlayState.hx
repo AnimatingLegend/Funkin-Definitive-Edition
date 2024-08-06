@@ -69,6 +69,7 @@ import cutscenes.CutsceneCharacter;
 import objects.BGSprite;
 import objects.Boyfriend;
 import objects.Boyfriend.Pico;
+import objects.Boyfriend.Tankman;
 import objects.Character;
 import objects.DialogueBox;
 import objects.HealthIcon;
@@ -128,6 +129,7 @@ class PlayState extends MusicBeatState
 	public static var gf:Character;
 	public static var boyfriend:Boyfriend;
 	public static var pico:Pico;
+	public static var tankman:Tankman;
 
 	private var babyArrow:FlxSprite;
 	private var notes:FlxTypedGroup<Note>;
@@ -954,9 +956,19 @@ class PlayState extends MusicBeatState
 					else
 					{
 						#if windows
-						startVideo('week7/${SONG.song.toLowerCase()}_cutscene');
-						/*if (SONG.song.toLowerCase() == 'stress' && !DefinitiveData.naugtyness)
-							startVideo('week7/stress_censored_cutscene');*/
+						if (SONG.song.toLowerCase() == 'ugh')
+							startVideo('week7/ugh_cutscene');
+
+						if (SONG.song.toLowerCase() == 'guns')
+							startVideo('week7/guns_cutscene');
+
+						if (SONG.song.toLowerCase() == 'stress')
+						{
+							if (!FlxG.save.data.explicitContent)
+								startVideo('week7/stress_censored_cutscene');
+							else
+								startVideo('week7/stress_cutscene');
+						}
 						#else
 						startCountdown();
 						#end
@@ -2198,7 +2210,7 @@ class PlayState extends MusicBeatState
 
 			deathCounter += 1;
 
-			if (boyfriend.curCharacter.startsWith('pico-player'))
+			if (boyfriend.curCharacter.startsWith('pico-player') || boyfriend.curCharacter.startsWith('tankman-player'))
 			{
 				FlxG.sound.play(Paths.sound('fnf_loss_sfx-pico', 'shared'));
 				FlxG.switchState(new PlayState());
@@ -3104,7 +3116,6 @@ class PlayState extends MusicBeatState
 			{
 				remove(netStream);
 				remove(bg);
-
 
 				startAndEnd();
 			}
