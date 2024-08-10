@@ -78,7 +78,7 @@ class StageData extends MusicBeatState
 					PlayState.camPos.x += 600;
 					PlayState.tweenCamIn();
 				}
-			case "spooky":
+			case "spookyKids":
 				PlayState.dad.y += 200;
 			case "monster":
 				PlayState.dad.y += 100;
