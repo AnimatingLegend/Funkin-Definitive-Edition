@@ -368,6 +368,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Cocoa (fixed an issue with mom and dads alt animation)
   - Guns (hard charting)
   - Stress (camera issues)
+- Botplay changes
+  - Score updates to botplay watermark when enabled
+  - boyfriend stays in his singing pose a *little* bit longer instead of instantly going back to idle
 - Num-1 asset
 - Made it so you can only gain a *little* bit of health after hitting notes instead of a lot
 - Improved mashing (a tad bit)
@@ -375,11 +378,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Made it so if you press 'ESCAPE' in the TitleScreen your game closes
 - Tweaked the chances of getting the NG title easter egg slimmer
 - Softcoded the freeplay songs (they can now be viewed in ``assets/data/freeplaySonglist.txt``)
-- Botplay changes
-  - Score updates to botplay watermark when enabled
-  - boyfriend stays in his singing pose a *little* bit longer instead of instantly going back to idle
 - Tweaked the cameras on the week7 atlas cutscenes
-- Instead of returning you to the Main Menu when you get the Gitaroo Easter Egg, it takes you to whatever menu you were recently in (i.e if you were selected a song from the freeplay menu, and you get the easter egg, it returns you to that menu)
+- Instead of returning you to the Main Menu when you get the Gitaroo Easter Egg, it takes you to whatever menu you were recently in
 - Notesplashes are now pixelized !! (view in week 6)
 
 ### Fixed
@@ -397,5 +397,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - [?/?/24]
 
 ### Added
-- Tankman is now playable
-- Github API (tells you what specfic branch you're in, and the commit code)
+- Github Commit API (tells you what specfic branch you're in, and the commit number)
+- Specific TitleScreen Messages when the Watermark Option is enabled
+- (Re)Added Grid Background for the character editor
+
+### Changed
+- Tankman Sprites
+  - Tankman is now a playable character
+  - Tweaked Healthbar color
+- Boyfriend does cheering animations during 'Spookeez'
+
+### Fixed
+-  Issue where you would still die even in practice mode (forgot to change old code lol)
+
+### Removed
+- Stage BG for Character Editor
+- Comepletely Reverted Freeplay Code (lots of bugs with the new system, will change it back soon probably)

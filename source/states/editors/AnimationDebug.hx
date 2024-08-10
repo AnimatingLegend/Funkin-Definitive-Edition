@@ -74,9 +74,9 @@ class AnimationDebug extends MusicBeatState
 
 	override function create()
 	{
-		//gridBG = FlxGridOverlay.create(10, 10);
-		//gridBG.scrollFactor.set(0.5, 0.5);
-		//add(gridBG);
+		gridBG = FlxGridOverlay.create(10, 10);
+		gridBG.scrollFactor.set(1, 1);
+		add(gridBG);
 
 		//FlxG.sound.music.stop();
 		FlxG.sound.playMusic(Paths.music('pauseMusic/breakfast', 'shared'), 0.5);
@@ -89,30 +89,6 @@ class AnimationDebug extends MusicBeatState
 		FlxG.cameras.add(camHUD);
 
 		FlxCamera.defaultCameras = [camOther];
-
-		// Stage Shit
-		var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stage/stageback', 'shared'));
-		var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stage/stagefront', 'shared'));
-		var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stage/stagecurtains', 'shared'));
-		
-		bg.antialiasing = FlxG.save.data.antialiasing;
-		stageFront.antialiasing = FlxG.save.data.antialiasing;
-		stageCurtains.antialiasing = FlxG.save.data.antialiasing;
-
-		bg.screenCenter(X);
-		bg.scale.set(0.7, 0.7);
-		stageFront.screenCenter(X);
-		stageFront.scale.set(0.7, 0.7);
-		stageCurtains.screenCenter(X);
-		stageCurtains.scale.set(0.7, 0.7);
-
-		bg.scrollFactor.set(0.9, 0.9);
-		stageFront.scrollFactor.set(0.9, 0.9);
-		stageCurtains.scrollFactor.set(0.9, 0.9);
-
-		add(bg);
-		add(stageFront);
-		add(stageCurtains);
 
 		FlxG.mouse.visible = true;
 	

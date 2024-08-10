@@ -1,7 +1,7 @@
 bf
 dad
 gf
-spooky
+spookyKids
 pico
 pico-player
 mom
@@ -17,5 +17,6 @@ senpai
 senpai-angry
 spirit
 tankman
+tankman-player
 pico-speaker
 bf-holding-gf

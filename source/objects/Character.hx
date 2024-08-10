@@ -143,7 +143,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 				barColor = 0xFFaf66ce;
 
-			case 'spooky':
+			case 'spookyKids':
 				tex = Paths.getSparrowAtlas('characters/spooky_kids_assets', 'shared');
 				frames = tex;
 				quickAnimAdd('singUP', 'spooky UP NOTE');
@@ -504,22 +504,38 @@ class Character extends FlxSprite
 				tex = Paths.getSparrowAtlas('characters/tankmanCaptain', 'shared');
 				frames = tex;
 				quickAnimAdd('idle', "Tankman Idle Dance");
-				quickAnimAdd('singUP', 'Tankman UP note ');
-				quickAnimAdd('singDOWN', 'Tankman DOWN note ');
-				quickAnimAdd('singLEFT', 'Tankman Right Note ');
-				quickAnimAdd('singRIGHT', 'Tankman Note Left ');
 
-				quickAnimAdd('singUP-miss', 'Tankman UP note MISS');
-				quickAnimAdd('singDOWN-miss', 'Tankman DOWN note MISS');
-				quickAnimAdd('singLEFT-miss', 'Tankman Note Left MISS');
-				quickAnimAdd('singRIGHT-miss', 'Tankman Right Note MISS');
+				animation.addByIndices('singUP', 'Tankman UP note', 	 [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009], '', 24, false);
+				animation.addByIndices('singDOWN', 'Tankman DOWN note',  [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009], '', 24, false);
+				animation.addByIndices('singLEFT', 'Tankman Right Note', [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009], '', 24, false);
+				animation.addByIndices('singRIGHT', 'Tankman Note Left', [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007], 	   			 '', 24, false);
 	
 				quickAnimAdd('singUP-alt', 'TANKMAN UGH');
 				quickAnimAdd('singDOWN-alt', 'PRETTY GOOD tankman');
 	
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
-				barColor = 0xff000000;
+				barColor = 0xFFFFFFFF;
+				flipX = true;
+			
+			case 'tankman-player':
+				tex = Paths.getSparrowAtlas('characters/tankmanCaptain', 'shared');
+				frames = tex;
+				quickAnimAdd('idle', "Tankman Idle Dance");
+
+				animation.addByIndices('singUP', 'Tankman UP note', 	  [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009], '', 24, false);
+				animation.addByIndices('singDOWN', 'Tankman DOWN note',   [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009], '', 24, false);
+				animation.addByIndices('singLEFT', 'Tankman Note Left',   [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007], 			  '', 24, false);
+				animation.addByIndices('singRIGHT', 'Tankman Right Note', [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009], '', 24, false);
+
+				quickAnimAdd('singUPmiss', 'Tankman UP note MISS');
+				quickAnimAdd('singDOWNmiss', 'Tankman DOWN note MISS');
+				quickAnimAdd('singLEFTmiss', 'Tankman Note Left MISS');
+				quickAnimAdd('singRIGHTmiss', 'Tankman Right Note MISS');
+
+				loadOffsetFile(curCharacter);
+				playAnim('idle');
+				barColor = 0xFFFFFFFF;
 				flipX = true;
 		}
 
@@ -531,7 +547,7 @@ class Character extends FlxSprite
 			flipX = !flipX;
 
 			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.startsWith('bf') && !curCharacter.startsWith('pico-player'))
+			if (!curCharacter.startsWith('bf') && !curCharacter.startsWith('pico-player') && !curCharacter.startsWith('tankman-player'))
 			{
 				// var animArray
 				var oldRight = animation.getByName('singRIGHT').frames;
@@ -583,7 +599,7 @@ class Character extends FlxSprite
 			{
 				case 'dad':
 					singDuration = 6.1;
-				case 'gf' | 'spooky':
+				case 'gf' | 'spookyKids':
 					singDuration = 4.2; // to fix the double dances
 			}
 		}
@@ -652,7 +668,7 @@ class Character extends FlxSprite
 					// -- ERROR -- \\
 				case 'pico-speaker':
 					// -- ERROR -- \\
-				case 'spooky':
+				case 'spookyKids':
 					danced = !danced;
 	
 					if (danced)

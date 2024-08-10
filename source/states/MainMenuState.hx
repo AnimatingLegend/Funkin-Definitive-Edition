@@ -42,7 +42,7 @@ class MainMenuState extends MusicBeatState
 	var camFollow:FlxObject;
 
 	public static var definitiveVersion:String = '0.5.1';
-	public static var versionSuffix:String = #if debug ' DEBUG' #else '' #end;
+	public static var versionSuffix:String = #if debug ' DEBUG' #else ' RELEASE' #end;
 
 
 	override function create()
@@ -140,7 +140,7 @@ class MainMenuState extends MusicBeatState
 			git_VERSION();
 		else 
 		{
-			var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' - v" + Application.current.meta.get('version'), 12);
+			var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' - v" + Application.current.meta.get('version') + versionSuffix, 12);
 			versionShit.scrollFactor.set();
 			versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			add(versionShit);

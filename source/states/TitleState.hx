@@ -66,6 +66,7 @@ class TitleState extends MusicBeatState
 	var credTextShit:Alphabet;
 	var textGroup:FlxGroup;
 	var ngSpr:FlxSprite;
+	var legSpr:FlxSprite;
 
 	var curWacky:Array<String> = [];
 
@@ -124,9 +125,23 @@ class TitleState extends MusicBeatState
 			new FlxTimer().start(1, function(tmr:FlxTimer) {
 				startIntro();
 			});
-		} 
-		else
+		} else {
 			startIntro();
+		}
+		#end
+
+		if (FlxG.save.data.weekUnlocked != null)
+		{
+			StoryMenuState.weekUnlocked = StoryMenuState.unlockWeeks();
+			FlxG.save.flush();
+		}
+
+		#if desktop
+		if(FlxG.save.data.framerateDraw != null)
+		{
+			FlxG.updateFramerate = FlxG.save.data.framerateDraw;
+			FlxG.drawFramerate = FlxG.save.data.framerateDraw;
+		}
 		#end
 
 		#if discord_rpc
@@ -245,6 +260,15 @@ class TitleState extends MusicBeatState
 		ngSpr.antialiasing = FlxG.save.data.antialiasing;
 		add(ngSpr);
 		ngSpr.visible = false;
+
+		legSpr = new FlxSprite(0, FlxG.height * 0.6);
+		legSpr.loadGraphic(Paths.image('leg'));
+		legSpr.setGraphicSize(Std.int(legSpr.width * 0.4));
+		legSpr.updateHitbox();
+		legSpr.screenCenter(X);
+		legSpr.antialiasing = FlxG.save.data.antialiasing;
+		add(legSpr);
+		legSpr.visible = false;
 
 		if (initialized)
 			skipIntro();
@@ -443,7 +467,12 @@ class TitleState extends MusicBeatState
 
 					case 7:
 						if (FlxG.save.data.watermark)
-							addMoreText('Animating Legend');
+						{
+							addMoreText('This guy lol');
+
+							if (legSpr != null)
+								legSpr.visible = true;
+						}
 						else
 						{
 							addMoreText('newgrounds');
@@ -453,7 +482,16 @@ class TitleState extends MusicBeatState
 						}
 					case 8:
 						deleteCoolText();
-						if (ngSpr != null) ngSpr.visible = false;
+						if (FlxG.save.data.watermark)
+						{
+							if (legSpr != null) 
+								legSpr.visible = false;
+						}
+						else
+						{
+							if (ngSpr != null) 
+								ngSpr.visible = false;
+						}
 					case 9:
 						createCoolText([curWacky[0]]);
 					case 11:

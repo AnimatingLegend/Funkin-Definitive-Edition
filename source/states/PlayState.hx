@@ -1574,7 +1574,7 @@ class PlayState extends MusicBeatState
 					dad.dance();
 			} 
 			
-			else if (dad.curCharacter == 'spooky' && !dad.animation.curAnim.name.startsWith('sing')) {
+			else if (dad.curCharacter == 'spookyKids' && !dad.animation.curAnim.name.startsWith('sing')) {
 				dad.dance();
 			}
 
@@ -1791,11 +1791,12 @@ class PlayState extends MusicBeatState
 	}
 
 	function sortByShit(Obj1:Note, Obj2:Note):Int {
-		return sortNotes(FlxSort.ASCENDING, Obj1, Obj2);
+		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
 	}
 
-	function sortNotes(order:Int = FlxSort.ASCENDING, Obj1:Note, Obj2:Note) {
-		return FlxSort.byValues(order, Obj1.strumTime, Obj2.strumTime);
+	function sortNotes(Sort:Int = FlxSort.ASCENDING, Obj1:Note, Obj2:Note):Int
+	{
+		return Obj1.strumTime < Obj2.strumTime ? Sort : Obj1.strumTime > Obj2.strumTime ? -Sort : 0;
 	}
 
 	private function generateStaticArrows(player:Int):Void 
@@ -2197,7 +2198,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if (health <= 0 && !FlxG.save.data.practiceMode) 
+		if (health <= 0 && !practiceMode) 
 		{
 			boyfriend.stunned = true;
 
@@ -3045,14 +3046,11 @@ class PlayState extends MusicBeatState
 				note.destroy();
 			}
 
-			if (!botplay) {
+			if (!botplay || !practiceMode) {
 				updateStatistic();
 			}
 
-			if (!practiceMode) {
-				updateAccuracy();
-				updateStatistic();
-			}
+			updateAccuracy();
 		}
 	}
 
@@ -3359,6 +3357,11 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		callOnEvents();
+	}
+
+	function callOnEvents()
+	{
 		switch(SONG.song.toLowerCase()) 
 		{ 
 			case "tutorial":
@@ -3368,14 +3371,10 @@ class PlayState extends MusicBeatState
 					{
 						dad.playAnim('cheer', true);
 
-						if (boyfriend.curCharacter.startsWith('pico-player')) 
-						{
+						if (boyfriend.curCharacter.startsWith('pico-player') || boyfriend.curCharacter.startsWith('tankman-player')) {
 							boyfriend.playAnim('idle', true);
-						} 
-						else 
-						{
-							if (boyfriend.curCharacter.startsWith('bf')) 
-							{
+						} else {
+							if (boyfriend.curCharacter.startsWith('bf')) {
 								boyfriend.playAnim('hey!', true);
 							}
 						}
@@ -3387,12 +3386,26 @@ class PlayState extends MusicBeatState
 				{
 					gf.playAnim('cheer');
 		
-					if (boyfriend.curCharacter.startsWith('pico-player'))
+					if (boyfriend.curCharacter.startsWith('pico-player') || boyfriend.curCharacter.startsWith('tankman-player')) {
 						boyfriend.playAnim('idle', true);
-					else 
-					{
-						if (boyfriend.curCharacter.startsWith('bf')) 
-						{
+					} else {
+						if (boyfriend.curCharacter.startsWith('bf')) {
+							boyfriend.playAnim('hey!', true);
+						}
+					}
+				}
+
+			/**
+			* kinda stupid but wtv
+			* used alt anims for the spookykids to do their 
+			**/
+			case "spookeez":
+				if (curBeat == 47 || curBeat == 111)
+				{
+					if (boyfriend.curCharacter.startsWith('pico-player') || boyfriend.curCharacter.startsWith('tankman-player')) {
+						boyfriend.playAnim('idle', true);
+					} else {
+						if (boyfriend.curCharacter.startsWith('bf')) {
 							boyfriend.playAnim('hey!', true);
 						}
 					}
@@ -3405,12 +3418,9 @@ class PlayState extends MusicBeatState
 					{
 						if (curBeat % 16 == 8) 
 						{
-							if (boyfriend.curCharacter.startsWith('pico-player')) 
-							{
+							if (boyfriend.curCharacter.startsWith('pico-player') || boyfriend.curCharacter.startsWith('tankman-player')) {
 								boyfriend.playAnim('idle', true);
-							} 
-							else 
-							{
+							} else {
 								if (boyfriend.curCharacter.startsWith('bf')) {
 									boyfriend.playAnim('hey!', true);
 								}
