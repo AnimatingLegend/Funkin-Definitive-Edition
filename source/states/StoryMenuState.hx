@@ -338,10 +338,6 @@ class StoryMenuState extends MusicBeatState
 		}
 	}
 
-	/**
-		* lord please forgive me for my sins....
-		* this is obviously subject to change, but its gonna stay like this for a little bit :/
-	**/
 	function cleanDifficulties()
 	{
 		var diffList:Array<String> = CoolUtil.coolTextFile(Paths.txt('weeksDifficulties'));
@@ -349,30 +345,15 @@ class StoryMenuState extends MusicBeatState
 
 		try
 		{
-			// yandere dev moment :(
-
+			// much better than the last catastrophe i had :sob:
 			var splitDiffs:Array<String> = diffList[curWeek].split(':');
 
-			if (splitDiffs[0].contains('easy'))
-				diffsThatExists.push('easy');
-			else if (splitDiffs[0].contains('normal'))
-				diffsThatExists.push('normal');
-			else if (splitDiffs[0].contains('hard'))
-				diffsThatExists.push('hard');
-
-			if (splitDiffs[1].contains('easy'))
-				diffsThatExists.push('easy');
-			else if (splitDiffs[1].contains('normal'))
-				diffsThatExists.push('normal');
-			else if (splitDiffs[1].contains('hard'))
-				diffsThatExists.push('hard');
-
-			if (splitDiffs[2].contains('easy'))
-				diffsThatExists.push('easy');
-			else if (splitDiffs[2].contains('normal'))
-				diffsThatExists.push('normal');
-			else if (splitDiffs[2].contains('hard'))
-				diffsThatExists.push('hard');
+			diffsThatExists = splitDiffs.map(diffStr -> {
+				if (diffStr.contains('easy')) return 'easy';
+				if (diffStr.contains('normal')) return 'normal';
+				if (diffStr.contains('hard')) return 'hard';
+				return null; // Or handle invalid cases as needed
+			}).filter(diff -> diff != null);
 		}
 		catch (e)
 		{

@@ -394,22 +394,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Webm Support for cutscenes
 - Modifiers Category from Options Menu
 ------------------------------------------------------------
-## [Unreleased] - [?/?/24]
+## [0.5.2] - [1/20/25]
 
 ### Added
-- Github Commit API (tells you what specfic branch you're in, and the commit number)
+- Github Commit API (tells you what specific branch you're in, and the commit number)
 - Specific TitleScreen Messages when the Watermark Option is enabled
-- (Re)Added Grid Background for the character editor
 
 ### Changed
-- Tankman Sprites
-  - Tankman is now a playable character
-  - Tweaked Healthbar color
+- Modifier Menu (Pause Menu)
+  - Added 'Healthdrain' to the modifier menu
+  - Everytime you select an option, your song resets
+  - You can now view whether a modified option is enabled or not in the top right corner
+- Backend Changes
+  - File rearrangements
+  - Tweaked Up FPS Counter code
+  - Tweaked Up the difficulty system code in the story menu
+  - & plenty more !
+- Updated Tankman's Sprites
+- Updated winter-horrorland hard chart
 - Boyfriend does cheering animations during 'Spookeez'
+- Made it so if you get a combo of 50 or higher, GF does her cute cheer animation
+- Grid BG appears if you have the low quality option enabled in the character editor
 
 ### Fixed
--  Issue where you would still die even in practice mode (forgot to change old code lol)
+- Issue where you would still die even in practice mode (forgot to change old code lol)
+- Issue where you still unlock weeks if you play on botplay or practice mode
 
 ### Removed
-- Stage BG for Character Editor
-- Comepletely Reverted Freeplay Code (lots of bugs with the new system, will change it back soon probably)
+- Completely Reverted Freeplay Code (lots of bugs with the new system, will change it back soon probably)
+- Pico & and tankman are no longer playable characters

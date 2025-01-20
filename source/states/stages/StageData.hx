@@ -11,7 +11,6 @@ import flixel.math.FlxPoint;
 
 import objects.Character;
 import objects.Boyfriend;
-import objects.Boyfriend.Pico;
 
 using StringTools;
 
@@ -59,15 +58,10 @@ class StageData extends MusicBeatState
 
     public static function charData():Void
 	{
-		PlayState.dad = new Character(100, 100, PlayState.SONG.player2);
-		PlayState.camPos = new FlxPoint(PlayState.dad.getGraphicMidpoint().x, PlayState.dad.getGraphicMidpoint().y);
-
-		PlayState.pico = new Pico(100, 100, PlayState.SONG.player1);
-		PlayState.tankman = new Tankman(450, 100, PlayState.SONG.player1);
 		PlayState.boyfriend = new Boyfriend(770, 450, PlayState.SONG.player1);
+		PlayState.dad = new Character(100, 100, PlayState.SONG.player2);
 
-		if (PlayState.pico.curCharacter == 'pico-player')
-			PlayState.camPos.x += 200;
+		PlayState.camPos = new FlxPoint(PlayState.dad.getGraphicMidpoint().x, PlayState.dad.getGraphicMidpoint().y);
 
 		switch (PlayState.SONG.player2) 
 		{
@@ -110,24 +104,15 @@ class StageData extends MusicBeatState
 		// Stage Positioning
 		switch (PlayState.curStage) 
 		{
-			case 'spookyMansion':
-				PlayState.tankman.y += 100;
-				PlayState.pico.x += 100;
-				PlayState.pico.y -= 50;
-
 			case 'limo':
 				PlayState.boyfriend.y -= 220;
 				PlayState.boyfriend.x += 260;
-				PlayState.tankman.y += 100;
-				PlayState.pico.y += 100;
 
 			case 'mall':
 				PlayState.boyfriend.x += 200;
-				PlayState.tankman.y += 100;
 
 			case 'mallEvil':
 				PlayState.boyfriend.x += 320;
-				PlayState.tankman.y += 100;
 				PlayState.dad.y -= 80;
 
 			case 'school' | 'schoolEvil':

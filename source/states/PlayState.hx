@@ -68,8 +68,6 @@ import cutscenes.CutsceneCharacter;
 
 import objects.BGSprite;
 import objects.Boyfriend;
-import objects.Boyfriend.Pico;
-import objects.Boyfriend.Tankman;
 import objects.Character;
 import objects.DialogueBox;
 import objects.HealthIcon;
@@ -111,6 +109,7 @@ class PlayState extends MusicBeatState
 
 	public static var practiceMode:Bool = false;
 	public static var instaKill:Bool = false;
+	public static var healthDrain:Bool = false;
 	public static var botplay:Bool = false;
 
 	public static var campaignScore:Int = 0;
@@ -128,8 +127,6 @@ class PlayState extends MusicBeatState
 	public static var dad:Character;
 	public static var gf:Character;
 	public static var boyfriend:Boyfriend;
-	public static var pico:Pico;
-	public static var tankman:Tankman;
 
 	private var babyArrow:FlxSprite;
 	private var notes:FlxTypedGroup<Note>;
@@ -894,10 +891,6 @@ class PlayState extends MusicBeatState
 						FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
 						if (gf != null) gf.playAnim('scared', true);
 						boyfriend.playAnim('scared', true);
-						
-						if (boyfriend.curCharacter.startsWith('pico-player')) {
-							pico.playAnim('idle', true);
-						}
 
 						new FlxTimer().start(0.6, function(tmr:FlxTimer) 
 						{
@@ -2211,15 +2204,7 @@ class PlayState extends MusicBeatState
 
 			deathCounter += 1;
 
-			if (boyfriend.curCharacter.startsWith('pico-player') || boyfriend.curCharacter.startsWith('tankman-player'))
-			{
-				FlxG.sound.play(Paths.sound('fnf_loss_sfx-pico', 'shared'));
-				FlxG.switchState(new PlayState());
-			}
-			else
-			{
-				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-			}
+			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 			#if discord_rpc
 			// Game Over doesn't get his own variable because it's only used here
@@ -2323,6 +2308,16 @@ class PlayState extends MusicBeatState
 
 					if (SONG.needsVoices)
 						vocals.volume = 1;
+
+					if (healthDrain)
+					{
+						/**
+						* take away 1.5 of your health out of the 100 you should have
+						* muliply it by the amount of health you gain when getting a 'sick' rating
+						**/
+						if (health > 0.1)
+							health -= 1.5 / 100.0 * 2.0;
+					}
 
 					if (FlxG.save.data.glowStrums) 
 					{
@@ -2453,19 +2448,24 @@ class PlayState extends MusicBeatState
 
 			if (storyPlaylist.length <= 0) 
 			{
-				transIn = FlxTransitionableState.defaultTransIn;
-				transOut = FlxTransitionableState.defaultTransOut;
-
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 
 				FlxG.switchState(new StoryMenuState());
 
-				if (SONG.validScore) {
-					Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
+				/*
+				* this has completly slipped my mind for so many updates
+				* yall cant finesse the system no more >:)
+				*/
+				if (!practiceMode && !botplay)
+				{
+					if (SONG.validScore) {
+						Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
+					}
+	
+					FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
+					StoryMenuState.unlockNextWeek(storyWeek);
 				}
 
-				FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
-				StoryMenuState.unlockNextWeek(storyWeek);
 				FlxG.save.flush();
 			} 
 			else 
@@ -2653,11 +2653,15 @@ class PlayState extends MusicBeatState
 		comboSpr.velocity.x += FlxG.random.int(1, 10);
 		comboSpr.visible = !FlxG.save.data.hideHud;
 
-		if (combo == 0) {
+		if (combo == 0)
 			add(comboSpr);
-		} else {
+		else
 			comboSpr.kill();
-		}
+
+		/*
+		if (combo >= 10 || combo == 0)
+			add(comboSpr);
+		*/
 
 		if (combo > highestCombo)
 			highestCombo = combo;
@@ -3017,6 +3021,12 @@ class PlayState extends MusicBeatState
 					FlxG.sound.play(Paths.sound(note.hitsound), 0.5);
 			}
 
+			if (gf != null)
+			{
+				if (combo == 50 && gf.animOffsets.exists('cheer'))
+					gf.playAnim('cheer', true);
+			}
+
 			switch (note.noteData) 
 			{
 				case 0:
@@ -3028,7 +3038,6 @@ class PlayState extends MusicBeatState
 				case 3:
 					boyfriend.playAnim('singRIGHT', true);
 			}
-
 
 			playerStrums.forEach(function(spr:FlxSprite) 
 			{
@@ -3160,12 +3169,8 @@ class PlayState extends MusicBeatState
 		lightningStrikeBeat = curBeat;
 		lightningOffset = FlxG.random.int(8, 24);
 
-		if (boyfriend.curCharacter.startsWith('pico-player')) {
-			boyfriend.playAnim('idle', true);
-		} else {
-			if (boyfriend.curCharacter.startsWith('bf')) {
-				boyfriend.playAnim('scared', true);
-			}
+		if (boyfriend.curCharacter.startsWith('bf')) {
+			boyfriend.playAnim('scared', true);
 		}
 
 		gf.playAnim('scared', true);
@@ -3371,12 +3376,8 @@ class PlayState extends MusicBeatState
 					{
 						dad.playAnim('cheer', true);
 
-						if (boyfriend.curCharacter.startsWith('pico-player') || boyfriend.curCharacter.startsWith('tankman-player')) {
-							boyfriend.playAnim('idle', true);
-						} else {
-							if (boyfriend.curCharacter.startsWith('bf')) {
-								boyfriend.playAnim('hey!', true);
-							}
+						if (boyfriend.curCharacter.startsWith('bf')) {
+							boyfriend.playAnim('hey!', true);
 						}
 					}
 				}
@@ -3386,28 +3387,18 @@ class PlayState extends MusicBeatState
 				{
 					gf.playAnim('cheer');
 		
-					if (boyfriend.curCharacter.startsWith('pico-player') || boyfriend.curCharacter.startsWith('tankman-player')) {
-						boyfriend.playAnim('idle', true);
-					} else {
-						if (boyfriend.curCharacter.startsWith('bf')) {
-							boyfriend.playAnim('hey!', true);
-						}
+					if (boyfriend.curCharacter.startsWith('bf')) {
+						boyfriend.playAnim('hey!', true);
 					}
 				}
-
 			/**
-			* kinda stupid but wtv
-			* used alt anims for the spookykids to do their 
+			* hardcoding bf hey sprites bc im too lazy to chart :]
 			**/
 			case "spookeez":
 				if (curBeat == 47 || curBeat == 111)
 				{
-					if (boyfriend.curCharacter.startsWith('pico-player') || boyfriend.curCharacter.startsWith('tankman-player')) {
-						boyfriend.playAnim('idle', true);
-					} else {
-						if (boyfriend.curCharacter.startsWith('bf')) {
-							boyfriend.playAnim('hey!', true);
-						}
+					if (boyfriend.curCharacter.startsWith('bf')) {
+						boyfriend.playAnim('hey!', true);
 					}
 				}
 
@@ -3418,12 +3409,8 @@ class PlayState extends MusicBeatState
 					{
 						if (curBeat % 16 == 8) 
 						{
-							if (boyfriend.curCharacter.startsWith('pico-player') || boyfriend.curCharacter.startsWith('tankman-player')) {
-								boyfriend.playAnim('idle', true);
-							} else {
-								if (boyfriend.curCharacter.startsWith('bf')) {
-									boyfriend.playAnim('hey!', true);
-								}
+							if (boyfriend.curCharacter.startsWith('bf')) {
+								boyfriend.playAnim('hey!', true);
 							}
 						}
 					}

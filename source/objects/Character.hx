@@ -271,27 +271,6 @@ class Character extends FlxSprite
 
 				flipX = true;
 
-			case 'pico-player':
-				tex = Paths.getSparrowAtlas('characters/Pico_FNF_assetss', 'shared');
-				frames = tex;
-				quickAnimAdd('idle', "Pico Idle Dance");
-				quickAnimAdd('singUP', 'pico Up note0');
-				quickAnimAdd('singDOWN', 'Pico Down Note0');
-				quickAnimAdd('singLEFT', 'Pico NOTE LEFT0');
-				quickAnimAdd('singRIGHT', 'Pico Note Right0');
-
-				// Miss anims
-				quickAnimAdd('singUPmiss', 'pico Up note miss');
-				quickAnimAdd('singDOWNmiss', 'Pico Down Note MISS');
-				quickAnimAdd('singRIGHTmiss', 'Pico Note Right Miss');
-				quickAnimAdd('singLEFTmiss', 'Pico NOTE LEFT miss');
-
-				loadOffsetFile(curCharacter);
-				playAnim('idle');
-				barColor = 0xFFb7d855;
-
-				flipX = true;
-
 			case 'bf':
 				var tex = Paths.getSparrowAtlas('characters/BOYFRIEND', 'shared');
 				frames = tex;
@@ -517,26 +496,6 @@ class Character extends FlxSprite
 				playAnim('idle');
 				barColor = 0xFFFFFFFF;
 				flipX = true;
-			
-			case 'tankman-player':
-				tex = Paths.getSparrowAtlas('characters/tankmanCaptain', 'shared');
-				frames = tex;
-				quickAnimAdd('idle', "Tankman Idle Dance");
-
-				animation.addByIndices('singUP', 'Tankman UP note', 	  [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009], '', 24, false);
-				animation.addByIndices('singDOWN', 'Tankman DOWN note',   [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009], '', 24, false);
-				animation.addByIndices('singLEFT', 'Tankman Note Left',   [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007], 			  '', 24, false);
-				animation.addByIndices('singRIGHT', 'Tankman Right Note', [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009], '', 24, false);
-
-				quickAnimAdd('singUPmiss', 'Tankman UP note MISS');
-				quickAnimAdd('singDOWNmiss', 'Tankman DOWN note MISS');
-				quickAnimAdd('singLEFTmiss', 'Tankman Note Left MISS');
-				quickAnimAdd('singRIGHTmiss', 'Tankman Right Note MISS');
-
-				loadOffsetFile(curCharacter);
-				playAnim('idle');
-				barColor = 0xFFFFFFFF;
-				flipX = true;
 		}
 
 		dance();
@@ -547,7 +506,7 @@ class Character extends FlxSprite
 			flipX = !flipX;
 
 			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.startsWith('bf') && !curCharacter.startsWith('pico-player') && !curCharacter.startsWith('tankman-player'))
+			if (!curCharacter.startsWith('bf'))
 			{
 				// var animArray
 				var oldRight = animation.getByName('singRIGHT').frames;
