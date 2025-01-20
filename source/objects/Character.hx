@@ -33,7 +33,7 @@ class Character extends FlxSprite
 		this.isPlayer = isPlayer;
 
 		var tex:FlxAtlasFrames;
-		antialiasing = DefinitiveData.antialiasing;
+		antialiasing = FlxG.save.data.antialiasing;
 
 		switch (curCharacter)
 		{
@@ -143,7 +143,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 				barColor = 0xFFaf66ce;
 
-			case 'spooky':
+			case 'spookyKids':
 				tex = Paths.getSparrowAtlas('characters/spooky_kids_assets', 'shared');
 				frames = tex;
 				quickAnimAdd('singUP', 'spooky UP NOTE');
@@ -264,27 +264,6 @@ class Character extends FlxSprite
 				quickAnimAdd('singDOWN', 'Pico Down Note0');
 				quickAnimAdd('singLEFT', 'Pico Note Right0');
 				quickAnimAdd('singRIGHT', 'Pico NOTE LEFT0');
-
-				loadOffsetFile(curCharacter);
-				playAnim('idle');
-				barColor = 0xFFb7d855;
-
-				flipX = true;
-
-			case 'pico-player':
-				tex = Paths.getSparrowAtlas('characters/Pico_FNF_assetss', 'shared');
-				frames = tex;
-				quickAnimAdd('idle', "Pico Idle Dance");
-				quickAnimAdd('singUP', 'pico Up note0');
-				quickAnimAdd('singDOWN', 'Pico Down Note0');
-				quickAnimAdd('singLEFT', 'Pico NOTE LEFT0');
-				quickAnimAdd('singRIGHT', 'Pico Note Right0');
-
-				// Miss anims
-				quickAnimAdd('singUPmiss', 'pico Up note miss');
-				quickAnimAdd('singDOWNmiss', 'Pico Down Note MISS');
-				quickAnimAdd('singRIGHTmiss', 'Pico Note Right Miss');
-				quickAnimAdd('singLEFTmiss', 'Pico NOTE LEFT miss');
 
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
@@ -504,17 +483,18 @@ class Character extends FlxSprite
 				tex = Paths.getSparrowAtlas('characters/tankmanCaptain', 'shared');
 				frames = tex;
 				quickAnimAdd('idle', "Tankman Idle Dance");
-				quickAnimAdd('singUP', 'Tankman UP note ');
-				quickAnimAdd('singDOWN', 'Tankman DOWN note ');
-				quickAnimAdd('singLEFT', 'Tankman Right Note ');
-				quickAnimAdd('singRIGHT', 'Tankman Note Left ');
+
+				animation.addByIndices('singUP', 'Tankman UP note', 	 [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009], '', 24, false);
+				animation.addByIndices('singDOWN', 'Tankman DOWN note',  [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009], '', 24, false);
+				animation.addByIndices('singLEFT', 'Tankman Right Note', [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009], '', 24, false);
+				animation.addByIndices('singRIGHT', 'Tankman Note Left', [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007], 	   			 '', 24, false);
 	
-				quickAnimAdd('singUP-alt', 'TANKMAN UGH instance');
-				quickAnimAdd('singDOWN-alt', 'PRETTY GOOD');
+				quickAnimAdd('singUP-alt', 'TANKMAN UGH');
+				quickAnimAdd('singDOWN-alt', 'PRETTY GOOD tankman');
 	
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
-				barColor = 0xff000000;
+				barColor = 0xFFFFFFFF;
 				flipX = true;
 		}
 
@@ -526,7 +506,7 @@ class Character extends FlxSprite
 			flipX = !flipX;
 
 			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.startsWith('bf') && !curCharacter.startsWith('pico-player'))
+			if (!curCharacter.startsWith('bf'))
 			{
 				// var animArray
 				var oldRight = animation.getByName('singRIGHT').frames;
@@ -578,7 +558,7 @@ class Character extends FlxSprite
 			{
 				case 'dad':
 					singDuration = 6.1;
-				case 'gf' | 'spooky':
+				case 'gf' | 'spookyKids':
 					singDuration = 4.2; // to fix the double dances
 			}
 		}
@@ -641,14 +621,13 @@ class Character extends FlxSprite
 						else
 							playAnim('danceLeft');
 					}
-				// These do nothing, just added these here so i wont get annoying debug errors
 				case 'bf-pixel-dead':
-					// guacamole
+					// -- ERROR -- \\
 				case 'bf-holding-gf-dead':
-					// CENSORED
+					// -- ERROR -- \\
 				case 'pico-speaker':
-					// peenus
-				case 'spooky':
+					// -- ERROR -- \\
+				case 'spookyKids':
 					danced = !danced;
 	
 					if (danced)

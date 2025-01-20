@@ -73,13 +73,9 @@ class FreeplayState extends MusicBeatState
 		isDebug = true;
 		#end
 
-		if (FlxG.save.data.weekUnlocked)
+		for (i in 0...initSonglist.length)
 		{
-			for (i in 0...initSonglist.length)
-			{
-				var data:Array<String> = initSonglist[i].split(':');
-				songs.push(new SongMetadata(data[0], Std.parseInt(data[2]), data[1]));
-			}
+			songs.push(new SongMetadata(initSonglist[i], 0, 'gf'));
 		}
 
 		if (FlxG.sound.music != null)
@@ -88,8 +84,32 @@ class FreeplayState extends MusicBeatState
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		}
 
+		if (FlxG.save.data.weekUnlocked)
+		{
+			if (StoryMenuState.weekUnlocked[1]|| isDebug)
+				addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
+	
+			if (StoryMenuState.weekUnlocked[2] || isDebug)
+				addWeek(['Spookeez', 'South', 'Monster'], 2, ['spookyKids', 'spookyKids', 'monster']);
+	
+			if (StoryMenuState.weekUnlocked[3] || isDebug)
+				addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
+	
+			if (StoryMenuState.weekUnlocked[4] || isDebug)
+				addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
+	
+			if (StoryMenuState.weekUnlocked[5] || isDebug)
+				addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
+	
+			if (StoryMenuState.weekUnlocked[6] || isDebug)
+				addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
+			
+			if (StoryMenuState.weekUnlocked[7] || isDebug)
+				addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman']);
+		}
+
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.antialiasing = DefinitiveData.antialiasing;
+		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();

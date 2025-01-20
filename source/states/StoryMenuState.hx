@@ -139,7 +139,7 @@ class StoryMenuState extends MusicBeatState
 			grpWeekText.add(weekThing);
 
 			weekThing.screenCenter(X);
-			weekThing.antialiasing = DefinitiveData.antialiasing;
+			weekThing.antialiasing = FlxG.save.data.antialiasing;
 
 			// Needs an offset thingie
 			if (!weekUnlocked[i])
@@ -150,7 +150,7 @@ class StoryMenuState extends MusicBeatState
 				lock.animation.addByPrefix('lock', 'lock');
 				lock.animation.play('lock');
 				lock.ID = i;
-				lock.antialiasing = DefinitiveData.antialiasing;
+				lock.antialiasing = FlxG.save.data.antialiasing;
 				grpLocks.add(lock);
 			}
 		}
@@ -171,11 +171,11 @@ class StoryMenuState extends MusicBeatState
 		leftArrow.animation.addByPrefix('idle', "arrow left");
 		leftArrow.animation.addByPrefix('press', "arrow push left");
 		leftArrow.animation.play('idle');
-		leftArrow.antialiasing = DefinitiveData.antialiasing;
+		leftArrow.antialiasing = FlxG.save.data.antialiasing;
 		difficultySelectors.add(leftArrow);
 
 		sprDifficulty = new FlxSprite(0, leftArrow.y);
-		sprDifficulty.antialiasing = DefinitiveData.antialiasing;
+		sprDifficulty.antialiasing =FlxG.save.data.antialiasing;
 
 		cleanDifficulties();
 		changeDifficulty();
@@ -187,7 +187,7 @@ class StoryMenuState extends MusicBeatState
 		rightArrow.animation.addByPrefix('idle', 'arrow right');
 		rightArrow.animation.addByPrefix('press', "arrow push right", 24, false);
 		rightArrow.animation.play('idle');
-		rightArrow.antialiasing = DefinitiveData.antialiasing;
+		rightArrow.antialiasing = FlxG.save.data.antialiasing;
 		difficultySelectors.add(rightArrow);
 
 		trace("Line 150");
@@ -338,10 +338,6 @@ class StoryMenuState extends MusicBeatState
 		}
 	}
 
-	/**
-		* lord please forgive me for my sins....
-		* this is obviously subject to change, but its gonna stay like this for a little bit :/
-	**/
 	function cleanDifficulties()
 	{
 		var diffList:Array<String> = CoolUtil.coolTextFile(Paths.txt('weeksDifficulties'));
@@ -349,30 +345,15 @@ class StoryMenuState extends MusicBeatState
 
 		try
 		{
-			// yandere dev moment :(
-
+			// much better than the last catastrophe i had :sob:
 			var splitDiffs:Array<String> = diffList[curWeek].split(':');
 
-			if (splitDiffs[0].contains('easy'))
-				diffsThatExists.push('easy');
-			else if (splitDiffs[0].contains('normal'))
-				diffsThatExists.push('normal');
-			else if (splitDiffs[0].contains('hard'))
-				diffsThatExists.push('hard');
-
-			if (splitDiffs[1].contains('easy'))
-				diffsThatExists.push('easy');
-			else if (splitDiffs[1].contains('normal'))
-				diffsThatExists.push('normal');
-			else if (splitDiffs[1].contains('hard'))
-				diffsThatExists.push('hard');
-
-			if (splitDiffs[2].contains('easy'))
-				diffsThatExists.push('easy');
-			else if (splitDiffs[2].contains('normal'))
-				diffsThatExists.push('normal');
-			else if (splitDiffs[2].contains('hard'))
-				diffsThatExists.push('hard');
+			diffsThatExists = splitDiffs.map(diffStr -> {
+				if (diffStr.contains('easy')) return 'easy';
+				if (diffStr.contains('normal')) return 'normal';
+				if (diffStr.contains('hard')) return 'hard';
+				return null; // Or handle invalid cases as needed
+			}).filter(diff -> diff != null);
 		}
 		catch (e)
 		{

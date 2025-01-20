@@ -66,6 +66,7 @@ class TitleState extends MusicBeatState
 	var credTextShit:Alphabet;
 	var textGroup:FlxGroup;
 	var ngSpr:FlxSprite;
+	var legSpr:FlxSprite;
 
 	var curWacky:Array<String> = [];
 
@@ -101,7 +102,7 @@ class TitleState extends MusicBeatState
 		FlxG.game.focusLostFramerate = 60;
 		#end
 
-		DefinitiveData.loadSettings();
+		DefinitiveData.settings();
 		PlayerSettings.init();
 		Highscore.load();
 		getBuildVer();
@@ -124,9 +125,23 @@ class TitleState extends MusicBeatState
 			new FlxTimer().start(1, function(tmr:FlxTimer) {
 				startIntro();
 			});
-		} 
-		else
+		} else {
 			startIntro();
+		}
+		#end
+
+		if (FlxG.save.data.weekUnlocked != null)
+		{
+			StoryMenuState.weekUnlocked = StoryMenuState.unlockWeeks();
+			FlxG.save.flush();
+		}
+
+		#if desktop
+		if(FlxG.save.data.framerateDraw != null)
+		{
+			FlxG.updateFramerate = FlxG.save.data.framerateDraw;
+			FlxG.drawFramerate = FlxG.save.data.framerateDraw;
+		}
 		#end
 
 		#if discord_rpc
@@ -178,12 +193,12 @@ class TitleState extends MusicBeatState
 		persistentUpdate = true;
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		bg.antialiasing = DefinitiveData.antialiasing;
+		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
 
 		logoBl = new FlxSprite(-150, -100);
 		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
-		logoBl.antialiasing = DefinitiveData.antialiasing;
+		logoBl.antialiasing = FlxG.save.data.antialiasing;
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logoBl.animation.play('bump');
 		logoBl.updateHitbox();
@@ -193,7 +208,7 @@ class TitleState extends MusicBeatState
 		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-		gfDance.antialiasing = DefinitiveData.antialiasing;
+		gfDance.antialiasing = FlxG.save.data.antialiasing;
 		add(gfDance);
 		add(logoBl);
 
@@ -207,13 +222,13 @@ class TitleState extends MusicBeatState
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
 		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
 		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
-		titleText.antialiasing = DefinitiveData.antialiasing;
+		titleText.antialiasing = FlxG.save.data.antialiasing;
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
 		add(titleText);
 
 		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('logo'));
-		logo.antialiasing = DefinitiveData.antialiasing;
+		logo.antialiasing = FlxG.save.data.antialiasing;
 		logo.screenCenter();
 
 		credGroup = new FlxGroup();
@@ -242,9 +257,18 @@ class TitleState extends MusicBeatState
 		}
 		ngSpr.updateHitbox();
 		ngSpr.screenCenter(X);
-		ngSpr.antialiasing = DefinitiveData.antialiasing;
+		ngSpr.antialiasing = FlxG.save.data.antialiasing;
 		add(ngSpr);
 		ngSpr.visible = false;
+
+		legSpr = new FlxSprite(0, FlxG.height * 0.6);
+		legSpr.loadGraphic(Paths.image('leg'));
+		legSpr.setGraphicSize(Std.int(legSpr.width * 0.4));
+		legSpr.updateHitbox();
+		legSpr.screenCenter(X);
+		legSpr.antialiasing = FlxG.save.data.antialiasing;
+		add(legSpr);
+		legSpr.visible = false;
 
 		if (initialized)
 			skipIntro();
@@ -443,7 +467,12 @@ class TitleState extends MusicBeatState
 
 					case 7:
 						if (FlxG.save.data.watermark)
-							addMoreText('Legend :]');
+						{
+							addMoreText('This guy lol');
+
+							if (legSpr != null)
+								legSpr.visible = true;
+						}
 						else
 						{
 							addMoreText('newgrounds');
@@ -453,7 +482,16 @@ class TitleState extends MusicBeatState
 						}
 					case 8:
 						deleteCoolText();
-						if (ngSpr != null) ngSpr.visible = false;
+						if (FlxG.save.data.watermark)
+						{
+							if (legSpr != null) 
+								legSpr.visible = false;
+						}
+						else
+						{
+							if (ngSpr != null) 
+								ngSpr.visible = false;
+						}
 					case 9:
 						createCoolText([curWacky[0]]);
 					case 11:

@@ -42,7 +42,7 @@ class MenuCharacter extends FlxSprite
 		super(x, y);
 		this.flipped = flipped;
 
-		antialiasing = DefinitiveData.antialiasing;
+		antialiasing = FlxG.save.data.antialiasing;
 
 		frames = Paths.getSparrowAtlas('storymenu/props/campaign_menu_UI_characters');
 

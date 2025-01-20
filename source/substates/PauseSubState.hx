@@ -40,6 +40,7 @@ class PauseSubState extends MusicBeatSubstate
 	var modifierChoices:Array<String> = [
 		"Toggle Practice Mode",
 		"InstaKill on Miss",
+		"HealthDrain",
 		"Botplay",
 		"Back"
 	];
@@ -60,6 +61,7 @@ class PauseSubState extends MusicBeatSubstate
 	var practiceText:FlxText;
 	var botplayText:FlxText;
 	var instaKillText:FlxText;
+	var healthDrainText:FlxText;
 
 	var pauseMusic:FlxSound;
 
@@ -107,43 +109,69 @@ class PauseSubState extends MusicBeatSubstate
 		levelDeathCounter.updateHitbox();
 		add(levelDeathCounter);
 
-		practiceText = new FlxText(20, 15 + 96, 0, "PRACTICE MODE", 32);
+		practiceText = new FlxText(20, 79 + 32, 0, "", 32);
+		practiceText.text += "PRACTICE MODE = " + (!PlayState.practiceMode ? "FALSE" : "TRUE");
 		practiceText.scrollFactor.set();
 		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
 		practiceText.updateHitbox();
 		practiceText.x = FlxG.width - (practiceText.width + 20);
-		practiceText.visible = PlayState.practiceMode;
 		add(practiceText);
 
-		instaKillText = new FlxText(20, 14 + 120, 0, "INSTAKILL ON", 32);
+		instaKillText = new FlxText(20, 79 + 64, 0, "", 32);
+		instaKillText.text += "INSTAKILL MODE = " + (!PlayState.instaKill ? "FALSE" : "TRUE");
 		instaKillText.scrollFactor.set();
 		instaKillText.setFormat(Paths.font('vcr.ttf'), 32);
 		instaKillText.updateHitbox();
 		instaKillText.x = FlxG.width - (practiceText.width + 20);
-		instaKillText.visible = PlayState.instaKill;
+	//	instaKillText.visible = PlayState.instaKill;
 		add(instaKillText);
 
-		botplayText = new FlxText(20, FlxG.height - 40, 0, "BOTPLAY", 32);
+		botplayText = new FlxText(20, 79 + 96, 0, "", 32);
+		botplayText.text += "BOTPLAY = " + (!PlayState.botplay ? "FALSE" : "TRUE");
 		botplayText.scrollFactor.set();
 		botplayText.setFormat(Paths.font('vcr.ttf'), 32);
 		botplayText.x = FlxG.width - (botplayText.width + 20);
 		botplayText.updateHitbox();
-		botplayText.visible = PlayState.botplay;
+	//	botplayText.visible = PlayState.botplay;
 		add(botplayText);
+
+		healthDrainText = new FlxText(20, 79 + 130, 0, "", 32);
+		healthDrainText.text += "HEALTHDRAIN = " + (!PlayState.healthDrain ? "FALSE" : "TRUE");
+		healthDrainText.scrollFactor.set();
+		healthDrainText.setFormat(Paths.font('vcr.ttf'), 32);
+		healthDrainText.x = FlxG.width - (healthDrainText.width + 20);
+		healthDrainText.updateHitbox();
+	//	healthDrainText.visible = PlayState.healthDrain;
+		add(healthDrainText);
 
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;
 		levelDeathCounter.alpha = 0;
 
+		practiceText.alpha = 0;
+		instaKillText.alpha = 0;
+		botplayText.alpha = 0;
+		healthDrainText.alpha = 0;
+
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
 		levelDeathCounter.x = FlxG.width - (levelDeathCounter.width + 20);
+
+		practiceText.x = FlxG.width - (practiceText.width + 20);
+		instaKillText.x = FlxG.width - (instaKillText.width + 20);
+		botplayText.x = FlxG.width - (botplayText.width + 20);
+		healthDrainText.x = FlxG.width - (healthDrainText.width + 20);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(levelDeathCounter, {alpha: 1, y: levelDeathCounter.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
 
+		FlxTween.tween(practiceText,  {alpha: 1, y: practiceText.y + 5},  0.4,   {ease: FlxEase.quartInOut, startDelay: 0.9});
+		FlxTween.tween(instaKillText, {alpha: 1, y: instaKillText.y + 5}, 0.4,   {ease: FlxEase.quartInOut, startDelay: 0.9});
+		FlxTween.tween(botplayText,   {alpha: 1, y: botplayText.y + 5},   0.4,   {ease: FlxEase.quartInOut, startDelay: 0.9});
+		FlxTween.tween(healthDrainText, {alpha: 1, y: healthDrainText.y + 5},   0.4,   {ease: FlxEase.quartInOut, startDelay: 0.9});
+		
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
 
@@ -204,15 +232,19 @@ class PauseSubState extends MusicBeatSubstate
 
 				case "Toggle Practice Mode":
 					PlayState.practiceMode = !PlayState.practiceMode;
-					practiceText.visible = PlayState.practiceMode;
+					FlxG.resetState();
 
 				case "InstaKill on Miss":
 					PlayState.instaKill = !PlayState.instaKill;
-					instaKillText.visible = PlayState.instaKill;
+					FlxG.resetState();
 
 				case "Botplay":
 					PlayState.botplay = !PlayState.botplay;
-					botplayText.visible = PlayState.botplay;
+					FlxG.resetState();
+
+				case "HealthDrain":
+					PlayState.healthDrain = !PlayState.healthDrain;
+					FlxG.resetState();
 
 				case "Options":
 					OptionsMenuState.fromFreeplay = true;
@@ -238,6 +270,19 @@ class PauseSubState extends MusicBeatSubstate
 		pauseMusic.destroy();
 
 		super.destroy();
+	}
+
+	function skipTrans(skipTrans:Bool = false) 
+	{
+		FlxG.sound.music.volume = 0;
+
+		if (skipTrans)
+		{
+			FlxTransitionableState.skipNextTransIn = true;
+			FlxTransitionableState.skipNextTransOut = true;
+		}
+
+		FlxG.resetState();
 	}
 
 	private function regenMenu()

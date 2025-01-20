@@ -1,7 +1,7 @@
 idle 0 0
-singDOWN-alt 2 16
+singUP 54 49
 singDOWN 88 -100
+singLEFT 89 -12
 singRIGHT -23 -31
 singUP-alt -16 -11
-singUP 54 49
-singLEFT 89 -12
+singDOWN-alt 2 16

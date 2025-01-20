@@ -2,9 +2,6 @@ package states;
 
 import flixel.util.FlxTimer;
 import flixel.FlxState;
-import ui.MenuItem;
-import ui.MenuTypedList;
-import ui.AtlasMenuItem;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -18,6 +15,12 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import io.newgrounds.NG;
 import lime.app.Application;
+
+import ui.MenuItem;
+import ui.MenuTypedList;
+import ui.AtlasMenuItem;
+
+import backend.GitCommit;
 
 #if discord_rpc
 import backend.Discord.DiscordClient;
@@ -38,11 +41,9 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	#if !debug
-	public static var definitiveVersion:String = '0.5.1';
-	#else
-	public static var definitiveVersion:String = '0.5.1 (DEBUG : BETA TESTING AREA)';
-	#end
+	public static var definitiveVersion:String = '0.5.2';
+	public static var versionSuffix:String = #if debug ' DEBUG' #else '' #end;
+
 
 	override function create()
 	{
@@ -69,7 +70,7 @@ class MainMenuState extends MusicBeatState
 		bg.setGraphicSize(Std.int(bg.width * 1.2));
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.antialiasing = DefinitiveData.antialiasing;
+		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -83,7 +84,7 @@ class MainMenuState extends MusicBeatState
 		magenta.x = bg.x;
 		magenta.y = bg.y;
 		magenta.visible = false;
-		magenta.antialiasing = DefinitiveData.antialiasing;
+		magenta.antialiasing = FlxG.save.data.antialiasing;
 		magenta.color = 0xFFFD719B;
 		if (FlxG.save.data.flashingLights)
 			add(magenta);
@@ -135,20 +136,15 @@ class MainMenuState extends MusicBeatState
 		FlxG.camera.follow(camFollow, null, 0.06 * (30 / FlxG.save.data.framerateDraw));
 		#end
 
-		if (FlxG.save.data.watermark) 
+		if (FlxG.save.data.watermark)
+			git_VERSION();
+		else 
 		{
-			var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "FNF' Definitive Edition - v" + definitiveVersion, 12);
+			var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' - v" + Application.current.meta.get('version') + versionSuffix, 12);
 			versionShit.scrollFactor.set();
 			versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			add(versionShit);
 		} 
-		else 
-		{
-			var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' - v" + Application.current.meta.get('version'), 12);
-			versionShit.scrollFactor.set();
-			versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			add(versionShit);		
-		}
 
 		super.create();
 		Paths.clearUnusedMemory();
@@ -220,6 +216,34 @@ class MainMenuState extends MusicBeatState
 
 		super.update(elapsed);
 	}
+
+	// Current Git Branch
+   	public static final GIT_BRANCH:String = GitCommit.getGitBranch();
+
+	// Current Git Commit Hash
+   	public static final GIT_HASH:String = GitCommit.getGitCommitHash();
+ 
+   	public static final GIT_HAS_LOCAL_CHANGES:Bool = GitCommit.getGitHasLocalChanges();
+
+	#if debug
+	function git_VERSION()
+	{
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "FNF' Definitive Edition - v" 
+		+ definitiveVersion + ' ($GIT_BRANCH : ${GIT_HASH} ${GIT_HAS_LOCAL_CHANGES})' + versionSuffix , 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
+	}
+	#else
+	function git_VERSION()
+	{
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "FNF' Definitive Edition - v" 
+		+ definitiveVersion + versionSuffix , 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
+	}
+	#end
 }
 
 class MainMenuItem extends AtlasMenuItem

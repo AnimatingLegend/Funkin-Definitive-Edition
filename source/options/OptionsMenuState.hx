@@ -115,7 +115,7 @@ class OptionsMenuState extends MusicBeatState
 		menuBG.scrollFactor.x = 0;
 		menuBG.scrollFactor.y = 0.18;
 		menuBG.screenCenter();
-		menuBG.antialiasing = DefinitiveData.antialiasing;
+		menuBG.antialiasing = FlxG.save.data.antialiasing;
 		add(menuBG);
 
 		grpControls = new FlxTypedGroup<Alphabet>();

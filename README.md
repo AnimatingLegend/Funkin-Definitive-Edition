@@ -25,9 +25,6 @@ Everything you see in this engine was used in my [Funkin': Week 7](https://githu
     - Custom Scroll Speed
     - Toggleable Accuracy Meter
     - & Plenty More!!!
-- Playable Characters
-    - Pico
-    - tankman (coming soon!!!)
 - Source Code/Asset Overhaul
     - Fixed/Changed File locations
     - Up-to-date Charting
