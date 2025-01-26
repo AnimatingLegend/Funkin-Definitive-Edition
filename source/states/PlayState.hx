@@ -296,7 +296,7 @@ class PlayState extends MusicBeatState
 		persistentDraw = true;
 
 		if (SONG == null)
-			SONG = Song.loadFromJson('tutorial');
+			SONG = Song.loadFromJson('charts/tutorial');
 
 		if (FlxG.save.data.scrollSpeed == 1)
 			scrollSpeed = SONG.speed;
@@ -311,14 +311,14 @@ class PlayState extends MusicBeatState
 		switch (SONG.song.toLowerCase()) 
 		{
 			case 'senpai':
-				dialogue = CoolUtil.coolTextFile(Paths.txt('senpai/senpaiDialogue'));
+				dialogue = CoolUtil.coolTextFile(Paths.txt('charts/senpai/senpaiDialogue'));
 			case 'roses':
 				if (FlxG.save.data.explicitContent)
-					dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogue'));
+					dialogue = CoolUtil.coolTextFile(Paths.txt('charts/roses/rosesDialogue'));
 				else
-					dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogueCensored'));
+					dialogue = CoolUtil.coolTextFile(Paths.txt('charts/roses/rosesDialogueCensored'));
 			case 'thorns':
-				dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
+				dialogue = CoolUtil.coolTextFile(Paths.txt('charts/thorns/thornsDialogue'));
 		}
 
 		#if discord_rpc
