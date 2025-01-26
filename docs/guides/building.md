@@ -1,13 +1,13 @@
 # Building The Game
 
 ### Warning
-**In order compile the game for Windows you will need 6GB+ of space, so if you have NO space left then you should clear up some space !**
+**In order compile the game for Windows you will need atleast 6GB+ of space, so if you have NO space left then you should clear up some space !**
 
-**Also note that this is a guide to build the game on your own. If you just want to play Funkin-Definitive-Edition then [download it here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases) or [play on browser](https://animatinglegend.github.io/). But if you want to build the game yourself, then continue reading.**
+**Also note that this is a guide to build the game on your own. If you just want to play Funkin-Definitive-Edition then [download it here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases). But if you want to build the game yourself, then continue reading.**
 
 ### Stuff Needed
 - [Git](https://git-scm.com/) (required)
-- [Haxe 4.1.5](https://haxe.org/download/version/4.1.5/) (this version is recommended because their latest versions have issues running this engine)
+- [Haxe 4.1.5](https://haxe.org/download/version/4.1.5/) (this version is recommended because their latest versions have issues running this specific engine)
     - [HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/) (required)
 - [Visual Community](https://visualstudio.microsoft.com/)
      - Visual Community Components (Required/Setup.bat)
@@ -39,10 +39,14 @@ haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 ```
 
 ### Compiling the game
-If everthing is installed perfectly then you are ready to compile the game! Follow these steps on how to do it:
-- Run ```lime test <target>```, replacing ```<target>``` with the platform you want to build your game in like ```windows```, ```mac```, ```linux```, & ```html5```. (ie. ```lime test windows```)
+If everything is installed perfectly, then you are ready to compile the game! Follow these steps on how to do it:
+- Run ```lime test <target>```. replace ```<target>``` with the platform you want to build your game with like ```windows```, ```mac```, ```linux```, & ```html5```. (ie. ```lime test windows```)
 - *side note* - If you want to run the debug build of the game, then follow step 1 but put ```-debug``` after it. (ie. ```lime test windows -debug```)
-- The build will be in ```Funkin-Definitive-Edition/export/release/<target>/bin```, with ```<target>``` also being the platform you're building the game in. (ie ```Funkin-Definitive-Edition/export/windows/release/bin```)
+- The build will be in ```Funkin-Definitive-Edition/export/release/<target>/bin```, with ```<target>``` also being the platform you're building the game with. (ie ```Funkin-Definitive-Edition/export/windows/release/bin```)
+
+*side note* - If you're compiling the game for the first time, then it should take about 4 - 5 minutes to fully compile and start running. But after that, it should take a couple of seconds.
+
+And if everything goes all according to plan, then your game should be compiled, and running perfectly fine!
 
 ### Additional Guides
 If you want a better guide on how to use the command line then follow [ninjamuffin's haxeflixel tips guide](https://ninjamuffin99.newgrounds.com/news/post/1090480).

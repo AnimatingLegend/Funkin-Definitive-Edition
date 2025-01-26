@@ -10,9 +10,9 @@ Here ill teach you how to make customs weeks in this engine!
 Now lets get started !!!!
 
 ## Steps
-1. Navagate through your source code. in the ```source``` folder, you'd have to open ANOTHER folder called ```states```. If you did that then look for ```StoryMenuState.hx```, and open it on VS Code.
+1. Navagate through your source code. In the ```source``` folder, you'd have to open ANOTHER folder called ```states```. If you did that then look for ```StoryMenuState.hx```, and open it on VS Code.
 
-2. Once opened, look for a function called ```weekData()```. If you cant find it then do ```CTRL + F``` and type in the same thing. It should look like this:
+2. Once opened, look for a function called ```weekData()```. If you cant find it, then do ```CTRL + F``` and type in the same thing. It should look like this:
 
 ```haxe
 static function weekData():Array<Dynamic>
@@ -29,7 +29,7 @@ static function weekData():Array<Dynamic>
 }
 ```
 ------------------------------------------------------------
-3. Copy ```['senpai', 'roses', 'thorns']``` and paste them on an empty line below, and change the song name that you want to use.
+3. Copy ```['senpai', 'roses', 'thorns']```, and paste them on an empty line below, and change the song name that you want to use.
 ------------------------------------------------------------
 ### Example
 ```haxe
@@ -48,7 +48,7 @@ static function weekData():Array<Dynamic>
 }
 ```
 ------------------------------------------------------------
-4. Below ```weekData()```, theres another function called ```weekCharacters()```. It functions the same way as weekData() but this is an array that basically displays a character of your choosing instead of songs.
+4. Below ```weekData()```, theres another function called ```weekCharacters()```. It functions the same way as weekData(), but this is an array that basically displays a character of your choosing instead of songs.
 ------------------------------------------------------------
 ### Example
 ```haxe
@@ -64,7 +64,7 @@ var weekCharacters:Array<Dynamic> = [
 ];
 ```
 ------------------------------------------------------------
-5. Below ```weekCharacters()```, theres another function called ```weekNames()```. It's more or less exactly like the last functions but this time is for the week titles. create a new line under ```"Hating Simulator ft. Moawling"``` and add your week name.
+5. Below ```weekCharacters()```, theres another function called ```weekNames()```. It's more or less exactly like the last functions but this time is for the week titles. Create a new line under ```"Hating Simulator ft. Moawling"``` and add your week name.
 ------------------------------------------------------------
 ### Example
 ```haxe
@@ -80,7 +80,7 @@ public static var weekNames:Array<String> = [
 	];
 ```
 ------------------------------------------------------------
-6. Displaying a week icon for your custom week is as simple as dropping a ```.png``` into ```assets/preload/images/storymenu/titles.``` Rename the file to ```week6.png```, ```week7.png```, etc.
+6. Displaying a week icon for your custom week is as simple as dropping a ```.png``` into ```assets/preload/images/storymenu/titles```. Rename the file to ```week6.png```, ```week7.png```, etc.
 ------------------------------------------------------------
 ### Example
 ![Screenshot_1 || week_titles](https://github.com/user-attachments/assets/84e81941-7022-4010-956c-0d06442cbea8)
