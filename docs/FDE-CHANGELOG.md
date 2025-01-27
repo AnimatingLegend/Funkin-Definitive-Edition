@@ -423,3 +423,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Completely Reverted Freeplay Code (lots of bugs with the new system, will change it back soon probably)
 - Pico & and tankman are no longer playable characters
+------------------------------------------------------------
+## [Unreleased]
+
+### Added
+- (Re)Added Ridge to the game (old fnf chart)
+
+
+### Changed
+- Music Chart
+ - Charts are now being cached
+ - Updated charts File Location
