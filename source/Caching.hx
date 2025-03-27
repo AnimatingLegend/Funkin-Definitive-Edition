@@ -40,6 +40,7 @@ class Caching extends MusicBeatState
 
 	var images = [];
 	var music  = [];
+	var sounds = [];
 	var charts = [];
 
 	var preloadStuff:FlxText;
@@ -83,6 +84,11 @@ class Caching extends MusicBeatState
 		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/songs")))
 		{
 			music.push(i);
+		}
+
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/sounds")))
+		{
+			sounds.push(i);
 		}
 
 		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/data/charts")))
@@ -154,6 +160,16 @@ class Caching extends MusicBeatState
 		{
 			FlxG.sound.cache(Paths.inst(i));
 			FlxG.sound.cache(Paths.voices(i));
+			trace(i);
+		}
+
+		for (i in sounds) {
+			var replaced = i.replace(".ogg", "");
+			var data:BitmapData = BitmapData.fromFile("assets/shared/sounds/" + i);
+			var graph = FlxGraphic.fromBitmapData(data);
+			graph.persist = true;
+			graph.destroyOnNoUse = false;
+			bitmapData.set(replaced, graph);
 			trace(i);
 		}
 
