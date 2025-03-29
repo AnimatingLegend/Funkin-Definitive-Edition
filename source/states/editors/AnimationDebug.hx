@@ -21,7 +21,7 @@ import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUITooltip.FlxUITooltipStyle;
 import flixel.addons.transition.FlxTransitionableState;
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 import openfl.events.Event;
 import openfl.net.FileReference;
 import openfl.events.IOErrorEvent;
@@ -116,7 +116,7 @@ class AnimationDebug extends MusicBeatState
 		camHUD.bgColor.alpha = 0;
 		FlxG.cameras.add(camHUD);
 
-		FlxCamera.defaultCameras = [camOther];
+		this.cameras = [camOther, camHUD];
 
 		FlxG.mouse.visible = true;
 	

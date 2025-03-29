@@ -16,7 +16,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.ui.FlxSpriteButton;
@@ -26,6 +26,7 @@ import lime.utils.Assets;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
+import openfl.media.SoundChannel;
 import openfl.net.FileReference;
 import openfl.utils.ByteArray;
 import flash.media.Sound;
@@ -607,10 +608,7 @@ class ChartingState extends MusicBeatState
 			#if cpp
 			@:privateAccess
 			{
-				lime.media.openal.AL.sourcef(FlxG.sound.music._channel.__source.__backend.handle, lime.media.openal.AL.PITCH,
-					stepperSongSpeed.value / (1 * 100));
-				if (vocals.playing)
-					lime.media.openal.AL.sourcef(vocals._channel.__source.__backend.handle, lime.media.openal.AL.PITCH, stepperSongSpeed.value / (1 * 100));
+				// Removed invalid pitch manipulation logic for SoundChannel
 			}
 			#end
 		}

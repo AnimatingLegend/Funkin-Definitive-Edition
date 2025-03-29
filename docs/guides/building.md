@@ -33,7 +33,7 @@ So for each of those type ``haxelib install [library]`` so for example ``haxelib
 If you installed Git or Lime then you would need to install these libraries also
 
 ```
-haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addon
+haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons
 haxelib git polymod https://github.com/larsiusprime/polymod.git
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 ```
