@@ -23,7 +23,6 @@ import flixel.math.FlxAngle;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
-import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -137,9 +136,9 @@ class PlayState extends MusicBeatState
 
 	private static var prevCamFollow:FlxObject;
 
-	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
-	private var playerStrums:FlxTypedGroup<FlxSprite>;
-	private var opponentStrums:FlxTypedGroup<FlxSprite>;
+	public static var strumLineNotes:FlxTypedGroup<FlxSprite> = null;
+	public static var playerStrums:FlxTypedGroup<FlxSprite> = null;
+	public static var opponentStrums:FlxTypedGroup<FlxSprite> = null;
 
 	public static var camZooming:Bool = false;
 	public static var camPos:FlxPoint;
@@ -2234,30 +2233,23 @@ class PlayState extends MusicBeatState
 				} else {
 					daNote.active = true;
 					daNote.visible = true;
-				}
-	
+					}
+
 				var center = strumLine.y + (Note.swagWidth / 2);
 				var leSpeed = scrollSpeed == 1 ? SONG.speed : scrollSpeed;
-		
-				// i am so fucking sorry for these if conditions
-				if (FlxG.save.data.downscroll) 
-				{
-					daNote.y = (strumLine.y + (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(leSpeed, 2))); 
-	
-					if (daNote.isSustainNote)
+
+				if (FlxG.save.data.downscroll) {
+					daNote.y = (strumLine.y + (Conductor.songPosition - daNote.strumTime) * (0.45 * leSpeed));
+
+					if (daNote.isSustainNote) 
 					{
-						if (daNote.animation.curAnim.name.endsWith("end") && daNote.prevNote != null)
-							daNote.y += daNote.prevNote.height;
-						else
-							daNote.y += daNote.height / 2;
-	
-						if ((!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))
-							&& daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= center)
-						{
-							// clipRect is applied to graphic itself so use frame Heights
+						daNote.y -= daNote.height - (0.45 * Conductor.stepCrochet * leSpeed);
+
+						if ((botplay || !daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))
+							&& daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= center) {
+							// Smooth clipping for sustain notes
 							var swagRect:FlxRect = new FlxRect(0, 0, daNote.frameWidth, daNote.frameHeight);
-	
-							swagRect.height = (center - daNote.y) / daNote.scale.y;
+							swagRect.height = Math.max(0, (center - daNote.y) / daNote.scale.y);
 							swagRect.y = daNote.frameHeight - swagRect.height;
 							daNote.clipRect = swagRect;
 						}
@@ -2265,15 +2257,18 @@ class PlayState extends MusicBeatState
 				} 
 				else 
 				{
-					daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(leSpeed, 2)));
-	
-					if (daNote.isSustainNote && (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))) && daNote.y + daNote.offset.y * daNote.scale.y <= center) 
-					{
-						var swagRect:FlxRect = new FlxRect(0, 0, daNote.width / daNote.scale.x, daNote.height / daNote.scale.y);
+					daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * leSpeed));
 
-						swagRect.y = (center - daNote.y) / daNote.scale.y;
-						swagRect.height -= swagRect.y;
-						daNote.clipRect = swagRect;
+					if (daNote.isSustainNote) 
+					{
+						if ((botplay || !daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))) 
+							&& daNote.y + daNote.offset.y * daNote.scale.y <= center) {
+							// Smooth clipping for sustain notes
+							var swagRect:FlxRect = new FlxRect(0, 0, daNote.width / daNote.scale.x, daNote.height / daNote.scale.y);
+							swagRect.y = Math.max(0, (center - daNote.y) / daNote.scale.y);
+							swagRect.height = Math.max(0, swagRect.height - swagRect.y);
+							daNote.clipRect = swagRect;
+						}
 					}
 				}
 	
@@ -2432,6 +2427,13 @@ class PlayState extends MusicBeatState
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
+
+		// disposing of sounds to avoid memory leaks
+		FlxG.sound.music.stop();
+		vocals.stop();
+		FlxG.sound.music.destroy();
+		vocals.destroy();
+		
 		
 		if (SONG.validScore) {
 			#if !switch
@@ -2653,15 +2655,9 @@ class PlayState extends MusicBeatState
 		comboSpr.velocity.x += FlxG.random.int(1, 10);
 		comboSpr.visible = !FlxG.save.data.hideHud;
 
-		if (combo == 0)
-			add(comboSpr);
-		else
-			comboSpr.kill();
+		if (combo == 0) add(comboSpr); else comboSpr.kill();
 
-		/*
-		if (combo >= 10 || combo == 0)
-			add(comboSpr);
-		*/
+	//	if (combo >= 10 || combo == 0) add(comboSpr);
 
 		if (combo > highestCombo)
 			highestCombo = combo;
@@ -3123,14 +3119,11 @@ class PlayState extends MusicBeatState
 			{
 				remove(netStream);
 				remove(bg);
-
 				startAndEnd();
-			}
+			};
 			#end
 			return;
-		}
-		catch (e)
-		{
+		} catch (e) {
 			FlxG.log.warn("Video not found: " + fileName);
 			startAndEnd();
 		}
