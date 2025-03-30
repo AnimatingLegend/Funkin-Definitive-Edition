@@ -9,7 +9,6 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import flixel.FlxG;
 import flixel.text.FlxText.FlxTextBorderStyle;
-import openfl.display.StageScaleMode;
 
 import ui.FPSCounter;
 
