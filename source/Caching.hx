@@ -1,6 +1,6 @@
-#if sys
 package;
 
+#if sys
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.graphics.FlxGraphic;
