@@ -65,10 +65,10 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
-		backend.DefinitiveData.settings();
-
 		#if !debug
 		initialState = Caching;
+		FlxG.debugger = true;
+		FlxG.debug = true;
 		#end
 
 		addChild(new FlxGame(game.gameWidth, game.gameHeight, game.initialState, game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
