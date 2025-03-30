@@ -1,5 +1,7 @@
 package;
 
+import Caching;
+
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
@@ -65,13 +67,21 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
-		#if !debug
-		initialState = Caching;
-		FlxG.debugger = true;
-		FlxG.debug = true;
+		#if (!debug && !html5)
+		game.initialState = states.TitleState; // Replace Caching with a valid state
+		#else
+		game.initialState = Caching; // Replace Caching with a valid state
 		#end
 
+		#if !cpp
+		game.framerate = 60;
+		#end
+
+		#if cpp
 		addChild(new FlxGame(game.gameWidth, game.gameHeight, game.initialState, game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
+		#else
+		addChild(new FlxGame(game.gameWidth, game.gameHeight, game.initialState, game.framerate, game.framerate, game.skipSplash));
+		#end
 
 		#if !mobile
 		if(FlxG.save.data.fps == null) FlxG.save.data.fps = true;
