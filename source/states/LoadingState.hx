@@ -19,27 +19,26 @@ import haxe.io.Path;
 class LoadingState extends MusicBeatState
 {
 	inline static var MIN_TIME = 1.0;
-	
 	var target:FlxState;
-	var targetShit:Float = 0;
 	var stopMusic = false;
+	var directory:String;
 	var callbacks:MultiCallback;
-	
-	function new(target:FlxState, stopMusic:Bool)
+	var targetShit:Float = 0;
+ 
+	function new(target:FlxState, stopMusic:Bool, directory:String)
 	{
 		super();
 		this.target = target;
 		this.stopMusic = stopMusic;
+		this.directory = directory;
 	}
 
 	var funkay:FlxSprite;
 	var loadBar:FlxSprite;
-
 	override function create()
 	{
 		var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xffcaff4d);
 		add(bg);
-		
 		funkay = new FlxSprite(0, 0).loadGraphic(Paths.image('funkay'));
 		funkay.setGraphicSize(0, FlxG.height);
 		funkay.updateHitbox();
@@ -59,18 +58,21 @@ class LoadingState extends MusicBeatState
 			{
 				callbacks = new MultiCallback(onLoad);
 				var introComplete = callbacks.add("introComplete");
-				checkLoadSong(getSongPath());
-				
-				if (PlayState.SONG.needsVoices)
-					checkLoadSong(getVocalPath());
-
+				if (PlayState.SONG != null) {
+					checkLoadSong(getSongPath());
+					if (PlayState.SONG.needsVoices)
+						checkLoadSong(getVocalPath());
+				}
 				checkLibrary("videos");
 				checkLibrary("shared");
-				
-				if (PlayState.storyWeek > 0)
-					checkLibrary("week" + PlayState.storyWeek);
-				else
-					checkLibrary("tutorial");
+				if(directory != null && directory.length > 0 && directory != 'shared') {
+					checkLibrary(directory);
+				} else {
+					if (PlayState.storyWeek > 0)
+						checkLibrary("week" + PlayState.storyWeek);
+					else
+						checkLibrary("tutorial");
+				}
 				
 				var fadeTime = 0.5;
 				FlxG.camera.fade(FlxG.camera.bgColor, fadeTime, true);
@@ -118,10 +120,7 @@ class LoadingState extends MusicBeatState
 		if(callbacks != null) 
 		{
 			targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
-
-			var lerpWidth:Int = Std.int(FlxMath.lerp(loadBar.width, FlxG.width * targetShit, 0.2));
-			loadBar.setGraphicSize(lerpWidth, FlxG.height);
-			loadBar.updateHitbox();
+			loadBar.scale.x += 0.5 * (targetShit - loadBar.scale.x);
 		}
 
 		#if debug
@@ -154,14 +153,19 @@ class LoadingState extends MusicBeatState
 	
 	static function getNextState(target:FlxState, stopMusic = false):FlxState
 	{
-		Paths.setCurrentLevel("week" + PlayState.storyWeek);
+		var directory:String = 'shared';
+
+		Paths.setCurrentLevel(directory);
+		trace('Setting asset folder to ' + directory);
+
 		#if NO_PRELOAD_ALL
-		var loaded = isSoundLoaded(getSongPath())
-			&& (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath()))
-			&& isLibraryLoaded("shared");
+		var loaded:Bool = false;
+		if (PlayState.SONG != null) {
+			loaded = isSoundLoaded(getSongPath()) && (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath())) && isLibraryLoaded("shared") && isLibraryLoaded(directory);
+		}
 		
 		if (!loaded)
-			return new LoadingState(target, stopMusic);
+			return new LoadingState(target, stopMusic, directory);
 		#end
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();

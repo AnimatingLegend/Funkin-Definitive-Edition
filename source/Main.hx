@@ -70,7 +70,7 @@ class Main extends Sprite
 		#if (!debug && !html5)
 		game.initialState = states.TitleState; // Replace Caching with a valid state
 		#else
-		game.initialState = Caching; // Replace Caching with a valid state
+		game.initialState = states.TitleState; // Replace Caching with a valid state
 		#end
 
 		#if !cpp
