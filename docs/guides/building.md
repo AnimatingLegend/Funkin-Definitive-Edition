@@ -18,7 +18,37 @@
         - [Lime](https://marketplace.visualstudio.com/items?itemName=openfl.lime-vscode-extension)
         - [HXCCP Debugger](https://marketplace.visualstudio.com/items?itemName=vshaxe.hxcpp-debugger)
 
-After installing everything above, you will need to install these additional libraries, a fully updated list will be in `Project.xml` in the project root. Since Haxe is still getting updates, aswell as the libraries I'd recommend you use [my Haxe libraries](https://github.com/AnimatingLegend/Funkin-Haxe-Libraries) instead, considering how they're up-to-date with my engine.
+After installing everything above, you will need to install these additional libraries, a fully updated list will be in `Project.xml` in the project root. Currently these are all of the things you need to install:
+```
+flixel
+flixel-addons
+flixel-tools
+flixel-ui
+hscript
+hxCodec
+hxcpp
+hxcpp-debug-server
+actuate
+polymod 1.5.3
+```
+So for each of those type ``haxelib install [library]`` so for example ``haxelib install flixel``
+
+If you installed Git or lime then you would need to setup these dependencies:
+
+for lime
+```
+haxelib run flixel-tools setup
+haxelib run lime setup flixel
+haxelib run lime setup
+```
+
+for git
+```
+haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
+haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons
+```
+
+As for any other libraries that are needed, go to [Funkin-Haxe-Libraries](https://github.com/AnimatingLegend/Funkin-Haxe-Libraries) to install the majority of the dependencies needed.
 
 ### Compiling the game
 If everthing is installed perfectly then you are ready to compile the game! Follow these steps on how to do it:
