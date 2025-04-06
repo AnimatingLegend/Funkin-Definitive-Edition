@@ -1,7 +1,5 @@
 package;
 
-import Caching;
-
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
@@ -28,14 +26,13 @@ using StringTools;
 
 class Main extends Sprite
 {
-	var game = {
-		gameWidth: 1280, // WINDOW WIDTH
-		gameHeight: 720, // WINDOW HEIGHT
-		initialState: states.TitleState, // INITIAL GAME STATE
-		framerate: 120, // DEFAULT FRAMERATE
-		skipSplash: true, // If the Default flixel splash screen should be skipped
-		startFullscreen: false // If the game should start in fullscreen mode
-	}
+	var gameWidth:Int = 1280; // GAME WIDTH
+	var gameHeight:Int = 720; // GAME HEIGHT
+	var initialState:Class<FlxState> = states.TitleState; // GAMES INITIAL STATE
+	var zoom:Float = -1; // GAME ZOOM (1 = 100%)
+	var framerate:Int = 120; // GAME FRAMERATE
+	var skipSplash:Bool = true; // SKIP HAXE LOGO
+	var startFullscreen:Bool = false; // GAME STARTS IN FULLSCREEN
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
@@ -67,21 +64,31 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
-		#if (!debug && !html5)
-		game.initialState = states.TitleState; // Replace Caching with a valid state
-		#else
-		game.initialState = states.TitleState; // Replace Caching with a valid state
-		#end
+		var stageWidth:Int = Lib.current.stage.stageWidth;
+		var stageHeight:Int = Lib.current.stage.stageHeight;
+
+		if (zoom == -1)
+		{
+			var ratioX:Float = stageWidth / gameWidth;
+			var ratioY:Float = stageHeight / gameHeight;
+			zoom = Math.min(ratioX, ratioY);
+			gameWidth = Math.ceil(stageWidth / zoom);
+			gameHeight = Math.ceil(stageHeight / zoom);
+		}
 
 		#if !cpp
-		game.framerate = 60;
+		framerate = 60;
 		#end
 
 		#if cpp
-		addChild(new FlxGame(game.gameWidth, game.gameHeight, game.initialState, game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
-		#else
-		addChild(new FlxGame(game.gameWidth, game.gameHeight, game.initialState, game.framerate, game.framerate, game.skipSplash));
+		#if !debug
+		initialState = Caching;
 		#end
+		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
+		#else
+		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
+		#end
+		addChild(game);
 
 		#if !mobile
 		if(FlxG.save.data.fps == null) FlxG.save.data.fps = true;
@@ -99,9 +106,11 @@ class Main extends Sprite
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 		#end
 
+		backend.DefinitiveData.settings();
 		Conductor.offset = FlxG.save.data.notesOffset;
 	}
 
+	var game:FlxGame;
 	var fpsCounter:FPSCounter;
 
 	public function toggleFPS(fpsEnabled:Bool):Void {
