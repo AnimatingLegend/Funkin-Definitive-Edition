@@ -26,7 +26,7 @@ import objects.BGSprite;
 import states.PlayState;
 import states.LoadingState;
 
-import flixel.sound.FlxSound;
+import flixel.system.FlxSound;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
