@@ -1,13 +1,13 @@
 # Building The Game
 
 ### Warning
-**In order compile the game for Windows you will need atleast 6GB+ of space, so if you have NO space left then you should clear up some space !**
+**In order compile the game for Windows you will need 6GB+ of space, so if you have NO space left then you should clear up some space !**
 
-**Also note that this is a guide to build the game on your own. If you just want to play Funkin-Definitive-Edition then [download it here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases). But if you want to build the game yourself, then continue reading.**
+**Also note that this is a guide to build the game on your own. If you just want to play Funkin-Definitive-Edition then [download it here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases) or [play on browser](https://animatinglegend.github.io/content/FDE-WEB-DEMO). But if you want to build the game yourself, then continue reading.**
 
 ### Stuff Needed
 - [Git](https://git-scm.com/) (required)
-- [Haxe 4.1.5](https://haxe.org/download/version/4.1.5/) (this version is recommended because their latest versions have issues running this specific engine)
+- [Haxe 4.2.5](https://haxe.org/download/version/4.2.5/) (this version is recommended because their latest versions have issues running this engine)
     - [HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/) (required)
 - [Visual Community](https://visualstudio.microsoft.com/)
      - Visual Community Components (Required/Setup.bat)
@@ -18,35 +18,43 @@
         - [Lime](https://marketplace.visualstudio.com/items?itemName=openfl.lime-vscode-extension)
         - [HXCCP Debugger](https://marketplace.visualstudio.com/items?itemName=vshaxe.hxcpp-debugger)
 
-After installing everything above, you will need to install these additional libraries, a fully updated list will be in `Project.xml` in the project root. Currently, these are all of the things you need to install:
+After installing everything above, you will need to install these additional libraries, a fully updated list will be in `Project.xml` in the project root. Currently these are all of the things you need to install:
 ```
-flixel
-flixel-addons
+flixel 4.9.0
+flixel-addons 2.11.0
+flixel-tools
 flixel-ui
 hscript
 hxCodec
-newgrounds
+hxcpp
+hxcpp-debug-server
 actuate
+polymod 1.5.3
 ```
-So for each of those type ``haxelib install [library]`` so for example ``haxelib install newgrounds``
+So for each of those type ``haxelib install [library]`` so for example ``haxelib install flixel``
 
-If you installed Git or Lime then you would need to install these libraries also
+If you installed Git or lime then you would need to setup these dependencies:
 
+for lime
 ```
-haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addon
-haxelib git polymod https://github.com/larsiusprime/polymod.git
+haxelib run flixel-tools setup
+haxelib run lime setup flixel
+haxelib run lime setup
+```
+
+for git
+```
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
+haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons
 ```
+
+As for any other libraries that are needed, go to [Funkin-Haxe-Libraries](https://github.com/AnimatingLegend/Funkin-Haxe-Libraries) to install the majority of the dependencies needed.
 
 ### Compiling the game
-If everything is installed perfectly, then you are ready to compile the game! Follow these steps on how to do it:
-- Run ```lime test <target>```. replace ```<target>``` with the platform you want to build your game with like ```windows```, ```mac```, ```linux```, & ```html5```. (ie. ```lime test windows```)
+If everthing is installed perfectly then you are ready to compile the game! Follow these steps on how to do it:
+- Run ```lime test <target>```, replacing ```<target>``` with the platform you want to build your game in like ```windows```, ```mac```, ```linux```, & ```html5```. (ie. ```lime test windows```)
 - *side note* - If you want to run the debug build of the game, then follow step 1 but put ```-debug``` after it. (ie. ```lime test windows -debug```)
-- The build will be in ```Funkin-Definitive-Edition/export/release/<target>/bin```, with ```<target>``` also being the platform you're building the game with. (ie ```Funkin-Definitive-Edition/export/windows/release/bin```)
-
-*side note* - If you're compiling the game for the first time, then it should take about 4 - 5 minutes to fully compile and start running. But after that, it should take a couple of seconds.
-
-And if everything goes all according to plan, then your game should be compiled, and running perfectly fine!
+- The build will be in ```Funkin-Definitive-Edition/export/release/<target>/bin```, with ```<target>``` also being the platform you're building the game in. (ie ```Funkin-Definitive-Edition/export/windows/release/bin```)
 
 ### Additional Guides
 If you want a better guide on how to use the command line then follow [ninjamuffin's haxeflixel tips guide](https://ninjamuffin99.newgrounds.com/news/post/1090480).
