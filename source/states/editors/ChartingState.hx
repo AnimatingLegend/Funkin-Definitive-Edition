@@ -608,7 +608,7 @@ class ChartingState extends MusicBeatState
 			#if cpp
 			@:privateAccess
 			{
-				// Removed invalid pitch manipulation logic for SoundChannel
+				Conductor.songPosition = FlxG.sound.music.time;
 			}
 			#end
 		}

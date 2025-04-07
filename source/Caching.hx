@@ -21,6 +21,7 @@ import flixel.tweens.FlxTween;
 import sys.FileSystem;
 import sys.io.File;
 #end
+import haxe.Json;
 
 import states.TitleState;
 import backend.Paths;
@@ -39,6 +40,7 @@ class Caching extends MusicBeatState
 
 	var images = [];
 	var music  = [];
+	var sounds = [];
 	var charts = [];
 
 	var preloadStuff:FlxText;
@@ -79,16 +81,19 @@ class Caching extends MusicBeatState
 			images.push(i);
 		}
 
-		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/week7/images/cutscenes")))
-		{
-			if (!i.endsWith(".png"))
-				continue;
-			images.push(i);
-		}
-
 		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/songs")))
 		{
 			music.push(i);
+		}
+
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/sounds")))
+		{
+			sounds.push(i);
+		}
+
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/data/charts")))
+		{
+			charts.push(i);
 		}
 		#end
 
@@ -106,13 +111,17 @@ class Caching extends MusicBeatState
 
 	function changetext() 
 	{
-		new FlxTimer().start(0.5, function(tmr:FlxTimer) {
+		new FlxTimer().start(0.5, function(tmr:FlxTimer) 
+		{
 			preloadStuff.text = 'Preloading Assets';
-			new FlxTimer().start(0.5, function(tmr:FlxTimer) {
+			new FlxTimer().start(0.5, function(tmr:FlxTimer) 
+			{
 				preloadStuff.text = 'Preloading Assets.';
-				new FlxTimer().start(0.5, function(tmr:FlxTimer) {
+				new FlxTimer().start(0.5, function(tmr:FlxTimer) 
+				{
 					preloadStuff.text = 'Preloading Assets..';
-					new FlxTimer().start(0.5, function(tmr:FlxTimer) {
+					new FlxTimer().start(0.5, function(tmr:FlxTimer) 
+					{
 						preloadStuff.text = 'Preloading Assets...';
 						changetext();
 					});
@@ -152,6 +161,29 @@ class Caching extends MusicBeatState
 			FlxG.sound.cache(Paths.inst(i));
 			FlxG.sound.cache(Paths.voices(i));
 			trace(i);
+		}
+
+		for (i in sounds) {
+			var replaced = i.replace(".ogg", "");
+			var data:BitmapData = BitmapData.fromFile("assets/shared/sounds/" + i);
+			var graph = FlxGraphic.fromBitmapData(data);
+			graph.persist = true;
+			graph.destroyOnNoUse = false;
+			bitmapData.set(replaced, graph);
+			trace(i);
+		}
+
+		for (i in charts)
+		{
+			var replaced:String = i.replace(".json", "");
+			var jsonPath:String = 'assets/data/charts/' + i;
+
+			if (FileSystem.exists(jsonPath)) {
+				var jsonData:Dynamic = jsonPath; 
+                bitmapData.set(replaced, jsonData); 
+			} else {
+				trace("Chart file not found: " + jsonPath);
+			}
 		}
 
 		#end
