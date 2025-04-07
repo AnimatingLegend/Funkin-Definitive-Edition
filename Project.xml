@@ -19,7 +19,7 @@
 	<!-- ____________________________ Window Settings ___________________________ -->
 
 	<!--These window settings apply to all targets-->
-	<window width="1280" height="720" fps="" background="#000000" hardware="true" vsync="false" />
+	<window width="1280" height="720" fps="120" background="#000000" hardware="true" vsync="false" />
 
 	<!--HTML5-specific-->
 	<window if="html5" resizable="true" />
@@ -117,11 +117,11 @@
 	<haxelib name="flixel-ui" />
 	<haxelib name="newgrounds"/>
 	<haxelib name="faxe" if='switch'/>
-	<haxelib name="polymod"/>
 	<haxelib name="discord_rpc" if="desktop"/>
 	<haxelib name="actuate" />
 	<haxelib name="hxCodec" if="windows"/>
 	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
+	<haxelib name="polymod"/>
 	<!-- <haxelib name="extension-webm"/> -->
 
 	<!-- ______________________________ Haxedefines _____________________________ -->

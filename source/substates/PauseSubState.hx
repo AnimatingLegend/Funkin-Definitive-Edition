@@ -77,7 +77,7 @@ class PauseSubState extends MusicBeatSubstate
 				stageSuffix = '-pixel';
 		}
 
-		pauseMusic = new FlxSound().loadEmbedded(Paths.music('pauseMusic/breakfast' + stageSuffix, 'shared'), true, true);
+		pauseMusic = new FlxSound().loadEmbedded(Paths.music('pauseMusic/breakfast' + stageSuffix, 'shared'), true);
 		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
 		pauseMusic.volume = 0;
 

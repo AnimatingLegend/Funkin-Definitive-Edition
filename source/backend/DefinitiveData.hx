@@ -17,7 +17,7 @@ class DefinitiveData
 			FlxG.save.data.shaders = true;
 
 		if(FlxG.save.data.cutscenes == null) // Cutscene Option
-			FlxG.save.data.cutscenes == true;
+			FlxG.save.data.cutscenes = true;
 
 		if(FlxG.save.data.framerateDraw == null) // FPS Cap Option
 			FlxG.save.data.framerateDraw = 120;
@@ -45,7 +45,7 @@ class DefinitiveData
 			FlxG.save.data.notesplash = true;
 
 		if(FlxG.save.data.watermark == null) // Watermark Option
-			FlxG.save.data.watermark == true;
+			FlxG.save.data.watermark = true;
 
 		if(FlxG.save.data.glowStrums == null) // CPU Strums Option
 			FlxG.save.data.glowStrums = true;
@@ -78,10 +78,10 @@ class DefinitiveData
 			FlxG.save.data.ghostTapping = true;
 
 		if(FlxG.save.data.resetButton == null)
-			FlxG.save.data.resetButton == false;
+			FlxG.save.data.resetButton = false;
 
 		if(FlxG.save.data.hitsounds == null)
-			FlxG.save.data.hitsounds == false;
+			FlxG.save.data.hitsounds = false;
 
 		/**
 		* Save Data

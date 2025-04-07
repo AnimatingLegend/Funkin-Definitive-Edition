@@ -26,6 +26,7 @@ import lime.utils.Assets;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
+import openfl.media.SoundChannel;
 import openfl.net.FileReference;
 import openfl.utils.ByteArray;
 import flash.media.Sound;

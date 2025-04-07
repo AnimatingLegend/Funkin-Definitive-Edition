@@ -38,7 +38,7 @@ class NoteSplash extends FlxSprite
 
 	override public function update(elapsed:Float)
 	{
-		if (animation.curAnim.finished)
+		if (animation.curAnim != null && animation.curAnim.finished)
 			kill();
 			
 		super.update(elapsed);
@@ -79,7 +79,7 @@ class NoteSplashPixel extends FlxSprite
 
 	override public function update(elapsed:Float)
 	{
-		if (animation.curAnim.finished)
+		if (animation.curAnim != null && animation.curAnim.finished)
 			kill();
 
 		super.update(elapsed);

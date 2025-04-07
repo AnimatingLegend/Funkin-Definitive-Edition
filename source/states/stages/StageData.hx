@@ -1,7 +1,6 @@
 package states.stages;
 
 import flixel.FlxG;
-import flixel.system.FlxSound;
 import states.PlayState;
 #if sys
 import sys.io.File;
