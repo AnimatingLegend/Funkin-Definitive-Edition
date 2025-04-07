@@ -607,10 +607,7 @@ class ChartingState extends MusicBeatState
 			#if cpp
 			@:privateAccess
 			{
-				lime.media.openal.AL.sourcef(FlxG.sound.music._channel.__source.__backend.handle, lime.media.openal.AL.PITCH,
-					stepperSongSpeed.value / (1 * 100));
-				if (vocals.playing)
-					lime.media.openal.AL.sourcef(vocals._channel.__source.__backend.handle, lime.media.openal.AL.PITCH, stepperSongSpeed.value / (1 * 100));
+				Conductor.songPosition = FlxG.sound.music.time;
 			}
 			#end
 		}
