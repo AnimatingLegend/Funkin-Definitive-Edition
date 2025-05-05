@@ -3,7 +3,6 @@ package cutscenes;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxPoint;
-import flixel.system.FlxSound;
 import flixel.FlxG;
 
 using StringTools;

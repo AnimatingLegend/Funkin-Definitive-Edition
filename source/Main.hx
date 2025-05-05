@@ -84,9 +84,9 @@ class Main extends Sprite
 		#if !debug
 		initialState = Caching;
 		#end
-		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
+		game = new FlxGame(gameWidth, gameHeight, initialState, FlxG.drawFramerate, FlxG.updateFramerate, skipSplash, startFullscreen);
 		#else
-		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
+		game = new FlxGame(gameWidth, gameHeight, initialState, FlxG.drawFramerate, FlxG.updateFramerate, skipSplash, startFullscreen);
 		#end
 		addChild(game);
 
