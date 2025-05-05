@@ -309,15 +309,11 @@ class PlayState extends MusicBeatState
 
 		switch (SONG.song.toLowerCase()) 
 		{
-			case 'senpai':
-				dialogue = CoolUtil.coolTextFile(Paths.txt('charts/senpai/senpaiDialogue'));
-			case 'roses':
-				if (FlxG.save.data.explicitContent)
-					dialogue = CoolUtil.coolTextFile(Paths.txt('charts/roses/rosesDialogue'));
-				else
-					dialogue = CoolUtil.coolTextFile(Paths.txt('charts/roses/rosesDialogueCensored'));
-			case 'thorns':
-				dialogue = CoolUtil.coolTextFile(Paths.txt('charts/thorns/thornsDialogue'));
+			case 'senpai' | 'roses' | 'thorns':
+				dialogue = CoolUtil.coolTextFile(Paths.txt('charts/${SONG.song.toLowerCase()}/${SONG.song.toLowerCase()}Dialogue'));
+
+			if (SONG.song.toLowerCase() == 'roses' && !FlxG.save.data.explicitContent)
+				dialogue = CoolUtil.coolTextFile(Paths.txt('charts/roses/rosesDialogueCensored'));
 		}
 
 		#if discord_rpc
@@ -2716,7 +2712,7 @@ class PlayState extends MusicBeatState
 
 			FlxTween.tween(numScore, {alpha: 0}, 0.2, {
 				onComplete: function(tween:FlxTween) {
-					numScore.destroy();
+					numScore.kill();
 				},
 				startDelay: Conductor.crochet * 0.002
 			});
@@ -2732,9 +2728,9 @@ class PlayState extends MusicBeatState
 
 		FlxTween.tween(comboSpr, {alpha: 0}, 0.2, {
 			onComplete: function(tween:FlxTween) {
-				comboSpr.destroy();
-				coolText.destroy();
-				rating.destroy();
+				comboSpr.kill();
+				coolText.kill();
+				rating.kill();
 			},
 			startDelay: Conductor.crochet * 0.001
 		});
