@@ -3,7 +3,7 @@
 ### Warning
 **In order compile the game for Windows you will need 6GB+ of space, so if you have NO space left then you should clear up some space !**
 
-**Also note that this is a guide to build the game on your own. If you just want to play Funkin-Definitive-Edition then [download it here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases) or [play on browser](https://animatinglegend.github.io/content/FDE-WEB-DEMO). But if you want to build the game yourself, then continue reading.**
+**Also note that this is a guide to build the game on your own. If you just want to play Funkin-Definitive-Edition then [download it here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases) or [play on browser](https://animatinglegend.github.io/content/funkin_definitive_edition). But if you want to build the game yourself, then continue reading.**
 
 ### Stuff Needed
 - [Git](https://git-scm.com/) (required)
@@ -20,7 +20,6 @@
 
 After installing everything above, you will need to install these additional libraries, a fully updated list will be in `Project.xml` in the project root. Currently these are all of the things you need to install:
 ```
-
 flixel 4.9.0
 flixel-addons 2.11.0
 flixel-tools
