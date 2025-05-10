@@ -310,10 +310,10 @@ class PlayState extends MusicBeatState
 		switch (SONG.song.toLowerCase()) 
 		{
 			case 'senpai' | 'roses' | 'thorns':
-				dialogue = CoolUtil.coolTextFile(Paths.txt('charts/${SONG.song.toLowerCase()}/${SONG.song.toLowerCase()}Dialogue'));
+				dialogue = CoolUtil.coolTextFile(Paths.txt('charts/${SONG.song.toLowerCase()}/${SONG.song.toLowerCase()}_dialogue'));
 
 			if (SONG.song.toLowerCase() == 'roses' && !FlxG.save.data.explicitContent)
-				dialogue = CoolUtil.coolTextFile(Paths.txt('charts/roses/rosesDialogueCensored'));
+				dialogue = CoolUtil.coolTextFile(Paths.txt('charts/roses/roses_dialogue_censored'));
 		}
 
 		#if discord_rpc
