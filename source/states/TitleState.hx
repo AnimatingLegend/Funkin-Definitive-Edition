@@ -38,9 +38,6 @@ import shaderslmao.BuildingShaders.BuildingShader;
 import shaderslmao.BuildingShaders;
 import shaderslmao.ColorSwap;
 
-#if discord_rpc
-import backend.Discord.DiscordClient;
-#end
 import backend.DefinitiveData;
 import backend.PlayerSettings;
 import backend.Highscore;
@@ -142,14 +139,6 @@ class TitleState extends MusicBeatState
 			FlxG.updateFramerate = FlxG.save.data.framerateDraw;
 			FlxG.drawFramerate = FlxG.save.data.framerateDraw;
 		}
-		#end
-
-		#if discord_rpc
-		DiscordClient.initialize();
-		
-		Application.current.onExit.add (function (exitCode) {
-			DiscordClient.shutdown();
-		 });
 		#end
 	}
 

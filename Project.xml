@@ -3,7 +3,7 @@
 	<!-- _________________________ Application Settings _________________________ -->
 
 	<!-- For some reason if you change the file name the game starts tweaking out so be careful with that if you ever decide to change it :sob: -->
-	<app title="Friday Night Funkin' - Definitive Edition" file="Funkin_Definitive_Edition" packageName="com.AnimatingLegend.FDE" package="com.AnimatingLegend.FDE" main="Main" version="0.2.8" company="AnimatingLegend" />
+	<app title="Friday Night Funkin' - Definitive Edition" file="Funkin Definitive Edition" packageName="io.animatinglegend.fde" package="io.AnimatingLegend.fde" main="Main" version="0.2.8" company="AnimatingLegend" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
@@ -106,23 +106,23 @@
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
-	<haxelib name="flixel" />
-	<haxedev set='webgl' />
-
-	<!--In case you want to use the addons package-->
+	<!-- Haxe Libraries -->
+	<haxelib name="hxcpp"/>
+	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
 	<haxelib name="hscript"/>
-	<haxelib name="flixel-addons" />
 
-	<!--In case you want to use the ui package-->
+	<!-- Flixel Libraries -->
+	<haxelib name="flixel" />
+	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
+
+	<!-- Modding -->
+	<haxelib name="polymod"/>
+
+	<!-- Misc -->
+	<haxedev set='webgl' />
 	<haxelib name="newgrounds"/>
 	<haxelib name="faxe" if='switch'/>
-	<haxelib name="discord_rpc" if="desktop"/>
-	<haxelib name="actuate" />
-	<haxelib name="hxCodec" if="windows"/>
-	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
-	<haxelib name="polymod"/>
-	<!-- <haxelib name="extension-webm"/> -->
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
@@ -135,7 +135,6 @@
 	<!--Enable this for Nape release builds for a serious peformance improvement-->
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 
-	<!-- taken from psych engine :) -->
 	<haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER" />
 	<haxedef name="HXCPP_STACK_LINE" if="CRASH_HANDLER" />
 	<haxedef name="HXCPP_STACK_TRACE" if="CRASH_HANDLER" />
@@ -150,11 +149,4 @@
 
 	<!-- adding this so the default haxe logo doesnt show -->
 	<icon path="art/iconOG.png" rename="icon.png" if="html5"/>
-
-	<!-- <haxedef name="SKIP_TO_PLAYSTATE" if="debug" /> -->
-	<haxedef name="CAN_OPEN_LINKS" unless="switch"/>
-	<haxedef name="CAN_CHEAT" if="switch debug"/>
-	<section if="newgrounds">
-	</section>
-	
 </project>

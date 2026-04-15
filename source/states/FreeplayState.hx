@@ -1,8 +1,5 @@
 package states;
 
-#if desktop
-import backend.Discord.DiscordClient;
-#end
 import backend.Highscore;
 import backend.Song;
 
@@ -58,11 +55,6 @@ class FreeplayState extends MusicBeatState
 	override function create()
 	{
 		Paths.clearStoredMemory();
-
-		#if desktop
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
-		#end
 
 		songs = [];
 

@@ -1,10 +1,6 @@
 package;
 #if !macro
 
-#if discord_rpc
-import backend.Discord;
-import backend.Discord.DiscordClient;
-#end
 import backend.Paths;
 import backend.Controls;
 import backend.CoolUtil;
@@ -12,13 +8,6 @@ import backend.MusicBeatState;
 import backend.MusicBeatSubstate;
 import backend.DefinitiveData;
 import backend.Conductor;
-
-#if (windows && !html5)
-import hxcodec.flixel.FlxVideo as VideoHandler;
-import hxcodec.flixel.FlxVideoSprite as VideoSprite;
-#else
-import cutscenes.FlxVideo;
-#end
 
 import objects.Alphabet;
 import objects.BGSprite;

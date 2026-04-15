@@ -19,10 +19,6 @@ import backend.Highscore;
 import objects.MenuItem;
 import objects.MenuCharacter;
 
-#if discord_rpc
-import backend.Discord.DiscordClient;
-#end
-
 using StringTools;
 
 class StoryMenuState extends MusicBeatState
@@ -125,11 +121,6 @@ class StoryMenuState extends MusicBeatState
 		grpWeekCharacters = new FlxTypedGroup<MenuCharacter>();
 
 		trace("Line 70");
-		
-		#if desktop
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
-		#end
 
 		for (i in 0...weekData().length)
 		{

@@ -1,4 +1,12 @@
+# Builds / Compilation
 export/
+
+# Dependencies
+.haxelib/
+
+# IDEs
 .vscode/
+
+# Files
 APIStuff.hx
 Main-Unused.hx

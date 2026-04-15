@@ -1,8 +1,5 @@
 package states.editors;
 
-#if desktop
-import backend.Discord.DiscordClient;
-#end
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
