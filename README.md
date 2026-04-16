@@ -3,16 +3,16 @@
 Everything you see in this engine was used in my [Funkin': Week 7](https://github.com/LegendLOL/Funkin-Week7) project. This is intended to be a more fixed and polished version of the port.
 
 ## Credits
-**Friday Night Funkin'**
+### Friday Night Funkin'
 - [ninjamuffin99](https://twitter.com/ninja_muffin99) - Programming
 - [EliteMasterEric](https://twitter.com/EliteMasterEric) - Additional Programmer
 - [PhantomArcade3k](https://twitter.com/phantomarcade3k?lang=en) & [Evilsk8r](https://twitter.com/evilsk8r) - Art
 - [Kawaisprite](https://twitter.com/kawaisprite) - Music
 
-**Definitive Edition**
+### Definitive Edition
 - [Legend](https://twitter.com/AnimatingLegend) - Lead Programmer/Creator
 
-**Shoutouts**
+### Shoutouts
 - [yck](https://github.com/YckenEhh) - Additional Programmer (helped optimze a bunch of code)
 - [TackDrawz](https://www.youtube.com/channel/UCAPDPJuunLWQJzOXA_3yEfw) - Art (made a couple of assets for my engine!)
 
@@ -33,9 +33,6 @@ Everything you see in this engine was used in my [Funkin': Week 7](https://githu
     - & Plenty More!!!
 
 **Changes**
-- Discord Rich Presence
-    - Added certain messages when going through menus
-    - Changed Game name & Photo
 - Revamped certain menus in the game
     - Options Menu (Added options menu music)
     - Chart Editor
@@ -78,5 +75,5 @@ Everything you see in this engine was used in my [Funkin': Week 7](https://githu
 ### Gameplay
 ![GITHUB GIF](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/assets/83415030/2ca560d3-23c8-417d-838b-0372c2944e52)
 
-### Building the game
-if you want to learn how to compile the game on your own then [click here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/blob/experimental/docs/guides/building.md)!
+### Build the game for yourself!
+if you want to learn how to compile the game on your own then [click here](./docs/COMPILING.md)!
