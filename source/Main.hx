@@ -1,16 +1,21 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
-import openfl.Assets;
-import openfl.Lib;
-import openfl.display.FPS;
-import openfl.display.Sprite;
-import openfl.events.Event;
-import flixel.FlxG;
 import flixel.text.FlxText.FlxTextBorderStyle;
 
-import ui.FPSCounter;
+import funkin.backend.chart.Conductor;
+import funkin.backend.system.monitor.FPSCounter;
+import funkin.backend.utils.DefinitiveData;
+
+import funkin.menus.TitleState;
+import funkin.menus.CacheState;
+
+import openfl.Assets;
+import openfl.Lib;
+import openfl.display.Sprite;
+import openfl.events.Event;
 
 #if CRASH_HANDLER
 import openfl.events.UncaughtErrorEvent;
@@ -28,7 +33,7 @@ class Main extends Sprite
 {
 	var gameWidth:Int = 1280; // GAME WIDTH
 	var gameHeight:Int = 720; // GAME HEIGHT
-	var initialState:Class<FlxState> = states.TitleState; // GAMES INITIAL STATE
+	var initialState:Class<FlxState> = TitleState; // GAMES INITIAL STATE
 	var zoom:Float = -1; // GAME ZOOM (1 = 100%)
 	var framerate:Int = 120; // GAME FRAMERATE
 	var skipSplash:Bool = true; // SKIP HAXE LOGO
@@ -82,7 +87,7 @@ class Main extends Sprite
 
 		#if cpp
 		#if !debug
-		initialState = Caching;
+		initialState = CacheState;
 		#end
 		game = new FlxGame(gameWidth, gameHeight, initialState, FlxG.drawFramerate, FlxG.updateFramerate, skipSplash, startFullscreen);
 		#else
@@ -106,7 +111,7 @@ class Main extends Sprite
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 		#end
 
-		backend.DefinitiveData.settings();
+		DefinitiveData.settings();
 		Conductor.offset = FlxG.save.data.notesOffset;
 	}
 
