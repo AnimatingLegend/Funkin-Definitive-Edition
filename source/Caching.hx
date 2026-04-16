@@ -9,7 +9,6 @@ import flixel.math.FlxPoint;
 import flixel.ui.FlxBar;
 import flixel.util.FlxTimer;
 import flixel.text.FlxText;
-import flixel.sound.FlxSound;
 import lime.app.Application;
 import openfl.display.BitmapData;
 import openfl.utils.Assets;

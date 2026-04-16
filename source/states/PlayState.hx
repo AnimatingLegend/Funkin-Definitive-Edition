@@ -50,9 +50,6 @@ import shaderslmao.ColorSwap;
 import shaderslmao.WiggleEffect;
 import shaderslmao.WiggleEffect.WiggleEffectType;
 
-#if discord_rpc
-import backend.Discord.DiscordClient;
-#end
 import backend.Song.SwagSong;
 import backend.Song;
 import backend.Highscore;
@@ -61,7 +58,15 @@ import backend.Conductor;
 import backend.Section.SwagSection;
 import backend.Ratings;
 
+#if (hxCodec >= "3.0.0")
+import hxcodec.flixel.FlxVideo as VideoHandler;
+#elseif (hxCodec >= "2.6.1") 
+import hxcodec.VideoHandler as VideoHandler;
+#elseif (hxCodec == "2.6.0") 
+import VideoHandler as VideoHandler;
+#else
 import cutscenes.FlxVideo;
+#end
 import cutscenes.TankCutscene;
 import cutscenes.CutsceneCharacter;
 
@@ -240,15 +245,6 @@ class PlayState extends MusicBeatState
 	public var scrollSpeed:Float = 1.0;
 	public var noteKillOffset:Float = 350;
 
-	#if discord_rpc
-	// Discord RPC variables
-	var storyDifficultyText:String = "";
-	var iconRPC:String = "";
-	var songLength:Float = 0;
-	var detailsText:String = "";
-	var detailsPausedText:String = "";
-	#end
-
 	override public function create() 
 	{
 		FlxG.mouse.visible = false;
@@ -315,10 +311,6 @@ class PlayState extends MusicBeatState
 			if (SONG.song.toLowerCase() == 'roses' && !FlxG.save.data.explicitContent)
 				dialogue = CoolUtil.coolTextFile(Paths.txt('charts/roses/rosesDialogueCensored'));
 		}
-
-		#if discord_rpc
-		initDiscord();
-		#end
 
 		curStage = SONG.stage;
 		StageData.songData();
@@ -1472,32 +1464,6 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	function initDiscord():Void
-	{
-		#if discord_rpc
-		storyDifficultyText = CoolUtil.difficultyString();
-		iconRPC = SONG.player2;
-
-		// To avoid having duplicate images in Discord assets
-		switch (iconRPC)
-		{
-			case 'senpai-angry':
-				iconRPC = 'senpai';
-			case 'monster-christmas':
-				iconRPC = 'monster';
-			case 'mom-car':
-				iconRPC = 'mom';
-		}
-
-		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
-		detailsText = isStoryMode ? "Story Mode: Week " + storyWeek : "Freeplay";
-		detailsPausedText = "Paused - " + detailsText;
-
-		// Updating Discord Rich Presence.
-		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-		#end
-	}
-
 	var startTimer:FlxTimer;
 	var perfectMode:Bool = false;
 
@@ -1666,14 +1632,6 @@ class PlayState extends MusicBeatState
 			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
 		FlxG.sound.music.onComplete = endSong;
 		vocals.play();
-
-		#if discord_rpc
-		// Song duration in a float, useful for the time left feature
-		songLength = FlxG.sound.music.length;
-
-		// Updating Discord Rich Presence (with Time Left)
-		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC, true, songLength);
-		#end
 	}
 
 	var debugNum:Int = 0;
@@ -1944,44 +1902,18 @@ class PlayState extends MusicBeatState
 				startTimer.active = true;
 
 			paused = false;
-
-			#if discord_rpc
-			if (startTimer != null && startTimer.finished) {
-				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC, true, songLength - Conductor.songPosition);
-			} else {
-				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-			}
-			#end
 		}
 
 		super.closeSubState();
 	}
 
 	override public function onFocus():Void 
-	{
-		#if discord_rpc
-		if (health > 0 && !paused && FlxG.autoPause) {
-			if (Conductor.songPosition > 0.0) {
-				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC, true, songLength - Conductor.songPosition);
-			} else {
-				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-			}
-		}
-		#end
-
 		super.onFocus();
-	}
+
 
 	override public function onFocusLost():Void 
-	{
-		#if discord_rpc
-		if (health > 0 && !paused && FlxG.autoPause) {
-			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-		}
-		#end
-
 		super.onFocusLost();
-	}
+
 
 	function resyncVocals():Void 
 	{
@@ -2062,20 +1994,9 @@ class PlayState extends MusicBeatState
 				FlxG.switchState(new GitarooPause());
 			} else
 				openSubState(new substates.PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-
-			#if discord_rpc
-			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-			#end
 		}
 
-		if (FlxG.keys.justPressed.SEVEN) 
-		{
-			FlxG.switchState(new ChartingState());
-
-			#if discord_rpc
-			DiscordClient.changePresence("Chart Editor", null, null, true);
-			#end
-		}
+		if (FlxG.keys.justPressed.SEVEN) FlxG.switchState(new ChartingState());
 
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(145, iconP1.width, 0.85)));
 		iconP2.setGraphicSize(Std.int(FlxMath.lerp(145, iconP2.width, 0.85)));
@@ -2105,14 +2026,7 @@ class PlayState extends MusicBeatState
 		else
 			iconP2.animation.curAnim.curFrame = 0;
 
-		if (FlxG.keys.justPressed.EIGHT) 
-		{
-			FlxG.switchState(new AnimationDebug(SONG.player2));
-
-			#if discord_rpc
-			DiscordClient.changePresence("Sprite Offset Editor", null, null, true);
-			#end
-		}	
+		if (FlxG.keys.justPressed.EIGHT) FlxG.switchState(new AnimationDebug(SONG.player2));
 		
 		if (startingSong) {
 			if (startedCountdown) 
@@ -2200,11 +2114,6 @@ class PlayState extends MusicBeatState
 			deathCounter += 1;
 
 			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-
-			#if discord_rpc
-			// Game Over doesn't get his own variable because it's only used here
-			DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-			#end
 		}
 
 		if (unspawnNotes[0] != null) 
@@ -3098,7 +3007,7 @@ class PlayState extends MusicBeatState
 			bg.cameras = [camHUD];
 			add(bg);
 
-			#if (windows && !html5)
+			#if (hxCodec >= "3.0.0")
 			var daVid:VideoHandler = new VideoHandler();
 			daVid.onEndReached.add(function()
 			{

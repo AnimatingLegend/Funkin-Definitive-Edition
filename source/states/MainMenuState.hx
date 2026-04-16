@@ -22,10 +22,6 @@ import ui.AtlasMenuItem;
 
 import backend.GitCommit;
 
-#if discord_rpc
-import backend.Discord.DiscordClient;
-#end
-
 using StringTools;
 
 class MainMenuState extends MusicBeatState
@@ -48,11 +44,6 @@ class MainMenuState extends MusicBeatState
 	override function create()
 	{
 		Paths.clearStoredMemory();
-
-		#if discord_rpc
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
-		#end
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;

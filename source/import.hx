@@ -13,20 +13,17 @@ import backend.MusicBeatSubstate;
 import backend.DefinitiveData;
 import backend.Conductor;
 
-#if (windows && !html5)
-import hxcodec.flixel.FlxVideo as VideoHandler;
-import hxcodec.flixel.FlxVideoSprite as VideoSprite;
-#else
-import cutscenes.FlxVideo;
-#end
-
 import objects.Alphabet;
 import objects.BGSprite;
 
 import states.PlayState;
 import states.LoadingState;
 
+#if (flixel >= "5.3.0")
 import flixel.sound.FlxSound;
+#else
+import flixel.system.FlxSound;
+#end
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
