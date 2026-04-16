@@ -41,11 +41,6 @@
       "version": null
     },
     {
-      "name": "tjson",
-      "type": "haxelib",
-      "version": null
-    },
-    {
       "name": "json2object",
       "type": "haxelib",
       "version": null
