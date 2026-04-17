@@ -6,14 +6,13 @@ import flixel.FlxState;
 import flixel.text.FlxText.FlxTextBorderStyle;
 
 import funkin.backend.chart.Conductor;
-import funkin.backend.system.monitor.FPSCounter;
 import funkin.backend.utils.DefinitiveData;
 import funkin.backend.utils.Highscore;
+import funkin.backend.system.monitor.DebugDisplay;
 import funkin.backend.system.PlayerSettings;
 
 import funkin.menus.TitleState;
 import funkin.menus.MainMenuState;
-import funkin.menus.CacheState;
 
 import openfl.Assets;
 import openfl.Lib;
@@ -56,6 +55,7 @@ class Main extends Sprite
 
 	public function new():Void 
 	{
+		
 		super();
 
 		if (stage != null) 
@@ -82,19 +82,14 @@ class Main extends Sprite
 	/**
 	 * The FPS debug display on the top left of your game window.
 	 */
-	var debugDisplay:FPSCounter;
+	var debugDisplay:DebugDisplay;
 	
 	function setupGame():Void
 	{
-		// If you're not using the debug build, the initial startup state will be the Cacheing menu.
-		#if !debug 
-		initialState = CacheState; 
-		#end
-
 		var game = new FlxGame(gameWidth, gameHeight, initialState, FlxG.drawFramerate, FlxG.updateFramerate, skipSplash, startFullScreen);
 		addChild(game);
 
-		debugDisplay = new FPSCounter(10, 3, FlxTextBorderStyle.OUTLINE);
+		debugDisplay = new DebugDisplay(10, 3, FlxTextBorderStyle.OUTLINE);
 		toggleFPS(FlxG.save.data.fps);
 		addChild(debugDisplay);
 
