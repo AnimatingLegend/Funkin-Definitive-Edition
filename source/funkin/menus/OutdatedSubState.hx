@@ -4,8 +4,6 @@ import flixel.addons.transition.FlxTransitionableState;
 import flixel.text.FlxText;
 
 import funkin.menus.MainMenuState;
-import funkin.menus.TitleState;
-
 class OutdatedSubState extends MusicBeatState
 {
 	public static var leftState:Bool = false;
@@ -20,7 +18,7 @@ class OutdatedSubState extends MusicBeatState
 		var warnText:FlxText = new FlxText(0, 0, FlxG.width,
 			"HEY YOU! looks like you're running an
 			\n outdated version of FNF: Definitive Edition. (" + MainMenuState.definitiveVersion + "),
-			\n please update to " + TitleState.updateVersion + "!
+			\n please update to " + Main.updateVersion + "!
 			\n Press 'ESCAPE' to proceed anyway.",
 			32);
 		warnText.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);

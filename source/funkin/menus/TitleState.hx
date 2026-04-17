@@ -17,8 +17,6 @@ import funkin.backend.utils.Highscore;
 import funkin.backend.utils.Paths;
 import funkin.backend.system.PlayerSettings;
 
-import funkin.menus.FreeplayState;
-import funkin.menus.OptionsMenuState;
 import funkin.menus.OutdatedSubState;
 import funkin.menus.objects.Alphabet;
 import funkin.menus.shaders.ColorSwap;
@@ -39,12 +37,17 @@ import sys.thread.Thread;
 
 using StringTools;
 
+// * ---------------------------------------	* \\
+// * TITLE STATE CLASS                       * \\
+// * 								* \\
+// * This is the title screen of the game.	* \\
+// * --------------------------------------- * \\
 class TitleState extends MusicBeatState
 {
-	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
-	public static var volumeDownKeys:Array<FlxKey> = [FlxKey.NUMPADMINUS, FlxKey.MINUS];
-	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
-
+	/**
+	 * Whether or not the title screen has been initialized.
+	 * [!NOTE] Only play the credits once per game session.
+	 */
 	public static var initialized:Bool = false;
 
 	var blackScreen:FlxSprite;
@@ -55,114 +58,48 @@ class TitleState extends MusicBeatState
 	var legSpr:FlxSprite;
 
 	var curWacky:Array<String> = [];
-
-	var wackyImage:FlxSprite;
- 
 	var lastBeat:Int = 0;
-	
-	var returnedData:Array<String> = [];
-
-	var mustUpdate:Bool = false;
-
-	public static var updateVersion:String = '';
-	public static var closedState:Bool = false;
+	var swagShader:ColorSwap;
 
 	override public function create():Void
 	{
-		Paths.clearStoredMemory();
+          Paths.clearStoredMemory();
 
-		FlxG.fixedTimestep = false;
-		FlxG.game.focusLostFramerate = 60;
-		FlxG.keys.preventDefaultKeys[TAB];
-
-		swagShader = new ColorSwap();
-
+          swagShader = new ColorSwap();
 		curWacky = FlxG.random.getObject(getIntroTextShit());
-		
-		super.create();
+
+          super.create();
 
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
+		DefinitiveData.settings();
+          Highscore.load();
+          Main.getBuildVersion();
+		PlayerSettings.init();
+
+		if (FlxG.keys.justPressed.F) FlxG.fullscreen = !FlxG.fullscreen;
+
+          FlxG.mouse.visible = false;
+
+          // If the game isn't initialized yet, wait a second before starting the intro.
+          // Otherwise, start the intro normally.
+		if (!initialized)
+          {
+               new FlxTimer().start(1, function(tmr:FlxTimer) 
+               { 
+                    startIntro(); 
+               });
+          }
+		else startIntro();
+
 		#if desktop
 		FlxG.game.focusLostFramerate = 60;
-		#end
 
-		DefinitiveData.settings();
-		PlayerSettings.init();
-		Highscore.load();
-		getBuildVer();
-
-
-		if (FlxG.keys.justPressed.F)
-			FlxG.fullscreen = !FlxG.fullscreen;
-
-		FlxG.mouse.visible = false;
-		
-		#if FREEPLAY
-		FlxG.switchState(new FreeplayState());
-		#elseif CHARTING
-		FlxG.switchState(new ChartingState());
-		#elseif OPTIONS
-		FlxG.switchState(new OptionsMenuState());
-		#else
-		if (!initialized) 
-		{
-			new FlxTimer().start(1, function(tmr:FlxTimer) {
-				startIntro();
-			});
-		} else {
-			startIntro();
-		}
-		#end
-
-		if (FlxG.save.data.weekUnlocked != null)
-		{
-			StoryMenuState.weekUnlocked = StoryMenuState.unlockWeeks();
-			FlxG.save.flush();
-		}
-
-		#if desktop
-		if(FlxG.save.data.framerateDraw != null)
+		if (FlxG.save.data.framerateDraw != null)
 		{
 			FlxG.updateFramerate = FlxG.save.data.framerateDraw;
 			FlxG.drawFramerate = FlxG.save.data.framerateDraw;
 		}
-		#end
-
-		#if discord_rpc
-		DiscordClient.initialize();
-		
-		Application.current.onExit.add (function (exitCode) {
-			DiscordClient.shutdown();
-		 });
-		#end
-	}
-
-	function getBuildVer()
-    {
-		#if !debug
-		trace('checking for update');
-		var http = new haxe.Http("https://raw.githubusercontent.com/AnimatingLegend/Funkin-Definitive-Edition/master/gitVersion.txt");
-	
-		http.onData = function (data:String)
-		{
-			updateVersion = data.split('\n')[0].trim();
-			var curVersion:String = MainMenuState.definitiveVersion.trim();
-	
-			trace('version online: ' + updateVersion + ', your version: ' + curVersion);
-			if(updateVersion != curVersion) 
-			{
-				trace('versions arent matching!');
-				mustUpdate = true;
-			}
-		}
-	
-		http.onError = function (error) 
-		{
-			trace('error: $error');
-		}
-	
-		http.request();
 		#end
 	}
 
@@ -170,7 +107,6 @@ class TitleState extends MusicBeatState
 	var gfDance:FlxSprite;
 	var danceLeft:Bool = false;
 	var titleText:FlxSprite;
-	var swagShader:ColorSwap = null;
 
 	function startIntro()
 	{
@@ -185,22 +121,20 @@ class TitleState extends MusicBeatState
 		logoBl.antialiasing = FlxG.save.data.antialiasing;
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logoBl.animation.play('bump');
+		if (FlxG.save.data.shaders && swagShader != null) 
+               logoBl.shader = swagShader.shader;
 		logoBl.updateHitbox();
 
-		if(FlxG.save.data.shaders) swagShader = new ColorSwap();
 		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
 		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		gfDance.antialiasing = FlxG.save.data.antialiasing;
+		if (FlxG.save.data.shaders && swagShader != null) 
+               gfDance.shader = swagShader.shader;
+
 		add(gfDance);
 		add(logoBl);
-
-		if(swagShader != null)
-		{
-			gfDance.shader = swagShader.shader;
-			logoBl.shader = swagShader.shader;
-		}
 
 		titleText = new FlxSprite(100, FlxG.height * 0.8);
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
@@ -210,10 +144,6 @@ class TitleState extends MusicBeatState
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
 		add(titleText);
-
-		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('logo'));
-		logo.antialiasing = FlxG.save.data.antialiasing;
-		logo.screenCenter();
 
 		credGroup = new FlxGroup();
 		add(credGroup);
@@ -226,7 +156,7 @@ class TitleState extends MusicBeatState
 		credTextShit.screenCenter();
 		
 		ngSpr = new FlxSprite(0, FlxG.height * 0.55);
-		if (FlxG.random.bool(0.09)) // 9% chance
+		if (FlxG.random.bool(1))
 		{
 			ngSpr.loadGraphic(Paths.image('newgrounds_logo_animated'), true, 600);
 			ngSpr.animation.add('idle', [0, 1], 4);
@@ -254,14 +184,12 @@ class TitleState extends MusicBeatState
 		add(legSpr);
 		legSpr.visible = false;
 
-		if (initialized)
-			skipIntro();
+		if (initialized) skipIntro();
 		else
 		{
 			credTextShit.visible = false;
 			FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 
-			// im so sorry for this :sob:
 			var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
 			diamond.persist = true;
 			diamond.destroyOnNoUse = false;
@@ -274,18 +202,19 @@ class TitleState extends MusicBeatState
 			transIn = FlxTransitionableState.defaultTransIn;
 			transOut = FlxTransitionableState.defaultTransOut;
 
-			if (FlxG.sound.music == null || !FlxG.sound.music.playing)
-			{
-				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
-				FlxG.sound.music.fadeIn(4, 0, 0.7);
-			}
-
+               playMenuMusic();
 			Conductor.changeBPM(102);
 			initialized = true;
 		}
-
-		Paths.clearUnusedMemory();
 	}
+
+     function playMenuMusic():Void
+     {
+          var shouldFadeIn:Bool = (FlxG.sound.music == null || !FlxG.sound.music.playing);
+          FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+
+          if (shouldFadeIn) FlxG.sound.music.fadeIn(4, 0, 0.7);
+     }
 
 	function getIntroTextShit():Array<Array<String>>
 	{
@@ -303,44 +232,15 @@ class TitleState extends MusicBeatState
 	}
 
 	var transitioning:Bool = false;
-	var isRainbow:Bool = false;
 
 	override function update(elapsed:Float)
 	{
-		if (FlxG.sound.music != null)
-			Conductor.songPosition = FlxG.sound.music.time;
+		if (FlxG.sound.music != null) Conductor.songPosition = FlxG.sound.music.time;
 
 		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER || controls.ACCEPT;
-
-		#if mobile
-		for (touch in FlxG.touches.list)
-		{
-			if (touch.justPressed)
-			{
-				pressedEnter = true;
-			}
-		}
-		#end
-
-		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
-
-		if (gamepad != null)
-		{
-			if (gamepad.justPressed.START)
-				pressedEnter = true;
-
-			#if switch
-			if (gamepad.justPressed.B)
-				pressedEnter = true;
-			#end
-		}
-
 		if (pressedEnter && !transitioning && skippedIntro)
 		{
-			if (FlxG.sound.music != null)
-			{
-				FlxG.sound.music.onComplete = null;
-			}
+			if (FlxG.sound.music != null) FlxG.sound.music.onComplete = null;
 
 			titleText.animation.play('press');
 
@@ -351,26 +251,30 @@ class TitleState extends MusicBeatState
 
 			new FlxTimer().start(0.3, function(tmr:FlxTimer)
 			{
-				if (mustUpdate)
-					FlxG.switchState(new OutdatedSubState()); 
-				else
+                    // Only show update screen if you're not on a debug build.
+				#if !debug
+				if (Main.mustUpdate) 
+					FlxG.switchState(new OutdatedSubState());
+				else 
 					FlxG.switchState(new MainMenuState());
-
-				closedState = true;
+				#else
+				FlxG.switchState(new MainMenuState());
+				#end
 			});
 		}
 
 		if (pressedEnter && !skippedIntro && initialized)
 		{
+			trace('[INFO] Just Pressed ${if (FlxG.keys.justPressed.ENTER) "ENTER" else "SPACE"} Skipping Intro...');
 			skipIntro();
 		}
 
 		#if desktop
-		if (FlxG.keys.justPressed.ESCAPE)
+		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE)
 		{
+			trace('[EXITING] Game is closing. Cleaning up resources...');
+			Paths.clearStoredMemory();
 			Sys.exit(0);
-
-			trace("exiting game...");
 		}
 		#end
 
@@ -385,6 +289,8 @@ class TitleState extends MusicBeatState
 
 	function createCoolText(textArray:Array<String>, ?offset:Float = 0)
 	{
+          if (credGroup == null || textGroup == null) return;
+
 		for (i in 0...textArray.length)
 		{
 			var money:Alphabet = new Alphabet(0, 0, textArray[i], true, false);
@@ -397,6 +303,8 @@ class TitleState extends MusicBeatState
 
 	function addMoreText(text:String, ?offset:Float = 0)
 	{
+          if (credGroup == null || textGroup == null) return;
+
 		var coolText:Alphabet = new Alphabet(0, 0, text, true, false);
 		coolText.screenCenter(X);
 		coolText.y += (textGroup.length * 60) + 200 + offset;
@@ -406,95 +314,79 @@ class TitleState extends MusicBeatState
 
 	function deleteCoolText()
 	{
-		while (textGroup.members.length > 0)
-		{
-			credGroup.remove(textGroup.members[0], true);
-			textGroup.remove(textGroup.members[0], true);
-		}
+		if (credGroup == null || textGroup == null) return;
+		for (member in textGroup.members) credGroup.remove(member, true);
+		textGroup.clear();
 	}
 
 	override function beatHit()
 	{
 		super.beatHit();
 
-		if(logoBl != null && logoBl.animation != null) {
-			logoBl.animation.play('bump', true);
-		}
-
-		danceLeft = !danceLeft;
-
-		if(gfDance != null && gfDance.animation != null) 
-		{
-			if (danceLeft)
-				gfDance.animation.play('danceRight');
-			else
-				gfDance.animation.play('danceLeft');
-		}
-
-		if (curBeat > lastBeat)
+		if (!skippedIntro && curBeat > lastBeat)
 		{
 			for (i in lastBeat...curBeat)
 			{
 				switch (i + 1)
 				{
-					case 1:
-						createCoolText(['The', 'Funkin Inc Crew']);
-					case 3:
-						addMoreText('presents');
-					case 4:
-						deleteCoolText();
+					case 1: createCoolText(['The', 'Funkin Inc Crew']);
+					case 3: addMoreText('presents');
+					case 4: deleteCoolText();
 					case 5:
 						if (FlxG.save.data.watermark)
-							createCoolText(['FNF Definitive Edition', 'by']);
+                              {
+                                  createCoolText(['FNF Definitive Edition', 'by']); 
+                              }
 						else
-							createCoolText(['In association', 'with']);
-
+                              {
+                                 createCoolText(['In association', 'with']);  
+                              }
 					case 7:
 						if (FlxG.save.data.watermark)
 						{
 							addMoreText('This guy lol');
-
-							if (legSpr != null)
-								legSpr.visible = true;
+							if (legSpr != null) legSpr.visible = true;
 						}
 						else
 						{
 							addMoreText('newgrounds');
-
-							if (ngSpr != null) 
-								ngSpr.visible = true;
+							if (ngSpr != null) ngSpr.visible = true;
 						}
 					case 8:
 						deleteCoolText();
 						if (FlxG.save.data.watermark)
 						{
-							if (legSpr != null) 
-								legSpr.visible = false;
+							if (legSpr != null) legSpr.visible = false;
 						}
 						else
 						{
-							if (ngSpr != null) 
-								ngSpr.visible = false;
+							if (ngSpr != null) ngSpr.visible = false;
 						}
-					case 9:
-						createCoolText([curWacky[0]]);
-					case 11:
-						addMoreText(curWacky[1]);
-					case 12:
-						deleteCoolText();
-					case 13:
-						addMoreText('Friday');
-					case 14:
-						addMoreText('Night');
-					case 15:
-						addMoreText('Funkin');
-					case 16:
-						skipIntro();
+					case 9:  createCoolText([curWacky[0]]);
+					case 11: addMoreText(curWacky[1]);
+					case 12: deleteCoolText();
+					case 13: addMoreText('Friday');
+					case 14: addMoreText('Night');
+					case 15: addMoreText('Funkin');
+					case 16: skipIntro();
 				}
 			}
 		}	
 
 		lastBeat = curBeat;
+
+          if (skippedIntro)
+          {
+               if (logoBl != null && logoBl.animation != null) logoBl.animation.play('bump', true);
+
+		     danceLeft = !danceLeft;
+
+               if (gfDance != null && gfDance.animation != null) 
+               {
+                    if (danceLeft) gfDance.animation.play('danceRight');
+                    else gfDance.animation.play('danceLeft');
+               }
+          }
 	}
 
 	var skippedIntro:Bool = false;
@@ -503,18 +395,15 @@ class TitleState extends MusicBeatState
 	{
 		if (!skippedIntro)
 		{
-			trace('skipping intro...');
-
+               remove(legSpr);
 			remove(ngSpr);
 			remove(credGroup);
 			
-			if (FlxG.save.data.flashingLights) {
-				FlxG.camera.flash(FlxColor.WHITE, initialized ? 1 : 4);
-			} else {
-				FlxG.camera.flash(FlxColor.BLACK, initialized ? 1 : 4);
-			}
+			if (FlxG.save.data.flashingLights) FlxG.camera.flash(FlxColor.WHITE, initialized ? 1 : 4);
+			else FlxG.camera.flash(FlxColor.BLACK, initialized ? 1 : 4);
 
-			FlxG.sound.music.time = 9400; // 9.4 seconds
+			// This intro skips the first 9.4 seconds of the song.
+			FlxG.sound.music.time = 9400;
 			skippedIntro = true;
 		}
 	}
