@@ -5,11 +5,7 @@ import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.text.FlxText.FlxTextBorderStyle;
 
-import funkin.backend.chart.Conductor;
-import funkin.backend.utils.DefinitiveData;
-import funkin.backend.utils.Highscore;
 import funkin.backend.system.monitor.DebugDisplay;
-import funkin.backend.system.PlayerSettings;
 
 import funkin.menus.TitleState;
 import funkin.menus.MainMenuState;
@@ -43,9 +39,7 @@ class Main extends Sprite
 	var gameHeight:Int = 720; // The height of the game window in pixels.
 	var initialState:Class<FlxState> = TitleState; // The FlxState your game starts in.
 	var zoom:Float = -1; //if zoom is set to -1, zoom will automatically calculate to fit the game window.
-	var framerate:Int = 60; // The base framerate of the game.
 	var skipSplash:Bool = true; // Whether or not to skip the HaxeFlixel splash screen.
-	var startFullScreen:Bool = false; // Whether or not to start the game in fullscreen.
 
 	/**
 	 * Creates a new Main instance and adds it to the current stage.
@@ -82,16 +76,21 @@ class Main extends Sprite
 	/**
 	 * The FPS debug display on the top left of your game window.
 	 */
-	var debugDisplay:DebugDisplay;
+	public static var debugDisplay:DebugDisplay;
 	
 	function setupGame():Void
 	{
-		var game = new FlxGame(gameWidth, gameHeight, initialState, FlxG.drawFramerate, FlxG.updateFramerate, skipSplash, startFullScreen);
+		var framerate:Int = 60 ?? FlxG.save.data.fpsCap;
+
+		var game = new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, 
+			(FlxG.stage.window.fullscreen ?? FlxG.save.data.launchInFullscreen));
 		addChild(game);
 
-		debugDisplay = new DebugDisplay(10, 3, FlxTextBorderStyle.OUTLINE);
-		toggleFPS(FlxG.save.data.fps);
+		debugDisplay = new DebugDisplay(10, 15, FlxTextBorderStyle.OUTLINE);
 		addChild(debugDisplay);
+		debugDisplay.createBackground();
+		debugDisplay.backgroundOpacity = (FlxG.save.data.debugDisplayBGOpacity ?? 50) / 100;
+		debugDisplay.set_backgroundOpacityVisible(FlxG.save.data.debugDisplay ?? true);
 
 		#if html5
 		FlxG.autoPause = false;
@@ -108,8 +107,8 @@ class Main extends Sprite
 	/**
 	 * Toggle the FPS counter.
 	 */
-	public function toggleFPS(value:Bool):Void 
-		debugDisplay.visible = value;
+	public static function toggleFPS(value:Bool):Void 
+		if (debugDisplay != null) debugDisplay.visible = value;
 
 	/**
 	 * Clear games cache of assets and song data. (taken from Kade Engine)
@@ -142,7 +141,7 @@ class Main extends Sprite
 	public static function getBuildVersion():Void
 	{
 		#if !debug
-		var http = new haxe.Http('https://raw.githubusercontent.com/AnimatingLegend/Funkin-Definitive-Edition/master/gitVersion.txt');
+		var http = new haxe.Http('https://raw.githubusercontent.com/AnimatingLegend/Funkin-Definitive-Edition/refs/heads/main/gitVersion.txt');
 
 		trace('[VERSION] Checking for updates...');
 

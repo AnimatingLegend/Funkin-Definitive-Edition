@@ -75,7 +75,7 @@ class ControlsSubState extends MusicBeatState
 		persistentUpdate = persistentDraw = true;
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
-		menuBG.color = 0xFFea71fd;
+		menuBG.color = 0xFFc4618c;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
         menuBG.scrollFactor.x = 0;

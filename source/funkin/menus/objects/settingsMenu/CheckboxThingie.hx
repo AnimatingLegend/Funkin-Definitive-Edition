@@ -33,7 +33,7 @@ class CheckboxThingie extends FlxSprite
 			case "selecting":
 				offset.set(25, 65);
 			case "selected":
-				offset.set(25, 65);	
+				offset.set(25, 68);	
 		}
 
 		if (sprTracker != null)

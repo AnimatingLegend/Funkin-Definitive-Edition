@@ -7,7 +7,6 @@ import flixel.graphics.FlxGraphic;
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.math.FlxRect;
-import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
@@ -70,18 +69,33 @@ class TitleState extends MusicBeatState
 
           super.create();
 
+		// TODO: Initialize save data in `Main.hx`
 		FlxG.save.bind('funkin', 'ninjamuffin99');
-
-		DefinitiveData.settings();
+		DefinitiveData.initialize();
           Highscore.load();
           Main.getBuildVersion();
 		PlayerSettings.init();
 
-		if (FlxG.keys.justPressed.F) FlxG.fullscreen = !FlxG.fullscreen;
+		if (FlxG.save.data.launchInFullscreen) FlxG.fullscreen = true;
+
+		#if desktop
+		FlxG.game.focusLostFramerate = 60;
+
+		if (FlxG.save.data.fpsCap != null)
+		{
+			FlxG.updateFramerate = FlxG.save.data.framerateDraw;
+			FlxG.drawFramerate = FlxG.save.data.framerateDraw;
+		}
+		#end
 
           FlxG.mouse.visible = false;
 
-          // If the game isn't initialized yet, wait a second before starting the intro.
+		// DEBUG LOGIC
+		// TODO: Make an initialization state for stuff like this...
+		#if OPTIONS
+		FlxG.switchState(new funkin.menus.OptionsMenuState());
+		#else
+		// If the game isn't initialized yet, wait a second before starting the intro.
           // Otherwise, start the intro normally.
 		if (!initialized)
           {
@@ -91,15 +105,6 @@ class TitleState extends MusicBeatState
                });
           }
 		else startIntro();
-
-		#if desktop
-		FlxG.game.focusLostFramerate = 60;
-
-		if (FlxG.save.data.framerateDraw != null)
-		{
-			FlxG.updateFramerate = FlxG.save.data.framerateDraw;
-			FlxG.drawFramerate = FlxG.save.data.framerateDraw;
-		}
 		#end
 	}
 
@@ -238,6 +243,9 @@ class TitleState extends MusicBeatState
 		if (FlxG.sound.music != null) Conductor.songPosition = FlxG.sound.music.time;
 
 		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER || controls.ACCEPT;
+
+		// If you spam `ENTER`, skip the transition.
+		if (pressedEnter && transitioning && skippedIntro) moveToMainMenu();
 		if (pressedEnter && !transitioning && skippedIntro)
 		{
 			if (FlxG.sound.music != null) FlxG.sound.music.onComplete = null;
@@ -249,17 +257,9 @@ class TitleState extends MusicBeatState
 
 			transitioning = true;
 
-			new FlxTimer().start(0.3, function(tmr:FlxTimer)
+			new FlxTimer().start(2, function(tmr:FlxTimer)
 			{
-                    // Only show update screen if you're not on a debug build.
-				#if !debug
-				if (Main.mustUpdate) 
-					FlxG.switchState(new OutdatedSubState());
-				else 
-					FlxG.switchState(new MainMenuState());
-				#else
-				FlxG.switchState(new MainMenuState());
-				#end
+				moveToMainMenu();
 			});
 		}
 
@@ -285,6 +285,19 @@ class TitleState extends MusicBeatState
 		}
 
 		super.update(elapsed);
+	}
+
+	function moveToMainMenu():Void
+	{
+		Paths.clearUnusedMemory();
+
+		// Only show update screen if you're not on a debug build.
+		#if !debug
+		if (Main.mustUpdate) FlxG.switchState(new OutdatedSubState());
+		else FlxG.switchState(new MainMenuState());
+		#else
+		FlxG.switchState(new MainMenuState());
+		#end
 	}
 
 	function createCoolText(textArray:Array<String>, ?offset:Float = 0)
@@ -333,7 +346,7 @@ class TitleState extends MusicBeatState
 					case 3: addMoreText('presents');
 					case 4: deleteCoolText();
 					case 5:
-						if (FlxG.save.data.watermark)
+						if (FlxG.save.data.fdeWatermark)
                               {
                                   createCoolText(['FNF Definitive Edition', 'by']); 
                               }
@@ -342,7 +355,7 @@ class TitleState extends MusicBeatState
                                  createCoolText(['In association', 'with']);  
                               }
 					case 7:
-						if (FlxG.save.data.watermark)
+						if (FlxG.save.data.fdeWatermark)
 						{
 							addMoreText('This guy lol');
 							if (legSpr != null) legSpr.visible = true;
@@ -354,7 +367,7 @@ class TitleState extends MusicBeatState
 						}
 					case 8:
 						deleteCoolText();
-						if (FlxG.save.data.watermark)
+						if (FlxG.save.data.fdeWatermark)
 						{
 							if (legSpr != null) legSpr.visible = false;
 						}
@@ -397,13 +410,14 @@ class TitleState extends MusicBeatState
 		{
                remove(legSpr);
 			remove(ngSpr);
-			remove(credGroup);
 			
 			if (FlxG.save.data.flashingLights) FlxG.camera.flash(FlxColor.WHITE, initialized ? 1 : 4);
 			else FlxG.camera.flash(FlxColor.BLACK, initialized ? 1 : 4);
 
 			// This intro skips the first 9.4 seconds of the song.
 			FlxG.sound.music.time = 9400;
+
+			if (credGroup != null) remove(credGroup);
 			skippedIntro = true;
 		}
 	}

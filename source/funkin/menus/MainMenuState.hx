@@ -22,18 +22,19 @@ class MainMenuState extends MusicBeatState
 {
 	var menuItems:MainMenuList;
 
-	#if !switch
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
-	#else
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
-	#end
-
+	var bg:FlxSprite;
 	var magenta:FlxSprite;
+
 	var camFollow:FlxObject;
 
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
+
+	/**
+	 * Get the text for the left watermark, aswell as the version of the game.
+	 */
+	public var leftWatermarkText:FlxText;
 	public static var definitiveVersion:String = '0.5.2';
 	public static var versionSuffix:String = #if debug ' DEBUG' #else '' #end;
-
 
 	override function create()
 	{
@@ -42,14 +43,13 @@ class MainMenuState extends MusicBeatState
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
 
-		if (!FlxG.sound.music.playing)
-		{
+		if (FlxG.sound.music != null &&!FlxG.sound.music.playing) 
 			FlxG.sound.playMusic(Paths.music('freakyMenu'));
-		}
 
-		persistentUpdate = persistentDraw = true;
+		persistentUpdate = true;
+		persistentDraw = true;
 
-		var bg:FlxSprite = new FlxSprite(null, null, Paths.image('menuBG'));
+		bg = new FlxSprite(null, null, Paths.image('menuBG'));
 		bg.scrollFactor.x = 0;
 		bg.scrollFactor.y = 0.17;
 		bg.setGraphicSize(Std.int(bg.width * 1.2));
@@ -62,8 +62,7 @@ class MainMenuState extends MusicBeatState
 		add(camFollow);
 
 		magenta = new FlxSprite(null, null, Paths.image('menuDesat'));
-		magenta.scrollFactor.x = bg.scrollFactor.x;
-		magenta.scrollFactor.y = bg.scrollFactor.y;
+		magenta.scrollFactor.copyFrom(bg.scrollFactor);
 		magenta.setGraphicSize(Std.int(bg.width));
 		magenta.updateHitbox();
 		magenta.x = bg.x;
@@ -71,8 +70,7 @@ class MainMenuState extends MusicBeatState
 		magenta.visible = false;
 		magenta.antialiasing = FlxG.save.data.antialiasing;
 		magenta.color = 0xFFFD719B;
-		if (FlxG.save.data.flashingLights)
-			add(magenta);
+		if (FlxG.save.data.flashingLights) add(magenta);
 
 		menuItems = new MainMenuList();
 		add(menuItems);
@@ -100,10 +98,11 @@ class MainMenuState extends MusicBeatState
 		}
 		menuItems.createItem(0, 0, "options", function()
 		{
-			if (FlxG.sound.music != null)
+			if (FlxG.sound.music != null) 
+			{
 				FlxG.sound.music.fadeOut(1, 0);
-
-			FlxG.sound.music.stop();
+				FlxG.sound.music.stop();
+			}
 			startExitState(new OptionsMenuState());
 		});
 
@@ -118,21 +117,36 @@ class MainMenuState extends MusicBeatState
 		#if html5
 		FlxG.camera.follow(camFollow, null, 0.06);
 		#else
-		FlxG.camera.follow(camFollow, null, 0.06 * (30 / FlxG.save.data.framerateDraw));
+		FlxG.camera.follow(camFollow, null, 0.06 * (30 / FlxG.save.data.fpsCap));
 		#end
 
-		if (FlxG.save.data.watermark)
-			git_VERSION();
-		else 
-		{
-			var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' - v" + Application.current.meta.get('version') + versionSuffix, 12);
-			versionShit.scrollFactor.set();
-			versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			add(versionShit);
-		} 
-
 		super.create();
+		initWatermark();
 		Paths.clearUnusedMemory();
+	}
+
+	/**
+	 * Get the current git branch and commit hash to display in the watermark.
+	 * [!NOTE] This is only used for debug builds.
+	 */
+	public static final GIT_BRANCH:String = GitCommit.getGitBranch();
+   	public static final GIT_HASH:String = GitCommit.getGitCommitHash();
+
+	function initWatermark()
+	{
+		if (!FlxG.save.data.fdeWatermark)
+		{
+			leftWatermarkText = new FlxText(12, FlxG.height - 24, 0, 'FNF - v${Application.current.meta.get('version')} ' 
+			+ #if debug '(${GIT_BRANCH}, ${GIT_HASH})' + #end versionSuffix, 12);
+		}
+		else
+		{
+			leftWatermarkText = new FlxText(12, FlxG.height - 24, 0, 'FDE - v${definitiveVersion} ' 
+			+ #if debug '(${GIT_BRANCH}, ${GIT_HASH})' + #end versionSuffix, 12);
+		}
+		leftWatermarkText.scrollFactor.set();
+		leftWatermarkText.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(leftWatermarkText);
 	}
 
 	override function finishTransIn()
@@ -184,15 +198,9 @@ class MainMenuState extends MusicBeatState
 		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.06);
 		#end
 
-		if (FlxG.sound.music.volume < 0.8)
-		{
-			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
-		}
-
-		if (_exiting)
-		{
-			menuItems.enabled = false;
-		}
+		if (FlxG.sound.music.volume < 0.8) FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
+		
+		if (_exiting) menuItems.enabled = false;
 
 		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE && menuItems.enabled && !menuItems.busy)
 		{
@@ -201,34 +209,6 @@ class MainMenuState extends MusicBeatState
 
 		super.update(elapsed);
 	}
-
-	// Current Git Branch
-   	public static final GIT_BRANCH:String = GitCommit.getGitBranch();
-
-	// Current Git Commit Hash
-   	public static final GIT_HASH:String = GitCommit.getGitCommitHash();
- 
-   	public static final GIT_HAS_LOCAL_CHANGES:Bool = GitCommit.getGitHasLocalChanges();
-
-	#if debug
-	function git_VERSION()
-	{
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "FNF' Definitive Edition - v" 
-		+ definitiveVersion + ' ($GIT_BRANCH : ${GIT_HASH} ${GIT_HAS_LOCAL_CHANGES})' + versionSuffix , 12);
-		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(versionShit);
-	}
-	#else
-	function git_VERSION()
-	{
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "FNF' Definitive Edition - v" 
-		+ definitiveVersion + versionSuffix , 12);
-		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(versionShit);
-	}
-	#end
 }
 
 class MainMenuItem extends AtlasMenuItem

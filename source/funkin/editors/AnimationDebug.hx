@@ -63,7 +63,7 @@ class AnimationDebug extends MusicBeatState
 
 	override function create()
 	{
-		if (FlxG.save.data.lowData)
+		if (FlxG.save.data.lowQuality)
 		{
 			gridBG = FlxGridOverlay.create(10, 10);
 			gridBG.scrollFactor.set(1, 1);

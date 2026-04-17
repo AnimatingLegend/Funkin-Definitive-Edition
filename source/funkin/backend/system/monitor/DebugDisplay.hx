@@ -2,10 +2,7 @@ package funkin.backend.system.monitor;
 
 import flixel.text.FlxText.FlxTextBorderStyle;
 
-import haxe.Timer;
-
 import openfl.display.Shape;
-import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.system.System;
 import openfl.text.TextField;
@@ -30,13 +27,9 @@ class DebugDisplay extends TextField
 
 
      /**
-      * The current memory usage of the game.
+      * The current, and maximum memory usage of the game.
       */
      public var systemMemory(default, null):Float = 0;
-
-     /**
-      * The highest amount of memory used since the counter was created.
-      */
      public var maxMemory:Float = 0;
 
 	/**
@@ -75,7 +68,6 @@ class DebugDisplay extends TextField
           debugDisplayBG = new Shape();
           debugDisplayBG.x = this.x;
           debugDisplayBG.y = this.y;
-          debugDisplayBG.alpha = backgroundOpacity;
           parent.addChildAt(debugDisplayBG, parent.getChildIndex(this));
           trace('[INFO] Created debug display background.');
      }
@@ -91,18 +83,24 @@ class DebugDisplay extends TextField
      function redrawBackground():Void
      {
           if (debugDisplayBG == null) return;
-          debugDisplayBG.x = this.x - 4;
-          debugDisplayBG.y = this.y - 2;
+
+          final padding:Int = 6;
+          final borderThickness:Int = 4;
+          final width:Float = this.width + (padding * 2);
+          final height:Float = this.height + (padding * 2);
+
+          debugDisplayBG.x = this.x - padding;
+          debugDisplayBG.y = this.y - padding;
           debugDisplayBG.graphics.clear();
 
-          // Border
-          debugDisplayBG.graphics.beginFill(0xFFFFFF, 0.6);
-          debugDisplayBG.graphics.drawRect(0, 0, this.width + 8, this.height + 4);
+          // Outer border
+          debugDisplayBG.graphics.beginFill(0x3d3f41, 1);
+          debugDisplayBG.graphics.drawRect(0, 0, width, height);
           debugDisplayBG.graphics.endFill();
 
-          // Background
+          // Inner background
           debugDisplayBG.graphics.beginFill(0x2c2f30, 1);
-          debugDisplayBG.graphics.drawRect(1, 1, this.width + 6, this.height + 2);
+          debugDisplayBG.graphics.drawRect(borderThickness, borderThickness, width - (borderThickness * 2), height - (borderThickness * 2));
           debugDisplayBG.graphics.endFill();
           
           debugDisplayBG.alpha = backgroundOpacity;
@@ -139,21 +137,22 @@ class DebugDisplay extends TextField
      public dynamic function updateDisplay():Void
      {
           // If your memory usage is above 1000 megabytes, display it in gigabytes. (default: megabytes)
-          var memoryUnit = systemMemory >= 1000 ? 'gb' : 'mb';
+          var memoryUnit = systemMemory >= 1000 ? 'GB' : 'MB';
 
           text = [
                'FPS: ${currentFPS}',
-               'MEM: ${systemMemory} / ${maxMemory}${memoryUnit}',
-			'GAME STATE: ${Type.getClassName(Type.getClass(FlxG.state))}'
+               'RAM: ${systemMemory} / ${maxMemory}${memoryUnit}',
+			'GAME STATE: ${Type.getClassName(Type.getClass(FlxG.state))}.hx'
           ].join('\n');
 
           textColor = FlxColor.WHITE;
-          if (maxMemory > 3000 || currentFPS <= FlxG.save.data.framerateDraw / 2) textColor = FlxColor.RED;
+          if (maxMemory > 3000 || currentFPS <= FlxG.save.data.fpsCap / 2) textColor = FlxColor.RED;
      }
 
-     public function set_backgroundOpacityVisible(value:Bool):Void { if (debugDisplayBG != null) debugDisplayBG.visible = value; }
+     public function set_backgroundOpacityVisible(value:Bool):Void 
+          if (debugDisplayBG != null) debugDisplayBG.visible = value;
 
-     function set_backgroundOpacity(value:Float):Float
+     public function set_backgroundOpacity(value:Float):Float
      {
 		if (debugDisplayBG != null) debugDisplayBG.alpha = value;
 

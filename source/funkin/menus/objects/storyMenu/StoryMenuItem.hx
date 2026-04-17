@@ -33,7 +33,7 @@ class MenuItem extends FlxSpriteGroup
 	// OldFlags doing
 	public function fakeFramerateCaps() 
 	{
-		(fakeFramerate * (30 / FlxG.save.data.framerateDraw));
+		(fakeFramerate * (30 / FlxG.save.data.fpsCap));
 	}
 
 	override function update(elapsed:Float)

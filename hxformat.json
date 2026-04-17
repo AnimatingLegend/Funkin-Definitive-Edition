@@ -12,5 +12,6 @@
 		"doWhile": "next",
 		"tryBody": "next",
 		"tryCatch": "next"
-	}
+	},
+	"excludes": [".haxelib", ".git"]
 }
