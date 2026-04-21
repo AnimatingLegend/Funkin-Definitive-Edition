@@ -1,222 +1,335 @@
 package funkin.gameplay.objects.note;
 
-import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.FlxSprite;
+import flixel.FlxG;
+
+import funkin.backend.chart.Conductor;
 import funkin.gameplay.PlayState;
 
-using StringTools;
+/**
+ * Represents the skin/visual varient a note should use.
+ * Decouples stage logic from the note itself.
+ */
+enum abstract NoteSkin(String) to String
+{
+	var DEFAULT = "default";
+	var PIXEL = "pixel";
+}
 
+/**
+ * Lightweight data-only struct passed to `Note.setup()`.
+ * Keeps the constructor clean and enables object pooling.
+ */
+typedef NoteData = {
+    var strumTime:Float;
+    var noteData:Int;
+    var sustainLength:Float;
+    var isSustainNote:Bool;
+    var skin:NoteSkin;
+    var ?prevNote:Note;
+}
+
+/**
+ * NOTE SPRITE CLASS
+ * 
+ * A single note arrow or sustain segment.
+ * 
+ * POOLING: Notes are never destroyed mid-song.
+ * Call `Note.pool()` to get one, `Note.setup()` to initialize it,
+ * and `Note.recycle()` to return it to the pool.
+ */
 class Note extends FlxSprite
 {
-	public var strumTime:Float = 0;
+	/**
+	 * Pool of notes available for reuse.
+	 */
+	static final _pool:Array<Note> = [];
 
-	public var mustPress:Bool = false;
+	/**
+	 * Grab a note from the pool (or create one if empty).
+	 */
+	public static function pool():Note
+	{
+		return _pool.length > 0 ? _pool.pop() : new Note();
+	}
+
+	/**
+	 * Call this when leaving `PlayState` to avoid stale graphic references across songs.
+	 */
+	public static function clearPool():Void
+	{
+		for (note in _pool) note.destroy();
+		_pool.resize(0);
+	}
+
+	/**
+	 * Return this note to the pool. Resets all state.
+	 */
+	public function recycle():Void
+	{
+		reset(0, -9999); // Move offscreen.
+		_clear();
+		_pool.push(this);
+	}
+
+	// * ---------------- * \\
+	// * LAYOUT CONSTANTS * \\
+	// * ---------------- * \\
+	public static inline final SWAG_WIDTH:Float = 160 * 0.7;
+	public static inline final PIXEL_ZOOM:Float = 6.0; // Matches `PlayState.daPixelZoom`.
+
+	// * -------------------------- * \\
+	// * NOTE COLOR => COLUMN INDEX * \\
+	// * -------------------------- * \\
+	public static inline final COL_LEFT:Int = 0; // purple
+    	public static inline final COL_DOWN:Int = 1; // blue
+    	public static inline final COL_UP:Int = 2; // green
+    	public static inline final COL_RIGHT:Int = 3; // red
+
+	// * ------------- * \\
+	// * RUNTIME STATE * \\
+	// * ------------- * \\
+	public var strumTime:Float = 0;
 	public var noteData:Int = 0;
+	public var sustainLength:Float = 0;
+	public var isSustainNote:Bool = false;
+	public var mustPress:Bool = false;
+
 	public var canBeHit:Bool = false;
 	public var tooLate:Bool = false;
 	public var wasGoodHit:Bool = false;
-	public var ignoreNote:Bool = false;
-	public var prevNote:Note;
 	public var willMiss:Bool = false;
+	public var ignoreNote:Bool = false;
+	public var hitCausesMiss:Bool = false;
 	public var altNote:Bool = false;
 
-	public var sustainLength:Float = 0;
-	public var isSustainNote:Bool = false;
+	public var prevNote:Note = null;
+	public var rating:String = 'shit';
 
-	public var hitsoundDisabled:Bool = false;
-	public var hitsound:String = 'hitsound';
+	// * INTERNAL VARIABLES * \\
+	var _skin:NoteSkin = DEFAULT;
+	var _loadedSkin:NoteSkin = null; // make true once the atlas/graphic is loaded for this skin.
 
-	public static var swagWidth:Float = 160 * 0.7;
-	public static var PURP_NOTE:Int = 0;
-	public static var GREEN_NOTE:Int = 2;
-	public static var BLUE_NOTE:Int = 1;
-	public static var RED_NOTE:Int = 3;
+	/**
+	 * PRIVATE - Use `Note.pool()` instead.
+	 */
+	function new() { super(0, -9999); }
 
-	public var rating:String = "shit";
-
-	public var hitCausesMiss:Bool = false;
-
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
+	/**
+	 * Configure this not with new data.
+	 * Loads graphics only when the skin actually changes.
+	 * @param data 
+	 */
+	public function setup(data:NoteData, scrollSpeed:Float):Void
 	{
-		super();
+		strumTime = data.strumTime;
+		noteData = data.noteData;
+		sustainLength = data.sustainLength;
+		isSustainNote = data.isSustainNote;
+		prevNote = data.prevNote != null ? data.prevNote : this;
+		_skin = data.skin;
 
-		if (prevNote == null)
-			prevNote = this;
+		// Reset hit state
+		canBeHit = false;
+		tooLate = false;
+		wasGoodHit = false;
+		willMiss = false;
+		ignoreNote = false;
+		hitCausesMiss = false;
+		altNote = false;
+		rating = "shit";
+		alpha = 1.0;
 
-		this.prevNote = prevNote;
-		isSustainNote = sustainNote;
+		_loadGraphics();
+		_scaleSustain(scrollSpeed);
+	}
 
-		x += (FlxG.save.data.middlescroll) + 50;
-		// MAKE SURE ITS DEFINITELY OFF SCREEN?
-		y -= 2000;
-		this.strumTime = strumTime;
+	// * ------------------- * \\
+	// * INITIALIZE GRAPHICS * \\
+	// * ------------------- * \\
+	static final ANIM_SCROLL = ["purpleScroll",  "blueScroll",  "greenScroll",  "redScroll"];
+    	static final ANIM_HOLD = ["purplehold",     "bluehold",    "greenhold",    "redhold"];
+    	static final ANIM_HOLDEND = ["purpleholdend",  "blueholdend", "greenholdend", "redholdend"];
 
-		this.noteData = noteData;
+	function _loadGraphics():Void
+	{
+		if (_loadedSkin != _skin)
+		{
+			_loadedSkin = _skin;
+			switch (_skin)
+			{
+				case PIXEL: 
+					_loadPixelGraphics();
+				default: 
+					_loadDefaultGraphics();
+			}
+		}
+		else _playNoteAnim(); // Skin is already loaded, just play the correct skin.
+	}
 
-		var daStage:String = PlayState.curStage;
+	function _loadDefaultGraphics():Void
+	{
+		frames = Paths.getSparrowAtlas('NOTE_assets');
 
-		switch (daStage)
-		{	
-			case 'school' | 'schoolEvil':
-				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels', 'week6'), true, 17, 17);
+		animation.addByPrefix('purpleScroll', 'purple instance');
+		animation.addByPrefix('blueScroll',   'blue instance');
+		animation.addByPrefix('greenScroll',  'green instance');
+		animation.addByPrefix('redScroll',    'red instance');
 
-				animation.add('greenScroll', [6]);
-				animation.add('redScroll', [7]);
-				animation.add('blueScroll', [5]);
-				animation.add('purpleScroll', [4]);
+		animation.addByPrefix('purpleholdend', 'pruple end hold');
+		animation.addByPrefix('blueholdend',   'blue hold end');
+		animation.addByPrefix('greenholdend',  'green hold end');
+		animation.addByPrefix('redholdend',    'red hold end');
 
-				if (isSustainNote)
-				{
-					loadGraphic(Paths.image('weeb/pixelUI/arrowEnds', 'week6'), true, 7, 6);
+		animation.addByPrefix('purplehold', 'purple hold piece');
+		animation.addByPrefix('bluehold',   'blue hold piece');
+		animation.addByPrefix('greenhold',  'green hold piece');
+		animation.addByPrefix('redhold',    'red hold piece');
 
-					animation.add('purpleholdend', [4]);
-					animation.add('greenholdend', [6]);
-					animation.add('redholdend', [7]);
-					animation.add('blueholdend', [5]);
+		setGraphicSize(Std.int(width * 0.7));
+		updateHitbox();
+		antialiasing = FlxG.save.data.antialiasing;
 
-					animation.add('purplehold', [0]);
-					animation.add('greenhold', [2]);
-					animation.add('redhold', [3]);
-					animation.add('bluehold', [1]);
-				}
+		_playNoteAnim();
+	}
 
-				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
-				updateHitbox();
-
-			default:
-				frames = Paths.getSparrowAtlas('NOTE_assets');
-		
-				animation.addByPrefix('greenScroll', 'green instance');
-				animation.addByPrefix('redScroll', 'red instance');
-				animation.addByPrefix('blueScroll', 'blue instance');
-				animation.addByPrefix('purpleScroll', 'purple instance');
-		
-				animation.addByPrefix('purpleholdend', 'pruple end hold');
-				animation.addByPrefix('greenholdend', 'green hold end');
-				animation.addByPrefix('redholdend', 'red hold end');
-				animation.addByPrefix('blueholdend', 'blue hold end');
-		
-				animation.addByPrefix('purplehold', 'purple hold piece');
-				animation.addByPrefix('greenhold', 'green hold piece');
-				animation.addByPrefix('redhold', 'red hold piece');
-				animation.addByPrefix('bluehold', 'blue hold piece');
-		
-				setGraphicSize(Std.int(width * 0.7));
-				updateHitbox();
-				antialiasing = FlxG.save.data.antialiasing;
+	function _loadPixelGraphics():Void
+	{
+		if (!isSustainNote)
+		{
+			loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels', 'week6'), true, 17, 17);
+			animation.add('purpleScroll', [4]);
+			animation.add('blueScroll', [5]);
+			animation.add('greenScroll', [6]);
+			animation.add('redScroll', [7]);
+		}
+		else
+		{
+			loadGraphic(Paths.image('weeb/pixelUI/arrowEnds', 'week6'), true, 7, 6);
+			animation.add('purpleholdend', [4]);
+			animation.add('blueholdend', [5]);
+			animation.add('greenholdend', [6]);
+			animation.add('redholdend', [7]);
+			animation.add('purplehold', [0]);
+			animation.add('bluehold', [1]);
+			animation.add('greenhold', [2]);
+			animation.add('redhold', [3]);
 		}
 
-		/**
-		 * Code originally from psych engine; just a little tweaked.
-		 * Doing this 'if' check to fix the warnings on Senpai songs
-		 */
-		x += swagWidth * (noteData % 4);
-		if (!isSustainNote) 
+		setGraphicSize(Std.int(width * PIXEL_ZOOM));
+		updateHitbox();
+		antialiasing = false;
+
+		_playNoteAnim();
+	}
+
+	inline function _playNoteAnim():Void
+	{
+		final col = noteData % 4;
+
+		if (!isSustainNote) animation.play(ANIM_SCROLL[col]);
+		else
 		{
-			var animToPlay:String = '';	
-			switch (noteData % 4)
-			{
-				case 0:
-					animToPlay = 'purple';
-				case 1:
-					animToPlay = 'blue';
-				case 2:
-					animToPlay = 'green';
-				case 3:
-					animToPlay = 'red';
-			}
-			animation.play(animToPlay + 'Scroll');
-		}
+			if (FlxG.save.data.downscroll) angle = 180;
 
-		if (isSustainNote && prevNote != null)
-		{
-			alpha = 0.6;
-
-			if (FlxG.save.data.downscroll /* && !sustainNote */) {
-				angle = 180;
-			}
-
-			x += width / 2;
-
-			switch (noteData)
-			{
-				case 2:
-					animation.play('greenholdend');
-				case 3:
-					animation.play('redholdend');
-				case 1:
-					animation.play('blueholdend');
-				case 0:
-					animation.play('purpleholdend');
-			}
-
+			animation.play(ANIM_HOLDEND[col]);
 			updateHitbox();
 
-			x -= width / 2;
+			if (_skin == PIXEL) x += 30;
 
-			if (PlayState.curStage.startsWith('school'))
-				x += 30;
-
-			if (prevNote.isSustainNote)
+			// Tell the previous note to switch to its hold-piece animation.
+			if (prevNote != null && prevNote != this && prevNote.isSustainNote)
 			{
-				switch (prevNote.noteData)
-				{
-					case 0:
-						prevNote.animation.play('purplehold');
-					case 1:
-						prevNote.animation.play('bluehold');
-					case 2:
-						prevNote.animation.play('greenhold');
-					case 3:
-						prevNote.animation.play('redhold');
-				}
-
-				/**
-				 * i am so sorry for this inconvenience...
-				 * it works though so whatever. shrug emoji
-				 */
-				prevNote.scale.y *= (((Conductor.stepCrochet / 100 * 1.52)) * FlxMath.roundDecimal(FlxG.save.data.scrollSpeed == 1 ? PlayState.SONG.speed : FlxG.save.data.scrollSpeed, 2));
-				prevNote.updateHitbox();
+				prevNote.animation.play(ANIM_HOLD[prevNote.noteData % 4]);
 			}
 		}
 	}
 
-	override function update(elapsed:Float)
+	/**
+	 * Scales the sustain note to match the scroll speed.
+	 * @see PlayState - x and y axis for strumline notes will be specifically handled there.
+	 * @param scrollSpeed 
+	 */
+	function _scaleSustain(scrollSpeed:Float):Void
 	{
-		super.update(elapsed);
+		if (!isSustainNote) return;
+		if (prevNote == null || prevNote == this || !prevNote.isSustainNote) return;
 
-		if (mustPress)
+		final speed = FlxMath.roundDecimal(
+			FlxG.save.data.scrollSpeed == 1 ? PlayState.SONG.speed : FlxG.save.data.scrollSpeed, 2
+		);
+
+		prevNote.scale.y = 1.0;
+
+		if (_skin == PIXEL)
 		{
-			if (willMiss && !wasGoodHit)
-			{
-				tooLate = true;
-				canBeHit = false;
-			}
-			else
-			{
-				if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset)
-				{
-					if (strumTime < Conductor.songPosition + 0.7 * Conductor.safeZoneOffset)
-						canBeHit = true;
-				}
-				else
-				{
-					willMiss = true;
-					canBeHit = true;
-				}
-			}		
+			prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.52) * speed;
+			prevNote.scale.y *= PIXEL_ZOOM;
 		}
 		else
 		{
-			canBeHit = false;
-
-			if (strumTime <= Conductor.songPosition)
-				wasGoodHit = true;
+			prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.52) * speed;
 		}
 
-		if (tooLate)
+		prevNote.updateHitbox();
+	}
+
+	override function update(elapsed:Float):Void
+	{
+		super.update(elapsed);
+
+		if (!mustPress)
 		{
-			if (alpha > 0.3)
-				alpha = 0.3;
+			// For opponent notes, automatically hit them when the strumTime is reached.
+			if (!wasGoodHit && strumTime <= Conductor.songPosition) wasGoodHit = true;
+			return;
 		}
+
+		// Already hit, so do nothing.
+		if (tooLate || wasGoodHit) return;
+
+		if (willMiss)
+		{
+			tooLate = true;
+			canBeHit = false;
+			if (alpha > 0.3) alpha = 0.3;
+			return;
+		}
+
+		final songPos = Conductor.songPosition;
+		final safeZone = Conductor.safeZoneOffset;
+
+		// Check if the note has been hit, or if it's too late to be hit.
+		if (strumTime > songPos - safeZone && strumTime < songPos + 0.7 * safeZone) canBeHit = true;
+		else if (strumTime <= songPos - safeZone)
+		{
+			willMiss = true;
+			canBeHit = true;
+		}
+	}
+
+	/**
+	 * Reset all fields to default without touching the graphics.
+	 */
+	function _clear():Void
+	{
+		strumTime = 0;
+		noteData = 0;
+		sustainLength = 0;
+		isSustainNote = false;
+		mustPress = false;
+		canBeHit = false;
+		tooLate = false;
+		wasGoodHit = false;
+		willMiss = false;
+		ignoreNote = false;
+		hitCausesMiss = false;
+		altNote = false;
+		prevNote = null;
+		rating = "shit";
+		alpha = 1.0;
+		angle = 0;
+		scale.set(1, 1);
+		clipRect = null;
 	}
 }

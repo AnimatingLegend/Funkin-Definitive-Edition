@@ -1043,9 +1043,12 @@ class ChartingState extends MusicBeatState
 
 	function updateGrid():Void
 	{
+		// Return all currently rendered notes to the pool
 		while (curRenderedNotes.members.length > 0)
 		{
-			curRenderedNotes.remove(curRenderedNotes.members[0], true);
+			var n = curRenderedNotes.members[0];
+			curRenderedNotes.remove(n, true);
+			n.recycle();
 		}
 
 		while (curRenderedSustains.members.length > 0)
@@ -1072,23 +1075,35 @@ class ChartingState extends MusicBeatState
 
 		for (i in sectionInfo)
 		{
-			var daNoteInfo = i[1];
-			var daStrumTime = i[0];
-			var daSus = i[2];
+			var daNoteInfo:Int = Std.int(i[1]);
+			var daStrumTime:Float = i[0];
+			var daSus:Float = i[2];
 
-			var note:Note = new Note(daStrumTime, daNoteInfo % 4);
-			note.sustainLength = daSus;
+			var note:Note = Note.pool();
+			note.setup({
+				strumTime: daStrumTime,
+				noteData: daNoteInfo % 4,
+				sustainLength: daSus,
+				isSustainNote: false,
+				skin: DEFAULT,
+				prevNote: null
+			}, 1.0);
+
+			// Position note on the grid
+			note.x = gridBG.x + (daNoteInfo % 8) * GRID_SIZE;
+			note.y = getYfromStrum((daStrumTime - sectionStartTime()) % (Conductor.stepCrochet * _song.notes[curSection].lengthInSteps));
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 			note.updateHitbox();
-			note.x = Math.floor(daNoteInfo * GRID_SIZE) + gridBG.x;
-			note.y = Math.floor(getYfromStrum((daStrumTime - sectionStartTime()) % (Conductor.stepCrochet * _song.notes[curSection].lengthInSteps)));
 
 			curRenderedNotes.add(note);
 
 			if (daSus > 0)
 			{
-				var sustainVis:FlxSprite = new FlxSprite(note.x - 3 + (GRID_SIZE / 2), note.y - 4 + GRID_SIZE).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height))); 
-				sustainVis.color = strumColors[note.noteData];
+				var sustainVis:FlxSprite = new FlxSprite(
+					note.x + (GRID_SIZE / 2) - 3,
+					note.y + GRID_SIZE - 4
+				).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height)));
+				sustainVis.color = strumColors[daNoteInfo % 4];
 				curRenderedSustains.add(sustainVis);
 			}
 		}
@@ -1111,16 +1126,15 @@ class ChartingState extends MusicBeatState
 
 	function selectNote(note:Note):Void
 	{
-		var swagNum:Int = 0;
+		 var swagNum:Int = 0;
 
 		for (i in _song.notes[curSection].sectionNotes)
 		{
-			if (i.strumTime == note.strumTime && i.noteData % 4 == note.noteData)
+			if (i[0] == note.strumTime && i[1] % 4 == note.noteData)
 			{
 				curSelectedNote = _song.notes[curSection].sectionNotes[swagNum];
 			}
-
-			swagNum += 1;
+			swagNum++;
 		}
 
 		updateGrid();
