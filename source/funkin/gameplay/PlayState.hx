@@ -762,8 +762,7 @@ class PlayState extends MusicBeatState
 		healthBar.visible = !FlxG.save.data.hideHUD;
 		healthBar.scrollFactor.set();
 		add(healthBar);
-
-		healthBar.createFilledBar(dad.HEALTH_BAR_COLOR, boyfriend.HEALTH_BAR_COLOR);
+		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 
 		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);

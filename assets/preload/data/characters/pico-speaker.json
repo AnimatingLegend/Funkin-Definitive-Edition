@@ -1,0 +1,54 @@
+{
+  "version": "1.0.0",
+  "name": "Pico (Speaker)",
+  "renderType": "sparrow",
+  "assetPath": "characters/picoSpeaker",
+  "library": "shared",
+  "startingAnimation": "shoot1",
+  "singDuration": 4.0,
+  "flipX": false,
+  "isPixel": false,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": {
+    "id": "pico",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
+  },
+  "healthBarColors": [183, 216, 85],
+  "mappedAnims": {
+    "charId": "picospeaker",
+    "songId": "stress"
+  },
+  "animations": [
+    {
+      "name": "shoot1",
+      "prefix": "Pico shoot 1",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [0, 0]
+    },
+    {
+      "name": "shoot2",
+      "prefix": "Pico shoot 2",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-1, -128]
+    },
+    {
+      "name": "shoot3",
+      "prefix": "Pico shoot 3",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [412, -64]
+    },
+    {
+      "name": "shoot4",
+      "prefix": "Pico shoot 4",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [439, -19]
+    }
+  ]
+}

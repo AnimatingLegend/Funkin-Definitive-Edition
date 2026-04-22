@@ -1,0 +1,97 @@
+{
+  "version": "1.0.0",
+  "name": "Monster",
+  "renderType": "sparrow",
+  "assetPath": "characters/Monster_Assets",
+  "library": "shared",
+  "startingAnimation": "idle",
+  "singDuration": 4.0,
+  "flipX": false,
+  "isPixel": false,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": {
+    "id": "monster",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
+  },
+  "healthBarColors": [243, 255, 110],
+  "animations": [
+    {
+      "name": "idle",
+      "prefix": "monster idle",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [0, 0]
+    },
+    {
+      "name": "idle-loop",
+      "prefix": "monster idle",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [0, 0],
+      "frameIndices": [10, 11, 12, 13]
+    },
+    {
+      "name": "singUP",
+      "prefix": "monster up note",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-20, 50]
+    },
+    {
+      "name": "singUP-loop",
+      "prefix": "monster up note",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [-20, 50],
+      "frameIndices": [10, 11, 12, 13]
+    },
+    {
+      "name": "singDOWN",
+      "prefix": "monster down",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-40, -94]
+    },
+    {
+      "name": "singDOWN-loop",
+      "prefix": "monster down",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [-40, -94],
+      "frameIndices": [10, 11, 12, 13]
+    },
+    {
+      "name": "singLEFT",
+      "prefix": "Monster Right note",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-30, 0]
+    },
+    {
+      "name": "singLEFT-loop",
+      "prefix": "Monster Right note",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [-30, 0],
+      "frameIndices": [10, 11, 12, 13]
+    },
+    {
+      "name": "singRIGHT",
+      "prefix": "Monster left note",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-51, 0]
+    },
+    {
+      "name": "singRIGHT-loop",
+      "prefix": "Monster left note",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [-51, 0],
+      "frameIndices": [10, 11, 12, 13]
+    }
+  ]
+}

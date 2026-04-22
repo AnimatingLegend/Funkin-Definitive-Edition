@@ -1,0 +1,92 @@
+{
+  "version": "1.0.0",
+  "name": "Boyfriend (Christmas)",
+  "renderType": "sparrow",
+  "assetPath": "characters/bfChristmas",
+  "library": "shared",
+  "startingAnimation": "idle",
+  "singDuration": 4.0,
+  "flipX": true,
+  "isPixel": false,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": {
+    "id": "bf",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
+  },
+  "healthBarColors": [49, 176, 209],
+  "animations": [
+    {
+      "name": "idle",
+      "prefix": "BF idle dance",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-5, 0]
+    },
+    {
+      "name": "singUP",
+      "prefix": "BF NOTE UP0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-39, 27]
+    },
+    {
+      "name": "singLEFT",
+      "prefix": "BF NOTE LEFT0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [5, -8]
+    },
+    {
+      "name": "singRIGHT",
+      "prefix": "BF NOTE RIGHT0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-51, -7]
+    },
+    {
+      "name": "singDOWN",
+      "prefix": "BF NOTE DOWN0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-12, -50]
+    },
+    {
+      "name": "singUPmiss",
+      "prefix": "BF NOTE UP MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-42, 27]
+    },
+    {
+      "name": "singLEFTmiss",
+      "prefix": "BF NOTE LEFT MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [8, 19]
+    },
+    {
+      "name": "singRIGHTmiss",
+      "prefix": "BF NOTE RIGHT MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-33, 19]
+    },
+    {
+      "name": "singDOWNmiss",
+      "prefix": "BF NOTE DOWN MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-11, -19]
+    },
+    {
+      "name": "hey!",
+      "prefix": "BF HEY",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-4, 5]
+    }
+  ]
+}

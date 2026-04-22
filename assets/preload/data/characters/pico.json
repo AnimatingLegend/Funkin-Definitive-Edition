@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "name": "Pico",
+  "renderType": "sparrow",
+  "assetPath": "characters/Pico_FNF_assetss",
+  "library": "shared",
+  "startingAnimation": "idle",
+  "singDuration": 4.0,
+  "flipX": true,
+  "isPixel": false,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": { 
+    "id": "pico", 
+    "scale": 1.0, 
+    "flipX": false, 
+    "offsets": [0, 0] 
+  },
+  "healthBarColors": [183, 216, 85],
+  "animations": [
+    { 
+      "name": "idle",    
+      "prefix": "Pico Idle Dance",  
+      "frameRate": 24, 
+      "looped": false, 
+      "offsets": [0, 0]     
+    },
+    { 
+      "name": "singUP",  
+      "prefix": "pico Up note0",    
+      "frameRate": 24, 
+      "looped": false, "offsets": [-29, 23]  
+    },
+    { 
+      "name": "singDOWN",
+      "prefix": "Pico Down Note0",  
+      "frameRate": 24, 
+      "looped": false, 
+      "offsets": [191, -83] 
+    },
+    { 
+      "name": "singLEFT",
+      "prefix": "Pico Note Right0", 
+      "frameRate": 24, 
+      "looped": false, 
+      "offsets": [51, 1]    
+    },
+    { 
+      "name": "singRIGHT",
+      "prefix": "Pico NOTE LEFT0", 
+      "frameRate": 24, 
+      "looped": false, 
+      "offsets": [-80, -14] 
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "version": "1.0.0",
+  "name": "Mom (Car)",
+  "renderType": "sparrow",
+  "assetPath": "characters/momCar",
+  "library": "shared",
+  "startingAnimation": "idle",
+  "singDuration": 4.0,
+  "flipX": false,
+  "isPixel": false,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": {
+    "id": "mom",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
+  },
+  "healthBarColors": [216, 85, 142],
+  "animations": [
+    {
+      "name": "idle",
+      "prefix": "Mom Idle",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [0, 0]
+    },
+    {
+      "name": "idle-loop",
+      "prefix": "Mom Idle",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [0, 0],
+      "frameIndices": [10, 11, 12, 13]
+    },
+    {
+      "name": "singUP",
+      "prefix": "Mom Up Pose",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [14, 71]
+    },
+    {
+      "name": "singUP-loop",
+      "prefix": "Mom Up Pose",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [14, 71],
+      "frameIndices": [10, 11, 12, 13]
+    },
+    {
+      "name": "singDOWN",
+      "prefix": "MOM DOWN POSE",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [20, -160]
+    },
+    {
+      "name": "singDOWN-loop",
+      "prefix": "MOM DOWN POSE",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [20, -160],
+      "frameIndices": [10, 11, 12, 13]
+    },
+    {
+      "name": "singLEFT",
+      "prefix": "Mom Left Pose",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [250, -23]
+    },
+    {
+      "name": "singLEFT-loop",
+      "prefix": "Mom Left Pose",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [250, -23],
+      "frameIndices": [5, 6, 7, 8]
+    },
+    {
+      "name": "singRIGHT",
+      "prefix": "Mom Pose Left",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [10, -60]
+    },
+    {
+      "name": "singRIGHT-loop",
+      "prefix": "Mom Pose Left",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [10, -60],
+      "frameIndices": [5, 6, 7, 8]
+    }
+  ]
+}

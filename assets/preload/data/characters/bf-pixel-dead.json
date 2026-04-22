@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0",
+  "name": "Boyfriend (Pixel, Dead)",
+  "renderType": "sparrow",
+  "assetPath": "characters/bfPixelsDEAD",
+  "library": "shared",
+  "startingAnimation": "firstDeath",
+  "singDuration": 4.0,
+  "flipX": true,
+  "isPixel": true,
+  "scale": 6.0,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": {
+    "id": "bf-pixel",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
+  },
+  "healthBarColors": [49, 176, 209],
+  "animations": [
+    {
+      "name": "firstDeath",
+      "prefix": "BF Dies pixel",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [0, 0]
+    },
+    {
+      "name": "deathLoop",
+      "prefix": "Retry Loop",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [-30, -12]
+    },
+    {
+      "name": "deathConfirm",
+      "prefix": "RETRY CONFIRM",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-30, -12]
+    }
+  ]
+}

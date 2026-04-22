@@ -1,0 +1,92 @@
+{
+  "version": "1.0.0",
+  "name": "Boyfriend (Holding GF)",
+  "renderType": "sparrow",
+  "assetPath": "characters/bfAndGF",
+  "library": "shared",
+  "startingAnimation": "idle",
+  "singDuration": 4.0,
+  "flipX": true,
+  "isPixel": false,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": {
+    "id": "bf",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
+  },
+  "healthBarColors": [49, 176, 209],
+  "animations": [
+    {
+      "name": "idle",
+      "prefix": "BF idle dance",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [0, 0]
+    },
+    {
+      "name": "singUP",
+      "prefix": "BF NOTE UP0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-29, 10]
+    },
+    {
+      "name": "singLEFT",
+      "prefix": "BF NOTE LEFT0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [12, 4]
+    },
+    {
+      "name": "singRIGHT",
+      "prefix": "BF NOTE RIGHT0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-41, 23]
+    },
+    {
+      "name": "singDOWN",
+      "prefix": "BF NOTE DOWN0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-10, -10]
+    },
+    {
+      "name": "singUPmiss",
+      "prefix": "BF NOTE UP MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-29, 10]
+    },
+    {
+      "name": "singLEFTmiss",
+      "prefix": "BF NOTE LEFT MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [12, 4]
+    },
+    {
+      "name": "singRIGHTmiss",
+      "prefix": "BF NOTE RIGHT MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-41, 33]
+    },
+    {
+      "name": "singDOWNmiss",
+      "prefix": "BF NOTE DOWN MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-10, -10]
+    },
+    {
+      "name": "Catch",
+      "prefix": "BF catches GF",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [10, 91]
+    }
+  ]
+}

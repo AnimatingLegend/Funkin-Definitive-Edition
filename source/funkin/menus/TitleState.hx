@@ -86,6 +86,8 @@ class TitleState extends MusicBeatState
 		// TODO: Make an initialization state for stuff like this...
 		#if OPTIONS
 		FlxG.switchState(new funkin.menus.OptionsMenuState());
+		#elseif ANIMATION
+		FlxG.switchState(new funkin.editors.AnimationDebug());
 		#else
 		// If the game isn't initialized yet, wait a second before starting the intro.
           // Otherwise, start the intro normally.

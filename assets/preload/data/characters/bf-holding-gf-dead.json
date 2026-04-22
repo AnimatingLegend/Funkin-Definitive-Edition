@@ -1,0 +1,43 @@
+{
+  "version": "1.0.0",
+  "name": "Boyfriend (Holding GF, Dead)",
+  "renderType": "sparrow",
+  "assetPath": "characters/bfHoldingGF-DEAD",
+  "library": "shared",
+  "startingAnimation": "firstDeath",
+  "singDuration": 4.0,
+  "flipX": true,
+  "isPixel": false,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": {
+    "id": "bf",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
+  },
+  "healthBarColors": [49, 176, 209],
+  "animations": [
+    {
+      "name": "firstDeath",
+      "prefix": "BF Dies with GF",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [37, 14]
+    },
+    {
+      "name": "deathLoop",
+      "prefix": "BF Dead with GF Loop",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [37, -3]
+    },
+    {
+      "name": "deathConfirm",
+      "prefix": "RETRY confirm holding gf",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [37, 28]
+    }
+  ]
+}
