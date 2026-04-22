@@ -763,7 +763,7 @@ class PlayState extends MusicBeatState
 		healthBar.scrollFactor.set();
 		add(healthBar);
 
-		healthBar.createFilledBar(dad.barColor, boyfriend.barColor);
+		healthBar.createFilledBar(dad.HEALTH_BAR_COLOR, boyfriend.HEALTH_BAR_COLOR);
 
 		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
@@ -1460,7 +1460,7 @@ class PlayState extends MusicBeatState
 					dad.dance();
 			} 
 			
-			else if (dad.curCharacter == 'spookyKids' && !dad.animation.curAnim.name.startsWith('sing')) {
+			else if (dad.currentCharacter == 'spookyKids' && !dad.animation.curAnim.name.startsWith('sing')) {
 				dad.dance();
 			}
 
@@ -2520,7 +2520,7 @@ class PlayState extends MusicBeatState
 		{
 			camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 
-			switch (dad.curCharacter) {
+			switch (dad.currentCharacter) {
 				case 'mom':
 					camFollow.y = dad.getMidpoint().y;
 				case 'senpai' | 'senpai-angry':
@@ -2528,7 +2528,7 @@ class PlayState extends MusicBeatState
 					camFollow.x = dad.getMidpoint().x - 100;
 			}
 
-			if (dad.curCharacter == 'mom')
+			if (dad.currentCharacter == 'mom')
 				vocals.volume = 1;
 
 			if (SONG.song.toLowerCase() == 'tutorial') {
@@ -2877,7 +2877,7 @@ class PlayState extends MusicBeatState
 		lightningStrikeBeat = curBeat;
 		lightningOffset = FlxG.random.int(8, 24);
 
-		if (boyfriend.curCharacter.startsWith('bf')) {
+		if (boyfriend.currentCharacter.startsWith('bf')) {
 			boyfriend.playAnim('scared', true);
 		}
 
@@ -3064,7 +3064,7 @@ class PlayState extends MusicBeatState
 	
 			if (!dad.animation.curAnim.name.startsWith("sing"))
 				dad.dance();
-		} else if (dad.curCharacter == 'spookyKids') {
+		} else if (dad.currentCharacter == 'spookyKids') {
 			if (!dad.animation.curAnim.name.startsWith("sing")) {
 				dad.dance();
 			}
@@ -3078,13 +3078,13 @@ class PlayState extends MusicBeatState
 		switch(SONG.song.toLowerCase()) 
 		{ 
 			case "tutorial":
-				if (dad.curCharacter == 'gf') 
+				if (dad.currentCharacter == 'gf') 
 				{
 					if (curBeat % 16 == 15 && curBeat > 16 && curBeat < 48) 
 					{
 						dad.playAnim('cheer', true);
 
-						if (boyfriend.curCharacter.startsWith('bf')) {
+						if (boyfriend.currentCharacter.startsWith('bf')) {
 							boyfriend.playAnim('hey!', true);
 						}
 					}
@@ -3095,7 +3095,7 @@ class PlayState extends MusicBeatState
 				{
 					gf.playAnim('cheer');
 		
-					if (boyfriend.curCharacter.startsWith('bf')) {
+					if (boyfriend.currentCharacter.startsWith('bf')) {
 						boyfriend.playAnim('hey!', true);
 					}
 				}
@@ -3105,7 +3105,7 @@ class PlayState extends MusicBeatState
 			case "spookeez":
 				if (curBeat == 47 || curBeat == 111)
 				{
-					if (boyfriend.curCharacter.startsWith('bf')) {
+					if (boyfriend.currentCharacter.startsWith('bf')) {
 						boyfriend.playAnim('hey!', true);
 					}
 				}
@@ -3117,7 +3117,7 @@ class PlayState extends MusicBeatState
 					{
 						if (curBeat % 16 == 8) 
 						{
-							if (boyfriend.curCharacter.startsWith('bf')) {
+							if (boyfriend.currentCharacter.startsWith('bf')) {
 								boyfriend.playAnim('hey!', true);
 							}
 						}

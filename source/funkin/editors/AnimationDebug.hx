@@ -192,7 +192,7 @@ class AnimationDebug extends MusicBeatState
 			updateTexts();
 		});
 	
-		player1DropDown.selectedLabel = char.curCharacter;
+		player1DropDown.selectedLabel = char.currentCharacter;
  
 		var tab_group_offsets = new FlxUI(null, UI_box);
 		tab_group_offsets.name = "Character List";
