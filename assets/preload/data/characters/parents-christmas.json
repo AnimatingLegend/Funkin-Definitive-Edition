@@ -1,0 +1,85 @@
+{
+  "version": "1.0.0",
+  "name": "Parents (Christmas)",
+  "renderType": "sparrow",
+  "assetPath": "characters/mom_dad_christmas_assets",
+  "library": "shared",
+  "startingAnimation": "idle",
+  "singDuration": 4.0,
+  "flipX": false,
+  "isPixel": false,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": {
+    "id": "parents-christmas",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
+  },
+  "healthBarColors": [134, 248, 0],
+  "animations": [
+    {
+      "name": "idle",
+      "prefix": "Parent Christmas Idle",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [0, 0]
+    },
+    {
+      "name": "singUP",
+      "prefix": "Parent Up Note Dad",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-47, 24]
+    },
+    {
+      "name": "singDOWN",
+      "prefix": "Parent Down Note Dad",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-31, -29]
+    },
+    {
+      "name": "singLEFT",
+      "prefix": "Parent Left Note Dad",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-30, 16]
+    },
+    {
+      "name": "singRIGHT",
+      "prefix": "Parent Right Note Dad",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-1, -23]
+    },
+    {
+      "name": "singUP-alt",
+      "prefix": "Parent Up Note Mom",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-47, 24]
+    },
+    {
+      "name": "singDOWN-alt",
+      "prefix": "Parent Down Note Mom",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-30, -27]
+    },
+    {
+      "name": "singLEFT-alt",
+      "prefix": "Parent Left Note Mom",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-30, 15]
+    },
+    {
+      "name": "singRIGHT-alt",
+      "prefix": "Parent Right Note Mom",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-1, -24]
+    }
+  ]
+}

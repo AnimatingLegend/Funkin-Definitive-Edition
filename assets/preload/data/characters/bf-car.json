@@ -1,0 +1,125 @@
+{
+  "version": "1.0.0",
+  "name": "Boyfriend (Car)",
+  "renderType": "sparrow",
+  "assetPath": "characters/bfCar",
+  "library": "shared",
+  "startingAnimation": "idle",
+  "singDuration": 4.0,
+  "flipX": true,
+  "isPixel": false,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": {
+    "id": "bf",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
+  },
+  "healthBarColors": [49, 176, 209],
+  "animations": [
+    {
+      "name": "idle",
+      "prefix": "BF idle dance",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [0, 0]
+    },
+    {
+      "name": "idle-loop",
+      "prefix": "BF idle dance",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [0, 0],
+      "frameIndices": [10, 11, 12, 13]
+    },
+    {
+      "name": "singUP",
+      "prefix": "BF NOTE UP0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-29, 27]
+    },
+    {
+      "name": "singUP-loop",
+      "prefix": "BF NOTE UP0",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [-29, 27],
+      "frameIndices": [10, 11, 12, 13]
+    },
+    {
+      "name": "singLEFT",
+      "prefix": "BF NOTE LEFT0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [12, -6]
+    },
+    {
+      "name": "singLEFT-loop",
+      "prefix": "BF NOTE LEFT0",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [12, -6],
+      "frameIndices": [10, 11, 12, 13]
+    },
+    {
+      "name": "singRIGHT",
+      "prefix": "BF NOTE RIGHT0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-38, -7]
+    },
+    {
+      "name": "singRIGHT-loop",
+      "prefix": "BF NOTE RIGHT0",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [-38, -7],
+      "frameIndices": [10, 11, 12, 13]
+    },
+    {
+      "name": "singDOWN",
+      "prefix": "BF NOTE DOWN0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-10, -50]
+    },
+    {
+      "name": "singDOWN-loop",
+      "prefix": "BF NOTE DOWN0",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [-10, -50],
+      "frameIndices": [10, 11, 12, 13]
+    },
+    {
+      "name": "singUPmiss",
+      "prefix": "BF NOTE UP MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-29, 27]
+    },
+    {
+      "name": "singLEFTmiss",
+      "prefix": "BF NOTE LEFT MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [12, 24]
+    },
+    {
+      "name": "singRIGHTmiss",
+      "prefix": "BF NOTE RIGHT MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-30, 21]
+    },
+    {
+      "name": "singDOWNmiss",
+      "prefix": "BF NOTE DOWN MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-11, -19]
+    }
+  ]
+}

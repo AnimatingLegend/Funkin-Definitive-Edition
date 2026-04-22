@@ -5,6 +5,7 @@ package funkin;
 import funkin.backend.*;
 import funkin.backend.chart.*;
 import funkin.backend.utils.*;
+import funkin.backend.utils.data.*;
 import funkin.gameplay.*;
 import funkin.gameplay.objects.*;
 import funkin.gameplay.objects.note.*;

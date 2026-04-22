@@ -1,4 +1,4 @@
-package funkin.backend.utils;
+package funkin.backend.utils.data;
 
 #if sys
 import sys.io.File;

@@ -1,0 +1,118 @@
+{
+  "version": "1.0.0",
+  "name": "Tankman",
+  "renderType": "sparrow",
+  "assetPath": "characters/tankmanCaptain",
+  "library": "shared",
+  "startingAnimation": "idle",
+  "singDuration": 4.0,
+  "flipX": true,
+  "isPixel": false,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": { 
+    "id": "tankman", 
+    "scale": 1.0, 
+    "flipX": false, 
+    "offsets": [0, 0] 
+  },
+  "healthBarColors": [255, 255, 255],
+  "animations": [
+    { 
+      "name": "idle",        
+      "prefix": "Tankman Idle Dance", 
+      "frameRate": 24, 
+      "looped": false, 
+      "offsets": [0, 0],      
+      "frameIndices": [] 
+    },
+    { 
+      "name": "singUP",      
+      "prefix": "Tankman UP note",    
+      "frameRate": 24, 
+      "looped": false, 
+      "offsets": [54, 49],    
+      "frameIndices": [
+        10000,
+        10001,
+        10002,
+        10003,
+        10004,
+        10005,
+        10006,
+        10007,
+        10008,
+        10009
+      ] 
+    },
+    { 
+      "name": "singDOWN",    
+      "prefix": "Tankman DOWN note",  
+      "frameRate": 24, 
+      "looped": false, 
+      "offsets": [88, -100],  
+      "frameIndices": [
+        10000,
+        10001,
+        10002,
+        10003,
+        10004,
+        10005,
+        10006,
+        10007,
+        10008,
+        10009
+      ] 
+    },
+    { 
+      "name": "singLEFT",    
+      "prefix": "Tankman Right Note", 
+      "frameRate": 24, 
+      "looped": false, 
+      "offsets": [89, -12],   
+      "frameIndices": [
+        10000,
+        10001,
+        10002,
+        10003,
+        10004,
+        10005,
+        10006,
+        10007,
+        10008,
+        10009
+      ] 
+    },
+    { 
+      "name": "singRIGHT",   
+      "prefix": "Tankman Note Left",  
+      "frameRate": 24, 
+      "looped": false, 
+      "offsets": [-23, -31],  
+      "frameIndices": [
+        10000,
+        10001,
+        10002,
+        10003,
+        10004,
+        10005,
+        10006,
+        10007
+      ] 
+    },
+    { 
+      "name": "singUP-alt",  
+      "prefix": "TANKMAN UGH",        
+      "frameRate": 24, 
+      "looped": false, 
+      "offsets": [-16, -11]   
+    },
+    { 
+      "name": "singDOWN-alt",
+      "prefix": "PRETTY GOOD tankman",
+      "frameRate": 24, 
+      "looped": false, 
+      "offsets": [2, 16]      
+    }
+  ]
+}

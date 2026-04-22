@@ -1,0 +1,120 @@
+{
+  "version": "1.0.0",
+  "name": "Boyfriend",
+  "renderType": "sparrow",
+  "assetPath": "characters/BOYFRIEND",
+  "library": "shared",
+  "startingAnimation": "idle",
+  "singDuration": 4.0,
+  "flipX": true,
+  "isPixel": false,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": {
+    "id": "bf",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
+  },
+  "healthBarColors": [49, 176, 209],
+  "animations": [
+    {
+      "name": "idle",
+      "prefix": "BF idle dance",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-5, 0]
+    },
+    {
+      "name": "singUP",
+      "prefix": "BF NOTE UP0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-29, 27]
+    },
+    {
+      "name": "singLEFT",
+      "prefix": "BF NOTE LEFT0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [12, -6]
+    },
+    {
+      "name": "singRIGHT",
+      "prefix": "BF NOTE RIGHT0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-38, -7]
+    },
+    {
+      "name": "singDOWN",
+      "prefix": "BF NOTE DOWN0",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-10, -50]
+    },
+    {
+      "name": "singUPmiss",
+      "prefix": "BF NOTE UP MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-29, 27]
+    },
+    {
+      "name": "singLEFTmiss",
+      "prefix": "BF NOTE LEFT MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [12, 24]
+    },
+    {
+      "name": "singRIGHTmiss",
+      "prefix": "BF NOTE RIGHT MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-30, 21]
+    },
+    {
+      "name": "singDOWNmiss",
+      "prefix": "BF NOTE DOWN MISS",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-11, -19]
+    },
+    {
+      "name": "hey!",
+      "prefix": "BF HEY",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-4, 5]
+    },
+    {
+      "name": "firstDeath",
+      "prefix": "BF dies",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [37, 11]
+    },
+    {
+      "name": "deathLoop",
+      "prefix": "BF Dead Loop",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [37, 5]
+    },
+    {
+      "name": "deathConfirm",
+      "prefix": "BF Dead confirm",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [37, 69]
+    },
+    {
+      "name": "scared",
+      "prefix": "BF idle shaking",
+      "frameRate": 24,
+      "looped": true,
+      "offsets": [-4, 0]
+    }
+  ]
+}

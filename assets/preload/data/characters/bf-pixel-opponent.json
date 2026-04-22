@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Boyfriend (Pixel, Opponent)",
+  "renderType": "sparrow",
+  "assetPath": "characters/bfPixel",
+  "library": "shared",
+  "startingAnimation": "idle",
+  "singDuration": 4.0,
+  "flipX": true,
+  "isPixel": true,
+  "scale": 6.0,
+  "widthTrim": 100,
+  "heightTrim": 100,
+  "offsets": [0, 0],
+  "cameraOffsets": [0, 0],
+  "healthIcon": {
+    "id": "bf-pixel",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
+  },
+  "healthBarColors": [49, 176, 209],
+  "animations": [
+    {
+      "name": "idle",
+      "prefix": "BF IDLE",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [0, 0]
+    },
+    {
+      "name": "singUP",
+      "prefix": "BF UP NOTE",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-2, -3]
+    },
+    {
+      "name": "singRIGHT",
+      "prefix": "BF LEFT NOTE",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-8, -3]
+    },
+    {
+      "name": "singLEFT",
+      "prefix": "BF RIGHT NOTE",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [12, -1]
+    },
+    {
+      "name": "singDOWN",
+      "prefix": "BF DOWN NOTE",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-10, 0]
+    }
+  ]
+}
