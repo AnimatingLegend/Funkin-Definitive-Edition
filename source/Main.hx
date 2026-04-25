@@ -88,6 +88,7 @@ class Main extends Sprite
 
 		debugDisplay = new DebugDisplay(10, 15, FlxTextBorderStyle.OUTLINE);
 		addChild(debugDisplay);
+		toggleFPS(FlxG.save.data.debugDisplay ?? true);
 		debugDisplay.createBackground();
 		debugDisplay.backgroundOpacity = (FlxG.save.data.debugDisplayBGOpacity ?? 50) / 100;
 		debugDisplay.set_backgroundOpacityVisible(FlxG.save.data.debugDisplay ?? true);
