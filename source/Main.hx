@@ -6,6 +6,9 @@ import flixel.FlxState;
 import flixel.text.FlxText.FlxTextBorderStyle;
 
 import funkin.backend.system.monitor.DebugDisplay;
+import funkin.backend.system.PlayerSettings;
+import funkin.backend.utils.DefinitiveData;
+import funkin.backend.utils.Highscore;
 
 import funkin.menus.TitleState;
 import funkin.menus.MainMenuState;
@@ -27,12 +30,12 @@ import lime.app.Application;
 
 using StringTools;
 
-// * -----------------------------------------------------------------------------------------	* \\
-// * MAIN GAME CLASS                                    								* \\
-// * 																		* \\
-// * This is where the game is initialized.											* \\
-// * You can pretty much ignore everything from here on, your code should go in your states.	* \\
-// * ----------------------------------------------------------------------------------------- * \\
+/**
+ * MAIN GAME CLASS
+ * 
+ * This is where the game is initialized.
+ * You can pretty much ignore everything from here on, your code should go in your states.
+ */
 class Main extends Sprite
 {
 	var gameWidth:Int = 1280; // The width of the game window in pixels.
@@ -80,10 +83,13 @@ class Main extends Sprite
 	
 	function setupGame():Void
 	{
-		var framerate:Int = 60 ?? FlxG.save.data.fpsCap;
+		FlxG.save.bind('funkin', 'ninjamuffin99');
+		DefinitiveData.initialize();
+
+		var framerate:Int = FlxG.save.data.fpsCap;
 
 		var game = new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, 
-			(FlxG.stage.window.fullscreen ?? FlxG.save.data.launchInFullscreen));
+			FlxG.stage.window.fullscreen || FlxG.save.data.launchInFullscreen);
 		addChild(game);
 
 		debugDisplay = new DebugDisplay(10, 15, FlxTextBorderStyle.OUTLINE);
@@ -97,6 +103,9 @@ class Main extends Sprite
 		FlxG.autoPause = false;
 		FlxG.mouse.visible = false;
 		#end
+
+		Highscore.load();
+		PlayerSettings.init();
 
 		#if hxcpp_debug_server
     		trace('hxcpp_debug_server is enabled! You can now connect to the game with a debugger.');

@@ -11,10 +11,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 
-import funkin.backend.utils.DefinitiveData;
-import funkin.backend.utils.Highscore;
 import funkin.backend.utils.Paths;
-import funkin.backend.system.PlayerSettings;
 
 import funkin.menus.OutdatedSubState;
 import funkin.menus.objects.Alphabet;
@@ -36,11 +33,11 @@ import sys.thread.Thread;
 
 using StringTools;
 
-// * ---------------------------------------	* \\
-// * TITLE STATE CLASS                       * \\
-// * 								* \\
-// * This is the title screen of the game.	* \\
-// * --------------------------------------- * \\
+/**
+ * TITLE STATE CLASS
+ * 
+ * This is the title screen of the game.
+ */
 class TitleState extends MusicBeatState
 {
 	/**
@@ -69,12 +66,7 @@ class TitleState extends MusicBeatState
 
           super.create();
 
-		// TODO: Initialize save data in `Main.hx`
-		FlxG.save.bind('funkin', 'ninjamuffin99');
-		DefinitiveData.initialize();
-          Highscore.load();
-          Main.getBuildVersion();
-		PlayerSettings.init();
+		Main.getBuildVersion();
 
 		if (FlxG.save.data.launchInFullscreen) FlxG.fullscreen = true;
 
