@@ -86,7 +86,8 @@ class Main extends Sprite
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 		DefinitiveData.initialize();
 
-		var framerate:Int = FlxG.save.data.fpsCap;
+		// Get the framerate from your saved data if it exists, otherwise fallback to 60 FPS.
+		var framerate:Int = FlxG.save.data.fpsCap == null ? 60 : FlxG.save.data.fpsCap;
 
 		var game = new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, 
 			FlxG.stage.window.fullscreen || FlxG.save.data.launchInFullscreen);
@@ -94,10 +95,10 @@ class Main extends Sprite
 
 		debugDisplay = new DebugDisplay(10, 15, FlxTextBorderStyle.OUTLINE);
 		addChild(debugDisplay);
-		toggleFPS(FlxG.save.data.debugDisplay ?? true);
+		toggleFPS(FlxG.save.data.debugDisplay);
 		debugDisplay.createBackground();
-		debugDisplay.backgroundOpacity = (FlxG.save.data.debugDisplayBGOpacity ?? 50) / 100;
-		debugDisplay.set_backgroundOpacityVisible(FlxG.save.data.debugDisplay ?? true);
+		debugDisplay.backgroundOpacity = (FlxG.save.data.debugDisplayBGOpacity) / 100;
+		debugDisplay.set_backgroundOpacityVisible(FlxG.save.data.debugDisplay);
 
 		#if html5
 		FlxG.autoPause = false;

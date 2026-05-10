@@ -385,12 +385,12 @@ class StrumLineBG extends Option
 	public override function pressLeftKey():Bool
 	{
 		// If the value is greater than 0, decrease it by 10%.
-		if (FlxG.save.data.strumLineBG > 0.0)
+		if (FlxG.save.data.strumLineBG > 0)
 		{
-			FlxG.save.data.strumLineBG -= 10.0;
+			FlxG.save.data.strumLineBG -= 10;
 
 			// If the value is less than 0, return it.
-			if (FlxG.save.data.strumLineBG < 0.0) FlxG.save.data.strumLineBG = 0.0;
+			if (FlxG.save.data.strumLineBG < 0) FlxG.save.data.strumLineBG = 0;
 			FlxG.save.data.strumLineBG = FlxMath.roundDecimal(FlxG.save.data.strumLineBG, 2);
 		}
 
@@ -404,9 +404,9 @@ class StrumLineBG extends Option
 	public override function pressRightKey():Bool
 	{
 		// If the value is greater than 0, decrease it by 10%.
-		if (FlxG.save.data.strumLineBG < 100.0)
+		if (FlxG.save.data.strumLineBG < 100)
 		{
-			FlxG.save.data.strumLineBG += 10.0;
+			FlxG.save.data.strumLineBG += 10;
 			FlxG.save.data.strumLineBG = FlxMath.roundDecimal(FlxG.save.data.strumLineBG, 2);
 		}
 

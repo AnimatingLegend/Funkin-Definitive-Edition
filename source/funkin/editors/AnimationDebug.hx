@@ -317,8 +317,6 @@ class AnimationDebug extends MusicBeatState
 
 		// Add everything to scene.
 		panelGroup.cameras = [camHUD];
-		panelGroup.remove(characterDropdown, true);
-		panelGroup.remove(animationDropdown, true);
 		add(panelGroup);
 		add(animationDropdown);
 		add(characterDropdown);
@@ -687,8 +685,7 @@ class AnimationDebug extends MusicBeatState
 
 		if (!animDataFound)
 		{
-			currentCharacterData.animations.push
-			({
+			currentCharacterData.animations.push({
 				name: name,
 				prefix: symbol,
 				frameRate: framerate,
@@ -699,13 +696,9 @@ class AnimationDebug extends MusicBeatState
 		}
 
 		if (indices.length > 0)
-		{
 			character.animation.addByIndices(name, symbol, indices, '', framerate, looped);
-		}
 		else 
-		{
 			character.animation.addByPrefix(name, symbol, framerate, looped);
-		}
 
 		if (!character.animOffsets.exists(name))  character.animOffsets.set(name, [0.0, 0.0]);
 		if (!animList.contains(name)) animList.push(name);
@@ -756,10 +749,10 @@ class AnimationDebug extends MusicBeatState
 	function saveToJson():Void
 	{
 		if (currentCharacterData == null) return;
-		if (imageFileInput != null) currentCharacterData.assetPath    = imageFileInput.text.trim();
-		if (flipXCheck != null) currentCharacterData.flipX        = flipXCheck.checked;
+		if (imageFileInput != null) currentCharacterData.assetPath = imageFileInput.text.trim();
+		if (flipXCheck != null) currentCharacterData.flipX = flipXCheck.checked;
 		if (singDurStepper != null) currentCharacterData.singDuration = singDurStepper.value;
-		if (scaleStepper != null) currentCharacterData.scale        = scaleStepper.value;
+		if (scaleStepper != null) currentCharacterData.scale = scaleStepper.value;
 
 		if (healthIconInput != null && currentCharacterData.healthIcon != null)
 			currentCharacterData.healthIcon.id = healthIconInput.text.trim();
@@ -791,9 +784,11 @@ class AnimationDebug extends MusicBeatState
 		if (FlxG.keys.justPressed.H)
 		{
 			uiVisible = !uiVisible;
-			panelGroup.visible  = uiVisible;
-			dumbTexts.visible   = uiVisible;
-			textOffset.visible  = uiVisible;
+			panelGroup.visible = uiVisible;
+			animationDropdown.visible = uiVisible;
+			characterDropdown.visible = uiVisible;
+			dumbTexts.visible = uiVisible;
+			textOffset.visible = uiVisible;
 		}
 
 		// Onion Skin toggle
@@ -808,13 +803,13 @@ class AnimationDebug extends MusicBeatState
 		if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.Q)
 		{
 			FlxG.mouse.visible = false;
-			FlxG.sound.music?.stop();
+			FlxG.sound.music.stop();
 			FlxG.switchState(new funkin.menus.MainMenuState());
 		}
 		else if (FlxG.keys.pressed.CONTROL && FlxG.keys.pressed.BACKSPACE)
 		{
 			FlxG.mouse.visible = false;
-			FlxG.sound.music?.stop();
+			FlxG.sound.music.stop();
 			FlxG.switchState(new funkin.gameplay.PlayState());
 		}
 
@@ -828,15 +823,23 @@ class AnimationDebug extends MusicBeatState
 			characterBackground.flipX = character.flipX;
 		}
 
-		// Zoom Camera using your scroll wheel.
-		FlxG.camera.zoom += FlxG.mouse.wheel * 0.1;
-		FlxG.camera.zoom = Math.max(0.1, Math.min(8.0, FlxG.camera.zoom));
-
-		// Pan the camera around using your middle mouse button.
-		if (FlxG.mouse.pressedMiddle)
+		// If your mouse is over the panel, don't zoom or pan the camera.
+		var mouseOverPanel = FlxG.mouse.x > FlxG.width - PANEL_W;
+		if (!mouseOverPanel)
 		{
-			camFollow.x -= FlxG.mouse.deltaX / FlxG.camera.zoom;
-			camFollow.y -= FlxG.mouse.deltaY / FlxG.camera.zoom;
+			// Zoom Camera using your scroll wheel.
+			if (FlxG.mouse.wheel != 0)
+			{
+				FlxG.camera.zoom += FlxG.mouse.wheel * 0.1;
+        			FlxG.camera.zoom  = Math.max(0.1, Math.min(8.0, FlxG.camera.zoom));
+			}
+
+			// Pan the camera around using your middle mouse button.
+			if (FlxG.mouse.pressedMiddle)
+			{
+				camFollow.x -= FlxG.mouse.deltaScreenX / FlxG.camera.zoom;
+				camFollow.y -= FlxG.mouse.deltaScreenY / FlxG.camera.zoom;
+			}
 		}
 
 		// Cycle Animations
@@ -883,6 +886,13 @@ class AnimationDebug extends MusicBeatState
 				character.playAnim(animList[curAnim]);
 			}
 		}
+
+		// Update dropdowns EVERY SINGLE FRAME to prevent layering issues.
+		// TODO: find a better way to do this.
+		members.remove(animationDropdown);
+		members.remove(characterDropdown);
+		members.push(animationDropdown);
+		members.push(characterDropdown);
 
 		super.update(elapsed);
 	}
