@@ -6,7 +6,7 @@
 > **Also note that this is a guide to build the game on your own. If you just want to play Funkin-Definitive-Edition then [download it here](https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases)**.
 
 ## Setup
-- Download **[Haxe](https://haxe.org/download)**
+- Download **[Haxe](https://haxe.org/download)** (preferably [`v4.1.5`](https://haxe.org/download/version/4.1.5/) - [`v4.2.5`](https://haxe.org/download/version/4.2.5/))
 - Download **[Git](https://git-scm.com/)**
     - Run `git clone https://github.com/AnimatingLegend/Funkin-Definitive-Edition.git` from the directory you want to store this repository.
 - Run `cd Funkin-Definitive-Edition`.
