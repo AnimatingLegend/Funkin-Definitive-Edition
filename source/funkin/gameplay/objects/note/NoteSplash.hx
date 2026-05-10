@@ -1,7 +1,4 @@
 package funkin.gameplay.objects.note;
-
-import flixel.graphics.frames.FlxAtlasFrames;
-
 class NoteSplash extends FlxSprite
 {
 	public function new(x:Float, y:Float, ?notedata:Int = 0)
@@ -26,7 +23,6 @@ class NoteSplash extends FlxSprite
 	public function setupNoteSplash(x:Float, y:Float, ?notedata:Int = 0)
 	{
 		setPosition(x, y);
-		alpha = 0.4;
 
 		animation.play('note' + notedata + '-' + FlxG.random.int(0, 1), true);
 		updateHitbox();
@@ -36,9 +32,7 @@ class NoteSplash extends FlxSprite
 
 	override public function update(elapsed:Float)
 	{
-		if (animation.curAnim != null && animation.curAnim.finished)
-			kill();
-			
+		if (animation.curAnim != null && animation.curAnim.finished) kill();
 		super.update(elapsed);
 	}
 }
@@ -67,7 +61,6 @@ class NoteSplashPixel extends FlxSprite
 	public function setupNoteSplash(x:Float, y:Float, ?notedata:Int = 0)
 	{
 		setPosition(x, y);
-		alpha = 0.5;
 
 		animation.play('note' + notedata + '-' + FlxG.random.int(0, 1), true);
 		updateHitbox();
@@ -77,9 +70,7 @@ class NoteSplashPixel extends FlxSprite
 
 	override public function update(elapsed:Float)
 	{
-		if (animation.curAnim != null && animation.curAnim.finished)
-			kill();
-
+		if (animation.curAnim != null && animation.curAnim.finished) kill();
 		super.update(elapsed);
 	}
 }

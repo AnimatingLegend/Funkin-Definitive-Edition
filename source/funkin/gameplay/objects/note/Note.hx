@@ -269,6 +269,7 @@ class Note extends FlxSprite
 		else
 		{
 			prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.52) * speed;
+			prevNote.scale.y *= 0.7;
 		}
 
 		prevNote.updateHitbox();
