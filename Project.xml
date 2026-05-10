@@ -109,7 +109,6 @@
 
 	<!-- Misc -->
 	<haxedev set='webgl' />
-	<haxelib name="newgrounds"/>
 	<haxelib name="thx.core" />
 	<haxelib name="thx.semver" />
 	<haxelib name="jsonpath" />
