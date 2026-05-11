@@ -22,8 +22,14 @@
     - Windows 10/11 SDK
 
 ## Compiling
-- Run `lime test <target>`to compile the game
+- Run `lime test <target>` to compile the game
 - Run `lime run <target>` if you want to relaunch the game.
 
-> [!NOTE]
-> If you want to run the debug build of the game, then add the `-debug` flag after `lime test <target>`.
+### Build Flags
+Here are some of the useful build flags you can add that affects your game build. These flags can be found in [`InitState.hx`](../source/funkin/InitState.hx).
+- `-debug`: Enables the in-game debug console.
+- `-DANIMATION_EDITOR`: With this flag, you can forcibly launch the animation debug editor.
+- `-DCHART_EDITOR`: With this flag, you can forcibly launch the chart editor.
+- `-DFREEPLAY_MENU`: With this flag, you can forcibly launch the freeplay menu.
+    * This saves a bunch of time if you want to test songs.
+- `-debug -DCACHE_MENU`: With this flag, you can forcibly launch the cache menu on startup.
