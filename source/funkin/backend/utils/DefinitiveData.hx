@@ -1,7 +1,5 @@
 package funkin.backend.utils;
 
-import lime.app.Application;
-
 class DefinitiveData
 {
     	public static function initialize()
@@ -12,7 +10,7 @@ class DefinitiveData
 		if (FlxG.save.data.lowQuality == null) FlxG.save.data.lowQuality = false;
 		if (FlxG.save.data.antialiasing == null) FlxG.save.data.antialiasing = true;
 		if (FlxG.save.data.shaders == null) FlxG.save.data.shaders = true;
-		if (FlxG.save.data.debugDisplay == null) FlxG.save.data.debugDisplay = true;
+		if (FlxG.save.data.debugDisplay == null) FlxG.save.data.debugDisplay = false;
 		if (Main.debugDisplay != null)
 		{
 			Main.toggleFPS(FlxG.save.data.debugDisplay);
