@@ -21,12 +21,12 @@ enum abstract NoteSkin(String) to String
  * Keeps the constructor clean and enables object pooling.
  */
 typedef NoteData = {
-    var strumTime:Float;
-    var noteData:Int;
-    var sustainLength:Float;
-    var isSustainNote:Bool;
-    var skin:NoteSkin;
-    var ?prevNote:Note;
+  var strumTime:Float;
+  var noteData:Int;
+  var sustainLength:Float;
+  var isSustainNote:Bool;
+  var skin:NoteSkin;
+  var ?prevNote:Note;
 }
 
 /**
@@ -72,23 +72,26 @@ class Note extends FlxSprite
 		_pool.push(this);
 	}
 
-	// * ---------------- * \\
-	// * LAYOUT CONSTANTS * \\
-	// * ---------------- * \\
+	//
+	// LAYOUT CONSTANTS
+	//
+
 	public static inline final SWAG_WIDTH:Float = 160 * 0.7;
 	public static inline final PIXEL_ZOOM:Float = 6.0; // Matches `PlayState.daPixelZoom`.
 
-	// * -------------------------- * \\
-	// * NOTE COLOR => COLUMN INDEX * \\
-	// * -------------------------- * \\
-	public static inline final COL_LEFT:Int = 0; // purple
-    	public static inline final COL_DOWN:Int = 1; // blue
-    	public static inline final COL_UP:Int = 2; // green
-    	public static inline final COL_RIGHT:Int = 3; // red
+	//
+	// NOTE COLORS => COLUMN INDEX
+	//
 
-	// * ------------- * \\
-	// * RUNTIME STATE * \\
-	// * ------------- * \\
+	public static inline final COL_LEFT:Int = 0; // purple
+  public static inline final COL_DOWN:Int = 1; // blue
+  public static inline final COL_UP:Int = 2; // green
+  public static inline final COL_RIGHT:Int = 3; // red
+
+	//
+	// DATA FIELDS
+	//
+
 	public var strumTime:Float = 0;
 	public var noteData:Int = 0;
 	public var sustainLength:Float = 0;
@@ -106,7 +109,10 @@ class Note extends FlxSprite
 	public var prevNote:Note = null;
 	public var rating:String = 'shit';
 
-	// * INTERNAL VARIABLES * \\
+	//
+	// INTERNAL FIELDS
+	//
+
 	var _skin:NoteSkin = DEFAULT;
 	var _loadedSkin:NoteSkin = null; // make true once the atlas/graphic is loaded for this skin.
 
@@ -148,8 +154,8 @@ class Note extends FlxSprite
 	// * INITIALIZE GRAPHICS * \\
 	// * ------------------- * \\
 	static final ANIM_SCROLL = ["purpleScroll",  "blueScroll",  "greenScroll",  "redScroll"];
-    	static final ANIM_HOLD = ["purplehold",     "bluehold",    "greenhold",    "redhold"];
-    	static final ANIM_HOLDEND = ["purpleholdend",  "blueholdend", "greenholdend", "redholdend"];
+  static final ANIM_HOLD = ["purplehold",     "bluehold",    "greenhold",    "redhold"];
+  static final ANIM_HOLDEND = ["purpleholdend",  "blueholdend", "greenholdend", "redholdend"];
 
 	function _loadGraphics():Void
 	{

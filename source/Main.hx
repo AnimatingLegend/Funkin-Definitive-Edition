@@ -39,6 +39,11 @@ class Main extends Sprite
 	var skipSplash:Bool = true; // Whether or not to skip the HaxeFlixel splash screen.
 
 	/**
+	 * The official version of Friday Night Funkin' - Definitive Edition.
+	 */
+	public static final DEFINITIVE_VERSION:String = '0.5.2';
+
+	/**
 	 * Creates a new Main instance and adds it to the current stage.
 	 */
 	public static function main():Void Lib.current.addChild(new Main());
@@ -107,10 +112,10 @@ class Main extends Sprite
 		#end
 
 		#if hxcpp_debug_server
-    		trace('hxcpp_debug_server is enabled! You can now connect to the game with a debugger.');
-    		#else
-    		trace('hxcpp_debug_server is disabled! This build does not support debugging.');
-    		#end
+    trace('hxcpp_debug_server is enabled! You can now connect to the game with a debugger.');
+    #else
+    trace('hxcpp_debug_server is disabled! This build does not support debugging.');
+    #end
 	}
 
 	/**
@@ -157,7 +162,7 @@ class Main extends Sprite
 		http.onData = function(data:String)
 		{
 			updateVersion = data.split('\n')[0].trim();
-			var currentVersion:String = funkin.menus.MainMenuState.definitiveVersion.trim();
+			var currentVersion:String = DEFINITIVE_VERSION.trim();
 
 			trace('[VERSION] Current version: ${currentVersion} | New version: ${updateVersion}');
 

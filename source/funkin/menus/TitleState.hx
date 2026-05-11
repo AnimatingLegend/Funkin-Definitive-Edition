@@ -59,28 +59,28 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-          Paths.clearStoredMemory();
+    Paths.clearStoredMemory();
 
-          swagShader = new ColorSwap();
+    swagShader = new ColorSwap();
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
-          super.create();
+    super.create();
 
 		Main.getBuildVersion();
 
 		if (FlxG.save.data.launchInFullscreen) FlxG.fullscreen = true;
 
-          FlxG.mouse.visible = false;
+    FlxG.mouse.visible = false;
 
 		// If the game isn't initialized yet, wait a second before starting the intro.
-          // Otherwise, start the intro normally.
+    // Otherwise, start the intro normally.
 		if (!initialized)
-          {
-               new FlxTimer().start(1, function(tmr:FlxTimer) 
-               { 
-                    startIntro(); 
-               });
-          }
+    {
+      new FlxTimer().start(1, function(tmr:FlxTimer) 
+      { 
+        startIntro(); 
+      });
+    }
 		else startIntro();
 	}
 
@@ -114,7 +114,7 @@ class TitleState extends MusicBeatState
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		gfDance.antialiasing = FlxG.save.data.antialiasing;
 		if (FlxG.save.data.shaders && swagShader != null) 
-               gfDance.shader = swagShader.shader;
+    	gfDance.shader = swagShader.shader;
 
 		add(gfDance);
 		add(logoBl);
@@ -173,7 +173,7 @@ class TitleState extends MusicBeatState
 			credTextShit.visible = false;
 			FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 
-               playMenuMusic();
+      playMenuMusic();
 			Conductor.changeBPM(102);
 			initialized = true;
 		}
@@ -182,9 +182,9 @@ class TitleState extends MusicBeatState
      function playMenuMusic():Void
      {
           var shouldFadeIn:Bool = (FlxG.sound.music == null);
-          FlxG.sound.playMusic(Paths.music('freakyMenu'), 0, true);
+          FlxG.sound.playMusic(Paths.music('freakyMenu/freakyMenu'), 0, true);
 
-          if (shouldFadeIn) FlxG.sound.music.fadeIn(4.0, 0.0, 1.0);
+        if (shouldFadeIn) FlxG.sound.music.fadeIn(4.0, 0.0, 1.0);
      }
 
 	function getIntroTextShit():Array<Array<String>>
@@ -259,8 +259,15 @@ class TitleState extends MusicBeatState
 
 		// Only show update screen if you're not on a debug build.
 		#if !debug
-		if (Main.mustUpdate) FlxG.switchState(new OutdatedSubState());
-		else FlxG.switchState(new MainMenuState());
+		if (Main.mustUpdate)
+		{
+			FlxG.switchState(new OutdatedSubState());
+			trace('[INFO] Game is outdated. Redirecting to update screen...');
+		}
+		else
+		{
+			FlxG.switchState(new MainMenuState());
+		}
 		#else
 		FlxG.switchState(new MainMenuState());
 		#end
@@ -268,7 +275,7 @@ class TitleState extends MusicBeatState
 
 	function createCoolText(textArray:Array<String>, ?offset:Float = 0)
 	{
-          if (credGroup == null || textGroup == null) return;
+    if (credGroup == null || textGroup == null) return;
 
 		for (i in 0...textArray.length)
 		{
@@ -282,7 +289,7 @@ class TitleState extends MusicBeatState
 
 	function addMoreText(text:String, ?offset:Float = 0)
 	{
-          if (credGroup == null || textGroup == null) return;
+    if (credGroup == null || textGroup == null) return;
 
 		var coolText:Alphabet = new Alphabet(0, 0, text, true, false);
 		coolText.screenCenter(X);
@@ -313,13 +320,13 @@ class TitleState extends MusicBeatState
 					case 4: deleteCoolText();
 					case 5:
 						if (FlxG.save.data.fdeWatermark)
-                              {
-                                  createCoolText(['FNF Definitive Edition', 'by']); 
-                              }
+            {
+              createCoolText(['FNF Definitive Edition', 'by']); 
+            }
 						else
-                              {
-                                 createCoolText(['In association', 'with']);  
-                              }
+            {
+              createCoolText(['In association', 'with']);  
+            }
 					case 7:
 						if (FlxG.save.data.fdeWatermark)
 						{
@@ -354,18 +361,20 @@ class TitleState extends MusicBeatState
 
 		lastBeat = curBeat;
 
-          if (skippedIntro)
-          {
-               if (logoBl != null && logoBl.animation != null) logoBl.animation.play('bump', true);
+    if (skippedIntro)
+    {
+      if (logoBl != null && logoBl.animation != null) logoBl.animation.play('bump', true);
 
-		     danceLeft = !danceLeft;
+		  danceLeft = !danceLeft;
 
-               if (gfDance != null && gfDance.animation != null) 
-               {
-                    if (danceLeft) gfDance.animation.play('danceRight');
-                    else gfDance.animation.play('danceLeft');
-               }
-          }
+      if (gfDance != null && gfDance.animation != null) 
+      {
+        if (danceLeft) 
+					gfDance.animation.play('danceRight');
+        else 
+					gfDance.animation.play('danceLeft');
+      }
+    }
 	}
 
 	var skippedIntro:Bool = false;
@@ -374,7 +383,7 @@ class TitleState extends MusicBeatState
 	{
 		if (!skippedIntro)
 		{
-               remove(legSpr);
+      remove(legSpr);
 			remove(ngSpr);
 			
 			if (FlxG.save.data.flashingLights) FlxG.camera.flash(FlxColor.WHITE, initialized ? 1 : 4);

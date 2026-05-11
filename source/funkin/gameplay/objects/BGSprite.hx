@@ -17,15 +17,12 @@ class BGSprite extends FlxSprite
 			{
 				animation.addByPrefix(anim, anim, 24, loopAnims);
 				animation.play(anim);
-				if (idleAnim == null)
-					idleAnim = anim;
+				if (idleAnim == null) idleAnim = anim;
 			}
 		}
 		else
 		{
-			if (image != null)
-				loadGraphic(Paths.image(image, library));
-
+			if (image != null) loadGraphic(Paths.image(image, library));
 			active = false;
 		}
 		
@@ -35,11 +32,8 @@ class BGSprite extends FlxSprite
 
 	public function dance(?forcePlay:Bool = false)
 	{
-		if (idleAnim != null)
-			animation.play(idleAnim);
+		if (idleAnim != null) animation.play(idleAnim);
 	}
 
-	public function forEach(arg:(light:BGSprite) -> Void) {
-		// dont mind this
-	}
+	public function forEach(arg:(light:BGSprite) -> Void) {}
 }

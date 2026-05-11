@@ -11,73 +11,64 @@
   "isPixel": false,
   "offsets": [0, 0],
   "cameraOffsets": [0, 0],
-  "healthIcon": { 
-    "id": "spooky", 
-    "scale": 1.0, 
-    "flipX": false, 
-    "offsets": [0, 0] 
+  "healthIcon": {
+    "id": "spookyKids",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
   },
   "healthBarColors": [213, 126, 0],
   "animations": [
-    { 
-      "name": "singUP",    
-      "prefix": "spooky UP NOTE",    
-      "frameRate": 24, 
-      "looped": false, 
-      "offsets": [-20, 26]   
+    {
+      "name": "singUP",
+      "prefix": "spooky UP NOTE",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-20, 26]
     },
-    { 
-      "name": "singDOWN",  
-      "prefix": "spooky DOWN note",  
-      "frameRate": 24, 
-      "looped": false, 
-      "offsets": [-50, -130] 
+    {
+      "name": "singDOWN",
+      "prefix": "spooky DOWN note",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-50, -130]
     },
-    { 
-      "name": "singLEFT",  
-      "prefix": "note sing left",    
-      "frameRate": 24, 
-      "looped": false, 
-      "offsets": [130, -10]  
+    {
+      "name": "singLEFT",
+      "prefix": "note sing left",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [130, -10]
     },
-    { 
-      "name": "singRIGHT", 
-      "prefix": "spooky sing right", 
-      "frameRate": 24, 
-      "looped": false, 
-      "offsets": [-130, -14] 
+    {
+      "name": "singRIGHT",
+      "prefix": "spooky sing right",
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [-130, -14]
     },
-    { 
+    {
       "name": "singUP-alt",
       "prefix": "spooky kids YEAH!!",
-      "frameRate": 24, 
-      "looped": false, 
-      "offsets": [50, -20]   
+      "frameRate": 24,
+      "looped": false,
+      "offsets": [50, -20]
     },
-    { 
-      "name": "danceLeft", 
-      "prefix": "spooky dance idle", 
-      "frameRate": 12, 
-      "looped": false, 
-      "offsets": [0, 0],     
-      "frameIndices": [
-        0,
-        2,
-        6
-      ] 
+    {
+      "name": "danceLeft",
+      "prefix": "spooky dance idle",
+      "frameRate": 12,
+      "looped": false,
+      "offsets": [0, 0],
+      "frameIndices": [0, 2, 6]
     },
-    { 
+    {
       "name": "danceRight",
-      "prefix": "spooky dance idle", 
-      "frameRate": 12, 
-      "looped": false, 
-      "offsets": [0, 0],     
-      "frameIndices": [
-        8,
-        10,
-        12,
-        14
-      ] 
+      "prefix": "spooky dance idle",
+      "frameRate": 12,
+      "looped": false,
+      "offsets": [0, 0],
+      "frameIndices": [8, 10, 12, 14]
     }
   ]
 }

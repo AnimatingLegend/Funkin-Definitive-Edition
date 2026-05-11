@@ -29,13 +29,13 @@ import funkin.backend.chart.Section.SwagSection;
 import funkin.backend.utils.Highscore;
 
 import funkin.menus.FreeplayState;
-import funkin.menus.GitarooPause;
 import funkin.menus.StoryMenuState;
 import funkin.menus.LoadingState;
 
 import funkin.editors.ChartingState;
 import funkin.editors.AnimationDebug;
 
+import funkin.gameplay.GitarooPause;
 import funkin.gameplay.PauseSubState;
 import funkin.gameplay.objects.note.Note;
 import funkin.gameplay.objects.note.NoteSplash;
@@ -220,34 +220,39 @@ class PlayState extends MusicBeatState
 	// 
 
 	/**
-	 *  Number of `SICK` judgements this song. 
+	 * Number of `SICK` judgements a user gets in a song. 
 	 */
 	public static var sicks:Int = 0;
 
 	/** 
-	 * Number of `GOOD` judgements this song. 
+	 * Number of `GOOD` judgements a user gets in a song. 
 	 */
 	public static var goods:Int = 0;
 
 	/** 
-	 * Number of `BAD` judgements this song. 
+	 * Number of `BAD` judgements a user gets in a song. 
 	 */
 	public static var bads:Int = 0;
 
 	/** 
-	 * Number of `SHIT` judgements this song. 
+	 * Number of `SHIT` judgements a user gets in a song. 
 	 */
 	public static var shits:Int = 0;
 
 	/** 
-	 * Total misses this song. 
+	 * Total misses a user gets in a song. 
 	 */
 	public static var misses:Int = 0;
 
 	/** 
-	 * The highest combo reached this song. 
+	 * The highest combo reached in a song. 
 	 */
 	public static var highestCombo:Int = 0;
+
+	/**
+	 * Total combo breaks a player gets in a song.
+	 */
+	public static var comboBreaks:Int = 0;
 
 	/** 
 	 * The current accuracy percentage (0–100). 
@@ -665,7 +670,7 @@ class PlayState extends MusicBeatState
 
 		// Restart per-song statistics.
 		sicks = goods = bads = shits = 0;
-		misses = highestCombo = 0;
+		misses = highestCombo = comboBreaks = 0;
 		accuracy = 0.00;
 
 		// Pre-initialize noteSplash groups.
@@ -890,7 +895,7 @@ class PlayState extends MusicBeatState
 				phillyTrain = new BGSprite('philly/train', 2000, 360, 'week3');
 				add(phillyTrain);
 
-				trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes'));
+				trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes', 'week3'));
 				FlxG.sound.list.add(trainSound);
 
 				phillyStreet = new BGSprite('philly/street', -40, 50, 'week3');
@@ -1212,7 +1217,7 @@ class PlayState extends MusicBeatState
 	}
 
 	/**
-	 * Bulds all HUD elements and assigns them to camHUD.
+	 * Builds all HUD elements and assigns them to camHUD.
 	 */
 	private function buildHUD(doof:DialogueBox):Void 
 	{
@@ -1280,6 +1285,7 @@ class PlayState extends MusicBeatState
 			'Good: ${goods}',
 			'Bad: ${bads}',
 			'Shit: ${shits}',
+			'Combo Breaks: ${comboBreaks}',
 			'Max Combo: ${highestCombo}'
 		].join('\n');
 		if (FlxG.save.data.judgementDisplay) add(judgementCounter);
@@ -1331,7 +1337,7 @@ class PlayState extends MusicBeatState
 		new FlxTimer().start(0.1, function(_)
 		{
 			FlxTween.tween(whiteScreen, {alpha: 0}, 1, {startDelay: 0.1, ease: FlxEase.linear});
-			FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2, 'shared'));
+			FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2, 'week2'));
 
 			if (gf != null) gf.playAnim('scared', true);
 			boyfriend.playAnim('scared', true);
@@ -1366,7 +1372,7 @@ class PlayState extends MusicBeatState
 		new FlxTimer().start(0.1, function(_)
 		{
 			remove(blackScreen);
-			FlxG.sound.play(Paths.sound('Lights_Turn_On', 'shared'));
+			FlxG.sound.play(Paths.sound('Lights_Turn_On', 'week5'));
 			camFollow.y = -2050;
 			camFollow.x += 200;
 			FlxG.camera.focusOn(camFollow.getPosition());
@@ -1450,7 +1456,7 @@ class PlayState extends MusicBeatState
 							else 
 							{
 								senpaiEvil.animation.play('idle');
-								FlxG.sound.play(Paths.sound('Senpai_Dies'), 
+								FlxG.sound.play(Paths.sound('Senpai_Dies', 'week6'), 
 								1, false, null, true, 
 								function()
 								{
@@ -1892,9 +1898,21 @@ class PlayState extends MusicBeatState
 
 		// Determine whether we need pixel UI assets. (Week 6 stages)
 		var introAssets:Map<String, Array<String>> = [
-			'default' => ['ready', 'set', 'go'],
-			'school' => ['weeb/pixelUI/ready-pixel', 'weeb/pixelUI/set-pixel', 'weeb/pixelUI/date-pixel'],
-			'schoolEvil' => ['weeb/pixelUI/ready-pixel', 'weeb/pixelUI/set-pixel', 'weeb/pixelUI/date-pixel'],
+			'default' => [
+				'ui/countdown/funkin/ready', 
+				'ui/countdown/funkin/set', 
+				'ui/countdown/funkin/go'
+			],
+			'school' => [
+				'ui/countdown/pixel/ready-pixel', 
+				'ui/countdown/pixel/set-pixel', 
+				'ui/countdown/pixel/date-pixel'
+			],
+			'schoolEvil' => [
+				'ui/countdown/pixel/ready-pixel', 
+				'ui/countdown/pixel/set-pixel', 
+				'ui/countdown/pixel/date-pixel'
+			],
 		];
 
 		var swagCounter:Int = 0;
@@ -1932,7 +1950,7 @@ class PlayState extends MusicBeatState
 			// Resolve which intro asset set to use.
 			var introAlts:Array<String> = introAssets.get('default');
 			var altSuffix:String = "";
-			var week6Lib:String = null;
+			var week6Lib:String = "shared";
 			var aliasing:Bool = FlxG.save.data.antialiasing;
 
 			for (key in introAssets.keys())
@@ -1941,7 +1959,6 @@ class PlayState extends MusicBeatState
 				{
 					introAlts = introAssets.get(key);
 					altSuffix = '-pixel';
-					week6Lib = 'week6';
 					aliasing = false;
 				}
 			}
@@ -1949,10 +1966,12 @@ class PlayState extends MusicBeatState
 			// Show countdown sprite for this beat.
 			switch (swagCounter)
 			{
-				case 0: FlxG.sound.play(Paths.sound('intro3' + altSuffix), 0.6);
+				case 0: FlxG.sound.play(Paths.sound('gameplay/countdown/intro3' + altSuffix, 'shared'), 0.6);
 				case 1 | 2 | 3:
 					var index:Int = swagCounter - 1; // maps beat 1/2/3 to asset index 0/1/2.
-					var introSound:String = ['intro2', 'intro1', 'introGo'][index];
+					var introSound:String = [
+						'intro2', 'intro1', 'introGo'
+					][index];
 					var image:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[index], week6Lib));
 					image.scrollFactor.set();
 					image.updateHitbox();
@@ -1969,8 +1988,7 @@ class PlayState extends MusicBeatState
 						ease: FlxEase.cubeInOut,
 						onComplete: function(_) { image.destroy(); }
 					});
-					FlxG.sound.play(Paths.sound(introSound + altSuffix), 0.6);
-
+					FlxG.sound.play(Paths.sound('gameplay/countdown/$introSound' + altSuffix, 'shared'), 0.6);
 			}
 			swagCounter++;
 		}, 5);
@@ -1987,9 +2005,7 @@ class PlayState extends MusicBeatState
 
 		if (!paused) 
 		{
-			FlxG.sound.playMusic(
-				Paths.inst(PlayState.SONG.song), 1, false
-			);
+			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
 		}
 
 		FlxG.sound.music.onComplete = endSong;
@@ -2351,6 +2367,10 @@ class PlayState extends MusicBeatState
 	 */
 	private function updateScoreText():Void
 	{
+		scoreTxt.color = FlxColor.WHITE;
+		scoreTxt.clearFormats();
+		Ratings.getComboRank();
+
 		if (botplay) scoreTxt.text = 'Botplay Enabled';
 		else
 		{
@@ -2362,14 +2382,16 @@ class PlayState extends MusicBeatState
 				scoreTxt.text = 'Score: ${FlxStringUtil.formatMoney(songScore, SHOW_DECIMALS, COMMA_SEPERATED)}'
 				+ ' | Misses: ${misses}'
 				+ ' | Accuracy: ${truncateFloat(accuracy, 2)}% - [${ratingFC}]';
+
+				// Apply FlxColor ONLY to the combo ranks. (i.e. 'MFC', 'SDCB', etc.)
+				final ratingStart = scoreTxt.text.length - ratingFC.length - 1;
+				scoreTxt.addFormat(Ratings.getComboRankFormat(), ratingStart, ratingStart + ratingFC.length);
 			}
 			else
 			{
 				scoreTxt.text = 'Score: ${FlxStringUtil.formatMoney(songScore, SHOW_DECIMALS, COMMA_SEPERATED)}';
 			}
 		}
-
-		Ratings.fullComboRank();
 	}
 
 	/**
@@ -2880,7 +2902,11 @@ class PlayState extends MusicBeatState
 		#if !switch
 		// Save highscore if you're not on switch.
 		if (SONG.validScore)
+		{
 			Highscore.saveScore(SONG.song, songScore, storyDifficulty);
+			Highscore.saveCombo(SONG.song, Ratings.getComboRank(), storyDifficulty);
+			Highscore.saveRating(SONG.song, truncateFloat(accuracy, 2), storyDifficulty);
+		}
 		#end
 
 		if (isStoryMode) 
@@ -2892,7 +2918,7 @@ class PlayState extends MusicBeatState
 			if (storyPlaylist.length <= 0) 
 			{
 				// If the song is finished and you're in story mode, return back to the menu.
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FlxG.sound.playMusic(Paths.music('freakyMenu/freakyMenu'));
 				FlxG.switchState(new StoryMenuState());
 
 				if (!practiceMode && !botplay)
@@ -2916,7 +2942,7 @@ class PlayState extends MusicBeatState
 					add(blackShit);
 					camHUD.visible = false;
 
-					FlxG.sound.play(Paths.sound('Lights_Shut_off', 'shared'), 1, false, null, true, function() {
+					FlxG.sound.play(Paths.sound('Lights_Shut_off', 'week5'), 1, false, null, true, function() {
 						PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
 						LoadingState.loadAndSwitchState(new PlayState());
 					});
@@ -2937,7 +2963,7 @@ class PlayState extends MusicBeatState
 		{
 			trace('Returning to freeplay menu...');
 			FlxG.switchState(new FreeplayState());
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+			FlxG.sound.playMusic(Paths.music('freakyMenu/freakyMenu'));
 		}
 	}
 
@@ -2961,9 +2987,9 @@ class PlayState extends MusicBeatState
 	 */
 	private function cachePopUpScore():Void
 	{
-		var prefix:String = curStage.startsWith('school') ? 'weeb/pixelUI/' : "";
+		var prefix:String = curStage.startsWith('school') ? 'ui/popup/pixel/' : "ui/popup/funkin/";
 		var suffix:String = curStage.startsWith('school') ? '-pixel' : "";
-		var lib:String = curStage.startsWith('school') ? 'week6' : null;
+		var lib:String = curStage.startsWith('school') ? null : "preload";
 
 		for (name in ['sick', 'good', 'bad', 'shit', 'combo']) 
 			Paths.image(prefix + name + suffix, lib);
@@ -2996,6 +3022,7 @@ class PlayState extends MusicBeatState
 		{
 			case 'shit':
 				shits++;
+				comboBreaks++;
 				score = 0;
 				combo = 0;
 				health -= 0.06;
@@ -3004,6 +3031,7 @@ class PlayState extends MusicBeatState
 
 			case 'bad':
 				bads++;
+				comboBreaks++;
 				score = 0;
 				combo = 0;
 				health -= 0.06;
@@ -3043,9 +3071,9 @@ class PlayState extends MusicBeatState
 		if (!practiceMode && !botplay) songScore += score;
 
 		// Asset path helpers (PIXEL and DEFAULT variants)
-		final prefix:String = curStage.startsWith('school') ? 'weeb/pixelUI/' : "";
+		final prefix:String = curStage.startsWith('school') ? 'ui/popup/pixel/' : "ui/popup/funkin/";
 		final suffix:String = curStage.startsWith('school') ? '-pixel' : "";
-		final lib:String = curStage.startsWith('school') ? 'week6' : null;
+		final lib:String = curStage.startsWith('school') ? null : "preload";
 		final isSchool:Bool = curStage.startsWith('school');
 
 		// insert behind strumLineNotes to prevent overlapping with arrows.
@@ -3575,6 +3603,7 @@ class PlayState extends MusicBeatState
 			'Good: ${goods}',
 			'Bad: ${bads}',
 			'Shit: ${shits}',
+			'Combo Breaks: ${comboBreaks}',
 			'Max Combo: ${highestCombo}'
 		].join('\n');
 	}
@@ -3647,9 +3676,9 @@ class PlayState extends MusicBeatState
 
 	function lightningStrikeShit():Void 
 	{
-		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
+		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2, 'week2'));
 
-		if (FlxG.save.data.lowQuality)
+		if (!FlxG.save.data.lowQuality)
 		{
 			halloweenBG.animation.play('halloweem bg lightning strike');
 		}
@@ -3674,7 +3703,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if (FlxG.save.data.flashingLights) 
+		if (!FlxG.save.data.flashingLights) 
 		{
 			halloweenWhite.alpha = 0.4;
 			FlxTween.tween(halloweenWhite, {alpha: 0.5}, 0.075);
@@ -3752,7 +3781,8 @@ class PlayState extends MusicBeatState
 
 	function fastCarDrive()
 	{
-		FlxG.sound.play(Paths.soundRandom('carPass', 0, 1), 0.7);
+		FlxG.sound.play(Paths.soundRandom('carPass', 0, 1, 'week4'), 0.7);
+
 		fastCar.velocity.x = (FlxG.random.int(170, 220) / FlxG.elapsed) * 3;
 		fastCarCanDrive = false;
 

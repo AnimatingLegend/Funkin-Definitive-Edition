@@ -1,59 +1,114 @@
 package funkin.backend.utils;
 
+import flixel.text.FlxText.FlxTextFormat;
+
+/**
+ * RATINGS CLASS
+ * 
+ * Handles the timing windows for each rating,
+ *  as well as determining the rating of a note based on how early/late it is.
+ */
 class Ratings
 {
-	/**
-	* Rating Hit Windows 
-	* Sick: 45ms | Good: 90ms | Bad: 135ms | Shit: 166ms
-	**/
+    /**
+     * The timing windows for each rating, in milliseconds.
+     */
+    public static var timingWindows:Array<Float> = [
+        166.0, // SHIT Rating
+        135.0, // BAD Rating 
+        90.0, // GOOD! Rating
+        45.0 // SICK!! Rating
+    ];
 
-    public static var timingWindows:Array<Float> = [166.0, 135.0, 90.0, 45.0]; 
+    /**
+     * The ratings for each timing window.
+     */
+    public static var timingRatings:Array<String> = [
+        'shit',
+        'bad',
+        'good',
+        'sick'
+    ];
    
-    public static function judgeNote(noteDiff:Float)
+    /**
+     * Determines the rating of a note based on how early/late it is.
+     * @param noteDiff The difference between the note's strum time and the current song position.
+     * @return The rating of the note.
+     */
+    public static inline function judgeNote(noteDiff:Float):String
     {
-        var diff = Math.abs(noteDiff);
-        for (index in 0...timingWindows.length) // based on 4 timing windows, will break with anything else
+        var count = timingWindows.length < timingRatings.length ? timingWindows.length : timingRatings.length;
+        if (count <= 0) return 'good';
+
+        var diff:Float = Math.abs(noteDiff) / Conductor.timeScale;
+        var expectedRating = -1;
+        var expectedWindow = Math.POSITIVE_INFINITY;
+        var worstRating = 0;
+        var worstWindow = timingWindows[0];
+        var rating = 0;
+
+        while (rating < count)
         {
-            var time = timingWindows[index] * Conductor.timeScale;
-            var nextTime = index + 1 > timingWindows.length - 1 ? 0 : timingWindows[index + 1];
-            if (diff < time && diff >= nextTime * Conductor.timeScale)
+            var window = timingWindows[rating];
+            if (window > worstWindow)
             {
-                switch (index)
-                {
-                    case 0:
-                        return "shit";
-                    case 1:
-                        return "bad";
-                    case 2:
-                        return "good";
-                    case 3:
-                        return "sick";
-                }
+                worstWindow = window;
+                worstRating = rating;
             }
+
+            if (diff <= window && window < expectedWindow)
+            {
+                expectedRating = rating;
+                expectedWindow = window;
+            }
+
+            rating++;
         }
-        return "good";
+
+        return timingRatings[expectedRating >= 0 ? expectedRating : worstRating];
     }
 
-	public static function fullComboRank() 
+	/**
+	 * Determines what rank the player gets based on their performance in the song.
+     * @see `PlayState.ratingFC` for the full combo rank, which is separate from the normal rank.
+	 */
+	public static inline function getComboRank():String
 	{
-		PlayState.ratingFC = 'N/A';
-		
-		if (PlayState.misses == 0) 
+		return PlayState.ratingFC = switch (PlayState.misses)
 		{
-			if (PlayState.bads > 0 || PlayState.shits > 0) {
-				PlayState.ratingFC = 'FC';
-			} else if (PlayState.goods > 0) {
-				PlayState.ratingFC = 'GFC';
-			} else if (PlayState.sicks > 0) {
-				PlayState.ratingFC = 'MFC';
-			}
+			case 0:
+				if (PlayState.bads > 0 || PlayState.shits > 0) 'FC';
+                else if (PlayState.goods > 0) 'GFC';
+				else if (PlayState.sicks > 0) 'MFC';
+                else 'N/A';
+			case misses if (misses < 10): 'SDCB';
+			default: 'CLEAR';
 		}
-		else
+	}
+
+    /**
+     * The FlxTextFormats for each rank, 
+     * used to color the combo rank in the score text.
+     */
+    static var RANK_COLORS:Array<FlxTextFormat> = [
+        new FlxTextFormat(0xFFFA84EA), // GFC Format
+        new FlxTextFormat(0xFFE6C949), // MFC Format
+        new FlxTextFormat(0xFFFAF871), // FC Format
+        new FlxTextFormat(0xB4FAF871), // SDCB Format
+        new FlxTextFormat(0xFF00287E), // CLEAR Format
+        new FlxTextFormat(0xFFFFFFFF)  // Default Format
+    ];
+
+	public static inline function getComboRankFormat():FlxTextFormat
+	{
+		return switch (PlayState.ratingFC)
 		{
-			if (PlayState.misses < 10) 
-				PlayState.ratingFC = 'SDCB';
-			else
-				PlayState.ratingFC = 'Clear';
+            case 'GFC': RANK_COLORS[0];
+            case 'MFC': RANK_COLORS[1];
+            case 'FC': RANK_COLORS[2];
+            case 'SDCB': RANK_COLORS[3];
+            case 'CLEAR': RANK_COLORS[4];
+            default: RANK_COLORS[5];
 		}
 	}
 }

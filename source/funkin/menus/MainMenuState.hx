@@ -30,11 +30,10 @@ class MainMenuState extends MusicBeatState
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
 
 	/**
-	 * Get the text for the left watermark, aswell as the version of the game.
+	 * Get the text for the watermark on the bottom left of the screen.
 	 */
 	public var leftWatermarkText:FlxText;
-	public static var definitiveVersion:String = '0.5.2';
-	public static var versionSuffix:String = #if debug ' DEBUG' #else '' #end;
+	public var versionSuffix:String = #if debug ' DEBUG' #else '' #end;
 
 	override function create()
 	{
@@ -43,8 +42,10 @@ class MainMenuState extends MusicBeatState
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
 
-		if (FlxG.sound.music != null &&!FlxG.sound.music.playing) 
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		if (FlxG.sound.music != null && !FlxG.sound.music.playing)
+		{
+			FlxG.sound.playMusic(Paths.music('freakyMenu/freakyMenu'));
+		}
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -114,11 +115,7 @@ class MainMenuState extends MusicBeatState
 			item.y = pos + (160 * i);
 		}
 		
-		#if html5
-		FlxG.camera.follow(camFollow, null, 0.06);
-		#else
-		FlxG.camera.follow(camFollow, null, 0.06 * (30 / FlxG.save.data.fpsCap));
-		#end
+		FlxG.camera.follow(camFollow, null, 0.04 #if !html5 * (30 / FlxG.save.data.fpsCap) #end);
 
 		super.create();
 		initWatermark();
@@ -130,7 +127,7 @@ class MainMenuState extends MusicBeatState
 	 * [!NOTE] This is only used for debug builds.
 	 */
 	public static final GIT_BRANCH:String = GitCommit.getGitBranch();
-   	public static final GIT_HASH:String = GitCommit.getGitCommitHash();
+  public static final GIT_HASH:String = GitCommit.getGitCommitHash();
 
 	function initWatermark()
 	{
@@ -141,7 +138,7 @@ class MainMenuState extends MusicBeatState
 		}
 		else
 		{
-			leftWatermarkText = new FlxText(12, FlxG.height - 24, 0, 'FDE - v${definitiveVersion} ' 
+			leftWatermarkText = new FlxText(12, FlxG.height - 24, 0, 'FDE - v${Main.DEFINITIVE_VERSION} ' 
 			+ #if debug '(${GIT_BRANCH}, ${GIT_HASH})' + #end versionSuffix, 12);
 		}
 		leftWatermarkText.scrollFactor.set();

@@ -14,11 +14,12 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
 
-// * ----------------------------------------------- * \\
-// * PATHS CLASS                      			   * \\
-// * 									   * \\
-// * A core class that handles certain asset paths.  * \\
-// * ----------------------------------------------  * \\
+/**
+ * PATHS CLASS
+ * 
+ * A core class that handles certain asset paths, 
+ * and memory management for assets.
+ */
 class Paths
 {
 	/**
@@ -205,6 +206,7 @@ class Paths
 	inline static public function xml(key:String, ?library:String)
 		return getPath('data/$key.xml', TEXT, library);
 
+	// TODO: remove `charts`, and just use `data` for everything, since it's more intuitive.
 	inline static public function json(key:String, ?library:String)
 		return getPath('data/charts/$key.json', TEXT, library);
 

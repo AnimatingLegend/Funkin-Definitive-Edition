@@ -24,19 +24,19 @@ class ControlsSubState extends MusicBeatState
     var curSelected:Int = 0;
 
     var keys:Array<String> = [
-                              FlxG.save.data.leftBind,
-                              FlxG.save.data.downBind,
-                              FlxG.save.data.upBind,
-                              FlxG.save.data.rightBind,
-                              FlxG.save.data.upBindUI,
-                              FlxG.save.data.leftBindUI,
-                              FlxG.save.data.rightBindUI,
-                              FlxG.save.data.downBindUI,
-                              FlxG.save.data.killBind,
-                              FlxG.save.data.acceptBindUI,
-                              FlxG.save.data.backBindUI,
-                              FlxG.save.data.pauseBindUI
-                            ];
+        FlxG.save.data.leftBind,
+        FlxG.save.data.downBind,
+        FlxG.save.data.upBind,
+        FlxG.save.data.rightBind,
+        FlxG.save.data.upBindUI,
+        FlxG.save.data.leftBindUI,
+        FlxG.save.data.rightBindUI,
+        FlxG.save.data.downBindUI,
+        FlxG.save.data.killBind,
+        FlxG.save.data.acceptBindUI,
+        FlxG.save.data.backBindUI,
+        FlxG.save.data.pauseBindUI
+    ];
 
     var tempKey:String = "";
     var blacklist:Array<String> = ["ESC"];

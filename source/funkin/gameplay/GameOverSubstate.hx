@@ -100,7 +100,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		// Blue ball SFX; play once, not looped.
 		blueBalled = true;
-		FlxG.sound.play(Paths.sound('fnf_loss_sfx' + blueBallSuffix));
+		FlxG.sound.play(Paths.sound('gameplay/gameover/fnf_loss_sfx' + blueBallSuffix, 'shared'));
 
 		// Exclude explicit voice lines if content filter is off.
 		// 1=Cock, 3=Shitty, 8=Shit, 13=Fuck, 17=Shit/Asshole, 21=Fucking

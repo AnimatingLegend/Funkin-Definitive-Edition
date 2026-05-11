@@ -83,8 +83,10 @@ class OptionsMenuState extends MusicBeatState
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
-		if (FlxG.sound.music != null && !FlxG.sound.music.playing) 
-			FlxG.sound.playMusic(Paths.music('settingsMenu'), 0.5, true);
+		if (FlxG.sound.music != null && !FlxG.sound.music.playing)
+		{
+			FlxG.sound.playMusic(Paths.music('settingsMenu/settingsMenu'), 1, true);
+		}
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
 		menuBG.color = 0xFFc4618c;

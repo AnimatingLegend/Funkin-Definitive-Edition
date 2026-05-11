@@ -106,8 +106,8 @@ class Option
 		return false;
 }
 
-// * ---------------------------------------	* \\
-// * GRAPHIC SETTINGS                       	* \\
+// * --------------------------------------- * \\
+// * GRAPHIC SETTINGS                        * \\
 // * --------------------------------------- * \\
 class LowQuality extends Option
 {
@@ -326,9 +326,9 @@ class LaunchInFullscreen extends Option
 		return 'Launch in Fullscreen';
 }
 
-// * ---------------------------------------	* \\
-// * UI SETTINGS                       		* \\
-// * --------------------------------------- * \\
+// * -------------------------------------- * \\
+// * UI SETTINGS                       			* \\
+// * -------------------------------------- * \\
 class AccuracyDisplay extends Option
 {
 	public function new(desc:String)
@@ -394,7 +394,7 @@ class StrumLineBG extends Option
 			FlxG.save.data.strumLineBG -= 10;
 
 			// If the value is less than 0, return it.
-			if (FlxG.save.data.strumLineBG < 0) FlxG.save.data.strumLineBG = 0;
+			if (FlxG.save.data.strumLineBG < 0) return false;
 			FlxG.save.data.strumLineBG = FlxMath.roundDecimal(FlxG.save.data.strumLineBG, 2);
 		}
 
@@ -509,7 +509,7 @@ class FDEWatermark extends Option
 		return 'FDE Watermark';
 }
 
-// * ---------------------------------------	* \\
+// * --------------------------------------- * \\
 // * GAMEPLAY SETTINGS                       * \\
 // * --------------------------------------- * \\
 class Naughtyness extends Option
@@ -683,8 +683,8 @@ class HitsoundVolume extends Option
 			FlxG.save.data.hitsoundVolume -= 10;
 
 			// If the value is less than 0, return it.
-			if (FlxG.save.data.hitsoundVolume < 0) FlxG.save.data.hitsoundVolume = 0;
-			FlxG.save.data.hitsoundVolume = FlxMath.roundDecimal(FlxG.save.data.strumLineBG, 2);
+			if (FlxG.save.data.hitsoundVolume < 0) return false;
+			FlxG.save.data.hitsoundVolume = FlxMath.roundDecimal(FlxG.save.data.hitsoundVolume, 2);
 		}
 		display = updateDisplay();
 
@@ -834,9 +834,12 @@ class ResetHighscore extends Option
 		}
 
 		for (key in Highscore.songScores.keys()) Highscore.songScores[key] = 0;
-		
+		for (key in Highscore.songCombos.keys()) Highscore.songCombos[key] = 'N/A';
+		for (key in Highscore.songRatings.keys()) Highscore.songRatings[key] = 0.00;
+
 		FlxG.save.data.songScores = null;
 		FlxG.save.data.songCombos = null;
+		FlxG.save.data.songRatings = null;
 		trace('[OPTIONS] Reset all Highscores.');
 
 		acceptValues = FlxG.save.data.resetHighscore;

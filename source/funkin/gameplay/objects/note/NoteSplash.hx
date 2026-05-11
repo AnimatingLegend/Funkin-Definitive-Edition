@@ -22,6 +22,7 @@ class NoteSplash extends FlxSprite
 
 	public function setupNoteSplash(x:Float, y:Float, ?notedata:Int = 0)
 	{
+		alpha = 0.6;
 		setPosition(x, y);
 
 		animation.play('note' + notedata + '-' + FlxG.random.int(0, 1), true);
@@ -41,25 +42,26 @@ class NoteSplashPixel extends FlxSprite
 {
 	public function new(x:Float, y:Float, ?notedata:Int = 0)
 	{
-			super(x, y);
-			frames = Paths.getSparrowAtlas('weeb/pixelUI/noteSplashes-pixels', 'week6');
+		super(x, y);
+		frames = Paths.getSparrowAtlas('weeb/pixelUI/noteSplashes-pixels', 'week6');
 	
-			// impact 1
-			animation.addByPrefix('note1-0', 'note splash 1  blue', 24, false);
-			animation.addByPrefix('note2-0', 'note splash 1 green', 24, false);
-			animation.addByPrefix('note0-0', 'note splash 1 purple', 24, false);
-			animation.addByPrefix('note3-0', 'note splash 1 red', 24, false);
+		// impact 1
+		animation.addByPrefix('note1-0', 'note splash 1  blue', 24, false);
+		animation.addByPrefix('note2-0', 'note splash 1 green', 24, false);
+		animation.addByPrefix('note0-0', 'note splash 1 purple', 24, false);
+		animation.addByPrefix('note3-0', 'note splash 1 red', 24, false);
 	
-			// impact 2
-			animation.addByPrefix('note1-1', 'note splash 2 blue', 24, false);
-			animation.addByPrefix('note2-1', 'note splash 2 green', 24, false);
-			animation.addByPrefix('note0-1', 'note splash 2 purple', 24, false);
-			animation.addByPrefix('note3-1', 'note splash 2 red', 24, false);
-			setupNoteSplash(x, y, notedata);
+		// impact 2
+		animation.addByPrefix('note1-1', 'note splash 2 blue', 24, false);
+		animation.addByPrefix('note2-1', 'note splash 2 green', 24, false);
+		animation.addByPrefix('note0-1', 'note splash 2 purple', 24, false);
+		animation.addByPrefix('note3-1', 'note splash 2 red', 24, false);
+		setupNoteSplash(x, y, notedata);
 	}
 
 	public function setupNoteSplash(x:Float, y:Float, ?notedata:Int = 0)
 	{
+		alpha = 0.6;
 		setPosition(x, y);
 
 		animation.play('note' + notedata + '-' + FlxG.random.int(0, 1), true);

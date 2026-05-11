@@ -11,7 +11,12 @@
   "isPixel": false,
   "offsets": [0, 0],
   "cameraOffsets": [0, 0],
-  "healthIcon": { "id": "gf", "scale": 1.0, "flipX": false, "offsets": [0, 0] },
+  "healthIcon": {
+    "id": "gf",
+    "scale": 1.0,
+    "flipX": false,
+    "offsets": [0, 0]
+  },
   "healthBarColors": [237, 121, 1],
   "animations": [
     {
