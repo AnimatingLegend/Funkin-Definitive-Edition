@@ -60,7 +60,6 @@ class InitState extends FlxState
                // Makes Flixel use frame times instead of locked movements per frame for things like tweens.
                FlxG.fixedTimestep = false;
 
-               // This was originally in `TitleState.` adding this here for code cleanup.
                var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
                diamond.persist = true;
                diamond.destroyOnNoUse = false;
@@ -88,7 +87,7 @@ class InitState extends FlxState
      }
 
      /**
-      * When the game loses focus, turn down the volume by 30%.
+      * When the game loses focus, turn down the volume by 25%.
       */
      var _lostFocusVolume:Null<Float>;
      function onLostFocus():Void
@@ -98,9 +97,11 @@ class InitState extends FlxState
           FlxG.sound.volume *= 0.25;
      }
 
+     /**
+      * When the game regains focus, restore your framerate and volume.
+      */
      function onGainFocus():Void
      {
-          // When gaining back focus, restore your framerate.
           if (FlxG.save.data.fpsCap != null)
           {
                FlxG.updateFramerate = FlxG.save.data.fpsCap;
@@ -112,7 +113,6 @@ class InitState extends FlxState
                FlxG.drawFramerate = 0;
           }
 
-          // When gaining back focus, restore your volume.
           if (FlxG.sound.muted || FlxG.autoPause) return;
           if (_lostFocusVolume != null) FlxG.sound.volume = _lostFocusVolume;
      }

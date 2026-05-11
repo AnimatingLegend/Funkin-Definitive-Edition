@@ -857,11 +857,8 @@ class ResetALLSettings extends Option
 		FlxG.save.data.resetSettings = null;
 
 		DefinitiveData.initialize();
-		if (FlxG.sound.music != null)
-		{
-			
-		}
-		FlxG.switchState(new funkin.InitState());
+		FlxG.resetGame();
+
 		trace('[OPTIONS] Reset all settings data.');
 
 		acceptValues = FlxG.save.data.resetSettings;
