@@ -22,6 +22,7 @@ import funkin.menus.CacheState;
 class InitState extends FlxState
 {
      static var _coreInitialized:Bool = false;
+     static var _lostFocusVolume:Null<Float> = null;
 
      /**
       * Quickly setup the game, and transition to the title screen.
@@ -51,11 +52,11 @@ class InitState extends FlxState
      {
           if (!_coreInitialized)
           {
+               // Setup auto pause.
+               FlxG.autoPause = FlxG.save.data.autoPause;
+
                // Set the game to a lower frame rate while it is in the background.
                FlxG.game.focusLostFramerate = 30;
-
-               // Keep controls consistent between states.
-               FlxG.inputs.resetOnStateSwitch = false;
 
                // Makes Flixel use frame times instead of locked movements per frame for things like tweens.
                FlxG.fixedTimestep = false;
@@ -81,6 +82,9 @@ class InitState extends FlxState
                          new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
                });
 
+               FlxG.signals.focusLost.add(onLostFocus);
+               FlxG.signals.focusGained.add(onGainFocus);
+
                _coreInitialized = true;
                trace('[SETUP] Flixel core initialized.');
           } 
@@ -89,10 +93,9 @@ class InitState extends FlxState
      /**
       * When the game loses focus, turn down the volume by 25%.
       */
-     var _lostFocusVolume:Null<Float>;
      function onLostFocus():Void
      {
-          if (FlxG.sound.muted || FlxG.sound.volume == 0 || FlxG.autoPause) return;
+          if (FlxG.sound.muted || FlxG.sound.volume <= 0 || FlxG.autoPause) return;
           _lostFocusVolume = FlxG.sound.volume;
           FlxG.sound.volume *= 0.25;
      }
@@ -109,12 +112,17 @@ class InitState extends FlxState
           }
           else
           {
-               FlxG.updateFramerate = 0;
-               FlxG.drawFramerate = 0;
+               FlxG.updateFramerate = 60;
+               FlxG.drawFramerate = 60;
           }
 
-          if (FlxG.sound.muted || FlxG.autoPause) return;
-          if (_lostFocusVolume != null) FlxG.sound.volume = _lostFocusVolume;
+          // Restore the volume.
+          if (FlxG.autoPause) return;
+          if (_lostFocusVolume != null) 
+          {
+               FlxG.sound.volume = _lostFocusVolume;
+               _lostFocusVolume = null;
+          }
      }
      
      /**
@@ -128,16 +136,16 @@ class InitState extends FlxState
           // Skip the next transition.
           FlxTransitionableState.skipNextTransIn = true;
 
-          #if ANIMDEBUG
+          #if ANIMATION_EDITOR
           // -DANIMDEBUG
           FlxG.switchState(new funkin.editors.AnimationDebug());
-          #elseif CHARTING
+          #elseif CHART_EDITOR
           // -DCHARTING
           FlxG.switchState(new funkin.editors.ChartEditor());
-          #elseif FREEPLAY
+          #elseif FREEPLAY_MENU
           // -DFREEPLAY
           FlxG.switchState(new funkin.menus.FreePlayState());
-          #elseif !debug
+          #elseif (!debug || CACHE_MENU)
           // Preload all assets, and sounds before the game starts.
           // NOTE: This is only done in release mode.
           FlxG.switchState(new funkin.menus.CacheState());
