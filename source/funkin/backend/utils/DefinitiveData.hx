@@ -41,7 +41,7 @@ class DefinitiveData
 		if (FlxG.save.data.middlescroll == null) FlxG.save.data.middlescroll = false;
 		if (FlxG.save.data.flashingLights == null) FlxG.save.data.flashingLights = true;
 		if (FlxG.save.data.cameraZooms == null) FlxG.save.data.cameraZooms = true;
-		if (FlxG.save.data.autoPause == null) FlxG.autoPause = true;
+		if (FlxG.save.data.autoPause == null) FlxG.save.data.autoPause = true;
 		if (FlxG.save.data.ghostTapping == null) FlxG.save.data.ghostTapping = true;
 		if (FlxG.save.data.scrollSpeed == null) FlxG.save.data.scrollSpeed = 1;
 

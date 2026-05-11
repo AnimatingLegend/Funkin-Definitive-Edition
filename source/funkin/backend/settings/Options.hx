@@ -623,12 +623,9 @@ class AutoPause extends Option
 	
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value)
-	 	{
-			FlxG.save.data.autoPause = !FlxG.save.data.autoPause;
-			FlxG.autoPause = FlxG.save.data.autoPause;
-	 	}
+		if (value) FlxG.save.data.autoPause = !FlxG.save.data.autoPause;
 
+		FlxG.autoPause = FlxG.save.data.autoPause;
 		acceptValues = FlxG.save.data.autoPause;
 		display = updateDisplay();
 		return true;
