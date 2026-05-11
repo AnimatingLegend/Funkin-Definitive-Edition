@@ -57,9 +57,9 @@ class OptionsMenuState extends MusicBeatState
 		]),
 		new OptionCategory("Save Data", 
 		[
-			new WeekUnlocked('If pressed, all story progress will be reset. (WARNING: THIS CANNOT BE UNDONE)'),
-			new ResetHighscore('If pressed, all highscore data will be reset. (WARNING: THIS CANNOT BE UNDONE)'),
-			new ResetALLSettings('If pressed, ALL settings data will be reset. (WARNING: THIS CANNOT BE UNDONE)'),
+			new WeekUnlocked('If pressed, all story progress will be reset.\n(WARNING: THIS CANNOT BE UNDONE)'),
+			new ResetHighscore('If pressed, all highscore data will be reset.\n(WARNING: THIS CANNOT BE UNDONE)'),
+			new ResetALLSettings('If pressed, ALL settings data will be reset.\n(WARNING: YOUR GAME WILL RESTART. THIS CANNOT BE UNDONE)'),
 		]),
 	];
 

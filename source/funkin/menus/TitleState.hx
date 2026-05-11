@@ -70,25 +70,8 @@ class TitleState extends MusicBeatState
 
 		if (FlxG.save.data.launchInFullscreen) FlxG.fullscreen = true;
 
-		#if desktop
-		FlxG.game.focusLostFramerate = 60;
-
-		if (FlxG.save.data.fpsCap != null)
-		{
-			FlxG.updateFramerate = FlxG.save.data.framerateDraw;
-			FlxG.drawFramerate = FlxG.save.data.framerateDraw;
-		}
-		#end
-
           FlxG.mouse.visible = false;
 
-		// DEBUG LOGIC
-		// TODO: Make an initialization state for stuff like this...
-		#if OPTIONS
-		FlxG.switchState(new funkin.menus.OptionsMenuState());
-		#elseif ANIMATION
-		FlxG.switchState(new funkin.editors.AnimationDebug());
-		#else
 		// If the game isn't initialized yet, wait a second before starting the intro.
           // Otherwise, start the intro normally.
 		if (!initialized)
@@ -99,7 +82,6 @@ class TitleState extends MusicBeatState
                });
           }
 		else startIntro();
-		#end
 	}
 
 	var logoBl:FlxSprite;
@@ -109,6 +91,8 @@ class TitleState extends MusicBeatState
 
 	function startIntro()
 	{
+		if (!initialized || FlxG.sound.music == null) playMenuMusic();
+
 		persistentUpdate = true;
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
@@ -189,18 +173,6 @@ class TitleState extends MusicBeatState
 			credTextShit.visible = false;
 			FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 
-			var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
-			diamond.persist = true;
-			diamond.destroyOnNoUse = false;
-
-			FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 1, new FlxPoint(0, -1), {asset: diamond, width: 32, height: 32},
-				new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-			FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.7, new FlxPoint(0, 1),
-				{asset: diamond, width: 32, height: 32}, new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-
-			transIn = FlxTransitionableState.defaultTransIn;
-			transOut = FlxTransitionableState.defaultTransOut;
-
                playMenuMusic();
 			Conductor.changeBPM(102);
 			initialized = true;
@@ -209,10 +181,10 @@ class TitleState extends MusicBeatState
 
      function playMenuMusic():Void
      {
-          var shouldFadeIn:Bool = (FlxG.sound.music == null || !FlxG.sound.music.playing);
-          FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+          var shouldFadeIn:Bool = (FlxG.sound.music == null);
+          FlxG.sound.playMusic(Paths.music('freakyMenu'), 0, true);
 
-          if (shouldFadeIn) FlxG.sound.music.fadeIn(4, 0, 0.7);
+          if (shouldFadeIn) FlxG.sound.music.fadeIn(4.0, 0.0, 1.0);
      }
 
 	function getIntroTextShit():Array<Array<String>>

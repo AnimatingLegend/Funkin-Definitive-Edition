@@ -6,12 +6,6 @@ import flixel.FlxState;
 import flixel.text.FlxText.FlxTextBorderStyle;
 
 import funkin.backend.system.monitor.DebugDisplay;
-import funkin.backend.system.PlayerSettings;
-import funkin.backend.utils.DefinitiveData;
-import funkin.backend.utils.Highscore;
-
-import funkin.menus.TitleState;
-import funkin.menus.MainMenuState;
 
 import openfl.Assets;
 import openfl.Lib;
@@ -40,20 +34,23 @@ class Main extends Sprite
 {
 	var gameWidth:Int = 1280; // The width of the game window in pixels.
 	var gameHeight:Int = 720; // The height of the game window in pixels.
-	var initialState:Class<FlxState> = TitleState; // The FlxState your game starts in.
+	var initialState:Class<FlxState> = funkin.InitState; // The FlxState your game starts in.
 	var zoom:Float = -1; //if zoom is set to -1, zoom will automatically calculate to fit the game window.
 	var skipSplash:Bool = true; // Whether or not to skip the HaxeFlixel splash screen.
 
 	/**
 	 * Creates a new Main instance and adds it to the current stage.
 	 */
-	public static function main():Void 
-		Lib.current.addChild(new Main());
+	public static function main():Void Lib.current.addChild(new Main());
 
 	public function new():Void 
 	{
-		
 		super();
+
+		// Initialize the Crash Handler as soon as possible before the game starts.
+		#if CRASH_HANDLER
+		Lib.current.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
+		#end
 
 		if (stage != null) 
 		{
@@ -63,16 +60,21 @@ class Main extends Sprite
 		{
 			addEventListener(Event.ADDED_TO_STAGE, init);
 		}
-
-		// Initialize the Crash Handler as soon as possible before the game starts.
-		#if CRASH_HANDLER
-		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
-		#end
 	}
 
-	function init(e:Event = null):Void
+	function init(?event:Event):Void
 	{
 		if (hasEventListener(Event.ADDED_TO_STAGE)) removeEventListener(Event.ADDED_TO_STAGE, init);
+
+		#if !mobile
+		// Force-dispose of any cached assets, to prevent background processing.
+		openfl.Lib.application.onExit.add((_) ->
+		{
+			openfl.Assets.cache.clear();
+			trace('[EXITING] Resources are disposed. Game is closing now.');
+		});
+		#end
+
 		setupGame();
 	}
 
@@ -84,10 +86,9 @@ class Main extends Sprite
 	function setupGame():Void
 	{
 		FlxG.save.bind('funkin', 'ninjamuffin99');
-		DefinitiveData.initialize();
 
 		// Get the framerate from your saved data if it exists, otherwise fallback to 60 FPS.
-		var framerate:Int = FlxG.save.data.fpsCap == null ? 60 : FlxG.save.data.fpsCap;
+		var framerate:Int = FlxG.save.data.fpsCap != null ? FlxG.save.data.fpsCap : 60;
 
 		var game = new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, 
 			FlxG.stage.window.fullscreen || FlxG.save.data.launchInFullscreen);
@@ -104,9 +105,6 @@ class Main extends Sprite
 		FlxG.autoPause = false;
 		FlxG.mouse.visible = false;
 		#end
-
-		Highscore.load();
-		PlayerSettings.init();
 
 		#if hxcpp_debug_server
     		trace('hxcpp_debug_server is enabled! You can now connect to the game with a debugger.');
@@ -159,7 +157,7 @@ class Main extends Sprite
 		http.onData = function(data:String)
 		{
 			updateVersion = data.split('\n')[0].trim();
-			var currentVersion:String = MainMenuState.definitiveVersion.trim();
+			var currentVersion:String = funkin.menus.MainMenuState.definitiveVersion.trim();
 
 			trace('[VERSION] Current version: ${currentVersion} | New version: ${updateVersion}');
 
