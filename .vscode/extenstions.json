@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "nadako.vshaxe",
+    "openfl.lime-vscode-extension",
+    "vshaxe.haxe-checkstyle"
+  ]
+}

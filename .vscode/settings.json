@@ -1,6 +1,37 @@
 {
-  "editor.formatOnSave": false,
-  "editor.formatOnType": true,
-  "editor.formatOnPaste": true,
-  "editor.defaultFormatter": null
+  // Format all code types.
+  "[haxe]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.defaultFormatter": "nadako.vshaxe",
+    "editor.tabSize": 2
+  },
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // Get lime targets for compiling.
+  "lime.targets": [
+    { "name": "windows", "enabled": true, "label": "Windows" },
+    { "name": "hl", "enabled": true, "label": "HashLink" }
+  ],
+  "lime.targetConfigurations": [
+    {
+      "label": "Windows / Debug",
+      "target": "windows",
+      "args": ["-debug"]
+    },
+    {
+      "label": "HashLink / Debug",
+      "target": "hl",
+      "args": ["-debug"]
+    }
+  ]
 }
