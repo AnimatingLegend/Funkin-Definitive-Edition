@@ -12,7 +12,7 @@ import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
 
-#if CRASH_HANDLER
+#if FEATURE_CRASH_HANDLER
 import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
 import haxe.io.Path;
@@ -178,7 +178,7 @@ class Main extends Sprite
 	 * Handle uncaught errors on game crash.
 	 * @param crashEvent - The uncaught error event.
 	 */
-	#if CRASH_HANDLER
+	#if FEATURE_CRASH_HANDLER
 	public function onCrash(crashEvent:UncaughtErrorEvent):Void
 	{
 		var errMsg:String = "";

@@ -22,7 +22,7 @@
 
 	<!-- _____________________________ FDE Defines ______________________________ -->
 
-	<define name="CRASH_HANDLER" if="desktop"/>
+	<define name="FEATURE_CRASH_HANDLER" if="desktop release"/>
 
 	<!-- _______________________________ Scripts ________________________________ -->
 
