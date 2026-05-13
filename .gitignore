@@ -4,9 +4,6 @@ export/
 # Dependencies
 .haxelib/
 
-# IDEs
-.vscode/
-
 # Files
 APIStuff.hx
 PlayStateText.hx
