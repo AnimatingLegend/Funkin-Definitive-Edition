@@ -38,7 +38,7 @@ class InitState extends FlxState
           // Load player highscores.
           Highscore.load();
 
-          // Load playe controls from save data.
+          // Load player controls from save data.
 		PlayerSettings.init();
 
           // Where the magic happens :eyes:
@@ -128,26 +128,28 @@ class InitState extends FlxState
      /**
       * Start the game.
       * 
-      * By default, it transitions to the title screen.
-      * Otherwise, it transitions to the build flag's state.
+      * For quick accessibility to certain states, 
+      *   use the `#define` build flags below to change the startup state.
+      * 
+      * @default `TitleState.hx`: Default startup state.
       */
      function startGame():Void
      {
           // Skip the next transition.
           FlxTransitionableState.skipNextTransIn = true;
 
-          #if ANIMATION_EDITOR
-          // -DANIMDEBUG
+          #if PREVIEW_ANIMATION_EDITOR
+          // -DPREVIEW_ANIMATION_EDITOR
           FlxG.switchState(new funkin.editors.AnimationDebug());
-          #elseif CHART_EDITOR
-          // -DCHARTING
-          FlxG.switchState(new funkin.editors.ChartEditor());
+          #elseif PREVIEW_CHART_EDITOR
+          // -DPREVIEW_CHART_EDITOR
+          FlxG.switchState(new funkin.editors.ChartingState());
           #elseif FREEPLAY_MENU
-          // -DFREEPLAY
-          FlxG.switchState(new funkin.menus.FreePlayState());
-          #elseif (!debug || CACHE_MENU)
-          // Preload all assets, and sounds before the game starts.
-          // NOTE: This is only done in release mode.
+          // -DFREEPLAY_MENU
+          FlxG.switchState(new funkin.menus.FreeplayState());
+          #elseif (!debug || FEATURE_CACHE)
+          // -DFEATURE_CACHE
+          // Adding this here if you want to cache the game when debugging.
           FlxG.switchState(new funkin.menus.CacheState());
           #else
           FlxG.switchState(new funkin.menus.TitleState());
