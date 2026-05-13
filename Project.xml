@@ -24,6 +24,12 @@
 
 	<define name="CRASH_HANDLER" if="desktop"/>
 
+	<!-- _______________________________ Scripts ________________________________ -->
+
+	<!-- Run a script before and after building. -->
+	<prebuild haxe="source/Prebuild.hx"/>
+	<postbuild haxe="source/Postbuild.hx"/>
+
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<set name="BUILD_DIR" value="export/release" />
