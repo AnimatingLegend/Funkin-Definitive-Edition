@@ -1,5 +1,6 @@
 # Builds / Compilation
 export/
+.build_time
 
 # Dependencies
 .haxelib/
