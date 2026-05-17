@@ -11,7 +11,7 @@ class Prebuild
      static function main():Void
      {
           saveBuildTime();
-          trace('Prebuilding the game...');
+          trace('[INFO] Prebuilding the game...');
      }
 
      static function saveBuildTime():Void
