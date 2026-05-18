@@ -2632,7 +2632,7 @@ class PlayState extends MusicBeatState
 				// but.. a tad bit more, for a challenge :)
 				if (healthDrain)
 				{
-					if (health > 0.01)
+					if (health > 0.1)
 					{
 						health -= 0.030 * (daNote.isSustainNote ? 0.35 : 1);
 					}
