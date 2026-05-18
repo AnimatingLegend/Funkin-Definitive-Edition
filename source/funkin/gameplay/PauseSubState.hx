@@ -301,7 +301,9 @@ class PauseSubState extends MusicBeatSubstate
     {
       // DEFAULT ENTRIES
       case 'Resume': close();
-      case 'Restart Song': FlxG.resetState();
+      case 'Restart Song': 
+        PlayState.instance.restartSong();
+        close();
       case 'Change Difficulty': switchMenu(DIFFICULTY_ENTRIES);
       case 'Easy' | 'Normal' | 'Hard': changeDifficulty();
       case 'Gameplay Modifiers': switchMenu(GAMEPLAY_MODIFIERS_ENTRIES);
@@ -333,7 +335,8 @@ class PauseSubState extends MusicBeatSubstate
       songName
     );
     PlayState.storyDifficulty = currentlySelected;
-    FlxG.resetState();
+    PlayState.instance.restartSong();
+    close();
   }
 
   function exitToMenu():Void
