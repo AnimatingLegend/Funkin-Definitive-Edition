@@ -2628,6 +2628,16 @@ class PlayState extends MusicBeatState
 				dad.holdTimer = 0;
 				if (SONG.needsVoices) vocals.volume = 1;
 
+				// Take away the same amount of health that the player would take -
+				// but.. a tad bit more, for a challenge :)
+				if (healthDrain)
+				{
+					if (health > 0.01)
+					{
+						health -= 0.030 * (daNote.isSustainNote ? 0.35 : 1);
+					}
+				}
+
 				opponentStrums.forEach(function(spr:FlxSprite)
 				{
 					if (Math.abs(daNote.noteData) == spr.ID) spr.animation.play('confirm', true);
@@ -3354,7 +3364,7 @@ class PlayState extends MusicBeatState
 
 		// Health gain (regular notes give more than zero-data notes).
 		// Sustain trails give a tad more health.
-		health += 0.020 * (note.isSustainNote ? 0.03 : 1);
+		health += 0.020 * (note.isSustainNote ? 0.25 : 1);
 
 		// GF cheers at combo milestones.
 		// Force GF to stay in her pose for a few instances.
