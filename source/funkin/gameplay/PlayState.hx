@@ -1195,7 +1195,7 @@ class PlayState extends MusicBeatState
 		laneunderlay.color = FlxColor.BLACK;
 		laneunderlay.scrollFactor.set();
 		// Only shows one background. (player side only)
-		if (FlxG.save.data.middleScroll || !FlxG.save.data.cpuStrums) 
+		if (FlxG.save.data.middleScroll || !FlxG.save.data.hideCPUStrums) 
 		{
 			add(laneunderlay);
 		}
@@ -2077,7 +2077,7 @@ class PlayState extends MusicBeatState
 	{
 		if (!note.mustPress)
 		{
-			if (FlxG.save.data.middlescroll || !FlxG.save.data.cpuStrums)
+			if (FlxG.save.data.middlescroll || !FlxG.save.data.hideCPUStrums)
 				note.alpha = 0;
 		}
 	}
@@ -2136,7 +2136,7 @@ class PlayState extends MusicBeatState
 			else if (player == 1) babyArrow.x += 40; // nudge player side slightly right.
 
 			// Completely hide CPU strums.
-			if (!FlxG.save.data.cpuStrums)
+			if (!FlxG.save.data.hideCPUStrums)
 			{
 				if (player == 1) 
 					babyArrow.alpha = 0;

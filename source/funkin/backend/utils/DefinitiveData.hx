@@ -30,7 +30,7 @@ class DefinitiveData
 		if (FlxG.save.data.hideHUD == null) FlxG.save.data.hideHUD = false;
 		if (FlxG.save.data.strumLineBG == null) FlxG.save.data.strumLineBG = 0.0;
 		if (FlxG.save.data.noteSplash == null) FlxG.save.data.noteSplash = true;
-		if (FlxG.save.data.cpuStrums == null) FlxG.save.data.cpuStrums = true;
+		if (FlxG.save.data.hideCPUStrums == null) FlxG.save.data.hideCPUStrums = true;
 		if (FlxG.save.data.fdeWatermark == null) FlxG.save.data.fdeWatermark = true;
 
 		/**

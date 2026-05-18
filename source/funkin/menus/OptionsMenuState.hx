@@ -41,7 +41,7 @@ class OptionsMenuState extends MusicBeatState
 			new StrumLineBG('Show a semi-transparent background behind the strumline.'),
 			new HideHUD('When enabled, most in-game UI elements will be hidden.'),
 			new NoteSplashOP('When disabled, hitting "sick!" notes won\'t display firework-like particles over the strumline.'),
-			new CPUStrums('When disabled, CPU Strums will be hidden. [NOT AVAILABLE]'),
+			new HideCPUStrums('When disabled, CPU Strums will be hidden.'),
 			new FDEWatermark('When disabled, any mention of "Funkin Definitive Edition" will be hidden.'),
 		]),
 		new OptionCategory("Gameplay", 

@@ -463,7 +463,7 @@ class NoteSplashOP extends Option
 		return 'NoteSplashes';
 }
 
-class CPUStrums extends Option
+class HideCPUStrums extends Option
 {
 	public function new(desc:String)
 	{
@@ -473,15 +473,15 @@ class CPUStrums extends Option
 
 	public override function pressKey(changeData:Bool):Bool
 	{
-		if (changeData) FlxG.save.data.cpuStrums  = !FlxG.save.data.cpuStrums;
+		if (changeData) FlxG.save.data.hideCPUStrums  = !FlxG.save.data.hideCPUStrums;
 
-		acceptValues = FlxG.save.data.cpuStrums;
+		acceptValues = FlxG.save.data.hideCPUStrums;
 		display = updateDisplay();
 		return true;
 	}
 
 	private override function updateDisplay():String
-		return 'CPU Strums';
+		return 'Hide CPU Strums';
 }
 
 class FDEWatermark extends Option
@@ -838,7 +838,7 @@ class ResetALLSettings extends Option
 		FlxG.save.data.hideHUD = null;
 		FlxG.save.data.strumLineBG = null;
 		FlxG.save.data.noteSplash = null;
-		FlxG.save.data.cpuStrums = null;
+		FlxG.save.data.hideCPUStrums = null;
 		FlxG.save.data.fdeWatermark = null;
 
 		FlxG.save.data.naughtyness = null;
