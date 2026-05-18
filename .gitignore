@@ -1,10 +1,9 @@
 # Builds / Compilation
-export/
 .build_time
+export/
 
 # Dependencies
 .haxelib/
 
 # Files
 APIStuff.hx
-PlayStateText.hx

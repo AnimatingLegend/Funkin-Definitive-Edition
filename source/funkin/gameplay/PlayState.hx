@@ -2256,18 +2256,9 @@ class PlayState extends MusicBeatState
 		songScoreLerp = FlxMath.lerp(songScoreLerp, songScore, 0.45);
 		healthLerp = FlxMath.lerp(healthLerp, health, 0.15);
 
-		if (controls.PAUSE && startedCountdown && canPause)
-		{
-			persistentUpdate = false;
-			persistentDraw = true;
-			paused = true;
-
-			// 0.1% chacne for Gitaroo Man easter egg.
-			if (FlxG.random.bool(0.1))
-				FlxG.switchState(new GitarooPause());
-			else
-				openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-		}
+		// Pause the game when needed.
+		if (controls.PAUSE && startedCountdown && canPause) 
+			pauseGame(true);
 
 		// Debug menu shortcuts
 		if (FlxG.keys.justPressed.SEVEN)
@@ -2727,7 +2718,33 @@ class PlayState extends MusicBeatState
 		super.onFocus();
 
 	override public function onFocusLost():Void
+	{
 		super.onFocusLost();
+		pauseGame();
+	}
+
+	/**
+	 * Called when you want to pause the game.
+	 * @param allowGitaroo Whether to allow the Gitaroo Man easter egg.
+	 */
+	inline function pauseGame(allowGitaroo:Bool = false):Void
+	{
+		if (!startedCountdown || !canPause || paused) return;
+
+		persistentUpdate = false;
+		persistentDraw = true;
+		paused = true;
+
+		// 0.1% chance for Gitaroo Man easter egg.
+		if (allowGitaroo && FlxG.random.bool(0.1))
+		{
+			FlxG.switchState(new GitarooPause());
+			return;
+		}
+
+		var boyfriendPos = boyfriend.getScreenPosition();
+		openSubState(new PauseSubState(boyfriendPos.x, boyfriendPos.y));
+	}
 
 	function resyncVocals():Void 
 	{

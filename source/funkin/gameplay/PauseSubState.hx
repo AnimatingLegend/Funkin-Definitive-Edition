@@ -1,6 +1,5 @@
 package funkin.gameplay;
 
-import flixel.addons.transition.FlxTransitionableState;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -9,315 +8,401 @@ import funkin.backend.chart.Song;
 import funkin.backend.system.Controls.Control;
 import funkin.backend.utils.Highscore;
 
-import funkin.menus.OptionsMenuState;
-import funkin.menus.StoryMenuState;
-import funkin.menus.FreeplayState;
-
 import funkin.gameplay.PlayState;
 
+/**
+ * PAUSE SUB-STATE CLASS (Substate for `PlayState.hx`)
+ */
 class PauseSubState extends MusicBeatSubstate
 {
-	var grpMenuShit:FlxTypedGroup<Alphabet>;
+  /**
+   * The instance of the pause substate.
+   */
+  public static var instance:PauseSubState = null;
 
-	public static var goToOptions:Bool = false;
+  /**
+   * The default entries for the pause menu.
+   * 
+   * `Resume`: Continue the game.
+   * `Restart Song`: Restart the song.
+   * `Gameplay Modifiers`: Change the game's modifiers.
+   * `Options`: Open the options menu.
+   * `Exit to menu`: Return to the main menu.
+   */
+  static final DEFAULT_ENTRIES:Array<String> = [
+    'Resume', 'Restart Song', 'Change Difficulty', 
+    'Gameplay Modifiers', 'Options', 'Exit to Menu'
+  ];
 
-	var pauseOG:Array<String> = [
-		'Resume', 
-		'Restart Song', 
-		'Change Difficulty',
-		'Modifiers',
-		'Options', 
-		'Exit to menu'
-	];
+  /**
+   * The modifier entries for the pause menu.
+   * 
+   * `Practice Mode`: Toggle practice mode.
+   * `InstaKill on Miss`: Toggle instaKill mode.
+   * `Healthdrain`: Toggle healthdrain mode.
+   * `Botplay`: Toggle botplay mode.
+   * `Back`: Return to the previous menu.
+   */
+  static final GAMEPLAY_MODIFIERS_ENTRIES:Array<String> = [
+    'Practice Mode', 'InstaKill on Miss',
+    'Healthdrain', 'Botplay', 'Back'
+  ];
 
-	var modifierChoices:Array<String> = [
-		"Toggle Practice Mode",
-		"InstaKill on Miss",
-		"HealthDrain",
-		"Botplay",
-		"Back"
-	];
+  /**
+   * The difficulty entries for the pause menu.
+   * 
+   * `Easy`: Easy difficulty.
+   * `Normal`: Normal difficulty.
+   * `Hard`: Hard difficulty.
+   * `Back`: Return to the previous menu.
+   */
+  static final DIFFICULTY_ENTRIES:Array<String> = [
+    'Easy', 'Normal', 'Hard', 'Back'
+  ];
 
-	var difficultyChoices:Array<String> = [
-		'Easy', 
-		'Normal', 
-		'Hard', 
-		'Back'
-	];
+  //
+  // SONG PROPERTIES / VALUES
+  //
 
-	var stageSuffix:String = "";
-	var daStage:String = PlayState.curStage;
+  /**
+   * The time it takes for the pause music to fade in,
+   *  and the final volume of the music.
+   */
+  static final MUSIC_FADE_IN_TIME:Float = 5;
+  static final MUSIC_FINAL_VOLUME:Float = 0.75;
 
-	var menuItems:Array<String> = [];
-	var curSelected:Int = 0;
+  /**
+   * Get the pause music.
+   */
+  var pauseMusic:FlxSound;
 
-	var practiceText:FlxText;
-	var botplayText:FlxText;
-	var instaKillText:FlxText;
-	var healthDrainText:FlxText;
+  /**
+   * Get the stage, and the stage suffix to correctly load the
+   *  pause music for the specified stage.
+   * 
+   * Suffix:
+   * `-pixel`: pixel suffix for week 6.
+   * `default`: no suffix
+   */
+  var stageSuffix:String;
+  var currentStage:String = PlayState.curStage;
 
-	var pauseMusic:FlxSound;
+  //
+  // UI ELEMENTS
+  //
 
-	public function new(x:Float, y:Float)
-	{
-		super();
+  var levelInfo:FlxText;
+  var currentlySelected:Int = 0;
+  var menuItems:Array<String> = [];
+  var menuItemGroup:FlxTypedGroup<Alphabet>;
 
-		menuItems = pauseOG;
+  //
+  // BOOLEAN VALUES
+  //
 
-		switch (daStage)
-		{
-			case 'school' | 'schoolEvil':
-				stageSuffix = '-pixel';
-		}
+  /**
+   * Whether the game has lost focus.
+   */
+  var lostFocus:Bool;
 
-		pauseMusic = new FlxSound().loadEmbedded(Paths.music('pauseMusic/breakfast' + stageSuffix, 'shared'), true);
-		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
-		pauseMusic.volume = 0;
+  /**
+   * Whether the game went to the options menu.
+   */
+  var goToOptions:Bool;
 
-		FlxG.sound.list.add(pauseMusic);
+  /**
+   * Whether the substate allows keyboard inputs.
+   * Dis-allow input until the transition into this substate is complete.
+   */
+  var allowInputs:Bool = true;
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		bg.alpha = 0;
-		bg.scrollFactor.set();
-		add(bg);
+  /**
+   * Whether the substate has just opened.
+   * If this is true, it means we are frame 1 of our substate.
+   */
+  var justOpened:Bool = true;
+  
+  public function new(x:Float, y:Float)
+  {
+    super();
 
-		var levelInfo:FlxText = new FlxText(20, 15, 0, "", 32);
-		levelInfo.text += PlayState.SONG.song;
-		levelInfo.scrollFactor.set();
-		levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
+    instance = this;
+    menuItems = DEFAULT_ENTRIES;
+
+    startPauseMusic();
+
+    if (lostFocus && FlxG.save.data.autoPause)
+      pauseMusic.pause();
+
+    buildElements();
+    regenerateMenu();
+  }
+
+  //
+  // UI ELEMENTS
+  //
+
+  function buildElements():Void
+  {
+    var background:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		background.alpha = 0.0;
+		background.scrollFactor.set(0, 0);
+		add(background);
+
+    levelInfo = new FlxText(0, 20);
+    levelInfo.alignment = FlxTextAlign.RIGHT;
+    levelInfo.setFormat(Paths.font('vcr.ttf'), 32);
 		levelInfo.updateHitbox();
-		add(levelInfo);
+    add(levelInfo);
 
-		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
-		levelDifficulty.text += CoolUtil.difficultyString();
-		levelDifficulty.scrollFactor.set();
-		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
-		levelDifficulty.updateHitbox();
-		add(levelDifficulty);
+    FlxTween.tween(background, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
+    FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 
-		var levelDeathCounter:FlxText = new FlxText(20, 15 + 64, 0, "", 32);
-		levelDeathCounter.text += "Blueballed: " + PlayState.deathCounter;
-		levelDeathCounter.scrollFactor.set();
-		levelDeathCounter.setFormat(Paths.font('vcr.ttf'), 32);
-		levelDeathCounter.updateHitbox();
-		add(levelDeathCounter);
+    menuItemGroup = new FlxTypedGroup<Alphabet>();
+		add(menuItemGroup);
 
-		practiceText = new FlxText(20, 79 + 32, 0, "", 32);
-		practiceText.text += "PRACTICE MODE = " + (!PlayState.practiceMode ? "FALSE" : "TRUE");
-		practiceText.scrollFactor.set();
-		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
-		practiceText.updateHitbox();
-		practiceText.x = FlxG.width - (practiceText.width + 20);
-		add(practiceText);
-
-		instaKillText = new FlxText(20, 79 + 64, 0, "", 32);
-		instaKillText.text += "INSTAKILL MODE = " + (!PlayState.instaKill ? "FALSE" : "TRUE");
-		instaKillText.scrollFactor.set();
-		instaKillText.setFormat(Paths.font('vcr.ttf'), 32);
-		instaKillText.updateHitbox();
-		instaKillText.x = FlxG.width - (practiceText.width + 20);
-	//	instaKillText.visible = PlayState.instaKill;
-		add(instaKillText);
-
-		botplayText = new FlxText(20, 79 + 96, 0, "", 32);
-		botplayText.text += "BOTPLAY = " + (!PlayState.botplay ? "FALSE" : "TRUE");
-		botplayText.scrollFactor.set();
-		botplayText.setFormat(Paths.font('vcr.ttf'), 32);
-		botplayText.x = FlxG.width - (botplayText.width + 20);
-		botplayText.updateHitbox();
-	//	botplayText.visible = PlayState.botplay;
-		add(botplayText);
-
-		healthDrainText = new FlxText(20, 79 + 130, 0, "", 32);
-		healthDrainText.text += "HEALTHDRAIN = " + (!PlayState.healthDrain ? "FALSE" : "TRUE");
-		healthDrainText.scrollFactor.set();
-		healthDrainText.setFormat(Paths.font('vcr.ttf'), 32);
-		healthDrainText.x = FlxG.width - (healthDrainText.width + 20);
-		healthDrainText.updateHitbox();
-	//	healthDrainText.visible = PlayState.healthDrain;
-		add(healthDrainText);
-
-		levelDifficulty.alpha = 0;
-		levelInfo.alpha = 0;
-		levelDeathCounter.alpha = 0;
-
-		practiceText.alpha = 0;
-		instaKillText.alpha = 0;
-		botplayText.alpha = 0;
-		healthDrainText.alpha = 0;
-
-		levelInfo.x = FlxG.width - (levelInfo.width + 20);
-		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
-		levelDeathCounter.x = FlxG.width - (levelDeathCounter.width + 20);
-
-		practiceText.x = FlxG.width - (practiceText.width + 20);
-		instaKillText.x = FlxG.width - (instaKillText.width + 20);
-		botplayText.x = FlxG.width - (botplayText.width + 20);
-		healthDrainText.x = FlxG.width - (healthDrainText.width + 20);
-
-		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
-		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
-		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
-		FlxTween.tween(levelDeathCounter, {alpha: 1, y: levelDeathCounter.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
-
-		FlxTween.tween(practiceText,  {alpha: 1, y: practiceText.y + 5},  0.4,   {ease: FlxEase.quartInOut, startDelay: 0.9});
-		FlxTween.tween(instaKillText, {alpha: 1, y: instaKillText.y + 5}, 0.4,   {ease: FlxEase.quartInOut, startDelay: 0.9});
-		FlxTween.tween(botplayText,   {alpha: 1, y: botplayText.y + 5},   0.4,   {ease: FlxEase.quartInOut, startDelay: 0.9});
-		FlxTween.tween(healthDrainText, {alpha: 1, y: healthDrainText.y + 5},   0.4,   {ease: FlxEase.quartInOut, startDelay: 0.9});
-		
-		grpMenuShit = new FlxTypedGroup<Alphabet>();
-		add(grpMenuShit);
-
-		for (i in 0...menuItems.length)
+		for (item in 0...menuItems.length)
 		{
-			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, menuItems[i], true, false);
+			var songText:Alphabet = new Alphabet(0, (70 * item) + 30, menuItems[item], true, false);
 			songText.isMenuItem = true;
-			songText.targetY = i;
-			grpMenuShit.add(songText);
+			songText.targetY = item;
+			menuItemGroup.add(songText);
 		}
 
-		changeSelection();
+    cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+    updateSongText();
+  }
 
-		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
-	}
+  /**
+   * Update the song text, such as the song name,
+   *  difficulty, and blue ball (death) count.
+   */
+  function updateSongText():Void
+  {
+    levelInfo.text = PlayState.SONG.song;
+    levelInfo.text += '\n Difficulty: ${CoolUtil.difficultyString()}';
+    levelInfo.text += '\n ${PlayState.deathCounter} Blue Ball';
+    if (PlayState.deathCounter != 1) 
+      levelInfo.text += 's';
+    
+    var activeModifiers:Array<String> = [];
+    if (PlayState.practiceMode) activeModifiers.push('PRACTICE MODE');
+    if (PlayState.instaKill) activeModifiers.push('INSTAKILL MODE');
+    if (PlayState.healthDrain) activeModifiers.push('HEALTH DRAIN');
+    if (PlayState.botplay) activeModifiers.push('BOTPLAY');
 
-	override function update(elapsed:Float)
-	{
-		if (pauseMusic.volume < 0.5)
-			pauseMusic.volume += 0.01 * elapsed;
+    switch (activeModifiers.length)
+    {
+      case 0: 
+        // Just add nothing.
+        // Putting `return` here would fuck up the levelInfo text.
+      case 1: levelInfo.text += '\n${activeModifiers[0]} ACTIVE';
+      default: levelInfo.text += '\nModifiers: ' + activeModifiers.join(', ');
+    }
 
-		super.update(elapsed);
+    levelInfo.x = FlxG.width - (levelInfo.width + 20);
+  }
 
-		var upP = controls.UI_UP_P;
-		var downP = controls.UI_DOWN_P;
-		var accepted = controls.ACCEPT;
+  /**
+   * Initialize, and play the pause music.
+   */
+  function startPauseMusic():Void
+  {
+    stageSuffix = switch (currentStage)
+    {
+      case 'school' | 'schoolEvil': '-pixel';
+      default: '';
+    }
 
-		if (upP)
-			changeSelection(-1);
+    pauseMusic = new FlxSound().loadEmbedded(
+      Paths.music('pauseMusic/breakfast' + stageSuffix, 'shared'), 
+    true);
+    pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
+    pauseMusic.fadeIn(MUSIC_FADE_IN_TIME, 0, MUSIC_FINAL_VOLUME);
 
-		if (downP)
-			changeSelection(1);
+    FlxG.sound.list.add(pauseMusic);
+  }
 
-		if (accepted)
-		{
-			var daSelected:String = menuItems[curSelected];
+  //
+  // HELPER EVENTS
+  //
 
-			switch (daSelected)
-			{
-				case "Resume":
-					close();
+  /**
+   * Called to destroy certain elements of this substate
+   *  to prevent memory leaks.
+   */
+  public override function destroy():Void
+  {
+    super.destroy();
 
-				case "Restart Song":
-					FlxG.resetState();
+    instance = null;
 
-				case "Change Difficulty":
-					menuItems = difficultyChoices;
-					regenMenu();
+    pauseMusic.destroy();
+    pauseMusic.fadeTween.cancel();
+  }
 
-				case "Easy" | "Normal" | "Hard":
-					PlayState.SONG = Song.loadFromJson(Highscore.formatSong(PlayState.SONG.song.toLowerCase(), curSelected), PlayState.SONG.song.toLowerCase());
-					PlayState.storyDifficulty = curSelected;
-					FlxG.resetState();
+  /**
+   * Called when the game loses focus.
+   */
+  public override function onFocusLost():Void
+  {
+    super.onFocusLost();
+    if (FlxG.save.data.autoPause) pauseMusic.pause();
+  }
 
-				case "Modifiers":
-					menuItems = modifierChoices;
-					regenMenu();
+  /**
+   * Called when the game regains focus.
+   */
+  public override function onFocus():Void
+  {
+    super.onFocus();
+    if (FlxG.save.data.autoPause) pauseMusic.resume();
+  }
 
-				case "Toggle Practice Mode":
-					PlayState.practiceMode = !PlayState.practiceMode;
-					FlxG.resetState();
+  /**
+   * Called to update the menu elements for every frame.
+   * @param elapsed The time since the last frame.
+   */
+  public override function update(elapsed:Float):Void
+  {
+    super.update(elapsed);
+    handleInputs();
+  }
 
-				case "InstaKill on Miss":
-					PlayState.instaKill = !PlayState.instaKill;
-					FlxG.resetState();
+  /**
+   * Basic input handling when navigating the menu.
+   */
+  function handleInputs():Void
+  {
+    if (!allowInputs) return;
 
-				case "Botplay":
-					PlayState.botplay = !PlayState.botplay;
-					FlxG.resetState();
+    if (controls.UI_UP_P) changeSelection(-1);
+    if (controls.UI_DOWN_P) changeSelection(1);
 
-				case "HealthDrain":
-					PlayState.healthDrain = !PlayState.healthDrain;
-					FlxG.resetState();
+    if (justOpened)
+    {
+      justOpened = false;
+      return;
+    }
 
-				case "Options":
-					OptionsMenuState.fromFreeplay = true;
-					FlxG.switchState(new OptionsMenuState());
+    if (controls.ACCEPT) selectEntry();
+  }
 
-				case "Exit to menu":
-					PlayState.seenCutscene = false;
-					PlayState.deathCounter = 0;
-					if (PlayState.isStoryMode)
-						FlxG.switchState(new StoryMenuState());
-					else
-						FlxG.switchState(new FreeplayState());
+  //
+  // ENTRY SELECTION HANDLING
+  //
 
-				case "Back":
-					menuItems = pauseOG;
-					regenMenu();
-			}
-		}
-	}
+  /**
+   * Called when a menu item is selected.
+   */
+  function selectEntry():Void
+  {
+    switch (menuItems[currentlySelected])
+    {
+      // DEFAULT ENTRIES
+      case 'Resume': close();
+      case 'Restart Song': FlxG.resetState();
+      case 'Change Difficulty': switchMenu(DIFFICULTY_ENTRIES);
+      case 'Easy' | 'Normal' | 'Hard': changeDifficulty();
+      case 'Gameplay Modifiers': switchMenu(GAMEPLAY_MODIFIERS_ENTRIES);
+      case 'Back': switchMenu(DEFAULT_ENTRIES);
+      case 'Options': exitToOptions();
+      case 'Exit to Menu': exitToMenu();
 
-	override function destroy()
-	{
-		pauseMusic.destroy();
+      // GAMEPLAY MODIFIERS ENTRIES
+      case 'Practice Mode': 
+        PlayState.practiceMode = !PlayState.practiceMode;
+        updateSongText();
+      case 'InstaKill on Miss': 
+        PlayState.instaKill = !PlayState.instaKill;
+        updateSongText();
+      case 'Healthdrain': 
+        PlayState.healthDrain = !PlayState.healthDrain;
+        updateSongText();
+      case 'Botplay':
+        PlayState.botplay = !PlayState.botplay;
+        updateSongText();
+    }
+  }
 
-		super.destroy();
-	}
+  function changeDifficulty():Void
+  {
+    var songName:String = PlayState.SONG.song.toLowerCase();
+    PlayState.SONG = Song.loadFromJson(
+      Highscore.formatSong(songName, currentlySelected),
+      songName
+    );
+    PlayState.storyDifficulty = currentlySelected;
+    FlxG.resetState();
+  }
 
-	function skipTrans(skipTrans:Bool = false) 
-	{
-		FlxG.sound.music.volume = 0;
+  function exitToMenu():Void
+  {
+    PlayState.seenCutscene = false;
+    PlayState.deathCounter = 0;
 
-		if (skipTrans)
-		{
-			FlxTransitionableState.skipNextTransIn = true;
-			FlxTransitionableState.skipNextTransOut = true;
-		}
+    if (PlayState.isStoryMode)
+    {
+      FlxG.switchState(new funkin.menus.StoryMenuState());
+    }
+    else
+    {
+      FlxG.switchState(new funkin.menus.FreeplayState());
+    }
+  }
 
-		FlxG.resetState();
-	}
+  function exitToOptions():Void
+  {
+    funkin.menus.OptionsMenuState.fromFreeplay = true;
+    FlxG.switchState(new funkin.menus.OptionsMenuState());
+  }
 
-	private function regenMenu()
-	{
-		while (grpMenuShit.members.length > 0)
-		{
-			grpMenuShit.remove(grpMenuShit.members[0], true);
-		}
-	
-		for (i in 0...menuItems.length)
-		{
-			var menuItem:Alphabet = new Alphabet(0, (70 * i) + 30, menuItems[i], true, false);
+  function switchMenu(entries:Array<String>):Void
+  {
+    menuItems = entries;
+    regenerateMenu();
+  }
+
+  //
+  // MENU HANDLING
+  //
+
+  /**
+   * Change the currently selected menu item.
+   * @param change The change in the currently selected menu item.
+   */
+  function changeSelection(change:Int = 0):Void
+  {
+    currentlySelected = (currentlySelected + change + menuItems.length) % menuItems.length;
+
+    var nextIndex:Int = 0;
+    for (item in menuItemGroup.members)
+    {
+      item.targetY = nextIndex - currentlySelected;
+      item.alpha = (item.targetY == 0) ? 1.0 : 0.6;
+      nextIndex++;
+    }
+
+    updateSongText();
+  }
+
+  /**
+   * Regenerate the menu.
+   */
+  function regenerateMenu():Void
+  {
+    while (menuItemGroup.members.length > 0) 
+      menuItemGroup.remove(menuItemGroup.members[0], true);
+
+    for (item in 0...menuItems.length)
+    {
+      var menuItem:Alphabet = new Alphabet(0, (70 * item) + 30, menuItems[item], true, false);
 			menuItem.isMenuItem = true;
-			menuItem.targetY = i;
-			grpMenuShit.add(menuItem);
-		}
-	
-		curSelected = 0;
-	
-		changeSelection();
-	}
+			menuItem.targetY = item;
+			menuItemGroup.add(menuItem);
+    }
 
-	function changeSelection(change:Int = 0):Void
-	{
-		curSelected += change;
-
-		if (curSelected < 0)
-			curSelected = menuItems.length - 1;
-		if (curSelected >= menuItems.length)
-			curSelected = 0;
-
-		var bullShit:Int = 0;
-
-		for (item in grpMenuShit.members)
-		{
-			item.targetY = bullShit - curSelected;
-			bullShit++;
-
-			item.alpha = 0.6;
-
-			if (item.targetY == 0)
-				item.alpha = 1;
-		}
-	}
+    currentlySelected = 0;
+    changeSelection(0);
+  }
 }
