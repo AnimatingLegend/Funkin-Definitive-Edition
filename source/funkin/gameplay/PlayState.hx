@@ -1893,15 +1893,26 @@ class PlayState extends MusicBeatState
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{	
 			// Character idle dances during countdown.
-			if (gf != null) gf.dance();
-
-			if (boyfriend != null)
+			if (swagCounter % gfSpeed == 0)
 			{
-				if (!boyfriend.animation.curAnim.name.startsWith("sing"))
-					boyfriend.playAnim('idle');
+				if (gf != null) gf.dance();
 			}
 
-			if (dad != null)
+			if (swagCounter % 2 == 0)
+			{
+				if (boyfriend != null)
+				{
+					if (!boyfriend.animation.curAnim.name.startsWith("sing"))
+						boyfriend.playAnim('idle');
+				}
+
+				if (dad != null)
+				{
+					if (!dad.animation.curAnim.name.startsWith("sing"))
+						dad.dance();
+				}
+			}
+			else if (dad.currentCharacter == 'spookyKids')
 			{
 				if (!dad.animation.curAnim.name.startsWith("sing"))
 					dad.dance();
@@ -3694,13 +3705,24 @@ class PlayState extends MusicBeatState
 		iconP2.updateHitbox();
 		
 		// Force characters to their dance poses.
-		if (curBeat % gfSpeed == 0) gf.dance();
+		if (curBeat % gfSpeed == 0)
+		{
+			if (gf != null) gf.dance();
+		}
+
 		if (curBeat % 2 == 0) 
 		{
-			if (!boyfriend.animation.curAnim.name.startsWith("sing"))
-				boyfriend.playAnim('idle');
-			if (!dad.animation.curAnim.name.startsWith("sing"))
-				dad.dance();
+			if (boyfriend != null)
+			{
+				if (!boyfriend.animation.curAnim.name.startsWith("sing"))
+					boyfriend.playAnim('idle');
+			}
+
+			if (dad != null)
+			{
+				if (!dad.animation.curAnim.name.startsWith("sing"))
+					dad.dance();
+			}
 		}
 		else if (dad.currentCharacter == 'spookyKids')
 		{
