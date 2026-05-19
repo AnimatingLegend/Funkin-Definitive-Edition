@@ -8,11 +8,11 @@ import openfl.system.System;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 
-// * --------------------------------------------------------------------------	* \\
-// * DEBUG DISLAY (FPS COUNTER) CLASS                                    		* \\
-// * 															* \\
-// * A simple FPS Counter that displays your current FPS, and Memory usage.	* \\
-// * -------------------------------------------------------------------------- * \\
+/**
+ * DEBUG DISPLAY (FPS COUNTER) CLASS
+ * 
+ * A simple FPS Counter that displays your current FPS, and Memory usage.
+ */
 class DebugDisplay extends TextField 
 {
      /**
@@ -141,7 +141,7 @@ class DebugDisplay extends TextField
 
           text = [
                'FPS: ${currentFPS}',
-               'RAM: ${systemMemory} / ${maxMemory}${memoryUnit}',
+               'MEM: ${systemMemory} / ${maxMemory}${memoryUnit}',
 			'GAME STATE: ${Type.getClassName(Type.getClass(FlxG.state))}.hx'
           ].join('\n');
 
@@ -155,8 +155,6 @@ class DebugDisplay extends TextField
      public function set_backgroundOpacity(value:Float):Float
      {
 		if (debugDisplayBG != null) debugDisplayBG.alpha = value;
-
-          trace('[INFO] BackgroundOpacity set to $value% || debugDisplayBG is ${debugDisplayBG == null ? "null" : "not null"}.');
           return backgroundOpacity = value;
      }
 }

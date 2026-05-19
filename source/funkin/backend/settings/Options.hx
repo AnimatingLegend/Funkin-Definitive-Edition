@@ -220,7 +220,7 @@ class DebugDisplayBGOP extends Option
 		// If the value is greater than 0, decrease it by 50%.
 		if (FlxG.save.data.debugDisplayBGOpacity > 0)
 		{
-			FlxG.save.data.debugDisplayBGOpacity -= 50;
+			FlxG.save.data.debugDisplayBGOpacity -= 10;
 
 			// If the value is less than 0, return it.
 			if (FlxG.save.data.debugDisplayBGOpacity < 0) return false;
@@ -230,18 +230,22 @@ class DebugDisplayBGOP extends Option
 
 		FlxG.save.flush();
 		display = updateDisplay();
+
+		trace('[SETTINGS] DebugDisplayBG set to ${FlxG.save.data.debugDisplayBGOpacity}%.');
 		return true;
 	}
 
 	public override function pressRightKey():Bool
 	{
 		// If the value is less than 100, increase it by 50%.
-		if (FlxG.save.data.debugDisplayBGOpacity < 100) FlxG.save.data.debugDisplayBGOpacity += 50;
+		if (FlxG.save.data.debugDisplayBGOpacity < 100) FlxG.save.data.debugDisplayBGOpacity += 10;
 		FlxG.save.data.debugDisplayBGOpacity = FlxMath.roundDecimal(FlxG.save.data.debugDisplayBGOpacity, 2);
 		Main.debugDisplay.backgroundOpacity = FlxG.save.data.debugDisplayBGOpacity / 100;
 
 		FlxG.save.flush();
 		display = updateDisplay();
+
+		trace('[SETTINGS] DebugDisplayBG set to ${FlxG.save.data.debugDisplayBGOpacity}%.');
 		return true;
 	}
 
