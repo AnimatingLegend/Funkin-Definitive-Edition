@@ -435,10 +435,15 @@ class PlayState extends MusicBeatState
 	 */
 	var canPause:Bool = true;
 
-	/** 
+	/**
 	 * Whether the game is currently paused.
-	  */
+	 */
 	private var paused:Bool = false;
+
+	/**
+	 * Whether the game has been restarted.
+	 */
+	var hasRestarted:Bool = false;
 
 	/** 
 	 * True if the camera is currently looking at BF's side. 
@@ -1865,8 +1870,12 @@ class PlayState extends MusicBeatState
 
 		if (FlxG.save.data.downscroll) strumLine.y = FlxG.height - 150;
 
-		generateStaticArrows(0);
-		generateStaticArrows(1);
+		// Only generate arrows if they haven't already been generated.
+		if (strumLineNotes.length == 0)
+		{
+			generateStaticArrows(0);
+			generateStaticArrows(1);
+		}
 
 		// Align lane underlays to match strum positions.
 		laneunderlay.x = playerStrums.members[0].x - 25;
@@ -2256,18 +2265,9 @@ class PlayState extends MusicBeatState
 		songScoreLerp = FlxMath.lerp(songScoreLerp, songScore, 0.45);
 		healthLerp = FlxMath.lerp(healthLerp, health, 0.15);
 
-		if (controls.PAUSE && startedCountdown && canPause)
-		{
-			persistentUpdate = false;
-			persistentDraw = true;
-			paused = true;
-
-			// 0.1% chacne for Gitaroo Man easter egg.
-			if (FlxG.random.bool(0.1))
-				FlxG.switchState(new GitarooPause());
-			else
-				openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-		}
+		// Pause the game when needed.
+		if (controls.PAUSE && startedCountdown && canPause) 
+			pauseGame(true);
 
 		// Debug menu shortcuts
 		if (FlxG.keys.justPressed.SEVEN)
@@ -2727,7 +2727,125 @@ class PlayState extends MusicBeatState
 		super.onFocus();
 
 	override public function onFocusLost():Void
+	{
 		super.onFocusLost();
+		pauseGame();
+	}
+
+	/**
+	 * Called when you want to pause the game.
+	 * @param allowGitaroo Whether to allow the Gitaroo Man easter egg.
+	 */
+	public function pauseGame(allowGitaroo:Bool = false):Void
+	{
+		if (!startedCountdown || !canPause || paused) return;
+
+		persistentUpdate = false;
+		persistentDraw = true;
+		paused = true;
+
+		// 0.1% chance for Gitaroo Man easter egg.
+		if (allowGitaroo && FlxG.random.bool(0.1))
+		{
+			FlxG.switchState(new GitarooPause());
+			return;
+		}
+
+		var boyfriendPos = boyfriend.getScreenPosition();
+		openSubState(new PauseSubState(boyfriendPos.x, boyfriendPos.y));
+	}
+
+	/**
+	 * Called when you restart a song.
+	 * 
+	 * Classes required for this function:
+	 * `GameOverSubState`: When a gameover occurs, make a smooth transition back to `PlayState`.
+	 * `PauseSubState`: Apply the same when restarting a song in the pause menu.
+	 */
+	public function restartSong():Void
+	{
+		trace('[INFO] Song is restarting. Resetting values...');
+
+		// Reset health immediately to prevent softlocking.
+		health = 1;
+
+		persistentUpdate = true;
+    persistentDraw = true;
+
+		// Pause audio immediately to prevent audio overlap.
+    if (FlxG.sound.music != null)
+    {
+      FlxG.sound.music.pause();
+      FlxG.sound.music.time = 0;
+    }
+
+    if (vocals != null) vocals.pause();
+
+		// Stop the countdown timer if it's still running
+    if (startTimer != null && !startTimer.finished)
+    {
+      startTimer.cancel();
+      startTimer.destroy();
+    }
+
+		// Reset all song state flags.
+		startingSong = true;
+    songStarted = false;
+    endingSong = false;
+    generatedMusic = false;
+    startedCountdown = false;
+    paused = false;
+    talking = false;
+    inCutscene = false;
+    canPause = true;
+		hasRestarted = true;
+
+		// Reset all song score data.
+		songScore = 0;
+    misses = 0;
+    combo = 0;
+    sicks = goods = bads = shits = 0;
+    highestCombo = 0;
+    accuracy = 0;
+    totalRatingsHit = 0;
+    totalRatingsHitDefault = 0;
+    totalRatings = 0;
+    totalPlayed = 0;
+    updatedAcc = false;
+		updateStatistic();
+
+		// Vwoosh existing notes downward off-screen before clearing them.
+		var noteVwooshDuration:Float = 0.5;
+		notes.forEachAlive(function(note:Note)
+		{
+			FlxTween.tween(note, {y: FlxG.height + 100, alpha: 0}, noteVwooshDuration,
+			{
+				ease: FlxEase.expoIn,
+				onComplete: function(_) { note.kill(); }
+			});
+		});
+
+		// Wait for the vwoosh to finish before regenerating.
+    new FlxTimer().start(noteVwooshDuration, function(_)
+    {
+			canPause = true;
+
+      Conductor.mapBPMChanges(SONG);
+      Conductor.changeBPM(SONG.bpm);
+      Conductor.songPosition = -(Conductor.crochet * 5);
+
+			notes.clear();
+      unspawnNotes = [];
+      Note.clearPool();
+			remove(notes);
+
+      generateSong(SONG.song);
+			notes.cameras = [camHUD];
+
+			trace('[INFO] Values reset. Starting song...');
+      startCountdown();
+    });
+	}
 
 	function resyncVocals():Void 
 	{
