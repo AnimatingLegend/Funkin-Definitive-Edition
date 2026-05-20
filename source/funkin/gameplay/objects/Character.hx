@@ -39,6 +39,14 @@ class Character extends FlxSprite
 	public var animNotes:Array<Dynamic> = [];
 
 	/**
+	 * If present, determines whether the character has animations mapped into a .json file, 
+	 * 	or anywhere else.
+	 */
+	public var mappedAnimCharId:String = null;
+	public var mappedAnimSongId:String = null;
+	public var lastMappedAnimSongPosition:Float = 0;
+
+	/**
 	 * Determines whether the character is in the debug build or not.
 	 */
 	public var debugMode:Bool = false;
@@ -243,6 +251,8 @@ class Character extends FlxSprite
 	{
 		if (!isPlayer) updateHoldTimer(elapsed);
 		if (!debugMode) updateLoopAnim();
+		
+		resetMappedAnims();
 		updateCharacterSpecific();
 
 		super.update(elapsed);
@@ -374,6 +384,10 @@ class Character extends FlxSprite
 	 */
 	function loadMappedAnims(charId:String, songId:String):Void
 	{
+		mappedAnimCharId = charId;
+		mappedAnimSongId = songId;
+		animNotes.resize(0);
+
 		var sections:Array<SwagSection> = Song.loadFromJson(charId, songId).notes;
 		for (section in sections)
 		{
@@ -382,6 +396,20 @@ class Character extends FlxSprite
 
 		TankmenBG.animationNotes = animNotes;
 		animNotes.sort(sortAnims);
+		lastMappedAnimSongPosition = Conductor.songPosition;
+	}
+
+	/**
+	 * In whatever case we need to reset the mapped animations, do so.
+	 * @see `loadMappedAnims`
+	 */
+	function resetMappedAnims():Void
+	{
+		if (mappedAnimCharId == null || mappedAnimSongId == null) return;
+
+		var songPosition = Conductor.songPosition;
+		if (songPosition <= 0 && songPosition < lastMappedAnimSongPosition) loadMappedAnims(mappedAnimCharId, mappedAnimSongId);
+		lastMappedAnimSongPosition = songPosition;
 	}
 
 	function sortAnims(x:Dynamic, y:Dynamic):Int 
