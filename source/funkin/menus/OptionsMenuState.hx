@@ -53,6 +53,7 @@ class OptionsMenuState extends MusicBeatState
 			new CameraZooms('When enabled, the camera bounces during songs.'),
 			new AutoPause('When enabled, the game will automatically pause when the game loses focus.'),
 			new GhostTapping('when enabled, you wont\'t get penalized for ghost misses.'),
+			new HitsoundVolume('When adjusted, a "tick" sound will play when a note is hit.'),
 			new ScrollSpeed('Adjust the songs scroll speed.'),
 		]),
 		new OptionCategory("Save Data", 

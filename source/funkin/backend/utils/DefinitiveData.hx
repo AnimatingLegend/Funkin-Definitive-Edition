@@ -43,6 +43,7 @@ class DefinitiveData
 		if (FlxG.save.data.cameraZooms == null) FlxG.save.data.cameraZooms = true;
 		if (FlxG.save.data.autoPause == null) FlxG.save.data.autoPause = true;
 		if (FlxG.save.data.ghostTapping == null) FlxG.save.data.ghostTapping = true;
+		if (FlxG.save.data.hitsoundVolume == null) FlxG.save.data.hitsoundVolume = 0.0;
 		if (FlxG.save.data.scrollSpeed == null) FlxG.save.data.scrollSpeed = 1;
 
 		/**

@@ -660,6 +660,57 @@ class GhostTapping extends Option
 		return 'Ghost Tapping';
 }
 
+class HitsoundVolume extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+		withoutCheckboxes = true;
+	}
+
+	public override function pressKey(value:Bool):Bool
+	{
+		withoutCheckboxes = true;
+		return true;
+	}
+
+	public override function pressLeftKey():Bool
+	{
+		// If the value is greater than 0, decrease it by 10%.
+		if (FlxG.save.data.hitsoundVolume > 0)
+		{
+			FlxG.save.data.hitsoundVolume -= 10;
+
+			// If the value is less than 0, return it.
+			if (FlxG.save.data.hitsoundVolume < 0) FlxG.save.data.hitsoundVolume = 0;
+			FlxG.save.data.hitsoundVolume = FlxMath.roundDecimal(FlxG.save.data.strumLineBG, 2);
+		}
+		display = updateDisplay();
+
+		trace('[SETTINGS] Decrease hitsound volume to ${FlxG.save.data.hitsoundVolume}.');
+		return true;
+	}
+
+	public override function pressRightKey():Bool
+	{
+		// If the value is greater than 0, decrease it by 10%.
+		if (FlxG.save.data.hitsoundVolume < 100)
+		{
+			FlxG.save.data.hitsoundVolume += 10;
+			FlxG.save.data.hitsoundVolume = FlxMath.roundDecimal(FlxG.save.data.hitsoundVolume, 2);
+		}
+
+		display = updateDisplay();
+
+		trace('[SETTINGS] Increase hitsound volume to ${FlxG.save.data.hitsoundVolume}.');
+		return true;
+	}
+
+	private override function updateDisplay():String
+		return '<${FlxG.save.data.hitsoundVolume}> Hitsound Volume';
+}
+
 class ScrollSpeed extends Option
 {
 	public function new(desc:String)
@@ -702,9 +753,9 @@ class ScrollSpeed extends Option
 		return '<${FlxG.save.data.scrollSpeed}> Scroll Speed';
 }
 
-// * ---------------------------------------	* \\
-// * SAVE DATA                       		* \\
-// * --------------------------------------- * \\
+// * ----------------------------------- * \\
+// * SAVE DATA                       		 * \\
+// * ----------------------------------- * \\
 class WeekUnlocked extends Option
 {
 	var confirm:Bool = false;
@@ -852,6 +903,7 @@ class ResetALLSettings extends Option
 		FlxG.save.data.cameraZooms = null;
 		FlxG.save.data.autoPause = null;
 		FlxG.save.data.ghostTapping = null;
+		FlxG.save.data.hitsoundVolume = null;
 		FlxG.save.data.scrollSpeed = null;
 
 		FlxG.save.data.resetHighscore = null;

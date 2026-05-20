@@ -3408,6 +3408,25 @@ class PlayState extends MusicBeatState
 			}
 		});
 
+		if (FlxG.save.data.hitsoundVolume > 0 && !note.isSustainNote)
+		{
+			// Calculate the time until the note should be hit.
+      // Clamp it afterwards so we never schedule in the past, or too far ahead.
+			var msUntilHit = note.strumTime - Conductor.songPosition;
+			var waitTime:Float = Math.max(0, msUntilHit) / 1000.0;
+
+			// Give a minor delay before playing the note hitsound to prevent audio lag.
+			new FlxTimer().start(waitTime, function(_)
+			{
+				var hitNoteSound:Null<FlxSound> = FlxG.sound.play(
+					Paths.sound('hitsound', 'preload'), 
+					FlxG.save.data.hitsoundVolume / 100.0
+				);
+				
+				if (hitNoteSound != null) hitNoteSound.volume = FlxG.save.data.hitsoundVolume / 100.0; 
+			});
+		}
+
 		// Remove head notes (sustains stay until they scroll off).
 		if (!note.isSustainNote) 
 		{
