@@ -30,11 +30,10 @@ class MainMenuState extends MusicBeatState
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
 
 	/**
-	 * Get the text for the left watermark, aswell as the version of the game.
+	 * Get the text for the watermark on the bottom left of the screen.
 	 */
 	public var leftWatermarkText:FlxText;
-	public static var definitiveVersion:String = '0.5.2';
-	public static var versionSuffix:String = #if debug ' DEBUG' #else '' #end;
+	public var versionSuffix:String = #if debug ' DEBUG' #else '' #end;
 
 	override function create()
 	{
@@ -141,7 +140,7 @@ class MainMenuState extends MusicBeatState
 		}
 		else
 		{
-			leftWatermarkText = new FlxText(12, FlxG.height - 24, 0, 'FDE - v${definitiveVersion} ' 
+			leftWatermarkText = new FlxText(12, FlxG.height - 24, 0, 'FDE - v${Main.DEFINITIVE_VERSION} ' 
 			+ #if debug '(${GIT_BRANCH}, ${GIT_HASH})' + #end versionSuffix, 12);
 		}
 		leftWatermarkText.scrollFactor.set();

@@ -1,6 +1,5 @@
 package funkin.menus;
 
-import flixel.addons.transition.FlxTransitionableState;
 import flixel.text.FlxText;
 
 import funkin.menus.MainMenuState;
@@ -17,7 +16,7 @@ class OutdatedSubState extends MusicBeatState
 
 		var warnText:FlxText = new FlxText(0, 0, FlxG.width,
 			"HEY YOU! looks like you're running an
-			\n outdated version of FNF: Definitive Edition. (" + MainMenuState.definitiveVersion + "),
+			\n outdated version of FNF: Definitive Edition. (" + Main.DEFINITIVE_VERSION + "),
 			\n please update to " + Main.updateVersion + "!
 			\n Press 'ESCAPE' to proceed anyway.",
 			32);
@@ -30,12 +29,12 @@ class OutdatedSubState extends MusicBeatState
 	{
 		if (controls.ACCEPT)
 		{
-			FlxG.openURL("https://github.com/LegendLOL/Funkin-Definitive-Edition/releases");
-			FlxG.sound.play(Paths.sound('confirmMenu'));
 			FlxG.camera.flash(FlxColor.WHITE, 4);
+			FlxG.sound.play(Paths.sound('confirmMenu'));
+			FlxG.openURL("https://github.com/AnimatingLegend/Funkin-Definitive-Edition/releases");
 		}
 
-		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE)
+		if (/*FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE*/ controls.BACK)
 		{
 			leftState = true;
 			FlxG.switchState(new MainMenuState());
