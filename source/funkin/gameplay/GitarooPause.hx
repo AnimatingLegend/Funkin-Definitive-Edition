@@ -1,12 +1,11 @@
-package funkin.menus;
+package funkin.gameplay;
+
+import flixel.addons.transition.FlxTransitionableState;
 
 import funkin.backend.utils.Paths;
-
 import funkin.gameplay.PlayState;
 import funkin.menus.StoryMenuState;
 import funkin.menus.FreeplayState;
-
-import flixel.graphics.frames.FlxAtlasFrames;
 
 class GitarooPause extends MusicBeatState
 {
@@ -19,20 +18,28 @@ class GitarooPause extends MusicBeatState
 
 	override function create()
 	{
-		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		if (FlxG.sound.music != null) 
+		{
+			FlxG.sound.music.destroy();
+			FlxG.sound.music = null;
+		}
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('pauseAlt/pauseBG'));
+		bg.setGraphicSize(Std.int(FlxG.width));
+		bg.updateHitbox();
+		bg.screenCenter();
+		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
 
 		var bf:FlxSprite = new FlxSprite(0, 30);
 		bf.frames = Paths.getSparrowAtlas('pauseAlt/bfLol');
 		bf.animation.addByPrefix('lol', "funnyThing", 13);
 		bf.animation.play('lol');
+		bf.screenCenter(X);
 		bf.antialiasing = FlxG.save.data.antialiasing;
 		add(bf);
-		bf.screenCenter(X);
 
-		replayButton = new FlxSprite(FlxG.width * 0.28, FlxG.height * 0.7);
+		replayButton = new FlxSprite(FlxG.width * 0.25, FlxG.height * 0.7);
 		replayButton.frames = Paths.getSparrowAtlas('pauseAlt/pauseUI');
 		replayButton.animation.addByPrefix('selected', 'bluereplay', 0, false);
 		replayButton.animation.appendByPrefix('selected', 'yellowreplay');
@@ -58,11 +65,22 @@ class GitarooPause extends MusicBeatState
 		if (controls.UI_LEFT_P || controls.UI_RIGHT_P) changeThing();
 		if (controls.ACCEPT)
 		{
-			if (replaySelect) FlxG.switchState(new PlayState());
+			if (replaySelect) 
+			{
+				FlxTransitionableState.skipNextTransIn = false;
+        FlxTransitionableState.skipNextTransOut = false;
+				FlxG.switchState(new PlayState());
+			}
 			else
 			{
-				if (PlayState.isStoryMode) FlxG.switchState(new StoryMenuState());
-				else FlxG.switchState(new FreeplayState());
+				if (PlayState.isStoryMode) 
+				{
+					FlxG.switchState(new StoryMenuState());
+				}
+				else 
+				{
+					FlxG.switchState(new FreeplayState());
+				}
 			}
 		}
 

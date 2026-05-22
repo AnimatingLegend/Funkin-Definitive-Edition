@@ -29,13 +29,13 @@ import funkin.backend.chart.Section.SwagSection;
 import funkin.backend.utils.Highscore;
 
 import funkin.menus.FreeplayState;
-import funkin.menus.GitarooPause;
 import funkin.menus.StoryMenuState;
 import funkin.menus.LoadingState;
 
 import funkin.editors.ChartingState;
 import funkin.editors.AnimationDebug;
 
+import funkin.gameplay.GitarooPause;
 import funkin.gameplay.PauseSubState;
 import funkin.gameplay.objects.note.Note;
 import funkin.gameplay.objects.note.NoteSplash;
@@ -2747,6 +2747,8 @@ class PlayState extends MusicBeatState
 		// 0.1% chance for Gitaroo Man easter egg.
 		if (allowGitaroo && FlxG.random.bool(0.1))
 		{
+			FlxTransitionableState.skipNextTransIn = true;
+      FlxTransitionableState.skipNextTransOut = true;
 			FlxG.switchState(new GitarooPause());
 			return;
 		}
