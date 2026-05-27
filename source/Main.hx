@@ -112,10 +112,10 @@ class Main extends Sprite
 		#end
 
 		#if hxcpp_debug_server
-    		trace('hxcpp_debug_server is enabled! You can now connect to the game with a debugger.');
-    		#else
-    		trace('hxcpp_debug_server is disabled! This build does not support debugging.');
-    		#end
+    trace('hxcpp_debug_server is enabled! You can now connect to the game with a debugger.');
+    #else
+    trace('hxcpp_debug_server is disabled! This build does not support debugging.');
+    #end
 	}
 
 	/**

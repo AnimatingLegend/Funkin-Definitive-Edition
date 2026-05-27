@@ -267,12 +267,12 @@ class AnimationDebug extends MusicBeatState
 
 		// Divide each section of the panel.
 		panelGroup.add(makeDivider(xBase, yOff, innerW));
-        	yOff += 10;
+    yOff += 10;
 
 		// Create tabs for the panel (Animation, & Character).
 		var tabs = [
 			{name: "Animations", label: 'Animations'},
-            	{name: "Character", label: 'Character'}
+      {name: "Character", label: 'Character'}
 		];
 		UI_BOX = new FlxUITabMenu(null, tabs, true);
 		UI_BOX.scrollFactor.set();
@@ -285,7 +285,7 @@ class AnimationDebug extends MusicBeatState
 		panelGroup.add(UI_BOX);
 
 		buildAnimTab(xBase, innerW);
-        	buildCharacterTab(xBase, innerW);
+    buildCharacterTab(xBase, innerW);
 		yOff += 268;
 
 		// Divide each section of the panel.
@@ -469,13 +469,13 @@ class AnimationDebug extends MusicBeatState
 		}
 
 		dataFound.sort((a, b) -> a < b ? -1 : a > b ? 1 : 0);
-        	return dataFound;
+    return dataFound;
 	}
 
 	/**
-     * Parse the character's XML and return all unique animation prefixes.
-     * Strips trailing digits so "BF idle dance001" becomes "BF idle dance".
-     */
+  * Parse the character's XML and return all unique animation prefixes.
+  * Strips trailing digits so "BF idle dance001" becomes "BF idle dance".
+  */
 	function scanXMLPrefixes(assetPath:String, library:String):Array<String>
 	{
 		var prefixes:Array<String> = [];
@@ -570,12 +570,12 @@ class AnimationDebug extends MusicBeatState
 		if (animList.length > 0) character.playAnim(animList[0]);
 
 		xmlPrefix = (currentCharacterData != null && currentCharacterData.assetPath != null)
-            ? scanXMLPrefixes(currentCharacterData.assetPath, currentCharacterData.library)
-            : [];
+      ? scanXMLPrefixes(currentCharacterData.assetPath, currentCharacterData.library)
+      : [];
 
 		rebuildAnimDropDown();
-        	syncCharTabToData();
-        	updateOffsetDisplay();
+    syncCharTabToData();
+    updateOffsetDisplay();
 	}
 
 	function rebuildAnimDropDown():Void
@@ -696,9 +696,13 @@ class AnimationDebug extends MusicBeatState
 		}
 
 		if (indices.length > 0)
+		{
 			character.animation.addByIndices(name, symbol, indices, '', framerate, looped);
-		else 
+		}
+		else
+		{
 			character.animation.addByPrefix(name, symbol, framerate, looped);
+		}
 
 		if (!character.animOffsets.exists(name))  character.animOffsets.set(name, [0.0, 0.0]);
 		if (!animList.contains(name)) animList.push(name);
@@ -776,8 +780,8 @@ class AnimationDebug extends MusicBeatState
 		if (character != null && character.animation != null)
 		{
 			textAnim.text = character.animation.curAnim.name
-               	+ '  (' + (character.animation.curAnim.curFrame + 1)
-                	+ ' / ' + character.animation.curAnim.numFrames + ')';
+      + '  (' + (character.animation.curAnim.curFrame + 1)
+      + ' / ' + character.animation.curAnim.numFrames + ')';
 		}
 
 		// Show / Hide UI Elements
@@ -831,7 +835,7 @@ class AnimationDebug extends MusicBeatState
 			if (FlxG.mouse.wheel != 0)
 			{
 				FlxG.camera.zoom += FlxG.mouse.wheel * 0.1;
-        			FlxG.camera.zoom  = Math.max(0.1, Math.min(8.0, FlxG.camera.zoom));
+        FlxG.camera.zoom  = Math.max(0.1, Math.min(8.0, FlxG.camera.zoom));
 			}
 
 			// Pan the camera around using your middle mouse button.
@@ -844,10 +848,10 @@ class AnimationDebug extends MusicBeatState
 
 		// Cycle Animations
 		if (FlxG.keys.justPressed.W) curAnim -= 1;
-        	if (FlxG.keys.justPressed.S && !FlxG.keys.pressed.CONTROL) curAnim += 1;
+    if (FlxG.keys.justPressed.S && !FlxG.keys.pressed.CONTROL) curAnim += 1;
 
 		if (curAnim < 0) curAnim = animList.length - 1;
-        	if (curAnim >= animList.length) curAnim = 0;
+    if (curAnim >= animList.length) curAnim = 0;
 
 		if (FlxG.keys.justPressed.W || FlxG.keys.justPressed.S || FlxG.keys.justPressed.SPACE)
 		{

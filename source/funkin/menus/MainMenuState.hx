@@ -113,11 +113,7 @@ class MainMenuState extends MusicBeatState
 			item.y = pos + (160 * i);
 		}
 		
-		#if html5
-		FlxG.camera.follow(camFollow, null, 0.06);
-		#else
-		FlxG.camera.follow(camFollow, null, 0.06 * (30 / FlxG.save.data.fpsCap));
-		#end
+		FlxG.camera.follow(camFollow, null, 0.04 #if !html5 * (30 / FlxG.save.data.fpsCap) #end);
 
 		super.create();
 		initWatermark();
@@ -129,7 +125,7 @@ class MainMenuState extends MusicBeatState
 	 * [!NOTE] This is only used for debug builds.
 	 */
 	public static final GIT_BRANCH:String = GitCommit.getGitBranch();
-   	public static final GIT_HASH:String = GitCommit.getGitCommitHash();
+  public static final GIT_HASH:String = GitCommit.getGitCommitHash();
 
 	function initWatermark()
 	{

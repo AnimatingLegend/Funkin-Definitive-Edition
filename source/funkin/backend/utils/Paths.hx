@@ -14,11 +14,12 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
 
-// * ----------------------------------------------- * \\
-// * PATHS CLASS                      			   * \\
-// * 									   * \\
-// * A core class that handles certain asset paths.  * \\
-// * ----------------------------------------------  * \\
+/**
+ * PATHS CLASS
+ * 
+ * A core class that handles certain asset paths, 
+ * and memory management for assets.
+ */
 class Paths
 {
 	/**

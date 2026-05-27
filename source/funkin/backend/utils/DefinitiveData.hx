@@ -2,8 +2,8 @@ package funkin.backend.utils;
 
 class DefinitiveData
 {
-    	public static function initialize()
-    	{
+  public static function initialize()
+  {
 		/**
 		* Graphic Settings
 		**/
@@ -35,7 +35,7 @@ class DefinitiveData
 
 		/**
 		* Gameplay Settings
-		**/
+		*/
 		if (FlxG.save.data.naughtyness == null) FlxG.save.data.naughtyness = true;
 		if (FlxG.save.data.downscroll == null) FlxG.save.data.downscroll = false;
 		if (FlxG.save.data.middlescroll == null) FlxG.save.data.middlescroll = false;
@@ -51,5 +51,5 @@ class DefinitiveData
 		 */
 		if (FlxG.save.data.weeksUnlocked == null) FlxG.save.data.weeksUnlocked = 8;
 		if (FlxG.save.data.resetHighscores == null) FlxG.save.data.resetHighscores = 0;
-    	}
+  }
 }

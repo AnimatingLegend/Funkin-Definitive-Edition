@@ -143,7 +143,8 @@ class CacheState extends MusicBeatState
 		trace('Caching Process Complete');
 		
 		// Use a slight delay before switching so the user can see it's done
-		new FlxTimer().start(0.5, function(tmr:FlxTimer) {
+		new FlxTimer().start(0.5, function(tmr:FlxTimer) 
+		{
 			FlxG.switchState(new funkin.menus.TitleState());
 		});
 		#end

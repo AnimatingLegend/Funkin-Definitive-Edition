@@ -68,14 +68,14 @@ class Alphabet extends FlxSpriteGroup
 			{
 				addText();
 			}
-		} else {
-			finishedText = true;
-		}
+		} 
+		else finishedText = true;
 	}
 
 	public function changeText(newText:String, newTypingSpeed:Float = -1)
 	{
-		for (i in 0...lettersArray.length) {
+		for (i in 0...lettersArray.length) 
+		{
 			var letter = lettersArray[0];
 			remove(letter);
 			lettersArray.remove(letter);
@@ -95,20 +95,23 @@ class Alphabet extends FlxSpriteGroup
 		x = 0;
 		_finalText = newText;
 		text = newText;
-		if(newTypingSpeed != -1) {
+		if (newTypingSpeed != -1) 
+		{
 			typingSpeed = newTypingSpeed;
 		}
 
-		if (text != "") {
+		if (text != "") 
+		{
 			if (typed)
 			{
 				startTypedText(typingSpeed);
-			} else {
+			} 
+			else 
+			{
 				addText();
 			}
-		} else {
-			finishedText = true;
-		}
+		} 
+		else finishedText = true;
 		x = lastX;
 	}
 

@@ -1212,7 +1212,7 @@ class PlayState extends MusicBeatState
 	}
 
 	/**
-	 * Bulds all HUD elements and assigns them to camHUD.
+	 * Builds all HUD elements and assigns them to camHUD.
 	 */
 	private function buildHUD(doof:DialogueBox):Void 
 	{
