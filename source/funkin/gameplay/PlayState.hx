@@ -220,34 +220,39 @@ class PlayState extends MusicBeatState
 	// 
 
 	/**
-	 *  Number of `SICK` judgements this song. 
+	 * Number of `SICK` judgements a user gets in a song. 
 	 */
 	public static var sicks:Int = 0;
 
 	/** 
-	 * Number of `GOOD` judgements this song. 
+	 * Number of `GOOD` judgements a user gets in a song. 
 	 */
 	public static var goods:Int = 0;
 
 	/** 
-	 * Number of `BAD` judgements this song. 
+	 * Number of `BAD` judgements a user gets in a song. 
 	 */
 	public static var bads:Int = 0;
 
 	/** 
-	 * Number of `SHIT` judgements this song. 
+	 * Number of `SHIT` judgements a user gets in a song. 
 	 */
 	public static var shits:Int = 0;
 
 	/** 
-	 * Total misses this song. 
+	 * Total misses a user gets in a song. 
 	 */
 	public static var misses:Int = 0;
 
 	/** 
-	 * The highest combo reached this song. 
+	 * The highest combo reached in a song. 
 	 */
 	public static var highestCombo:Int = 0;
+
+	/**
+	 * Total combo breaks a player gets in a song.
+	 */
+	public static var comboBreaks:Int = 0;
 
 	/** 
 	 * The current accuracy percentage (0–100). 
@@ -665,7 +670,7 @@ class PlayState extends MusicBeatState
 
 		// Restart per-song statistics.
 		sicks = goods = bads = shits = 0;
-		misses = highestCombo = 0;
+		misses = highestCombo = comboBreaks = 0;
 		accuracy = 0.00;
 
 		// Pre-initialize noteSplash groups.
@@ -1280,6 +1285,7 @@ class PlayState extends MusicBeatState
 			'Good: ${goods}',
 			'Bad: ${bads}',
 			'Shit: ${shits}',
+			'Combo Breaks: ${comboBreaks}',
 			'Max Combo: ${highestCombo}'
 		].join('\n');
 		if (FlxG.save.data.judgementDisplay) add(judgementCounter);
@@ -2351,6 +2357,10 @@ class PlayState extends MusicBeatState
 	 */
 	private function updateScoreText():Void
 	{
+		scoreTxt.color = FlxColor.WHITE;
+		scoreTxt.clearFormats();
+		Ratings.getComboRank();
+
 		if (botplay) scoreTxt.text = 'Botplay Enabled';
 		else
 		{
@@ -2362,14 +2372,16 @@ class PlayState extends MusicBeatState
 				scoreTxt.text = 'Score: ${FlxStringUtil.formatMoney(songScore, SHOW_DECIMALS, COMMA_SEPERATED)}'
 				+ ' | Misses: ${misses}'
 				+ ' | Accuracy: ${truncateFloat(accuracy, 2)}% - [${ratingFC}]';
+
+				// Apply FlxColor ONLY to the combo ranks. (i.e. 'MFC', 'SDCB', etc.)
+				final ratingStart = scoreTxt.text.length - ratingFC.length - 1;
+				scoreTxt.addFormat(Ratings.getComboRankFormat(), ratingStart, ratingStart + ratingFC.length);
 			}
 			else
 			{
 				scoreTxt.text = 'Score: ${FlxStringUtil.formatMoney(songScore, SHOW_DECIMALS, COMMA_SEPERATED)}';
 			}
 		}
-
-		Ratings.fullComboRank();
 	}
 
 	/**
@@ -2808,6 +2820,7 @@ class PlayState extends MusicBeatState
     combo = 0;
     sicks = goods = bads = shits = 0;
     highestCombo = 0;
+		comboBreaks = 0;
     accuracy = 0;
     totalRatingsHit = 0;
     totalRatingsHitDefault = 0;
@@ -2998,6 +3011,7 @@ class PlayState extends MusicBeatState
 		{
 			case 'shit':
 				shits++;
+				comboBreaks++;
 				score = 0;
 				combo = 0;
 				health -= 0.06;
@@ -3006,6 +3020,7 @@ class PlayState extends MusicBeatState
 
 			case 'bad':
 				bads++;
+				comboBreaks++;
 				score = 0;
 				combo = 0;
 				health -= 0.06;
@@ -3577,6 +3592,7 @@ class PlayState extends MusicBeatState
 			'Good: ${goods}',
 			'Bad: ${bads}',
 			'Shit: ${shits}',
+			'Combo Breaks: ${comboBreaks}',
 			'Max Combo: ${highestCombo}'
 		].join('\n');
 	}
