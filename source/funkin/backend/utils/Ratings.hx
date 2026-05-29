@@ -72,15 +72,15 @@ class Ratings
 	 * Determines what rank the player gets based on their performance in the song.
      * @see `PlayState.ratingFC` for the full combo rank, which is separate from the normal rank.
 	 */
-	public static inline function getComboRank():Void
+	public static inline function getComboRank():String
 	{
-		PlayState.ratingFC = switch (PlayState.misses)
+		return PlayState.ratingFC = switch (PlayState.misses)
 		{
 			case 0:
 				if (PlayState.bads > 0 || PlayState.shits > 0) 'FC';
                 else if (PlayState.goods > 0) 'GFC';
 				else if (PlayState.sicks > 0) 'MFC';
-				else 'N/A';
+                else 'N/A';
 			case misses if (misses < 10): 'SDCB';
 			default: 'CLEAR';
 		}

@@ -2895,7 +2895,11 @@ class PlayState extends MusicBeatState
 		#if !switch
 		// Save highscore if you're not on switch.
 		if (SONG.validScore)
+		{
 			Highscore.saveScore(SONG.song, songScore, storyDifficulty);
+			Highscore.saveCombo(SONG.song, Ratings.getComboRank(), storyDifficulty);
+			Highscore.saveRating(SONG.song, truncateFloat(accuracy, 2), storyDifficulty);
+		}
 		#end
 
 		if (isStoryMode) 
