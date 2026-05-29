@@ -2769,6 +2769,8 @@ class PlayState extends MusicBeatState
 		// 0.1% chance for Gitaroo Man easter egg.
 		if (allowGitaroo && FlxG.random.bool(0.1))
 		{
+			FlxTransitionableState.skipNextTransIn = true;
+      FlxTransitionableState.skipNextTransOut = true;
 			FlxG.switchState(new GitarooPause());
 			return;
 		}
@@ -2827,7 +2829,7 @@ class PlayState extends MusicBeatState
     misses = 0;
     combo = 0;
     sicks = goods = bads = shits = 0;
-    highestCombo = 0;
+    highestCombo = comboBreaks = 0;
     accuracy = 0;
     totalRatingsHit = 0;
     totalRatingsHitDefault = 0;

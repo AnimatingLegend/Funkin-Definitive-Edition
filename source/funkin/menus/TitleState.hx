@@ -179,13 +179,13 @@ class TitleState extends MusicBeatState
 		}
 	}
 
-     function playMenuMusic():Void
-     {
-          var shouldFadeIn:Bool = (FlxG.sound.music == null);
-          FlxG.sound.playMusic(Paths.music('freakyMenu/freakyMenu'), 0, true);
+  function playMenuMusic():Void
+  {
+    var shouldFadeIn:Bool = (FlxG.sound.music == null);
+    FlxG.sound.playMusic(Paths.music('freakyMenu/freakyMenu'), 0, true);
 
-        if (shouldFadeIn) FlxG.sound.music.fadeIn(4.0, 0.0, 1.0);
-     }
+    if (shouldFadeIn) FlxG.sound.music.fadeIn(4.0, 0.0, 1.0);
+  }
 
 	function getIntroTextShit():Array<Array<String>>
 	{
