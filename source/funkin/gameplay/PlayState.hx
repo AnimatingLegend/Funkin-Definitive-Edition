@@ -2034,6 +2034,7 @@ class PlayState extends MusicBeatState
 		add(notes);
 
 		final noteSkin:NoteSkin = curStage.startsWith('school') ? PIXEL : DEFAULT;
+		final sustainStep:Float = 0.45 * Conductor.stepCrochet * FlxMath.roundDecimal(scrollSpeed, 2);
 		var daBeats:Int = 0;
 
 		for (section in songData.notes)
@@ -2086,16 +2087,9 @@ class PlayState extends MusicBeatState
 					unspawnNotes.push(sustainNote);
 				}
 
-				// Scale the PREVIOUS note's height to fill the gap. (original Psych formula)
-				if (susLength > 1 && oldNote != null && oldNote.isSustainNote) 
+				if (susLength > 1 && oldNote != null && oldNote.isSustainNote)
 				{
-					final speed = FlxMath.roundDecimal(FlxG.save.data.scrollSpeed == 1 ? SONG.speed : FlxG.save.data.scrollSpeed, 2);
-					oldNote.scale.y = 1.0;
-
-					// Target height in pixels = how far a note travels in one step.
-					final targetPixelHeight:Float = (0.45 * Conductor.stepCrochet * speed);
-					// `scale.y = target` | original frame height
-					oldNote.scale.y = targetPixelHeight / oldNote.frameHeight;
+					oldNote.scale.y = sustainStep / oldNote.frameHeight;
 					oldNote.updateHitbox();
 				}
 			}
@@ -2559,6 +2553,11 @@ class PlayState extends MusicBeatState
 			? SONG.speed 
 			: scrollSpeed;
 
+			// Round the scroll speed to 2 decimals to prevent the sustain trails from seperating
+			// into multiple pieces.
+			final roundedSpeed:Float = FlxMath.roundDecimal(leSpeed, 2);
+			final sustainStep:Float = 0.45 * Conductor.stepCrochet * roundedSpeed;
+
 			// Strum line center Y (used for sustain clipping)
 			final center:Float = strumLine.y + (Note.SWAG_WIDTH / 2);
 
@@ -2574,17 +2573,22 @@ class PlayState extends MusicBeatState
 			if (FlxG.save.data.downscroll)
 			{
 				// Downscroll: Notes fall downward from above the strumline.
-				daNote.y = strumLine.y + (Conductor.songPosition - daNote.strumTime) * (0.45 * leSpeed);
+				daNote.y = strumLine.y + 0.45 * (Conductor.songPosition - daNote.strumTime) * roundedSpeed;
 					
 				if (daNote.isSustainNote)
 				{
-					daNote.y -= daNote.height - (0.45 * Conductor.stepCrochet * leSpeed);
+					daNote.y -= daNote.height - sustainStep;
 				}
 			}
 			else
 			{
 				// Upscroll: Notes rise upward towards the strumline.
-				daNote.y = strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * leSpeed);
+				daNote.y = strumLine.y - 0.45 * (Conductor.songPosition - daNote.strumTime) * roundedSpeed;
+				
+				if (daNote.isSustainNote) 
+				{
+					daNote.y -= sustainStep;
+				}
 			}
 
 			// Sustain Trails
