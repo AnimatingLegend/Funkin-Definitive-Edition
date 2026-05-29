@@ -106,8 +106,8 @@ class Option
 		return false;
 }
 
-// * ---------------------------------------	* \\
-// * GRAPHIC SETTINGS                       	* \\
+// * --------------------------------------- * \\
+// * GRAPHIC SETTINGS                        * \\
 // * --------------------------------------- * \\
 class LowQuality extends Option
 {
@@ -509,7 +509,7 @@ class FDEWatermark extends Option
 		return 'FDE Watermark';
 }
 
-// * ---------------------------------------	* \\
+// * --------------------------------------- * \\
 // * GAMEPLAY SETTINGS                       * \\
 // * --------------------------------------- * \\
 class Naughtyness extends Option
@@ -834,9 +834,12 @@ class ResetHighscore extends Option
 		}
 
 		for (key in Highscore.songScores.keys()) Highscore.songScores[key] = 0;
-		
+		for (key in Highscore.songCombos.keys()) Highscore.songCombos[key] = 'N/A';
+		for (key in Highscore.songRatings.keys()) Highscore.songRatings[key] = 0.00;
+
 		FlxG.save.data.songScores = null;
 		FlxG.save.data.songCombos = null;
+		FlxG.save.data.songRatings = null;
 		trace('[OPTIONS] Reset all Highscores.');
 
 		acceptValues = FlxG.save.data.resetHighscore;
