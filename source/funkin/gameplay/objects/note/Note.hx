@@ -150,12 +150,13 @@ class Note extends FlxSprite
 		_scaleSustain(scrollSpeed);
 	}
 
-	// * ------------------- * \\
-	// * INITIALIZE GRAPHICS * \\
-	// * ------------------- * \\
-	static final ANIM_SCROLL = ["purpleScroll",  "blueScroll",  "greenScroll",  "redScroll"];
-  static final ANIM_HOLD = ["purplehold",     "bluehold",    "greenhold",    "redhold"];
-  static final ANIM_HOLDEND = ["purpleholdend",  "blueholdend", "greenholdend", "redholdend"];
+	//
+	// INITIALIZE GRAPHICS
+	//
+
+	static final ANIM_SCROLL = ["purpleScroll", "blueScroll", "greenScroll", "redScroll"];
+  static final ANIM_HOLD = ["purplehold", "bluehold", "greenhold", "redhold"];
+  static final ANIM_HOLDEND = ["purpleholdend", "blueholdend", "greenholdend", "redholdend"];
 
 	function _loadGraphics():Void
 	{
@@ -178,19 +179,19 @@ class Note extends FlxSprite
 		frames = Paths.getSparrowAtlas('NOTE_assets');
 
 		animation.addByPrefix('purpleScroll', 'purple instance');
-		animation.addByPrefix('blueScroll',   'blue instance');
-		animation.addByPrefix('greenScroll',  'green instance');
-		animation.addByPrefix('redScroll',    'red instance');
+		animation.addByPrefix('blueScroll', 'blue instance');
+		animation.addByPrefix('greenScroll', 'green instance');
+		animation.addByPrefix('redScroll', 'red instance');
 
 		animation.addByPrefix('purpleholdend', 'pruple end hold');
-		animation.addByPrefix('blueholdend',   'blue hold end');
-		animation.addByPrefix('greenholdend',  'green hold end');
-		animation.addByPrefix('redholdend',    'red hold end');
+		animation.addByPrefix('blueholdend', 'blue hold end');
+		animation.addByPrefix('greenholdend', 'green hold end');
+		animation.addByPrefix('redholdend', 'red hold end');
 
 		animation.addByPrefix('purplehold', 'purple hold piece');
-		animation.addByPrefix('bluehold',   'blue hold piece');
-		animation.addByPrefix('greenhold',  'green hold piece');
-		animation.addByPrefix('redhold',    'red hold piece');
+		animation.addByPrefix('bluehold', 'blue hold piece');
+		animation.addByPrefix('greenhold', 'green hold piece');
+		animation.addByPrefix('redhold', 'red hold piece');
 
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
@@ -236,10 +237,12 @@ class Note extends FlxSprite
 		if (!isSustainNote) animation.play(ANIM_SCROLL[col]);
 		else
 		{
-			if (FlxG.save.data.downscroll) angle = 180;
+			// Kade Engine moment lol
+			if (FlxG.save.data.downscroll) flipY = true;
 
 			animation.play(ANIM_HOLDEND[col]);
 			updateHitbox();
+			alpha = 0.7;
 
 			if (_skin == PIXEL) x += 30;
 
@@ -299,7 +302,7 @@ class Note extends FlxSprite
 		{
 			tooLate = true;
 			canBeHit = false;
-			if (alpha > 0.3) alpha = 0.3;
+			alpha = 0.3;
 			return;
 		}
 
