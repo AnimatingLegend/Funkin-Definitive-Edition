@@ -1,0 +1,6 @@
+{
+  "name": "tutorial",
+  "displayName": "Teaching Time",
+  "songs": ["Tutorial"],
+  "characters": ["", "bf", "gf"]
+}
