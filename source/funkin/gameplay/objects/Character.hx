@@ -143,7 +143,7 @@ class Character extends FlxSprite
 		if (Assets.exists(jsonPath))
 		{
 			var rawPath = Assets.getText(jsonPath);
-			trace('[CHARACTER] raw JSON length: ${rawPath.length}');
+			trace('CHARACTER: raw JSON length: ${rawPath.length}');
 
 			var charData:CharacterData = Json.parse(Assets.getText(jsonPath));
 			applyCharacterData(charData);
@@ -151,7 +151,7 @@ class Character extends FlxSprite
 		}
 
 		// Nothing found; fall back to default.
-		trace('[CHARACTER] No JSON or spritesheet found for "$id". Falling back to $DEFAULT_CHARACTER.');
+		trace('CHARACTER: No JSON or spritesheet found for "$id". Falling back to $DEFAULT_CHARACTER.');
 		if (id != DEFAULT_CHARACTER)
 		{
 			currentCharacter = DEFAULT_CHARACTER;
@@ -159,7 +159,7 @@ class Character extends FlxSprite
 		}
 		else
 		{
-			trace('[CHARACTER] Default character "$DEFAULT_CHARACTER" has no JSON or spritesheet. Please check your character data.');
+			trace('CHARACTER: Default character "$DEFAULT_CHARACTER" has no JSON or spritesheet. Please check your character data.');
 		}
 	}
 
@@ -169,10 +169,10 @@ class Character extends FlxSprite
 	 */
 	function applyCharacterData(data:CharacterData):Void
 	{
-		trace('[CHARACTER] applyCharacterData called for: ' + currentCharacter);
-		trace('[CHARACTER] assetPath: ' + data.assetPath);
-		trace('[CHARACTER] animations count: ' + (data.animations != null ? data.animations.length : 0));
-		trace('[CHARACTER] renderType: ' + data.renderType);
+		trace('CHARACTER: applyCharacterData called for: ' + currentCharacter);
+		trace('CHARACTER: assetPath: ' + data.assetPath);
+		trace('CHARACTER: animations count: ' + (data.animations != null ? data.animations.length : 0));
+		trace('CHARACTER: renderType: ' + data.renderType);
 
 		var library = data.library != null ? data.library : 'shared';
 

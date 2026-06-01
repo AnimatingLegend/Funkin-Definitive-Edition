@@ -76,7 +76,7 @@ class Main extends Sprite
 		openfl.Lib.application.onExit.add((_) ->
 		{
 			openfl.Assets.cache.clear();
-			trace('[EXITING] Resources are disposed. Game is closing now.');
+			trace('EXITING: Resources are disposed. Game is closing now.');
 		});
 		#end
 
@@ -157,24 +157,24 @@ class Main extends Sprite
 		#if !debug
 		var http = new haxe.Http('https://raw.githubusercontent.com/AnimatingLegend/Funkin-Definitive-Edition/refs/heads/main/gitVersion.txt');
 
-		trace('[VERSION] Checking for updates...');
+		trace('VERSION: Checking for updates...');
 
 		http.onData = function(data:String)
 		{
 			updateVersion = data.split('\n')[0].trim();
 			var currentVersion:String = DEFINITIVE_VERSION.trim();
 
-			trace('[VERSION] Current version: ${currentVersion} | New version: ${updateVersion}');
+			trace('VERSION: Current version: ${currentVersion} | New version: ${updateVersion}');
 
 			if (updateVersion != currentVersion)
 			{
-				trace('[VERSION] New version available. Please update to ${updateVersion}.');
+				trace('VERSION: New version available. Please update to ${updateVersion}.');
 				mustUpdate = true;
 			}
-			else trace('[VERSION] Game version is up to date.');
+			else trace('VERSION: Game version is up to date.');
 		}
 
-		http.onError = function(error) { trace('[VERSION] Error: ${error}'); }
+		http.onError = function(error) { trace('VERSION: Error: ${error}'); }
 		http.request();
 		#end
 	}

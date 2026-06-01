@@ -249,7 +249,7 @@ class OptionsMenuState extends MusicBeatState
 			{
 				if (currentSelectedCat.getOptions()[curSelected].pressKey(true))
 				{
-					trace('[OPTIONS] "${currentSelectedCat.getOptions()[curSelected].getDisplay()}" has been ${currentSelectedCat.getOptions()[curSelected].getAccept() ? "enabled" : "disabled"}.');
+					trace('OPTIONS MENU: "${currentSelectedCat.getOptions()[curSelected].getDisplay()}" has been ${currentSelectedCat.getOptions()[curSelected].getAccept() ? "enabled" : "disabled"}.');
 					grpControls.remove(grpControls.members[curSelected]);
 
 					var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, currentSelectedCat.getOptions()[curSelected].getDisplay(),

@@ -86,7 +86,7 @@ class InitState extends FlxState
                FlxG.signals.focusGained.add(onGainFocus);
 
                _coreInitialized = true;
-               trace('[SETUP] Flixel core initialized.');
+               trace('SETUP: Flixel core initialized.');
           } 
      }
 
@@ -95,6 +95,7 @@ class InitState extends FlxState
       */
      function onLostFocus():Void
      {
+          trace('WARNING: User lost focus of the game window. Turning down volume by 25%.');
           if (FlxG.sound.muted || FlxG.sound.volume <= 0 || FlxG.autoPause) return;
           _lostFocusVolume = FlxG.sound.volume;
           FlxG.sound.volume *= 0.25;
@@ -105,6 +106,7 @@ class InitState extends FlxState
       */
      function onGainFocus():Void
      {
+          trace('INFO: User regained focus of the game window. Restoring volume and framerate.');
           if (FlxG.save.data.fpsCap != null)
           {
                FlxG.updateFramerate = FlxG.save.data.fpsCap;

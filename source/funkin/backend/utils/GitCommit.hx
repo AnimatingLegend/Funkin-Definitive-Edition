@@ -16,7 +16,7 @@ class GitCommit
     if (process.exitCode() != 0)
     {
       var message = process.stderr.readAll().toString();
-      haxe.macro.Context.info('[WARN] Could not determine current git commit; is this a proper Git repository?', pos);
+      haxe.macro.Context.info('WARNING: Could not determine current git commit; is this a proper Git repository?', pos);
     }
 
     // read the output of the process

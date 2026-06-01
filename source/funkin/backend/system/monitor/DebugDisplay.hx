@@ -61,7 +61,7 @@ class DebugDisplay extends TextField
      {
           if (parent == null)
           {
-               trace('[WARNING] Parent is null, retrying next frame...');
+               trace('WARNING: Parent is null, retrying next frame...');
                addEventListener(Event.ADDED_TO_STAGE, retryCreateBackground);
                return;
           }
@@ -69,7 +69,7 @@ class DebugDisplay extends TextField
           debugDisplayBG.x = this.x;
           debugDisplayBG.y = this.y;
           parent.addChildAt(debugDisplayBG, parent.getChildIndex(this));
-          trace('[INFO] Created debug display background.');
+          trace('INFO: Created debug display background.');
      }
 
      function retryCreateBackground(_):Void

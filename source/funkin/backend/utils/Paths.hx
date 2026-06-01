@@ -86,8 +86,8 @@ class Paths
 
 					currentTrackedAssets.remove(key);
 					counter++;
-					trace('[MEMORY] Cleared $key from RAM.');
-					trace('[MEMORY] Cleared and removed $counter assets from RAM.');
+					trace('RAM(cache): Cleared $key from memory.');
+					trace('RAM(cache): Cleared and removed $counter assets from memory.');
 				}
 			}
 		}
@@ -131,8 +131,8 @@ class Paths
 				object = null;
 
 				counterAssets++;
-				trace('[MEMORY] Cleared $key from RAM.');
-				trace('[MEMORY] Cleared and removed $counterAssets assets from RAM.');
+				trace('RAM(cache): Cleared $key from RAM.');
+				trace('RAM(cache): Cleared and removed $counterAssets assets from RAM.');
 			}
 		}
 
@@ -149,8 +149,8 @@ class Paths
 				currentTrackedSounds.remove(key);
 
 				counterSound++;
-				trace('[MEMORY] Cleared $key from RAM.');
-				trace('[MEMORY] Cleared and removed $counterSound cached sounds.');
+				trace('RAM(cache): Cleared $key from RAM.');
+				trace('RAM(cache): Cleared and removed $counterSound cached sounds.');
 			}
 		}
 

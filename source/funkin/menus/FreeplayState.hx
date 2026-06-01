@@ -186,7 +186,7 @@ class FreeplayState extends MusicBeatState
 		var rawData:String = openfl.utils.Assets.getText(Paths.json('freeplaySonglist'));
 		if (rawData == null || rawData.trim() == "")
 		{
-			trace('[SONG METADATA] No song metadata found in freeplaySonglist.json. Please check your JSON file.');
+			trace('SONG METADATA: No song metadata found in freeplaySonglist.json. Please check your JSON file.');
 			return;
 		}
 
@@ -281,7 +281,7 @@ class FreeplayState extends MusicBeatState
 			PlayState.isStoryMode = false;
 			PlayState.storyDifficulty = currentDifficulty;
 			PlayState.storyWeek = songs[currentlySelected].week;
-			trace('[FREEPLAY MENU] Starting song: ${songs[currentlySelected].songName}, Week: ${songs[currentlySelected].week}, Difficulty: ${CoolUtil.difficultyString()}');
+			trace('FREEPLAY MENU: Starting song: ${songs[currentlySelected].songName}, Week: ${songs[currentlySelected].week}, Difficulty: ${CoolUtil.difficultyString()}');
 			LoadingState.loadAndSwitchState(new PlayState());
 		}
 	}
