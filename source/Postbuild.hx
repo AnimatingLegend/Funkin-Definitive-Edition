@@ -24,7 +24,7 @@ class Postbuild
                FILE_INPUT.close();
 
                sys.FileSystem.deleteFile(BUILD_TIME_FILE);
-               Sys.println('[INFO] Build took: ${formatTime(END - START)}');
+               Sys.println('INFO: Build took: ${formatTime(END - START)}');
           }
      }
 

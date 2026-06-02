@@ -153,7 +153,7 @@ class LoadingState extends MusicBeatState
 		var directory:String = 'shared';
 
 		Paths.setCurrentLevel(directory);
-		trace('Setting asset folder to ' + directory);
+		trace('INFO: Setting asset folder to ' + directory);
 
 		#if NO_PRELOAD_ALL
 		var loaded:Bool = false;

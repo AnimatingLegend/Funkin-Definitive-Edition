@@ -231,14 +231,14 @@ class TitleState extends MusicBeatState
 
 		if (pressedEnter && !skippedIntro && initialized)
 		{
-			trace('[INFO] Just Pressed ${if (FlxG.keys.justPressed.ENTER) "ENTER" else "SPACE"} Skipping Intro...');
+			trace('INFO: Just Pressed ${if (FlxG.keys.justPressed.ENTER) "ENTER" else "SPACE"} Skipping Intro...');
 			skipIntro();
 		}
 
 		#if desktop
 		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE)
 		{
-			trace('[EXITING] Game is closing. Cleaning up resources...');
+			trace('EXITING: Leaving the game through title screen. Cleaning up resources...');
 			Paths.clearStoredMemory();
 			Sys.exit(0);
 		}

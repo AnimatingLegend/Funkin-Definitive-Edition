@@ -231,7 +231,7 @@ class DebugDisplayBGOP extends Option
 		FlxG.save.flush();
 		display = updateDisplay();
 
-		trace('[SETTINGS] DebugDisplayBG set to ${FlxG.save.data.debugDisplayBGOpacity}%.');
+		trace('OPTIONS MENU(values): Decrease "Debug Display BG" to ${FlxG.save.data.debugDisplayBGOpacity}%.');
 		return true;
 	}
 
@@ -245,7 +245,7 @@ class DebugDisplayBGOP extends Option
 		FlxG.save.flush();
 		display = updateDisplay();
 
-		trace('[SETTINGS] DebugDisplayBG set to ${FlxG.save.data.debugDisplayBGOpacity}%.');
+		trace('OPTIONS MENU(values): Increase "Debug Display BG" to ${FlxG.save.data.debugDisplayBGOpacity}%.');
 		return true;
 	}
 
@@ -278,7 +278,7 @@ class FPSCap extends Option
 		FlxG.save.flush();
 		display = updateDisplay();
 
-		trace('[SETTINGS] Decrease FPS Cap to ${FlxG.save.data.fpsCap}.');
+		trace('OPTIONS MENU(values): Decrease "FPS Cap" to ${FlxG.save.data.fpsCap}.');
 		return true;
 	}
 
@@ -292,7 +292,7 @@ class FPSCap extends Option
 		FlxG.save.flush();
 		display = updateDisplay();
 
-		trace('[SETTINGS] Increase FPS Cap to ${FlxG.save.data.fpsCap}.');
+		trace('OPTIONS MENU(values): Increase "FPS Cap" to ${FlxG.save.data.fpsCap}.');
 		return true;
 	}
 
@@ -401,7 +401,7 @@ class StrumLineBG extends Option
 		FlxG.save.flush();
 		display = updateDisplay();
 
-		trace('[SETTINGS] Decrease strumline background to ${FlxG.save.data.strumLineBG}.');
+		trace('OPTIONS MENU(values): Decrease "Strumline BG" to ${FlxG.save.data.strumLineBG}.');
 		return true;
 	}
 
@@ -417,7 +417,7 @@ class StrumLineBG extends Option
 		FlxG.save.flush();
 		display = updateDisplay();
 
-		trace('[SETTINGS] Increase strumline background to ${FlxG.save.data.strumLineBG}.');
+		trace('OPTIONS MENU(values): Increase "Strumline BG" to ${FlxG.save.data.strumLineBG}.');
 		return true;
 	}
 
@@ -688,7 +688,7 @@ class HitsoundVolume extends Option
 		}
 		display = updateDisplay();
 
-		trace('[SETTINGS] Decrease hitsound volume to ${FlxG.save.data.hitsoundVolume}.');
+		trace('OPTIONS MENU(values): Decrease "Hitsound volume" to ${FlxG.save.data.hitsoundVolume}.');
 		return true;
 	}
 
@@ -703,7 +703,7 @@ class HitsoundVolume extends Option
 
 		display = updateDisplay();
 
-		trace('[SETTINGS] Increase hitsound volume to ${FlxG.save.data.hitsoundVolume}.');
+		trace('OPTIONS MENU(values): Increase "Hitsound volume" to ${FlxG.save.data.hitsoundVolume}.');
 		return true;
 	}
 
@@ -733,7 +733,7 @@ class ScrollSpeed extends Option
 		FlxG.save.data.scrollSpeed = FlxMath.roundDecimal(FlxG.save.data.scrollSpeed, 2);
 		display = updateDisplay();
 
-		trace('[SETTINGS] Decrease scroll speed to ${FlxG.save.data.scrollSpeed}.');
+		trace('OPTIONS MENU(values): Decrease "Scroll speed" to ${FlxG.save.data.scrollSpeed}.');
 		return true;
 
 	}
@@ -745,7 +745,7 @@ class ScrollSpeed extends Option
 		FlxG.save.data.scrollSpeed = FlxMath.roundDecimal(FlxG.save.data.scrollSpeed, 2);
 		display = updateDisplay();
 
-		trace('[SETTINGS] Increase scroll speed to ${FlxG.save.data.scrollSpeed}.');
+		trace('OPTIONS MENU(values): Increase "Scroll speed" to ${FlxG.save.data.scrollSpeed}.');
 		return true;
 	}
 
@@ -790,7 +790,7 @@ class WeekUnlocked extends Option
 
 		FlxG.save.data.weekUnlocked = 1;
 		StoryMenuState.weekUnlocked = [true, true];
-		trace('[OPTIONS] Reset Story Progress. Weeks Unlocked ${FlxG.save.data.weekUnlocked}');
+		trace('OPTIONS MENU(values): Reset Story Progress. Weeks Unlocked - ${FlxG.save.data.weekUnlocked}');
 
 		acceptValues = FlxG.save.data.weekUnlocked;
 		display = updateDisplay();
@@ -840,7 +840,7 @@ class ResetHighscore extends Option
 		FlxG.save.data.songScores = null;
 		FlxG.save.data.songCombos = null;
 		FlxG.save.data.songRatings = null;
-		trace('[OPTIONS] Reset all Highscores.');
+		trace('OPTIONS MENU(values): All song highscores have been reset.');
 
 		acceptValues = FlxG.save.data.resetHighscore;
 		display = updateDisplay();
@@ -915,7 +915,7 @@ class ResetALLSettings extends Option
 		DefinitiveData.initialize();
 		FlxG.resetGame();
 
-		trace('[OPTIONS] Reset all settings data.');
+		trace('OPTIONS MENU(values): All settings have been reset.');
 
 		acceptValues = FlxG.save.data.resetSettings;
 		display = updateDisplay();

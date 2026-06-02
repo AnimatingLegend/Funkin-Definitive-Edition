@@ -702,7 +702,7 @@ class PlayState extends MusicBeatState
 		// Initialize Stages
 		curStage = SONG.stage;
 		StageData.songData();
-		trace('[STAGE] Successfully Loaded in ${curStage} Stage.');
+		trace('STAGE METADATA: Successfully Loaded in ${curStage} Stage.');
 		buildStage();
 
 		// Resolve Girlfriend variants
@@ -2303,7 +2303,7 @@ class PlayState extends MusicBeatState
 		if (controls.RESET)
 		{
 			health = 0;
-			trace('[INFO] Pressed RESET, health set to 0.');
+			trace('INFO: Pressed "RESET". Transitioning to gameover screen...');
 		}
 		deathTransition();
 
@@ -2792,7 +2792,7 @@ class PlayState extends MusicBeatState
 	 */
 	public function restartSong():Void
 	{
-		trace('[INFO] Song is restarting. Resetting values...');
+		trace('INFO: Song is restarting. Resetting values...');
 
 		// Reset health immediately to prevent softlocking.
 		health = 1;
@@ -2870,7 +2870,7 @@ class PlayState extends MusicBeatState
       generateSong(SONG.song);
 			notes.cameras = [camHUD];
 
-			trace('[INFO] Values reset. Starting song...');
+			trace('INFO: Values have been reset. Starting song...');
       startCountdown();
     });
 	}
@@ -2939,7 +2939,7 @@ class PlayState extends MusicBeatState
 			{
 				var difficulty:String = getDifficultySuffix();
 
-				trace('[STORY MODE] Loading next song: ' + storyPlaylist[0].toLowerCase() + difficulty);
+				trace('STORY MODE: Loading next song: ' + storyPlaylist[0].toLowerCase() + difficulty);
 				if (SONG.song.toLowerCase() == 'eggnog')  
 				{
 					var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
@@ -2967,7 +2967,7 @@ class PlayState extends MusicBeatState
 		} 
 		else 
 		{
-			trace('Returning to freeplay menu...');
+			trace('INFO: Returning to freeplay menu...');
 			FlxG.switchState(new FreeplayState());
 			FlxG.sound.playMusic(Paths.music('freakyMenu/freakyMenu'));
 		}

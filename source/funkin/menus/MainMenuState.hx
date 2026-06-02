@@ -89,7 +89,9 @@ class MainMenuState extends MusicBeatState
 		{
 			startExitState(new FreeplayState());
 		});
-		if (!FlxG.save.data.weekUnlocked || StoryMenuState.weekUnlocked[7])
+		// If the player has unlocked all 7 weeks, display the Kickstarter donate asset.
+		// Otherwise, display the default donate asset.
+		if (FlxG.save.data.weekUnlocked != null && FlxG.save.data.weekUnlocked >= 7)
 		{
 			menuItems.createItem(null, null, "kickstarter", selectDonate, true);
 		} 

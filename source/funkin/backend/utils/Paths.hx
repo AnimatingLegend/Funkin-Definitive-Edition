@@ -86,8 +86,8 @@ class Paths
 
 					currentTrackedAssets.remove(key);
 					counter++;
-					trace('[MEMORY] Cleared $key from RAM.');
-					trace('[MEMORY] Cleared and removed $counter assets from RAM.');
+					trace('RAM(cache): Cleared $key from memory.');
+					trace('RAM(cache): Cleared and removed $counter assets from memory.');
 				}
 			}
 		}
@@ -131,8 +131,8 @@ class Paths
 				object = null;
 
 				counterAssets++;
-				trace('[MEMORY] Cleared $key from RAM.');
-				trace('[MEMORY] Cleared and removed $counterAssets assets from RAM.');
+				trace('RAM(cache): Cleared $key from RAM.');
+				trace('RAM(cache): Cleared and removed $counterAssets assets from RAM.');
 			}
 		}
 
@@ -149,8 +149,8 @@ class Paths
 				currentTrackedSounds.remove(key);
 
 				counterSound++;
-				trace('[MEMORY] Cleared $key from RAM.');
-				trace('[MEMORY] Cleared and removed $counterSound cached sounds.');
+				trace('RAM(cache): Cleared $key from RAM.');
+				trace('RAM(cache): Cleared and removed $counterSound cached sounds.');
 			}
 		}
 
@@ -167,6 +167,51 @@ class Paths
 	 */
 	static var currentLevel:String;
 	static public function setCurrentLevel(name:String) currentLevel = name.toLowerCase();
+
+	/**
+	 * Load a JSON file, and parse it when possible.
+	 * @param key file name
+	 * @param library wanted directory
+	 */
+	static public function loadJSON(key:String, ?library:String):Dynamic
+	{
+		var rawJsonPath = '';
+
+		try
+		{
+			rawJsonPath = OpenFlAssets.getText(Paths.json(key, library));
+			trace('JSON: Loaded $key from $rawJsonPath');
+		}
+		catch (err)
+		{
+			trace('JSON: Failed to load $key from $rawJsonPath');
+			rawJsonPath = null;
+		}
+
+		// Cleanup on files that have bad data at the end.
+		if (rawJsonPath != null)
+		{
+			while (!rawJsonPath.endsWith('}')) 
+				rawJsonPath = rawJsonPath.substr(0, rawJsonPath.length - 1);
+		}
+
+		try
+		{
+			// Attempt to parse the JSON data.
+			if (rawJsonPath != null) 
+			{
+				trace('JSON: Successfully parsed $key from $rawJsonPath');
+				return haxe.Json.parse(rawJsonPath);
+			}
+
+			return null;
+		}
+		catch (err)
+		{
+			trace('JSON: Failed to parse $key from $rawJsonPath');
+			return null;
+		}
+	}
 
 	static public function getPath(file:String, type:AssetType, library:Null<String>)
 	{
@@ -206,9 +251,8 @@ class Paths
 	inline static public function xml(key:String, ?library:String)
 		return getPath('data/$key.xml', TEXT, library);
 
-	// TODO: remove `charts`, and just use `data` for everything, since it's more intuitive.
 	inline static public function json(key:String, ?library:String)
-		return getPath('data/charts/$key.json', TEXT, library);
+		return getPath('data/$key.json', TEXT, library);
 
 	static public function sound(key:String, ?library:String)
 		return getPath('sounds/$key.$SOUND_EXT', SOUND, library);

@@ -495,7 +495,7 @@ class AnimationDebug extends MusicBeatState
 			}
 			prefixes.sort((a, b) -> a < b ? -1 : a > b ? 1 : 0);
 		}
-		catch (e) { trace('[ANIMATION EDITOR] XML parse error: $e'); }
+		catch (e) { trace('CHARACTER ANIMATION DEBUGGER: XML parse error: $e'); }
 
 		return prefixes;
 	}

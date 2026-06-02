@@ -22,11 +22,11 @@ class NoteSplash extends FlxSprite
 
 	public function setupNoteSplash(x:Float, y:Float, ?notedata:Int = 0)
 	{
-		alpha = 0.6;
 		setPosition(x, y);
 
 		animation.play('note' + notedata + '-' + FlxG.random.int(0, 1), true);
 		updateHitbox();
+		alpha = 0.6;
 
 		offset.set(width * 0.3, height * 0.3);
 	}
@@ -61,11 +61,11 @@ class NoteSplashPixel extends FlxSprite
 
 	public function setupNoteSplash(x:Float, y:Float, ?notedata:Int = 0)
 	{
-		alpha = 0.7;
 		setPosition(x, y);
 
 		animation.play('note' + notedata + '-' + FlxG.random.int(0, 1), true);
 		updateHitbox();
+		alpha = 0.6;
 
 		offset.set(width * 0.3, height * 0.3);
 	}
