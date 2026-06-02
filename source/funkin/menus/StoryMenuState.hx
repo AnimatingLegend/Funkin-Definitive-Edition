@@ -308,29 +308,40 @@ class StoryMenuState extends MusicBeatState
 		return result;
 		#end
 
-		// Tutorial is always unlocked.
-		result.push(true);
-
-		// weekUnlocked is stored as an Int representing how many weeks past
-		// tutorial have been beaten.
 		var unlockedCount:Int = (FlxG.save.data.weekUnlocked != null)
 			? Std.int(FlxG.save.data.weekUnlocked)
 			: 0;
 
-		for (index in 0...weekDatas.length - 1) result.push(index < unlockedCount);
+		for (index in 0...weekDatas.length - 1) 
+		{
+			// Week 0 (Tutorial) is always unlocked. Rest depend on unlocked count.
+			result.push(index == 0 || index <= unlockedCount);
+		}
+
 		return result;
 	}
 
 	public static function unlockNextWeek(week:Int):Void
 	{
-		if (week <= 7)
+		if (PlayState.botplay) 
 		{
-			weekUnlocked.push(true);
-			trace('STORY MENU: Week $week beaten - Week ${week + 1} unlocked!');
+			trace('STORY MENU: Botplay detected! Skipping week unlock.');
+			return;
 		}
 
-		FlxG.save.data.weekUnlocked = weekUnlocked.length - 1;
-		FlxG.save.flush();
+		// Week is the week just beaten (0-indexed.
+    // Store how many non-tutorial weeks have been beaten.
+		var currentlyUnlocked:Int = (FlxG.save.data.weekUnlocked != null)
+			? Std.int(FlxG.save.data.weekUnlocked)
+			: 0;
+
+		if (week >= currentlyUnlocked)
+		{
+			FlxG.save.data.weekUnlocked = week + 1;
+			FlxG.save.flush();
+
+			trace('STORY MENU: Week $week beaten - Week ${week + 1} unlocked!');
+		}
 	}
 
 	//
