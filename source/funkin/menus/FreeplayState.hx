@@ -149,18 +149,12 @@ class FreeplayState extends MusicBeatState
 		add(comboText);
 		add(scoreText);
 
-		// Set the currently selected song to the first unlocked song.
+		// Restore the user's position in the menu.
 		currentlySelected = FreeplayState.lastSelected;
 		currentDifficulty = FreeplayState.lastDifficulty;
-		if (currentlySelected >= songs.length) currentlySelected = 0;
 
-		/*
-		// Skip to the first unlocked song in the list.
-		while (!isSongUnlocked(currentlySelected) && currentlySelected < songs.length - 1)
-		{
-			currentlySelected++;
-		}
-		*/
+		// Set the currently selected song to the first unlocked song.
+		if (currentlySelected >= songs.length) currentlySelected = 0;
 
 		changeSelection();
 		changeDifficulty();
@@ -199,7 +193,7 @@ class FreeplayState extends MusicBeatState
 
 	/**
 	 * Returns whether a song is unlocked based on its index in the songs array.
-	 * Week 0 (Tutorial) is always unlocked, 
+	 * Week 0 (Tutorial), & week 1 is always unlocked, 
 	 * 	and the rest depend on the player's progress (`FlxG.save.data.weekUnlocked`).
 	 */
 	function isSongUnlocked(songIndex:Int):Bool
@@ -207,12 +201,12 @@ class FreeplayState extends MusicBeatState
 		// Unlock all songs in debug mode.
 		if (isDebug) return true;
 		var week = songs[songIndex].week;
-		// Tutorial should always be unlocked.
-		if (week == 0) return true;
+		// Tutorial and week 1 should always be unlocked.
+		if (week == 0 || week == 1) return true;
 		// No weeks unlocked at all.
 		if (!FlxG.save.data.weekUnlocked) return false;
 		// Check if the specific week is unlocked.
-		return StoryMenuState.weekUnlocked[week] == true;
+		return FlxG.save.data.weekUnlocked >= week;
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String):Void
@@ -363,6 +357,7 @@ class FreeplayState extends MusicBeatState
     diffText.x -= diffText.width / 2;
 	}
 }
+
 class SongMetadata
 {
 	public var songName:String = "";
