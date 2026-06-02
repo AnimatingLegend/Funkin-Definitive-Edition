@@ -2024,7 +2024,7 @@ class PlayState extends MusicBeatState
 		add(notes);
 
 		final noteSkin:NoteSkin = curStage.startsWith('school') ? PIXEL : DEFAULT;
-		final sustainStep:Float = 0.45 * Conductor.stepCrochet * FlxMath.roundDecimal(scrollSpeed, 2);
+		final sustainStep:Float = 0.45 * Conductor.stepCrochet * FlxMath.roundDecimal(scrollSpeed, 2) + 2;
 		var daBeats:Int = 0;
 
 		for (section in songData.notes)
@@ -2514,7 +2514,15 @@ class PlayState extends MusicBeatState
 		if (unspawnNotes[0] != null && unspawnNotes[0].strumTime - Conductor.songPosition < 1500) 
 		{
 			var dunceNote:Note = unspawnNotes[0];
-			notes.add(dunceNote);
+			// Note head should always be over the sustain trail.
+			if (dunceNote.isSustainNote) 
+			{
+				notes.insert(0, dunceNote);
+			}
+			else 
+			{
+				notes.add(dunceNote);
+			}
 			unspawnNotes.splice(unspawnNotes.indexOf(dunceNote), 1);
 		}
 	}
@@ -2547,6 +2555,7 @@ class PlayState extends MusicBeatState
 			// into multiple pieces.
 			final roundedSpeed:Float = FlxMath.roundDecimal(leSpeed, 2);
 			final sustainStep:Float = 0.45 * Conductor.stepCrochet * roundedSpeed;
+			final sustainAnchor:Float = Note.SWAG_WIDTH * 0.5;
 
 			// Strum line center Y (used for sustain clipping)
 			final center:Float = strumLine.y + (Note.SWAG_WIDTH / 2);
@@ -2567,7 +2576,7 @@ class PlayState extends MusicBeatState
 					
 				if (daNote.isSustainNote)
 				{
-					daNote.y -= daNote.height - sustainStep;
+					daNote.y -= daNote.height - sustainStep - sustainAnchor;
 				}
 			}
 			else
@@ -2577,7 +2586,7 @@ class PlayState extends MusicBeatState
 				
 				if (daNote.isSustainNote) 
 				{
-					daNote.y -= sustainStep;
+					daNote.y -= sustainStep - sustainAnchor;
 				}
 			}
 
@@ -2698,6 +2707,8 @@ class PlayState extends MusicBeatState
 			// Offscreen Kill + Miss penalty
 			if (offscreen)
 			{
+				daNote.alpha = 0.4;
+				
 				if (daNote.mustPress && !botplay && !daNote.wasGoodHit && !daNote.isSustainNote)
 				{
 					comboBreak(daNote.noteData);

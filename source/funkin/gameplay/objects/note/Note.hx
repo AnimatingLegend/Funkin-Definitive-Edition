@@ -242,7 +242,7 @@ class Note extends FlxSprite
 
 			animation.play(ANIM_HOLDEND[col]);
 			updateHitbox();
-			alpha = 0.7;
+			alpha = 0.8;
 
 			if (_skin == PIXEL) x += 30;
 
@@ -264,23 +264,9 @@ class Note extends FlxSprite
 		if (!isSustainNote) return;
 		if (prevNote == null || prevNote == this || !prevNote.isSustainNote) return;
 
-		final speed = FlxMath.roundDecimal(
-			FlxG.save.data.scrollSpeed == 1 ? PlayState.SONG.speed : FlxG.save.data.scrollSpeed, 2
-		);
+		scrollSpeed = FlxMath.roundDecimal(scrollSpeed, 2);
 
-		prevNote.scale.y = 1.0;
-
-		if (_skin == PIXEL)
-		{
-			prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.52) * speed;
-			prevNote.scale.y *= PIXEL_ZOOM;
-		}
-		else
-		{
-			prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.52) * speed;
-			prevNote.scale.y *= 0.7;
-		}
-
+		prevNote.scale.y = (0.45 * Conductor.stepCrochet * scrollSpeed + 2) / prevNote.frameHeight;
 		prevNote.updateHitbox();
 	}
 
@@ -302,7 +288,7 @@ class Note extends FlxSprite
 		{
 			tooLate = true;
 			canBeHit = false;
-			alpha = 0.3;
+			if (alpha > 0.3) alpha = 0.3;
 			return;
 		}
 
