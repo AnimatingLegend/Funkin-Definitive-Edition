@@ -44,7 +44,7 @@ class DefinitiveData
 		if (FlxG.save.data.noteSplash == null)
 			FlxG.save.data.noteSplash = true;
 		if (FlxG.save.data.hideCPUStrums == null)
-			FlxG.save.data.hideCPUStrums = true;
+			FlxG.save.data.hideCPUStrums = false;
 		if (FlxG.save.data.fdeWatermark == null)
 			FlxG.save.data.fdeWatermark = true;
 
