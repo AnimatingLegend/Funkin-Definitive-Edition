@@ -1934,7 +1934,7 @@ class PlayState extends MusicBeatState
 		Conductor.songPosition = 0;
 		Conductor.songPosition -= Conductor.crochet * 5;
 
-		if (FlxG.sound.music.playing)
+		if (FlxG.sound.music != null && FlxG.sound.music.playing)
 			FlxG.sound.music.stop();
 
 		// Determine whether we need pixel UI assets. (Week 6 stages)
