@@ -3,7 +3,6 @@ package funkin.backend;
 import funkin.backend.chart.Conductor.BPMChangeEvent;
 import funkin.backend.system.Controls;
 import funkin.backend.system.PlayerSettings;
-
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.transition.TransitionData;
 
@@ -23,7 +22,7 @@ class MusicBeatSubstate extends FlxSubState
 
 	override function update(elapsed:Float)
 	{
-		//everyStep();
+		// everyStep();
 		var oldStep:Int = curStep;
 
 		updateCurStep();
@@ -31,7 +30,6 @@ class MusicBeatSubstate extends FlxSubState
 
 		if (oldStep != curStep && curStep >= 0)
 			stepHit();
-
 
 		super.update(elapsed);
 	}
@@ -60,6 +58,6 @@ class MusicBeatSubstate extends FlxSubState
 
 	public function beatHit():Void
 	{
-		//do literally nothing dumbass
+		// do literally nothing dumbass
 	}
 }

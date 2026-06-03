@@ -8,18 +8,17 @@ import sys.FileSystem;
 using StringTools;
 
 /**
-* Welcome To `StageData.hx`!
-* Basically, to put it in more simpler terms all the backend stuff for stages goes here, from songs, to the characters position on stages.
-* Its Pretty jank rn, but as time moves forward it will probably be more polished and easier to understand :]
+	* Welcome To `StageData.hx`!
+	* Basically, to put it in more simpler terms all the backend stuff for stages goes here, from songs, to the characters position on stages.
+	* Its Pretty jank rn, but as time moves forward it will probably be more polished and easier to understand :]
 
-** FUNCTION BREAK DOWN **
-* `songData()` - Add a list of songs, and whatever stage you want to preload it to, add that!
-* `charData()` - To sum it up, this basically preloads the character, and the positioning of the stage they are on.
+	** FUNCTION BREAK DOWN **
+	* `songData()` - Add a list of songs, and whatever stage you want to preload it to, add that!
+	* `charData()` - To sum it up, this basically preloads the character, and the positioning of the stage they are on.
 **/
-
 class StageData extends MusicBeatState
 {
-    public static function songData():Void
+	public static function songData():Void
 	{
 		if (PlayState.SONG.stage == null || PlayState.SONG.stage.length < 1)
 		{
@@ -49,19 +48,20 @@ class StageData extends MusicBeatState
 		PlayState.SONG.stage = PlayState.curStage;
 	}
 
-    public static function charData():Void
+	public static function charData():Void
 	{
 		PlayState.boyfriend = new Boyfriend(770, 450, PlayState.SONG.player1);
 		PlayState.dad = new Character(100, 100, PlayState.SONG.player2);
 
 		PlayState.camPos = new FlxPoint(PlayState.dad.getGraphicMidpoint().x, PlayState.dad.getGraphicMidpoint().y);
 
-		switch (PlayState.SONG.player2) 
+		switch (PlayState.SONG.player2)
 		{
 			case 'gf':
 				PlayState.dad.setPosition(PlayState.gf.x, PlayState.gf.y);
 				PlayState.gf.visible = false;
-				if (PlayState.isStoryMode) {
+				if (PlayState.isStoryMode)
+				{
 					PlayState.camPos.x += 600;
 					PlayState.tweenCamIn();
 				}
@@ -95,7 +95,7 @@ class StageData extends MusicBeatState
 		}
 
 		// Stage Positioning
-		switch (PlayState.curStage) 
+		switch (PlayState.curStage)
 		{
 			case 'limo':
 				PlayState.boyfriend.y -= 220;

@@ -2,7 +2,6 @@ package funkin.backend.settings;
 
 import funkin.backend.utils.DefinitiveData;
 import funkin.backend.utils.Highscore;
-
 import funkin.menus.OptionsMenuState;
 import funkin.menus.StoryMenuState;
 
@@ -49,58 +48,58 @@ class Option
 	public var boldDisplay:Bool = true;
 
 	/**
-	 * Get the display of the option
-	 * @return String
-		return display
+		* Get the display of the option
+		* @return String
+				return display
 	 */
 	public final function getDisplay():String
 		return display;
 
 	/**
-	 * Get the accept value of the option
-	 * @return Bool
-		return acceptValues
+		* Get the accept value of the option
+		* @return Bool
+				return acceptValues
 	 */
 	public final function getAccept():Bool
 		return acceptValues;
 
 	/**
-	 * Get the description of the option
-	 * @return String
-		return description
+		* Get the description of the option
+		* @return String
+				return description
 	 */
 	public final function getDescription():String
 		return description;
 
 	/**
-	 * Press the option
-	 * @param changeData 
-	 * @return Bool
-		return false
+		* Press the option
+		* @param changeData 
+		* @return Bool
+				return false
 	 */
 	public function pressKey(value:Bool):Bool
 		return false;
 
 	/**
-	 * Update the display
-	 * @return String
-		return ""
+		* Update the display
+		* @return String
+				return ""
 	 */
 	private function updateDisplay():String
 		return "";
 
 	/**
-	 * If your option has number values press your left key to update.
-	 * @return Bool
-		return false
+		* If your option has number values press your left key to update.
+		* @return Bool
+				return false
 	 */
 	public function pressLeftKey():Bool
 		return false;
 
 	/**
-	 * If your option has number values press your right key to update.
-	 * @return Bool
-		return false
+		* If your option has number values press your right key to update.
+		* @return Bool
+				return false
 	 */
 	public function pressRightKey():Bool
 		return false;
@@ -119,7 +118,8 @@ class LowQuality extends Option
 
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.lowQuality = !FlxG.save.data.lowQuality;
+		if (value)
+			FlxG.save.data.lowQuality = !FlxG.save.data.lowQuality;
 		acceptValues = FlxG.save.data.lowQuality;
 		display = updateDisplay();
 
@@ -140,7 +140,8 @@ class Antialiasing extends Option
 
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.antialiasing = !FlxG.save.data.antialiasing;
+		if (value)
+			FlxG.save.data.antialiasing = !FlxG.save.data.antialiasing;
 
 		acceptValues = FlxG.save.data.antialiasing;
 		display = updateDisplay();
@@ -161,7 +162,8 @@ class Shaders extends Option
 
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.shaders = !FlxG.save.data.shaders;
+		if (value)
+			FlxG.save.data.shaders = !FlxG.save.data.shaders;
 
 		acceptValues = FlxG.save.data.shaders;
 		display = updateDisplay();
@@ -182,7 +184,7 @@ class DebugDisplayOP extends Option
 
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) 
+		if (value)
 		{
 			FlxG.save.data.debugDisplay = !FlxG.save.data.debugDisplay;
 
@@ -223,7 +225,8 @@ class DebugDisplayBGOP extends Option
 			FlxG.save.data.debugDisplayBGOpacity -= 10;
 
 			// If the value is less than 0, return it.
-			if (FlxG.save.data.debugDisplayBGOpacity < 0) return false;
+			if (FlxG.save.data.debugDisplayBGOpacity < 0)
+				return false;
 			FlxG.save.data.debugDisplayBGOpacity = FlxMath.roundDecimal(FlxG.save.data.debugDisplayBGOpacity, 2);
 		}
 		Main.debugDisplay.backgroundOpacity = FlxG.save.data.debugDisplayBGOpacity / 100;
@@ -238,7 +241,8 @@ class DebugDisplayBGOP extends Option
 	public override function pressRightKey():Bool
 	{
 		// If the value is less than 100, increase it by 50%.
-		if (FlxG.save.data.debugDisplayBGOpacity < 100) FlxG.save.data.debugDisplayBGOpacity += 10;
+		if (FlxG.save.data.debugDisplayBGOpacity < 100)
+			FlxG.save.data.debugDisplayBGOpacity += 10;
 		FlxG.save.data.debugDisplayBGOpacity = FlxMath.roundDecimal(FlxG.save.data.debugDisplayBGOpacity, 2);
 		Main.debugDisplay.backgroundOpacity = FlxG.save.data.debugDisplayBGOpacity / 100;
 
@@ -271,7 +275,8 @@ class FPSCap extends Option
 	public override function pressLeftKey():Bool
 	{
 		// If shift is pressed, decrease the framerate by 10, otherwise decrease it by 1.
-		if (FlxG.drawFramerate > 60) FlxG.drawFramerate -= 1 * (FlxG.keys.pressed.SHIFT || FlxG.keys.pressed.CONTROL ? 10 : 1);
+		if (FlxG.drawFramerate > 60)
+			FlxG.drawFramerate -= 1 * (FlxG.keys.pressed.SHIFT || FlxG.keys.pressed.CONTROL ? 10 : 1);
 		FlxG.save.data.fpsCap = FlxG.drawFramerate;
 		FlxG.updateFramerate = FlxG.drawFramerate;
 
@@ -285,7 +290,8 @@ class FPSCap extends Option
 	public override function pressRightKey():Bool
 	{
 		// If shift is pressed, increase the framerate by 10, otherwise increase it by 1.
-		if (FlxG.drawFramerate < 280) FlxG.drawFramerate += 1 * (FlxG.keys.pressed.SHIFT || FlxG.keys.pressed.CONTROL ? 10 : 1);
+		if (FlxG.drawFramerate < 280)
+			FlxG.drawFramerate += 1 * (FlxG.keys.pressed.SHIFT || FlxG.keys.pressed.CONTROL ? 10 : 1);
 		FlxG.save.data.fpsCap = FlxG.drawFramerate;
 		FlxG.updateFramerate = FlxG.drawFramerate;
 
@@ -339,7 +345,8 @@ class AccuracyDisplay extends Option
 
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.accuracyDisplay = !FlxG.save.data.accuracyDisplay;
+		if (value)
+			FlxG.save.data.accuracyDisplay = !FlxG.save.data.accuracyDisplay;
 
 		acceptValues = FlxG.save.data.accuracyDisplay;
 		display = updateDisplay();
@@ -350,7 +357,7 @@ class AccuracyDisplay extends Option
 		return 'Accuracy Display';
 }
 
-class JudgementDisplay extends Option 
+class JudgementDisplay extends Option
 {
 	public function new(desc:String)
 	{
@@ -360,7 +367,8 @@ class JudgementDisplay extends Option
 
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.judgementDisplay = !FlxG.save.data.judgementDisplay;
+		if (value)
+			FlxG.save.data.judgementDisplay = !FlxG.save.data.judgementDisplay;
 
 		acceptValues = FlxG.save.data.judgementDisplay;
 		display = updateDisplay();
@@ -394,7 +402,8 @@ class StrumLineBG extends Option
 			FlxG.save.data.strumLineBG -= 10;
 
 			// If the value is less than 0, return it.
-			if (FlxG.save.data.strumLineBG < 0) return false;
+			if (FlxG.save.data.strumLineBG < 0)
+				return false;
 			FlxG.save.data.strumLineBG = FlxMath.roundDecimal(FlxG.save.data.strumLineBG, 2);
 		}
 
@@ -435,7 +444,8 @@ class HideHUD extends Option
 
 	public override function pressKey(changeData:Bool):Bool
 	{
-		if (changeData) FlxG.save.data.hideHUD = !FlxG.save.data.hideHUD;
+		if (changeData)
+			FlxG.save.data.hideHUD = !FlxG.save.data.hideHUD;
 
 		acceptValues = FlxG.save.data.hideHUD;
 		display = updateDisplay();
@@ -456,7 +466,8 @@ class NoteSplashOP extends Option
 
 	public override function pressKey(changeData:Bool):Bool
 	{
-		if (changeData) FlxG.save.data.noteSplash  = !FlxG.save.data.noteSplash;
+		if (changeData)
+			FlxG.save.data.noteSplash = !FlxG.save.data.noteSplash;
 
 		acceptValues = FlxG.save.data.noteSplash;
 		display = updateDisplay();
@@ -477,7 +488,8 @@ class HideCPUStrums extends Option
 
 	public override function pressKey(changeData:Bool):Bool
 	{
-		if (changeData) FlxG.save.data.hideCPUStrums  = !FlxG.save.data.hideCPUStrums;
+		if (changeData)
+			FlxG.save.data.hideCPUStrums = !FlxG.save.data.hideCPUStrums;
 
 		acceptValues = FlxG.save.data.hideCPUStrums;
 		display = updateDisplay();
@@ -495,16 +507,17 @@ class FDEWatermark extends Option
 		super();
 		description = desc;
 	}
-	
+
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.fdeWatermark = !FlxG.save.data.fdeWatermark;
+		if (value)
+			FlxG.save.data.fdeWatermark = !FlxG.save.data.fdeWatermark;
 
 		acceptValues = FlxG.save.data.fdeWatermark;
 		display = updateDisplay();
 		return true;
 	}
-	
+
 	private override function updateDisplay():String
 		return 'FDE Watermark';
 }
@@ -519,16 +532,17 @@ class Naughtyness extends Option
 		super();
 		description = desc;
 	}
-	
+
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.naughtyness = !FlxG.save.data.naughtyness;
+		if (value)
+			FlxG.save.data.naughtyness = !FlxG.save.data.naughtyness;
 
 		acceptValues = FlxG.save.data.naughtyness;
 		display = updateDisplay();
 		return true;
 	}
-	
+
 	private override function updateDisplay():String
 		return 'Naughtyness';
 }
@@ -540,16 +554,17 @@ class Downscroll extends Option
 		super();
 		description = desc;
 	}
-	
+
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.downscroll = !FlxG.save.data.downscroll;
+		if (value)
+			FlxG.save.data.downscroll = !FlxG.save.data.downscroll;
 
 		acceptValues = FlxG.save.data.downscroll;
 		display = updateDisplay();
 		return true;
 	}
-	
+
 	private override function updateDisplay():String
 		return 'Downscroll';
 }
@@ -561,16 +576,17 @@ class Middlescroll extends Option
 		super();
 		description = desc;
 	}
-	
+
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.middlescroll = !FlxG.save.data.middlescroll;
+		if (value)
+			FlxG.save.data.middlescroll = !FlxG.save.data.middlescroll;
 
 		acceptValues = FlxG.save.data.middlescroll;
 		display = updateDisplay();
 		return true;
 	}
-	
+
 	private override function updateDisplay():String
 		return 'Middlescroll';
 }
@@ -582,16 +598,17 @@ class FlashingLights extends Option
 		super();
 		description = desc;
 	}
-	
+
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.flashingLights = !FlxG.save.data.flashingLights;
+		if (value)
+			FlxG.save.data.flashingLights = !FlxG.save.data.flashingLights;
 
 		acceptValues = FlxG.save.data.flashingLights;
 		display = updateDisplay();
 		return true;
 	}
-	
+
 	private override function updateDisplay():String
 		return 'Flashing Lights';
 }
@@ -603,16 +620,17 @@ class CameraZooms extends Option
 		super();
 		description = desc;
 	}
-	
+
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.cameraZooms = !FlxG.save.data.cameraZooms;
+		if (value)
+			FlxG.save.data.cameraZooms = !FlxG.save.data.cameraZooms;
 
 		acceptValues = FlxG.save.data.cameraZooms;
 		display = updateDisplay();
 		return true;
 	}
-	
+
 	private override function updateDisplay():String
 		return 'Camera Zooms';
 }
@@ -624,17 +642,18 @@ class AutoPause extends Option
 		super();
 		description = desc;
 	}
-	
+
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.autoPause = !FlxG.save.data.autoPause;
+		if (value)
+			FlxG.save.data.autoPause = !FlxG.save.data.autoPause;
 
 		FlxG.autoPause = FlxG.save.data.autoPause;
 		acceptValues = FlxG.save.data.autoPause;
 		display = updateDisplay();
 		return true;
 	}
-	
+
 	private override function updateDisplay():String
 		return 'Pause on Unfocus';
 }
@@ -646,16 +665,17 @@ class GhostTapping extends Option
 		super();
 		description = desc;
 	}
-	
+
 	public override function pressKey(value:Bool):Bool
 	{
-		if (value) FlxG.save.data.ghostTapping = !FlxG.save.data.ghostTapping;	
+		if (value)
+			FlxG.save.data.ghostTapping = !FlxG.save.data.ghostTapping;
 
 		acceptValues = FlxG.save.data.ghostTapping;
 		display = updateDisplay();
 		return true;
 	}
-	
+
 	private override function updateDisplay():String
 		return 'Ghost Tapping';
 }
@@ -683,7 +703,8 @@ class HitsoundVolume extends Option
 			FlxG.save.data.hitsoundVolume -= 10;
 
 			// If the value is less than 0, return it.
-			if (FlxG.save.data.hitsoundVolume < 0) return false;
+			if (FlxG.save.data.hitsoundVolume < 0)
+				return false;
 			FlxG.save.data.hitsoundVolume = FlxMath.roundDecimal(FlxG.save.data.hitsoundVolume, 2);
 		}
 		display = updateDisplay();
@@ -729,19 +750,20 @@ class ScrollSpeed extends Option
 	public override function pressLeftKey():Bool
 	{
 		// If the value is greater than 0, decrease it by 10%.
-		if (FlxG.save.data.scrollSpeed > 1) FlxG.save.data.scrollSpeed -= 0.1;
+		if (FlxG.save.data.scrollSpeed > 1)
+			FlxG.save.data.scrollSpeed -= 0.1;
 		FlxG.save.data.scrollSpeed = FlxMath.roundDecimal(FlxG.save.data.scrollSpeed, 2);
 		display = updateDisplay();
 
 		trace('OPTIONS MENU(values): Decrease "Scroll speed" to ${FlxG.save.data.scrollSpeed}.');
 		return true;
-
 	}
 
 	public override function pressRightKey():Bool
 	{
 		// If the value is less than 10, increase it by 10%.
-		if (FlxG.save.data.scrollSpeed < 9.9) FlxG.save.data.scrollSpeed += 0.1;
+		if (FlxG.save.data.scrollSpeed < 9.9)
+			FlxG.save.data.scrollSpeed += 0.1;
 		FlxG.save.data.scrollSpeed = FlxMath.roundDecimal(FlxG.save.data.scrollSpeed, 2);
 		display = updateDisplay();
 
@@ -771,7 +793,8 @@ class WeekUnlocked extends Option
 	{
 		withoutCheckboxes = true;
 
-		if (OptionsMenuState.fromFreeplay) return false;
+		if (OptionsMenuState.fromFreeplay)
+			return false;
 
 		if (!confirm)
 		{
@@ -781,7 +804,7 @@ class WeekUnlocked extends Option
 		}
 
 		// If you actually press `ENTER` then reset all settings.
-		if (!value) 
+		if (!value)
 		{
 			confirm = false;
 			display = updateDisplay();
@@ -816,7 +839,8 @@ class ResetHighscore extends Option
 	{
 		withoutCheckboxes = true;
 
-		if (OptionsMenuState.fromFreeplay) return false;
+		if (OptionsMenuState.fromFreeplay)
+			return false;
 
 		if (!confirm)
 		{
@@ -826,16 +850,19 @@ class ResetHighscore extends Option
 		}
 
 		// If you actually press `ENTER` then reset all settings.
-		if (!value) 
+		if (!value)
 		{
 			confirm = false;
 			display = updateDisplay();
 			return true;
 		}
 
-		for (key in Highscore.songScores.keys()) Highscore.songScores[key] = 0;
-		for (key in Highscore.songCombos.keys()) Highscore.songCombos[key] = 'N/A';
-		for (key in Highscore.songRatings.keys()) Highscore.songRatings[key] = 0.00;
+		for (key in Highscore.songScores.keys())
+			Highscore.songScores[key] = 0;
+		for (key in Highscore.songCombos.keys())
+			Highscore.songCombos[key] = 'N/A';
+		for (key in Highscore.songRatings.keys())
+			Highscore.songRatings[key] = 0.00;
 
 		FlxG.save.data.songScores = null;
 		FlxG.save.data.songCombos = null;
@@ -866,7 +893,8 @@ class ResetALLSettings extends Option
 	{
 		withoutCheckboxes = true;
 
-		if (OptionsMenuState.fromFreeplay) return false;
+		if (OptionsMenuState.fromFreeplay)
+			return false;
 
 		if (!confirm)
 		{
@@ -876,7 +904,7 @@ class ResetALLSettings extends Option
 		}
 
 		// If you actually press `ENTER` then reset all settings.
-		if (!value) 
+		if (!value)
 		{
 			confirm = false;
 			display = updateDisplay();

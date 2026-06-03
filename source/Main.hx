@@ -4,14 +4,11 @@ import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.text.FlxText.FlxTextBorderStyle;
-
 import funkin.backend.system.monitor.DebugDisplay;
-
 import openfl.Assets;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
-
 #if FEATURE_CRASH_HANDLER
 import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
@@ -35,7 +32,7 @@ class Main extends Sprite
 	var gameWidth:Int = 1280; // The width of the game window in pixels.
 	var gameHeight:Int = 720; // The height of the game window in pixels.
 	var initialState:Class<FlxState> = funkin.InitState; // The FlxState your game starts in.
-	var zoom:Float = -1; //if zoom is set to -1, zoom will automatically calculate to fit the game window.
+	var zoom:Float = -1; // if zoom is set to -1, zoom will automatically calculate to fit the game window.
 	var skipSplash:Bool = true; // Whether or not to skip the HaxeFlixel splash screen.
 
 	/**
@@ -46,9 +43,10 @@ class Main extends Sprite
 	/**
 	 * Creates a new Main instance and adds it to the current stage.
 	 */
-	public static function main():Void Lib.current.addChild(new Main());
+	public static function main():Void
+		Lib.current.addChild(new Main());
 
-	public function new():Void 
+	public function new():Void
 	{
 		super();
 
@@ -57,11 +55,11 @@ class Main extends Sprite
 		Lib.current.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 		#end
 
-		if (stage != null) 
+		if (stage != null)
 		{
 			init();
 		}
-		else 
+		else
 		{
 			addEventListener(Event.ADDED_TO_STAGE, init);
 		}
@@ -69,7 +67,8 @@ class Main extends Sprite
 
 	function init(?event:Event):Void
 	{
-		if (hasEventListener(Event.ADDED_TO_STAGE)) removeEventListener(Event.ADDED_TO_STAGE, init);
+		if (hasEventListener(Event.ADDED_TO_STAGE))
+			removeEventListener(Event.ADDED_TO_STAGE, init);
 
 		#if !mobile
 		// Force-dispose of any cached assets, to prevent background processing.
@@ -87,7 +86,7 @@ class Main extends Sprite
 	 * The FPS debug display on the top left of your game window.
 	 */
 	public static var debugDisplay:DebugDisplay;
-	
+
 	function setupGame():Void
 	{
 		FlxG.save.bind('funkin', 'ninjamuffin99');
@@ -95,8 +94,8 @@ class Main extends Sprite
 		// Get the framerate from your saved data if it exists, otherwise fallback to 60 FPS.
 		var framerate:Int = FlxG.save.data.fpsCap != null ? FlxG.save.data.fpsCap : 60;
 
-		var game = new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, 
-			FlxG.stage.window.fullscreen || FlxG.save.data.launchInFullscreen);
+		var game = new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate,
+			skipSplash, FlxG.stage.window.fullscreen || FlxG.save.data.launchInFullscreen);
 		addChild(game);
 
 		debugDisplay = new DebugDisplay(10, 15, FlxTextBorderStyle.OUTLINE);
@@ -112,17 +111,18 @@ class Main extends Sprite
 		#end
 
 		#if hxcpp_debug_server
-    trace('hxcpp_debug_server is enabled! You can now connect to the game with a debugger.');
-    #else
-    trace('hxcpp_debug_server is disabled! This build does not support debugging.');
-    #end
+		trace('hxcpp_debug_server is enabled! You can now connect to the game with a debugger.');
+		#else
+		trace('hxcpp_debug_server is disabled! This build does not support debugging.');
+		#end
 	}
 
 	/**
 	 * Toggle the FPS counter.
 	 */
-	public static function toggleFPS(value:Bool):Void 
-		if (debugDisplay != null) debugDisplay.visible = value;
+	public static function toggleFPS(value:Bool):Void
+		if (debugDisplay != null)
+			debugDisplay.visible = value;
 
 	/**
 	 * Clear games cache of assets and song data. (taken from Kade Engine)
@@ -147,6 +147,7 @@ class Main extends Sprite
 	 * Get the current version of the game, and determine whether or not an update is available.
 	 */
 	public static var updateVersion:String = "";
+
 	public static var mustUpdate:Bool = false;
 
 	/**
@@ -171,10 +172,14 @@ class Main extends Sprite
 				trace('VERSION: New version available. Please update to ${updateVersion}.');
 				mustUpdate = true;
 			}
-			else trace('VERSION: Game version is up to date.');
+			else
+				trace('VERSION: Game version is up to date.');
 		}
 
-		http.onError = function(error) { trace('VERSION: Error: ${error}'); }
+		http.onError = function(error)
+		{
+			trace('VERSION: Error: ${error}');
+		}
 		http.request();
 		#end
 	}
@@ -211,7 +216,8 @@ class Main extends Sprite
 		errMsg += '\nUncaught Error: ${crashEvent.error}\n Please report this error to the GitHub page: https://github.com/AnimatingLegend/Funkin-Definitive-Edition/issues';
 
 		// Create the crash directory if it doesn't exist.
-		if (!FileSystem.exists("./crash/")) FileSystem.createDirectory("./crash/");
+		if (!FileSystem.exists("./crash/"))
+			FileSystem.createDirectory("./crash/");
 
 		File.saveContent(path, errMsg + "\n");
 

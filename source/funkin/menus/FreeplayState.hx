@@ -1,7 +1,6 @@
 package funkin.menus;
 
 import flixel.text.FlxText;
-
 import funkin.backend.chart.Song;
 import funkin.backend.utils.Highscore;
 
@@ -10,7 +9,8 @@ using StringTools;
 /**
  * Data structure for representing a song in the freeplay menu.
  */
-typedef FreeplaySongData = {
+typedef FreeplaySongData =
+{
 	var songName:String;
 	var week:Int;
 	var songCharacter:String;
@@ -41,7 +41,7 @@ class FreeplayState extends MusicBeatState
 	 * used to remember the user's position in the menu when they return to it.
 	 */
 	public static var lastDifficulty:Int = 1;
-	
+
 	/**
 	 * The index of the currently selected song in the freeplay menu.
 	 */
@@ -60,7 +60,6 @@ class FreeplayState extends MusicBeatState
 	//
 	// UI Elements
 	//
-
 	var bg:FlxSprite;
 	var scoreBG:FlxSprite;
 	var scoreText:FlxText;
@@ -74,7 +73,7 @@ class FreeplayState extends MusicBeatState
 	var intendedScore:Int = 0;
 	var intendedRating:Float = 0;
 	var intendedCombo:String;
-	
+
 	private var iconArray:Array<HealthIcon> = [];
 	private var songGrps:FlxTypedGroup<Alphabet>;
 	private var weekColors = [
@@ -93,8 +92,8 @@ class FreeplayState extends MusicBeatState
 		Paths.clearStoredMemory();
 		songs = [];
 
-		#if debug 
-		isDebug = true; 
+		#if debug
+		isDebug = true;
 		#end
 
 		persistentUpdate = true;
@@ -119,15 +118,17 @@ class FreeplayState extends MusicBeatState
 			var songText:Alphabet = new Alphabet(0, (70 * index) + 30, songs[index].songName, true, false);
 			songText.isMenuItem = true;
 			songText.targetY = index;
-			
+
 			// If the week is locked, gray out the text and disable it.
-			if (!isSongUnlocked(index)) songText.alpha = 0.3;
+			if (!isSongUnlocked(index))
+				songText.alpha = 0.3;
 			songGrps.add(songText);
 
 			var icon:HealthIcon = new HealthIcon(songs[index].songCharacter);
 			icon.sprTracker = songText;
 
-			if (!isSongUnlocked(index)) icon.alpha = 0.3;
+			if (!isSongUnlocked(index))
+				icon.alpha = 0.3;
 
 			iconArray.push(icon);
 			add(icon);
@@ -154,7 +155,8 @@ class FreeplayState extends MusicBeatState
 		currentDifficulty = FreeplayState.lastDifficulty;
 
 		// Set the currently selected song to the first unlocked song.
-		if (currentlySelected >= songs.length) currentlySelected = 0;
+		if (currentlySelected >= songs.length)
+			currentlySelected = 0;
 
 		changeSelection();
 		changeDifficulty();
@@ -199,12 +201,15 @@ class FreeplayState extends MusicBeatState
 	function isSongUnlocked(songIndex:Int):Bool
 	{
 		// Unlock all songs in debug mode.
-		if (isDebug) return true;
+		if (isDebug)
+			return true;
 		var week = songs[songIndex].week;
 		// Tutorial and week 1 should always be unlocked.
-		if (week == 0 || week == 1) return true;
+		if (week == 0 || week == 1)
+			return true;
 		// No weeks unlocked at all.
-		if (!FlxG.save.data.weekUnlocked) return false;
+		if (!FlxG.save.data.weekUnlocked)
+			return false;
 		// Check if the specific week is unlocked.
 		return FlxG.save.data.weekUnlocked >= week;
 	}
@@ -216,13 +221,15 @@ class FreeplayState extends MusicBeatState
 
 	public function addWeek(songs:Array<String>, weekNum:Int, ?songCharacters:Array<String>):Void
 	{
-		if (songCharacters == null) songCharacters = ["bf"];
-		
+		if (songCharacters == null)
+			songCharacters = ["bf"];
+
 		var songCount:Int = 0;
 		for (song in songs)
 		{
 			addSong(song, weekNum, songCharacters[songCount]);
-			if (songCharacters.length != 1) songCount++;
+			if (songCharacters.length != 1)
+				songCount++;
 		}
 	}
 
@@ -237,18 +244,19 @@ class FreeplayState extends MusicBeatState
 
 		lerpScore = CoolUtil.coolLerp(lerpScore, intendedScore, 0.4);
 		lerpRating = CoolUtil.coolLerp(lerpRating, intendedRating, 0.4);
-		bg.color = FlxColor.interpolate(
-			bg.color, weekColors[songs[currentlySelected].week % weekColors.length], 
-			CoolUtil.camLerpShit(0.045)
-		);
+		bg.color = FlxColor.interpolate(bg.color, weekColors[songs[currentlySelected].week % weekColors.length], CoolUtil.camLerpShit(0.045));
 
 		updateScoreText();
 		highscorePosition();
 
-		if (controls.UI_UP_P) changeSelection(-1);
-		if (controls.UI_DOWN_P) changeSelection(1);
-		if (controls.UI_LEFT_P) changeDifficulty(-1);
-		if (controls.UI_RIGHT_P) changeDifficulty(1);
+		if (controls.UI_UP_P)
+			changeSelection(-1);
+		if (controls.UI_DOWN_P)
+			changeSelection(1);
+		if (controls.UI_LEFT_P)
+			changeDifficulty(-1);
+		if (controls.UI_RIGHT_P)
+			changeDifficulty(1);
 
 		if (controls.BACK /*|| FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE*/)
 		{
@@ -282,18 +290,18 @@ class FreeplayState extends MusicBeatState
 
 	function updateScoreText()
 	{
-		var accuracyStr:String = lerpRating > 0
-      ? ' (' + (Math.round(lerpRating * 100) / 100) + '%)'
-      : ' (0.00%)';
-    scoreText.text = 'PERSONAL BEST: ' + Math.round(lerpScore) + accuracyStr;
+		var accuracyStr:String = lerpRating > 0 ? ' (' + (Math.round(lerpRating * 100) / 100) + '%)' : ' (0.00%)';
+		scoreText.text = 'PERSONAL BEST: ' + Math.round(lerpScore) + accuracyStr;
 	}
 
 	function changeDifficulty(change:Int = 0)
 	{
 		currentDifficulty += change;
 
-		if (currentDifficulty < 0) currentDifficulty = 2;
-		if (currentDifficulty > 2) currentDifficulty = 0;
+		if (currentDifficulty < 0)
+			currentDifficulty = 2;
+		if (currentDifficulty > 2)
+			currentDifficulty = 0;
 
 		#if !switch
 		intendedScore = Highscore.getScore(songs[currentlySelected].songName, currentDifficulty);
@@ -302,11 +310,9 @@ class FreeplayState extends MusicBeatState
 		#end
 
 		PlayState.storyDifficulty = currentDifficulty;
-		
-		var comboStr:String = (intendedCombo != null && intendedCombo != '')
-      ? intendedCombo
-      : ' N/A';
-    diffText.text = 'RANK: ' + comboStr + ' < ' + CoolUtil.difficultyString() + ' >';
+
+		var comboStr:String = (intendedCombo != null && intendedCombo != '') ? intendedCombo : ' N/A';
+		diffText.text = 'RANK: ' + comboStr + ' < ' + CoolUtil.difficultyString() + ' >';
 		highscorePosition();
 	}
 
@@ -316,8 +322,10 @@ class FreeplayState extends MusicBeatState
 
 		currentlySelected += change;
 
-		if (currentlySelected < 0) currentlySelected = songs.length - 1;
-		if (currentlySelected >= songs.length) currentlySelected = 0;
+		if (currentlySelected < 0)
+			currentlySelected = songs.length - 1;
+		if (currentlySelected >= songs.length)
+			currentlySelected = 0;
 
 		#if !switch
 		intendedScore = Highscore.getScore(songs[currentlySelected].songName, currentDifficulty);
@@ -326,7 +334,8 @@ class FreeplayState extends MusicBeatState
 		#end
 
 		var bullShit:Int = 0;
-		for (i in 0...iconArray.length) iconArray[i].alpha = isSongUnlocked(i) ? 0.6 : 0.2;
+		for (i in 0...iconArray.length)
+			iconArray[i].alpha = isSongUnlocked(i) ? 0.6 : 0.2;
 
 		iconArray[currentlySelected].alpha = isSongUnlocked(currentlySelected) ? 1 : 0.3;
 
@@ -336,8 +345,9 @@ class FreeplayState extends MusicBeatState
 			bullShit++;
 
 			item.alpha = 0.6;
-			
-			if (item.targetY == 0) item.alpha = isSongUnlocked(currentlySelected) ? 1 : 0.3;
+
+			if (item.targetY == 0)
+				item.alpha = isSongUnlocked(currentlySelected) ? 1 : 0.3;
 		}
 
 		changeDifficulty();
@@ -347,14 +357,14 @@ class FreeplayState extends MusicBeatState
 	{
 		scoreText.x = FlxG.width - scoreText.width - 6;
 
-    scoreBG.scale.x = FlxG.width - scoreText.x + 6;
-    scoreBG.x = FlxG.width - (scoreBG.scale.x / 2);
-    scoreBG.scale.y = scoreText.height + diffText.height + 16;
-    scoreBG.y = 0;
+		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
+		scoreBG.x = FlxG.width - (scoreBG.scale.x / 2);
+		scoreBG.scale.y = scoreText.height + diffText.height + 16;
+		scoreBG.y = 0;
 
-    diffText.y = scoreText.y + scoreText.height + 4;
-    diffText.x = Std.int(scoreBG.x + (scoreBG.width / 2));
-    diffText.x -= diffText.width / 2;
+		diffText.y = scoreText.y + scoreText.height + 4;
+		diffText.x = Std.int(scoreBG.x + (scoreBG.width / 2));
+		diffText.x -= diffText.width / 2;
 	}
 }
 

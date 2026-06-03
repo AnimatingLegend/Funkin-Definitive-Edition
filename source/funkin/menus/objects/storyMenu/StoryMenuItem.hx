@@ -31,7 +31,7 @@ class MenuItem extends FlxSpriteGroup
 	var fakeFramerate:Int = Math.round((1 / FlxG.elapsed) / 10);
 
 	// OldFlags doing
-	public function fakeFramerateCaps() 
+	public function fakeFramerateCaps()
 	{
 		(fakeFramerate * (30 / FlxG.save.data.fpsCap));
 	}

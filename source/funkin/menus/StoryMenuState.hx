@@ -8,7 +8,6 @@ import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
-
 import funkin.menus.objects.storyMenu.StoryMenuItem;
 import funkin.menus.objects.storyMenu.MenuCharacter;
 
@@ -18,7 +17,8 @@ using StringTools;
  * Data structure for a single week, 
  * 	loaded from `assets/data/weeks/<name>.json`.
  */
-typedef WeekData = {
+typedef WeekData =
+{
 	var name:String;
 	var displayName:String;
 	var songs:Array<String>;
@@ -46,12 +46,7 @@ class StoryMenuState extends MusicBeatState
 	/**
 	 * Ordered list of week file names.
 	 */
-	private static final WEEK_FILES:Array<String> = [
-		'tutorial',
-		'week1', 'week2', 'week3',
-		'week4', 'week5', 'week6',
-		'week7'
-	];
+	private static final WEEK_FILES:Array<String> = ['tutorial', 'week1', 'week2', 'week3', 'week4', 'week5', 'week6', 'week7'];
 
 	/**
 	 * All week definitions, loaded from `assets/data/weeks/<name>.json`.
@@ -61,7 +56,6 @@ class StoryMenuState extends MusicBeatState
 	//
 	// UI ELEMENTS
 	//
-
 	var scoreText:FlxText;
 	var weekTitleText:FlxText;
 	var trackListText:FlxText;
@@ -78,21 +72,20 @@ class StoryMenuState extends MusicBeatState
 	//
 	// MENU STATE
 	//
-
 	var currentWeek:Int = 0;
 	var currentDifficulty:Int = 1;
 	var difficultyMap:Array<String> = [];
 
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
-	
+
 	var movedBack:Bool = false;
 	var selectedWeek:Bool = false;
 	var stopSpamming:Bool = false;
 
 	var tweenDifficulty:FlxTween;
 
-	override function create() 
+	override function create()
 	{
 		instance = this;
 
@@ -206,7 +199,7 @@ class StoryMenuState extends MusicBeatState
 		Paths.clearUnusedMemory();
 	}
 
-	override function update(elapsed:Float) 
+	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
@@ -220,18 +213,27 @@ class StoryMenuState extends MusicBeatState
 
 		lockGroup.forEach(function(lock:FlxSprite) lock.y = weekTextGroup.members[lock.ID].y);
 
-		if (movedBack || selectedWeek) return;
-		
-		if (controls.UI_UP_P) changeWeek(-1);
-		if (controls.UI_DOWN_P) changeWeek(1);
+		if (movedBack || selectedWeek)
+			return;
 
-		if (controls.UI_RIGHT) rightArrow.animation.play('press');
-		else rightArrow.animation.play('idle');
-		if (controls.UI_LEFT) leftArrow.animation.play('press');
-		else leftArrow.animation.play('idle');
+		if (controls.UI_UP_P)
+			changeWeek(-1);
+		if (controls.UI_DOWN_P)
+			changeWeek(1);
 
-		if (controls.UI_RIGHT_P) changeDifficulty(1);
-		if (controls.UI_LEFT_P) changeDifficulty(-1);
+		if (controls.UI_RIGHT)
+			rightArrow.animation.play('press');
+		else
+			rightArrow.animation.play('idle');
+		if (controls.UI_LEFT)
+			leftArrow.animation.play('press');
+		else
+			leftArrow.animation.play('idle');
+
+		if (controls.UI_RIGHT_P)
+			changeDifficulty(1);
+		if (controls.UI_LEFT_P)
+			changeDifficulty(-1);
 
 		var shiftMult:Int = FlxG.keys.pressed.SHIFT ? 3 : 1;
 		if (FlxG.mouse.wheel != 0)
@@ -240,7 +242,8 @@ class StoryMenuState extends MusicBeatState
 			changeWeek(-shiftMult * FlxG.mouse.wheel);
 		}
 
-		if (controls.ACCEPT) selectWeek();
+		if (controls.ACCEPT)
+			selectWeek();
 		if (controls.BACK)
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -304,15 +307,14 @@ class StoryMenuState extends MusicBeatState
 
 		#if debug
 		// In debug mode, all weeks are unlocked.
-		for (index in 0...weekDatas.length) result.push(true);
+		for (index in 0...weekDatas.length)
+			result.push(true);
 		return result;
 		#end
 
-		var unlockedCount:Int = (FlxG.save.data.weekUnlocked != null)
-			? Std.int(FlxG.save.data.weekUnlocked)
-			: 0;
+		var unlockedCount:Int = (FlxG.save.data.weekUnlocked != null) ? Std.int(FlxG.save.data.weekUnlocked) : 0;
 
-		for (index in 0...weekDatas.length - 1) 
+		for (index in 0...weekDatas.length - 1)
 		{
 			// Week 0 (Tutorial) is always unlocked. Rest depend on unlocked count.
 			result.push(index == 0 || index <= unlockedCount);
@@ -323,17 +325,15 @@ class StoryMenuState extends MusicBeatState
 
 	public static function unlockNextWeek(week:Int):Void
 	{
-		if (PlayState.botplay) 
+		if (PlayState.botplay)
 		{
 			trace('STORY MENU: Botplay detected! Skipping week unlock.');
 			return;
 		}
 
 		// Week is the week just beaten (0-indexed.
-    // Store how many non-tutorial weeks have been beaten.
-		var currentlyUnlocked:Int = (FlxG.save.data.weekUnlocked != null)
-			? Std.int(FlxG.save.data.weekUnlocked)
-			: 0;
+		// Store how many non-tutorial weeks have been beaten.
+		var currentlyUnlocked:Int = (FlxG.save.data.weekUnlocked != null) ? Std.int(FlxG.save.data.weekUnlocked) : 0;
 
 		if (week >= currentlyUnlocked)
 		{
@@ -363,11 +363,12 @@ class StoryMenuState extends MusicBeatState
 			if (currentWeek < difficultyList.length)
 			{
 				var splitDifficulties:Array<String> = difficultyList[currentWeek].split(':');
-				difficultyMap = splitDifficulties.map(diffName -> {
+				difficultyMap = splitDifficulties.map(diffName ->
+				{
 					diffName = diffName.trim().toLowerCase();
-					if (diffName == 'easy' || diffName == 'normal' || diffName == 'hard') return diffName;
+					if (diffName == 'easy' || diffName == 'normal' || diffName == 'hard')
+						return diffName;
 					return null;
-					
 				}).filter(diffName -> diffName != null);
 			}
 		}
@@ -376,9 +377,11 @@ class StoryMenuState extends MusicBeatState
 			FlxG.log.warn('STORY MENU: Failed to load weekDifficulties.txt: $err - Falling back to default difficulties.');
 		}
 
-		if (difficultyMap.length == 0) difficultyMap = ['easy', 'normal', 'hard'];
+		if (difficultyMap.length == 0)
+			difficultyMap = ['easy', 'normal', 'hard'];
 		// Clamp difficulty to valid range after reload.
-		if (currentDifficulty >= difficultyMap.length) currentDifficulty = difficultyMap.length - 1;
+		if (currentDifficulty >= difficultyMap.length)
+			currentDifficulty = difficultyMap.length - 1;
 	}
 
 	function changeDifficulty(change:Int = 0):Void
@@ -398,17 +401,17 @@ class StoryMenuState extends MusicBeatState
 
 		// Center difficulty sprite between the two arrows.
 		difficultySprites.x = leftArrow.x + leftArrow.width + 10;
-    difficultySprites.y = leftArrow.y + (leftArrow.height - difficultySprites.height) / 2;
+		difficultySprites.y = leftArrow.y + (leftArrow.height - difficultySprites.height) / 2;
 
 		// Pin right arrow flush after difficulty sprite
-    rightArrow.x = difficultySprites.x + difficultySprites.width + 10;
-    rightArrow.y = leftArrow.y;
+		rightArrow.x = difficultySprites.x + difficultySprites.width + 10;
+		rightArrow.y = leftArrow.y;
 
 		difficultySprites.alpha = 0;
 
-		if (tweenDifficulty != null) tweenDifficulty.cancel();
-		tweenDifficulty = FlxTween.tween(difficultySprites, {y: leftArrow.y + 15, alpha: 1}, 0.07, 
-		{
+		if (tweenDifficulty != null)
+			tweenDifficulty.cancel();
+		tweenDifficulty = FlxTween.tween(difficultySprites, {y: leftArrow.y + 15, alpha: 1}, 0.07, {
 			onComplete: function(_) tweenDifficulty = null
 		});
 
@@ -430,8 +433,10 @@ class StoryMenuState extends MusicBeatState
 	{
 		currentWeek += change;
 
-		if (currentWeek >= weekDatas.length) currentWeek = 0;
-		if (currentWeek < 0) currentWeek = weekDatas.length - 1;
+		if (currentWeek >= weekDatas.length)
+			currentWeek = 0;
+		if (currentWeek < 0)
+			currentWeek = weekDatas.length - 1;
 
 		updateWeekDisplay();
 		refreshWeek();
@@ -472,7 +477,7 @@ class StoryMenuState extends MusicBeatState
 
 		selectedWeek = true;
 
-		var difficultySuffix:String = switch(currentDifficulty)
+		var difficultySuffix:String = switch (currentDifficulty)
 		{
 			case 0: '-easy';
 			case 2: '-hard';
@@ -503,7 +508,7 @@ class StoryMenuState extends MusicBeatState
 		weekCharacterGroup.members[2].setCharacter(characters.length > 2 ? characters[2] : 'gf');
 
 		trackListText.text = "Tracks\n";
-		for (song in data.songs) 
+		for (song in data.songs)
 		{
 			trackListText.text += "\n" + song;
 		}

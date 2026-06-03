@@ -6,7 +6,6 @@ using StringTools;
 
 class CheckboxThingie extends FlxSprite
 {
-
 	public var sprTracker:FlxSpriteGroup;
 
 	public override function new(x:Float, y:Float, ?checked:Bool = false)
@@ -26,14 +25,14 @@ class CheckboxThingie extends FlxSprite
 	{
 		super.update(elapsed);
 
-		switch (animation.curAnim.name) 
+		switch (animation.curAnim.name)
 		{
 			case "unchecked":
 				offset.set(5, 15);
 			case "selecting":
 				offset.set(25, 65);
 			case "selected":
-				offset.set(25, 68);	
+				offset.set(25, 68);
 		}
 
 		if (sprTracker != null)

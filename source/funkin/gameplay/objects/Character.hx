@@ -3,14 +3,11 @@ package funkin.gameplay.objects;
 import funkin.backend.settings.Options.AccuracyDisplay;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.frames.FlxAtlasFrames;
-
 import funkin.backend.chart.Section.SwagSection;
 import funkin.backend.utils.CoolUtil;
 import funkin.backend.utils.Paths;
 import funkin.gameplay.PlayState;
-
 import haxe.Json;
-
 import openfl.Assets;
 
 using StringTools;
@@ -31,7 +28,7 @@ class Character extends FlxSprite
 	/**
 	 * The character's animation offsets.
 	 */
-	public var animOffsets:Map<String, Array <Dynamic>>;
+	public var animOffsets:Map<String, Array<Dynamic>>;
 
 	/**
 	 * The character's animation notes.
@@ -43,6 +40,7 @@ class Character extends FlxSprite
 	 * 	or anywhere else.
 	 */
 	public var mappedAnimCharId:String = null;
+
 	public var mappedAnimSongId:String = null;
 	public var lastMappedAnimSongPosition:Float = 0;
 
@@ -60,6 +58,7 @@ class Character extends FlxSprite
 	 * Determine how long a character holds it's current animation.
 	 */
 	public var holdTimer:Float = 0;
+
 	public var singDuration:Float = 0;
 
 	/**
@@ -86,7 +85,7 @@ class Character extends FlxSprite
 	 * The directory path where `.json` character data is stored.
 	 */
 	static final CHARACTER_DATA_PATH:String = 'data/characters/';
-	
+
 	/**
 	 * Initialize the characters instance.
 	 * @param x - Characters X position.
@@ -98,7 +97,7 @@ class Character extends FlxSprite
 	{
 		super(x, y);
 
-		animOffsets = new Map<String, Array <Dynamic>>();
+		animOffsets = new Map<String, Array<Dynamic>>();
 		currentCharacter = character;
 		this.isPlayer = isPlayer;
 
@@ -138,7 +137,7 @@ class Character extends FlxSprite
 	function loadCharacter(id:String):Void
 	{
 		var jsonPath = Paths.file(CHARACTER_DATA_PATH + id + '.json', TEXT, 'preload');
-		
+
 		// If the character data exists, automatically load it.
 		if (Assets.exists(jsonPath))
 		{
@@ -177,7 +176,7 @@ class Character extends FlxSprite
 		var library = data.library != null ? data.library : 'shared';
 
 		// Initialize the atlas render type.
-		frames = switch(data.renderType) 
+		frames = switch (data.renderType)
 		{
 			// Packer Atlas
 			case 'packer':
@@ -198,7 +197,8 @@ class Character extends FlxSprite
 			{
 				animation.addByIndices(anim.name, anim.prefix, anim.frameIndices, '', fps, looped);
 			}
-			else animation.addByPrefix(anim.name, anim.prefix, fps, looped);
+			else
+				animation.addByPrefix(anim.name, anim.prefix, fps, looped);
 
 			// Use offsets if they exist
 			// Otherwise, default to 0, 0
@@ -206,21 +206,21 @@ class Character extends FlxSprite
 			{
 				addOffset(anim.name, anim.offsets[0], anim.offsets[1]);
 			}
-			else addOffset(anim.name, 0, 0);
+			else
+				addOffset(anim.name, 0, 0);
 		}
 
 		// Dance / Idle Behavior
 		// `danceEvery` is beats between idles; if `danceLeft` and `danceRight` exist, it's a GF-style character.
-		isDanceCharacter = animation.getByName('danceLeft') != null 
-			&& animation.getByName('danceRight') != null;
+		isDanceCharacter = animation.getByName('danceLeft') != null && animation.getByName('danceRight') != null;
 
 		// `danceTracksDirection` stays true ONLY for GF-Style characters.
-		danceTracksDirection = isDanceCharacter
-			&& animation.getByName('singLEFT') != null;
+		danceTracksDirection = isDanceCharacter && animation.getByName('singLEFT') != null;
 
 		singDuration = data.singDuration != null ? data.singDuration : 4.0;
 
-		if (data.flipX == true) flipX = true;
+		if (data.flipX == true)
+			flipX = true;
 
 		// Set the character's hitbox size if the character is a pixel variant.
 		if (data.isPixel == true)
@@ -236,22 +236,28 @@ class Character extends FlxSprite
 		}
 
 		// Size trim data for pixel characters (specifically bf-pixel).
-		if (data.widthTrim != null) width -= data.widthTrim;
-		if (data.heightTrim != null) height -= data.heightTrim;
+		if (data.widthTrim != null)
+			width -= data.widthTrim;
+		if (data.heightTrim != null)
+			height -= data.heightTrim;
 
 		// Get mapped animations dynamically loaded from a `.json` file.
-		if (data.mappedAnims != null) loadMappedAnims(data.mappedAnims.charId, data.mappedAnims.songId);
+		if (data.mappedAnims != null)
+			loadMappedAnims(data.mappedAnims.charId, data.mappedAnims.songId);
 
 		// Initialize the character's start  animation.
 		var startingAnimation = data.startingAnimation != null ? data.startingAnimation : 'idle';
-		if (animation.getByName(startingAnimation) != null) playAnim(startingAnimation);
+		if (animation.getByName(startingAnimation) != null)
+			playAnim(startingAnimation);
 	}
 
-	override function update(elapsed:Float):Void 
+	override function update(elapsed:Float):Void
 	{
-		if (!isPlayer) updateHoldTimer(elapsed);
-		if (!debugMode) updateLoopAnim();
-		
+		if (!isPlayer)
+			updateHoldTimer(elapsed);
+		if (!debugMode)
+			updateLoopAnim();
+
 		resetMappedAnims();
 		updateCharacterSpecific();
 
@@ -266,7 +272,8 @@ class Character extends FlxSprite
 	{
 		var currentAnimation = animation.curAnim.name;
 
-		if (animation.curAnim == null) return;
+		if (animation.curAnim == null)
+			return;
 
 		if (currentAnimation.startsWith('sing'))
 		{
@@ -290,7 +297,8 @@ class Character extends FlxSprite
 	{
 		var loopAnim = animation.curAnim.name + '-loop';
 
-		if (animation.curAnim == null) return;
+		if (animation.curAnim == null)
+			return;
 		if (animation.getByName(loopAnim) != null && animation.curAnim.finished)
 		{
 			playAnim(loopAnim);
@@ -306,7 +314,9 @@ class Character extends FlxSprite
 		switch (currentCharacter)
 		{
 			// Make a seemless transition between the `hairFall` animation to the ``danceRight`` animation.
-			case 'gf': if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished) playAnim('danceRight');
+			case 'gf':
+				if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
+					playAnim('danceRight');
 			// Animation data for pico-speaker.
 			case 'pico-speaker':
 				if (animNotes.length > 0 && Conductor.songPosition > animNotes[0][0])
@@ -328,17 +338,20 @@ class Character extends FlxSprite
 
 	public function dance(forced:Bool = false, altAnim:Bool = false):Void
 	{
-		if (debugMode) return;
+		if (debugMode)
+			return;
 
 		// Characters that can't dance (death screens, scripted, etc.)
 		switch (currentCharacter)
 		{
-			case 'bf-pixel-dead' | 'bf-holding-gf-dead' | 'pico-speaker': return;
+			case 'bf-pixel-dead' | 'bf-holding-gf-dead' | 'pico-speaker':
+				return;
 		}
 
 		if (isDanceCharacter)
 		{
-			if (currentCharacter.startsWith('gf') && animation.curAnim.name.startsWith('hair')) return;
+			if (currentCharacter.startsWith('gf') && animation.curAnim.name.startsWith('hair'))
+				return;
 
 			danced = !danced;
 			playAnim(danced ? 'danceLeft' : 'danceRight');
@@ -346,7 +359,8 @@ class Character extends FlxSprite
 		else if (currentCharacter == 'tankman')
 		{
 			// After tankmans `pretty good` event ends, force him to go right back to idle.
-			if (!animation.curAnim.name.endsWith('DOWN-alt')) playAnim('idle');
+			if (!animation.curAnim.name.endsWith('DOWN-alt'))
+				playAnim('idle');
 		}
 		else
 		{
@@ -371,9 +385,12 @@ class Character extends FlxSprite
 		// Track dance state for GF-Style characters.
 		if (danceTracksDirection)
 		{
-			if (AnimName == 'singLEFT') danced = true;
-			else if (AnimName == 'singRIGHT') danced = false;
-			else if (AnimName == 'singUP' || AnimName == 'singDOWN') danced = !danced;
+			if (AnimName == 'singLEFT')
+				danced = true;
+			else if (AnimName == 'singRIGHT')
+				danced = false;
+			else if (AnimName == 'singUP' || AnimName == 'singDOWN')
+				danced = !danced;
 		}
 	}
 
@@ -391,7 +408,8 @@ class Character extends FlxSprite
 		var sections:Array<SwagSection> = Song.loadFromJson(charId, songId).notes;
 		for (section in sections)
 		{
-			for (note in section.sectionNotes) animNotes.push(note);
+			for (note in section.sectionNotes)
+				animNotes.push(note);
 		}
 
 		TankmenBG.animationNotes = animNotes;
@@ -405,14 +423,16 @@ class Character extends FlxSprite
 	 */
 	function resetMappedAnims():Void
 	{
-		if (mappedAnimCharId == null || mappedAnimSongId == null) return;
+		if (mappedAnimCharId == null || mappedAnimSongId == null)
+			return;
 
 		var songPosition = Conductor.songPosition;
-		if (songPosition <= 0 && songPosition < lastMappedAnimSongPosition) loadMappedAnims(mappedAnimCharId, mappedAnimSongId);
+		if (songPosition <= 0 && songPosition < lastMappedAnimSongPosition)
+			loadMappedAnims(mappedAnimCharId, mappedAnimSongId);
 		lastMappedAnimSongPosition = songPosition;
 	}
 
-	function sortAnims(x:Dynamic, y:Dynamic):Int 
+	function sortAnims(x:Dynamic, y:Dynamic):Int
 		return x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0;
 
 	/**
@@ -424,6 +444,6 @@ class Character extends FlxSprite
 	/**
 	 * Dynamically add an animation offset.
 	 */
-	public function addOffset(name:String, x:Float = 0, y:Float = 0):Void 
+	public function addOffset(name:String, x:Float = 0, y:Float = 0):Void
 		animOffsets[name] = [x, y];
 }

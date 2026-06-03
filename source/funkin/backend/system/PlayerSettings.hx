@@ -1,11 +1,9 @@
 package funkin.backend.system;
 
 import funkin.backend.system.Controls;
-
 import flixel.FlxCamera;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.util.FlxSignal;
-
 import haxe.Json;
 
 class PlayerSettings

@@ -4,7 +4,6 @@ import flixel.math.FlxPoint;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
-
 import funkin.gameplay.PlayState;
 import funkin.menus.FreeplayState;
 import funkin.menus.StoryMenuState;
@@ -59,8 +58,8 @@ class GameOverSubstate extends MusicBeatSubstate
 	var gameOverMusic:Null<FlxSound> = null;
 
 	/**
-  * Whether the death loop music has started playing.
-  */
+	 * Whether the death loop music has started playing.
+	 */
 	var isStarting:Bool = false;
 
 	/**
@@ -78,7 +77,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		super();
 
 		instance = this;
-		
+
 		Paths.clearUnusedMemory();
 
 		Conductor.songPosition = 0;
@@ -149,9 +148,12 @@ class GameOverSubstate extends MusicBeatSubstate
 	 */
 	function handleInput():Void
 	{
-		if (isEnding) return;
-		if (controls.ACCEPT) confirmRestart();
-		if (controls.BACK) exitToMenu();
+		if (isEnding)
+			return;
+		if (controls.ACCEPT)
+			confirmRestart();
+		if (controls.BACK)
+			exitToMenu();
 	}
 
 	/**
@@ -161,7 +163,8 @@ class GameOverSubstate extends MusicBeatSubstate
 	function handleDeathAnimations():Void
 	{
 		final deathAnim = boyfriend.animation.curAnim;
-		if (deathAnim == null || deathAnim.name != 'firstDeath') return;
+		if (deathAnim == null || deathAnim.name != 'firstDeath')
+			return;
 
 		// Start camera follow at frame 12.
 		if (deathAnim.curFrame == 12)
@@ -188,13 +191,10 @@ class GameOverSubstate extends MusicBeatSubstate
 		{
 			case 7:
 				FlxG.sound.playMusic(Paths.music('gameOver/gameOver' + musicSuffix, 'shared'), 0.2);
-				FlxG.sound.play(Paths.sound('jeffGameover/jeffGameover-' + tankGameOverLines, 'week7'),
-					1, false, null, true,
-					function () 
-					{ 
-						FlxG.sound.music.fadeIn(4, 0.2, 1); 
-					}
-				);
+				FlxG.sound.play(Paths.sound('jeffGameover/jeffGameover-' + tankGameOverLines, 'week7'), 1, false, null, true, function()
+				{
+					FlxG.sound.music.fadeIn(4, 0.2, 1);
+				});
 			default:
 				FlxG.sound.playMusic(Paths.music('gameOver/gameOver' + musicSuffix, 'shared'), startingVolume);
 		}
@@ -209,7 +209,8 @@ class GameOverSubstate extends MusicBeatSubstate
 		isEnding = true;
 		boyfriend.playAnim('deathConfirm', true);
 
-		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
 		FlxG.sound.playMusic(Paths.music('gameOver/gameOverEnd' + musicSuffix, 'shared'), false);
 
 		// Confirm music length divided by 7,000
@@ -263,10 +264,9 @@ class GameOverSubstate extends MusicBeatSubstate
 		else
 		{
 			// For all other weeks, make the fade a normal framerate.
-			FlxTween.tween(fadeScreen, {alpha: 1}, PIXEL_FADE_DURATION, 
-			{
+			FlxTween.tween(fadeScreen, {alpha: 1}, PIXEL_FADE_DURATION, {
 				ease: FlxEase.quadInOut,
-				onComplete: function(_) 
+				onComplete: function(_)
 				{
 					LoadingState.loadAndSwitchState(new PlayState());
 				}
@@ -281,7 +281,8 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		isEnding = true;
 
-		if (FlxG.sound.music != null) FlxG.sound.music.stop();
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
 
 		PlayState.deathCounter = 0;
 		PlayState.seenCutscene = false;
@@ -307,4 +308,3 @@ class GameOverSubstate extends MusicBeatSubstate
 		super.destroy();
 	}
 }
- 

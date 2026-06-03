@@ -2,16 +2,16 @@ package funkin.menus.objects;
 
 import flixel.graphics.frames.FlxAtlasFrames;
 
-class AttatchedText extends Alphabet 
+class AttatchedText extends Alphabet
 {
-  public var offsetX:Float = 0;
+	public var offsetX:Float = 0;
 	public var offsetY:Float = 0;
 	public var sprTracker:FlxSprite;
 	public var copyVisible:Bool = true;
 	public var copyAlpha:Bool = false;
-	
-	public function new(text:String = "", ?offsetX:Float = 0, ?offsetY:Float = 0, ?bold = false, ?scale:Float = 1) 
-  {
+
+	public function new(text:String = "", ?offsetX:Float = 0, ?offsetY:Float = 0, ?bold = false, ?scale:Float = 1)
+	{
 		super(0, 0, text, bold, false, 0.05, scale);
 		isMenuItem = false;
 		this.offsetX = offsetX;
@@ -19,17 +19,17 @@ class AttatchedText extends Alphabet
 	}
 
 	override function update(elapsed:Float)
-  {
-		if (sprTracker != null) 
-    {
+	{
+		if (sprTracker != null)
+		{
 			setPosition(sprTracker.x + offsetX, sprTracker.y + offsetY);
-			if(copyVisible) 
-      {
+			if (copyVisible)
+			{
 				visible = sprTracker.visible;
 			}
-			
-      if(copyAlpha) 
-      {
+
+			if (copyAlpha)
+			{
 				alpha = sprTracker.alpha;
 			}
 		}

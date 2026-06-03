@@ -7,10 +7,8 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import flixel.text.FlxText;
 import funkin.backend.utils.Paths;
-
 import openfl.display.BitmapData;
 import openfl.utils.Assets;
-
 #if sys
 import sys.FileSystem;
 import sys.io.File;
@@ -63,29 +61,35 @@ class CacheState extends MusicBeatState
 
 		#if sys
 		// Populate asset lists
-		if (FileSystem.exists("assets/shared/images/characters")) 
+		if (FileSystem.exists("assets/shared/images/characters"))
 		{
-			for (i in FileSystem.readDirectory("assets/shared/images/characters")) 
+			for (i in FileSystem.readDirectory("assets/shared/images/characters"))
 			{
-				if (i.endsWith(".png")) images.push(i);
+				if (i.endsWith(".png"))
+					images.push(i);
 			}
 		}
 
-		if (FileSystem.exists("assets/songs")) 
+		if (FileSystem.exists("assets/songs"))
 		{
-			for (i in FileSystem.readDirectory("assets/songs")) music.push(i);
+			for (i in FileSystem.readDirectory("assets/songs"))
+				music.push(i);
 		}
 
-		if (FileSystem.exists("assets/shared/sounds")) 
+		if (FileSystem.exists("assets/shared/sounds"))
 		{
-			for (i in FileSystem.readDirectory("assets/shared/sounds")) 
+			for (i in FileSystem.readDirectory("assets/shared/sounds"))
 			{
-				if (i.endsWith(".ogg")) sounds.push(i);
+				if (i.endsWith(".ogg"))
+					sounds.push(i);
 			}
 		}
 
 		// Start caching thread
-		sys.thread.Thread.create(() -> { cache(); });
+		sys.thread.Thread.create(() ->
+		{
+			cache();
+		});
 		#else
 		// If not on a system target, skip to title
 		FlxG.switchState(new funkin.menus.TitleState());
@@ -97,13 +101,16 @@ class CacheState extends MusicBeatState
 	function updateTextAnimation()
 	{
 		var dots:Int = 0;
-		new FlxTimer().start(0.5, function(tmr:FlxTimer) {
+		new FlxTimer().start(0.5, function(tmr:FlxTimer)
+		{
 			dots++;
-			if (dots > 3) dots = 0;
-			
+			if (dots > 3)
+				dots = 0;
+
 			var dotStr = "";
-			for (i in 0...dots) dotStr += ".";
-			
+			for (i in 0...dots)
+				dotStr += ".";
+
 			preloadStuff.text = "Preloading Assets" + dotStr;
 		}, 0);
 	}
@@ -141,9 +148,9 @@ class CacheState extends MusicBeatState
 		}
 
 		trace('Caching Process Complete');
-		
+
 		// Use a slight delay before switching so the user can see it's done
-		new FlxTimer().start(0.5, function(tmr:FlxTimer) 
+		new FlxTimer().start(0.5, function(tmr:FlxTimer)
 		{
 			FlxG.switchState(new funkin.menus.TitleState());
 		});

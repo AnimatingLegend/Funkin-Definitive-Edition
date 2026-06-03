@@ -1,7 +1,6 @@
 package funkin.backend.system;
 
 import funkin.backend.system.Controls.Device;
-
 import flixel.input.keyboard.FlxKey;
 
 class InputFormatter
@@ -112,7 +111,8 @@ class InputFormatter
 	public static function shortenButtonName(button:String = '')
 	{
 		button = button.toLowerCase();
-		if (button == '') return '[?]';
+		if (button == '')
+			return '[?]';
 		if (dirReg.match(button))
 		{
 			var a = dirReg.matched(1).toUpperCase() + ' ';

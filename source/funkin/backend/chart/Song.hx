@@ -2,7 +2,6 @@ package funkin.backend.chart;
 
 import funkin.backend.chart.Section;
 import funkin.backend.chart.Section.SwagSection;
-
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.utils.Assets;

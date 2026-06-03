@@ -1,7 +1,6 @@
 package funkin.gameplay.objects.stage;
 
 import funkin.gameplay.PlayState;
-
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 

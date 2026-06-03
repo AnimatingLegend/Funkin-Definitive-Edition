@@ -6,9 +6,7 @@ import flixel.util.FlxColor;
 import flixel.FlxObject;
 import flixel.util.FlxTimer;
 import flixel.addons.transition.FlxTransitionableState;
-
 import funkin.backend.settings.Options;
-
 import funkin.menus.ControlsSubState;
 import funkin.menus.MainMenuState;
 import funkin.menus.objects.settingsMenu.CheckboxThingie;
@@ -24,8 +22,7 @@ class OptionsMenuState extends MusicBeatState
 
 	public var options:Array<OptionCategory> = [
 		new OptionCategory("Controls", []),
-		new OptionCategory("Graphics", 
-		[
+		new OptionCategory("Graphics", [
 			new LowQuality('When enabled, certain assets will be hidden for better performance.'),
 			new Antialiasing('Disables anti-aliasing, increasing performance at the cost of sharper / smoother visuals.'),
 			new Shaders('Certain visual effects will not be displayed. (CPU insensitive)'),
@@ -34,8 +31,7 @@ class OptionsMenuState extends MusicBeatState
 			new FPSCap('The maximum framerate the game targets. (60 - 280)'),
 			new LaunchInFullscreen('When enabled, the game will automatically launch in fullscreen.'),
 		]),
-		new OptionCategory("Visuals and UI",
-		[
+		new OptionCategory("Visuals and UI", [
 			new AccuracyDisplay('When disabled, the miss / accuracy display will be hidden.'),
 			new JudgementDisplay('When disabled, the judgement / ratings display will be hidden.'),
 			new StrumLineBG('Show a semi-transparent background behind the strumline.'),
@@ -44,8 +40,7 @@ class OptionsMenuState extends MusicBeatState
 			new HideCPUStrums('When disabled, CPU Strums will be hidden.'),
 			new FDEWatermark('When disabled, any mention of "Funkin Definitive Edition" will be hidden.'),
 		]),
-		new OptionCategory("Gameplay", 
-		[
+		new OptionCategory("Gameplay", [
 			new Naughtyness('When enabled, rauchy content (such as swearing, etc.) is displayed.'),
 			new Downscroll('When enabled, notes move downwards towards the strumline at the bottom of the screen.'),
 			new Middlescroll('When enabled, the strumline will move to the center of the screen.'),
@@ -56,8 +51,7 @@ class OptionsMenuState extends MusicBeatState
 			new HitsoundVolume('When adjusted, a "tick" sound will play when a note is hit.'),
 			new ScrollSpeed('Adjust the songs scroll speed.'),
 		]),
-		new OptionCategory("Save Data", 
-		[
+		new OptionCategory("Save Data", [
 			new WeekUnlocked('If pressed, all story progress will be reset.\n(WARNING: THIS CANNOT BE UNDONE)'),
 			new ResetHighscore('If pressed, all highscore data will be reset.\n(WARNING: THIS CANNOT BE UNDONE)'),
 			new ResetALLSettings('If pressed, ALL settings data will be reset.\n(WARNING: YOUR GAME WILL RESTART. THIS CANNOT BE UNDONE)'),
@@ -83,7 +77,7 @@ class OptionsMenuState extends MusicBeatState
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
-		if (FlxG.sound.music != null && !FlxG.sound.music.playing) 
+		if (FlxG.sound.music != null && !FlxG.sound.music.playing)
 			FlxG.sound.playMusic(Paths.music('settingsMenu'), 0.5, true);
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
@@ -170,19 +164,21 @@ class OptionsMenuState extends MusicBeatState
 
 		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE && !isCat)
 		{
-			if (FlxG.sound != null) FlxG.sound.play(Paths.sound("cancelMenu"), false);
-			if (FlxG.sound.music != null) FlxG.sound.music.fadeOut(0.5, 0);
+			if (FlxG.sound != null)
+				FlxG.sound.play(Paths.sound("cancelMenu"), false);
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.fadeOut(0.5, 0);
 
 			new FlxTimer().start(0.5, function(tmr:FlxTimer)
 			{
 				FlxG.sound.music.stop();
 
-				if (fromFreeplay) 
-				{				
+				if (fromFreeplay)
+				{
 					fromFreeplay = false;
 					FlxG.switchState(new PlayState());
-				} 
-				else 
+				}
+				else
 					FlxG.switchState(new MainMenuState());
 			});
 		}
@@ -223,8 +219,10 @@ class OptionsMenuState extends MusicBeatState
 			changeSelection(0);
 		}
 
-		if (controls.UI_UP_P) changeSelection(-1);
-		if (controls.UI_DOWN_P) changeSelection(1);
+		if (controls.UI_UP_P)
+			changeSelection(-1);
+		if (controls.UI_DOWN_P)
+			changeSelection(1);
 
 		if (isCat)
 		{
@@ -232,13 +230,17 @@ class OptionsMenuState extends MusicBeatState
 			{
 				if (FlxG.keys.pressed.SHIFT)
 				{
-					if (controls.UI_RIGHT_P) currentSelectedCat.getOptions()[curSelected].pressRightKey();
-					if (controls.UI_LEFT_P) currentSelectedCat.getOptions()[curSelected].pressLeftKey();
+					if (controls.UI_RIGHT_P)
+						currentSelectedCat.getOptions()[curSelected].pressRightKey();
+					if (controls.UI_LEFT_P)
+						currentSelectedCat.getOptions()[curSelected].pressLeftKey();
 				}
 				else
 				{
-					if (controls.UI_RIGHT_P) currentSelectedCat.getOptions()[curSelected].pressRightKey();
-					if (controls.UI_LEFT_P) currentSelectedCat.getOptions()[curSelected].pressLeftKey();
+					if (controls.UI_RIGHT_P)
+						currentSelectedCat.getOptions()[curSelected].pressRightKey();
+					if (controls.UI_LEFT_P)
+						currentSelectedCat.getOptions()[curSelected].pressLeftKey();
 				}
 			}
 		}
@@ -335,9 +337,10 @@ class OptionsMenuState extends MusicBeatState
 			var controlLabel = grpControls.members[i]; // Then use updated display.
 			checkbox = new CheckboxThingie(0, (70 * i) + 30, currentSelectedCat.getOptions()[i].getAccept());
 			checkbox.sprTracker = grpControls.members[i];
-			
+
 			checkBoxesArray.push(checkbox);
-			if (!currentSelectedCat.getOptions()[i].withoutCheckboxes) add(checkbox);
+			if (!currentSelectedCat.getOptions()[i].withoutCheckboxes)
+				add(checkbox);
 		}
 	}
 
@@ -350,14 +353,18 @@ class OptionsMenuState extends MusicBeatState
 		}
 		else
 		{
-			if (change != 0) FlxG.sound.play(Paths.sound('scrollMenu'));
+			if (change != 0)
+				FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
 
 		curSelected += change;
 
-		if (curSelected < 0) curSelected = grpControls.length - 1;
-		if (curSelected >= grpControls.length) curSelected = 0;
-		if (isCat) currentDescription = currentSelectedCat.getOptions()[curSelected].getDescription();
+		if (curSelected < 0)
+			curSelected = grpControls.length - 1;
+		if (curSelected >= grpControls.length)
+			curSelected = 0;
+		if (isCat)
+			currentDescription = currentSelectedCat.getOptions()[curSelected].getDescription();
 
 		camFollow.screenCenter();
 

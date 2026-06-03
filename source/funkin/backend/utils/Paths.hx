@@ -1,13 +1,10 @@
 package funkin.backend.utils;
 
 import flash.media.Sound;
-
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.util.FlxDestroyUtil;
-
 import funkin.menus.CacheState;
-
 import openfl.display.BitmapData;
 import openfl.system.System;
 import openfl.utils.AssetType;
@@ -26,13 +23,18 @@ class Paths
 	 * Get the extension for both sound and video for the current platform.
 	 */
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
+
 	inline public static var VIDEO_EXT = "mp4";
 
 	/**
 	 * Exclude an asset from the memory dump.
 	 * @param key 
 	 */
-	public static function excludeAsset(key:String) { if (!dumpExclusions.contains(key)) dumpExclusions.push(key); }
+	public static function excludeAsset(key:String)
+	{
+		if (!dumpExclusions.contains(key))
+			dumpExclusions.push(key);
+	}
 
 	/**
 	 * List of assets to exclude from the memory dump.
@@ -43,13 +45,14 @@ class Paths
 	 * List of assets and sounds that are currently being tracked.
 	 */
 	public static var localTrackedAssets:Array<String> = [];
+
 	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
 	public static var currentTrackedSounds:Map<String, Sound> = [];
 
 	/**
 	 * Clears out any unused memory from the system.
 	 */
-	public static function clearUnusedMemory() 
+	public static function clearUnusedMemory()
 	{
 		var counter:Int = 0;
 
@@ -59,7 +62,6 @@ class Paths
 			if (!localTrackedAssets.contains(key) && !dumpExclusions.contains(key))
 			{
 				var object = cast(currentTrackedAssets.get(key), FlxGraphic);
-
 				@:privateAccess
 				if (object != null)
 				{
@@ -76,7 +78,7 @@ class Paths
 						object.bitmap.__texture = null;
 					}
 					FlxG.bitmap.remove(object);
-					
+
 					object.dump();
 					object.bitmap.disposeImage();
 					FlxDestroyUtil.dispose(object.bitmap);
@@ -123,7 +125,7 @@ class Paths
 					object.bitmap.__texture = null;
 				}
 				FlxG.bitmap.remove(object);
-				
+
 				object.dump();
 				object.bitmap.disposeImage();
 				object.bitmap = null;
@@ -166,7 +168,9 @@ class Paths
 	 * Get, and set the current level of a directory.
 	 */
 	static var currentLevel:String;
-	static public function setCurrentLevel(name:String) currentLevel = name.toLowerCase();
+
+	static public function setCurrentLevel(name:String)
+		currentLevel = name.toLowerCase();
 
 	/**
 	 * Load a JSON file, and parse it when possible.
@@ -191,14 +195,14 @@ class Paths
 		// Cleanup on files that have bad data at the end.
 		if (rawJsonPath != null)
 		{
-			while (!rawJsonPath.endsWith('}')) 
+			while (!rawJsonPath.endsWith('}'))
 				rawJsonPath = rawJsonPath.substr(0, rawJsonPath.length - 1);
 		}
 
 		try
 		{
 			// Attempt to parse the JSON data.
-			if (rawJsonPath != null) 
+			if (rawJsonPath != null)
 			{
 				trace('JSON: Successfully parsed $key from $rawJsonPath');
 				return haxe.Json.parse(rawJsonPath);
@@ -215,18 +219,21 @@ class Paths
 
 	static public function getPath(file:String, type:AssetType, library:Null<String>)
 	{
-		if (library != null) return getLibraryPath(file, library);
+		if (library != null)
+			return getLibraryPath(file, library);
 
 		// If the current level isn't null use that level.
 		if (currentLevel != null)
 		{
 			var levelPath:String = getLibraryPathForce(file, currentLevel);
-			if (Assets.exists(levelPath, type)) return levelPath;
+			if (Assets.exists(levelPath, type))
+				return levelPath;
 		}
 
 		// If the current level is null, try to use the shared level.
 		var levelPath:String = getLibraryPathForce(file, 'shared');
-		if (Assets.exists(levelPath, type)) return levelPath;
+		if (Assets.exists(levelPath, type))
+			return levelPath;
 
 		return getPreloadPath(file);
 	}
@@ -275,7 +282,7 @@ class Paths
 	inline static public function image(key:String, ?library:String)
 		return getPath('images/$key.png', IMAGE, library);
 
-	static public function loadImage(key:String, ?library:String):FlxGraphic 
+	static public function loadImage(key:String, ?library:String):FlxGraphic
 	{
 		var path = image(key, library);
 

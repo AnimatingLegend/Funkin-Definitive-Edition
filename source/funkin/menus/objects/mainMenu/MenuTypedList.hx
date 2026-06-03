@@ -3,16 +3,14 @@ package funkin.menus.objects.mainMenu;
 import flixel.effects.FlxFlicker;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxSignal;
-
 import funkin.backend.system.Controls;
 import funkin.backend.system.PlayerSettings;
-
 import haxe.ds.StringMap;
 
 class MenuTypedList<T:MenuItem> extends FlxTypedGroup<T>
 {
 	public var selectedIndex:Int = 0;
-	
+
 	public var onChange:FlxTypedSignal<T->Void> = new FlxTypedSignal<T->Void>();
 	public var onAcceptPress:FlxTypedSignal<T->Void> = new FlxTypedSignal<T->Void>();
 

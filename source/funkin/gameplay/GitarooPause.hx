@@ -1,7 +1,6 @@
 package funkin.gameplay;
 
 import flixel.addons.transition.FlxTransitionableState;
-
 import funkin.backend.utils.Paths;
 import funkin.gameplay.PlayState;
 import funkin.menus.StoryMenuState;
@@ -14,11 +13,12 @@ class GitarooPause extends MusicBeatState
 
 	var replaySelect:Bool = false;
 
-	public function new():Void super();
+	public function new():Void
+		super();
 
 	override function create()
 	{
-		if (FlxG.sound.music != null) 
+		if (FlxG.sound.music != null)
 		{
 			FlxG.sound.music.destroy();
 			FlxG.sound.music = null;
@@ -62,22 +62,23 @@ class GitarooPause extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if (controls.UI_LEFT_P || controls.UI_RIGHT_P) changeThing();
+		if (controls.UI_LEFT_P || controls.UI_RIGHT_P)
+			changeThing();
 		if (controls.ACCEPT)
 		{
-			if (replaySelect) 
+			if (replaySelect)
 			{
 				FlxTransitionableState.skipNextTransIn = false;
-        FlxTransitionableState.skipNextTransOut = false;
+				FlxTransitionableState.skipNextTransOut = false;
 				FlxG.switchState(new PlayState());
 			}
 			else
 			{
-				if (PlayState.isStoryMode) 
+				if (PlayState.isStoryMode)
 				{
 					FlxG.switchState(new StoryMenuState());
 				}
-				else 
+				else
 				{
 					FlxG.switchState(new FreeplayState());
 				}

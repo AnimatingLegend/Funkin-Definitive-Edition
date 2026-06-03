@@ -7,7 +7,6 @@ import flixel.input.actions.FlxActionSet;
 import flixel.input.gamepad.FlxGamepadButton;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.keyboard.FlxKey;
-
 import haxe.DynamicAccess;
 import haxe.Json;
 import haxe.ds.EnumValueMap;
@@ -374,7 +373,7 @@ class Controls extends FlxActionSet
 
 		for (action in digitalActions)
 			byName[action.name] = action;
-			
+
 		if (scheme == null)
 			scheme = None;
 		setKeyboardScheme(scheme, false);
@@ -455,21 +454,22 @@ class Controls extends FlxActionSet
 
 	public function replaceBinding(control:Control, device:Device, toAdd:Int, toRemove:Int)
 	{
-		if (toAdd != toRemove) switch (device)
-		{
-			case Keys:
-				forEachBound(control, function(action, state)
-				{
-					replaceKey(action, toAdd, toRemove);
-				});
-			case Gamepad(id):
-				forEachBound(control, function(action, state)
-				{
-					replaceButton(action, id, toAdd, toRemove);
-				});
-		}
+		if (toAdd != toRemove)
+			switch (device)
+			{
+				case Keys:
+					forEachBound(control, function(action, state)
+					{
+						replaceKey(action, toAdd, toRemove);
+					});
+				case Gamepad(id):
+					forEachBound(control, function(action, state)
+					{
+						replaceButton(action, id, toAdd, toRemove);
+					});
+			}
 	}
-	
+
 	public function replaceKey(action:FlxActionDigital, toAdd:Int, toRemove:Int)
 	{
 		for (i in 0...action.inputs.length)
@@ -489,6 +489,7 @@ class Controls extends FlxActionSet
 				@:privateAccess action.inputs[i].inputID = toAdd;
 		}
 	}
+
 	/**
 	 * Sets all actions that pertain to the binder to trigger when the supplied keys are used.
 	 * If binder is a literal you can inline this
@@ -514,7 +515,7 @@ class Controls extends FlxActionSet
 			removeKeyboard();
 
 		keyboardScheme = scheme;
-		
+
 		#if (haxe >= "4.0.0")
 		switch (scheme)
 		{
@@ -610,33 +611,32 @@ class Controls extends FlxActionSet
 
 	public function loadKeyBinds()
 	{
-	
-	//	trace(FlxKey.fromString(FlxG.save.data.upBind));
+		//	trace(FlxKey.fromString(FlxG.save.data.upBind));
 
-		if(FlxG.save.data.upBind == null)
+		if (FlxG.save.data.upBind == null)
 			FlxG.save.data.upBind = "W";
-		if(FlxG.save.data.downBind == null)
+		if (FlxG.save.data.downBind == null)
 			FlxG.save.data.downBind = "S";
-		if(FlxG.save.data.leftBind == null)
+		if (FlxG.save.data.leftBind == null)
 			FlxG.save.data.leftBind = "A";
-		if(FlxG.save.data.rightBind == null)
+		if (FlxG.save.data.rightBind == null)
 			FlxG.save.data.rightBind = "D";
-		if(FlxG.save.data.killBind == null)
+		if (FlxG.save.data.killBind == null)
 			FlxG.save.data.killBind = "R";
-		if(FlxG.save.data.pauseBindUI == null)
+		if (FlxG.save.data.pauseBindUI == null)
 			FlxG.save.data.pauseBindUI = "P";
-		if(FlxG.save.data.upBindUI == null)
+		if (FlxG.save.data.upBindUI == null)
 			FlxG.save.data.upBindUI = "W";
-		if(FlxG.save.data.downBindUI == null)
+		if (FlxG.save.data.downBindUI == null)
 			FlxG.save.data.downBindUI = "S";
-		if(FlxG.save.data.leftBindUI == null)
+		if (FlxG.save.data.leftBindUI == null)
 			FlxG.save.data.leftBindUI = "A";
-		if(FlxG.save.data.rightBindUI == null)
+		if (FlxG.save.data.rightBindUI == null)
 			FlxG.save.data.rightBindUI = "D";
-		if(FlxG.save.data.acceptBindUI == null)
+		if (FlxG.save.data.acceptBindUI == null)
 			FlxG.save.data.acceptBindUI = "Z";
 		removeKeyboard();
-			
+
 		inline bindKeys(Control.NOTE_UP, [FlxKey.fromString(FlxG.save.data.upBind), FlxKey.UP]);
 		inline bindKeys(Control.NOTE_DOWN, [FlxKey.fromString(FlxG.save.data.downBind), FlxKey.DOWN]);
 		inline bindKeys(Control.NOTE_LEFT, [FlxKey.fromString(FlxG.save.data.leftBind), FlxKey.LEFT]);
@@ -650,7 +650,6 @@ class Controls extends FlxActionSet
 		inline bindKeys(Control.UI_RIGHT, [FlxKey.fromString(FlxG.save.data.rightBindUI), FlxKey.RIGHT]);
 		inline bindKeys(Control.UI_DOWN, [FlxKey.fromString(FlxG.save.data.downBindUI), FlxKey.DOWN]);
 	}
-	
 
 	function removeKeyboard()
 	{
@@ -689,20 +688,20 @@ class Controls extends FlxActionSet
 		map.set(Control.PAUSE, [START]);
 		map.set(Control.RESET, [Y]);
 		#else
-		//Swap A and B for switch
+		// Swap A and B for switch
 		map.set(Control.ACCEPT, [B]);
 		map.set(Control.BACK, [A, BACK]);
 		map.set(Control.UI_UP, [DPAD_UP, LEFT_STICK_DIGITAL_UP]);
 		map.set(Control.UI_DOWN, [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN]);
 		map.set(Control.UI_LEFT, [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT]);
 		map.set(Control.UI_RIGHT, [DPAD_RIGHT, LEFT_STICK_DIGITAL_RIGHT]);
-		//Swap A-B / X-Y for switch
+		// Swap A-B / X-Y for switch
 		map.set(Control.NOTE_UP, [DPAD_UP, X, LEFT_STICK_DIGITAL_UP, RIGHT_STICK_DIGITAL_UP]);
 		map.set(Control.NOTE_DOWN, [DPAD_DOWN, B, LEFT_STICK_DIGITAL_DOWN, RIGHT_STICK_DIGITAL_DOWN]);
 		map.set(Control.NOTE_LEFT, [DPAD_LEFT, Y, LEFT_STICK_DIGITAL_LEFT, RIGHT_STICK_DIGITAL_LEFT]);
 		map.set(Control.NOTE_RIGHT, [DPAD_RIGHT, A, LEFT_STICK_DIGITAL_RIGHT, RIGHT_STICK_DIGITAL_RIGHT]);
 		map.set(Control.PAUSE, [START]);
-		//Swap Y and X for switch
+		// Swap Y and X for switch
 		map.set(Control.RESET, [Y]);
 		#end
 		gamepadsAdded.push(id);
@@ -761,13 +760,14 @@ class Controls extends FlxActionSet
 		for (button in Control.createAll())
 		{
 			var inputs:Dynamic = Reflect.field(data, button.getName());
-			if (inputs != null) switch (device)
-			{
-				case Keys:
-					bindKeys(button, inputs);
-				case Gamepad(id):
-					bindButtons(button, id, inputs);
-			}
+			if (inputs != null)
+				switch (device)
+				{
+					case Keys:
+						bindKeys(button, inputs);
+					case Gamepad(id):
+						bindButtons(button, id, inputs);
+				}
 		}
 	}
 

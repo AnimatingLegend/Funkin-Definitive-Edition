@@ -7,13 +7,10 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
-
 import lime.app.Application;
-
 import funkin.menus.objects.mainMenu.MenuItem;
 import funkin.menus.objects.mainMenu.MenuTypedList;
 import funkin.menus.objects.mainMenu.AtlasMenuItem;
-
 import funkin.backend.utils.GitCommit;
 
 using StringTools;
@@ -33,6 +30,7 @@ class MainMenuState extends MusicBeatState
 	 * Get the text for the watermark on the bottom left of the screen.
 	 */
 	public var leftWatermarkText:FlxText;
+
 	public var versionSuffix:String = #if debug ' DEBUG' #else '' #end;
 
 	override function create()
@@ -42,7 +40,7 @@ class MainMenuState extends MusicBeatState
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
 
-		if (FlxG.sound.music != null &&!FlxG.sound.music.playing) 
+		if (FlxG.sound.music != null && !FlxG.sound.music.playing)
 			FlxG.sound.playMusic(Paths.music('freakyMenu'));
 
 		persistentUpdate = true;
@@ -69,7 +67,8 @@ class MainMenuState extends MusicBeatState
 		magenta.visible = false;
 		magenta.antialiasing = FlxG.save.data.antialiasing;
 		magenta.color = 0xFFFD719B;
-		if (FlxG.save.data.flashingLights) add(magenta);
+		if (FlxG.save.data.flashingLights)
+			add(magenta);
 
 		menuItems = new MainMenuList();
 		add(menuItems);
@@ -92,14 +91,14 @@ class MainMenuState extends MusicBeatState
 		if (FlxG.save.data.weekUnlocked != null && FlxG.save.data.weekUnlocked >= 7)
 		{
 			menuItems.createItem(null, null, "kickstarter", selectDonate, true);
-		} 
-		else 
+		}
+		else
 		{
 			menuItems.createItem(null, null, "donate", selectDonate, true);
 		}
 		menuItems.createItem(0, 0, "options", function()
 		{
-			if (FlxG.sound.music != null) 
+			if (FlxG.sound.music != null)
 			{
 				FlxG.sound.music.fadeOut(1, 0);
 				FlxG.sound.music.stop();
@@ -114,7 +113,7 @@ class MainMenuState extends MusicBeatState
 			item.x = FlxG.width / 2;
 			item.y = pos + (160 * i);
 		}
-		
+
 		FlxG.camera.follow(camFollow, null, 0.04 #if !html5 * (30 / FlxG.save.data.fpsCap) #end);
 
 		super.create();
@@ -127,19 +126,23 @@ class MainMenuState extends MusicBeatState
 	 * [!NOTE] This is only used for debug builds.
 	 */
 	public static final GIT_BRANCH:String = GitCommit.getGitBranch();
-  public static final GIT_HASH:String = GitCommit.getGitCommitHash();
+
+	public static final GIT_HASH:String = GitCommit.getGitCommitHash();
 
 	function initWatermark()
 	{
 		if (!FlxG.save.data.fdeWatermark)
 		{
-			leftWatermarkText = new FlxText(12, FlxG.height - 24, 0, 'FNF - v${Application.current.meta.get('version')} ' 
-			+ #if debug '(${GIT_BRANCH}, ${GIT_HASH})' + #end versionSuffix, 12);
+			leftWatermarkText = new FlxText(12, FlxG.height
+				- 24, 0,
+				'FNF - v${Application.current.meta.get('version')} '
+				+ #if debug '(${GIT_BRANCH}, ${GIT_HASH})'
+				+ #end versionSuffix, 12);
 		}
 		else
 		{
-			leftWatermarkText = new FlxText(12, FlxG.height - 24, 0, 'FDE - v${Main.DEFINITIVE_VERSION} ' 
-			+ #if debug '(${GIT_BRANCH}, ${GIT_HASH})' + #end versionSuffix, 12);
+			leftWatermarkText = new FlxText(12, FlxG.height - 24, 0, 'FDE - v${Main.DEFINITIVE_VERSION} ' + #if debug '(${GIT_BRANCH}, ${GIT_HASH})' + #end
+				versionSuffix, 12);
 		}
 		leftWatermarkText.scrollFactor.set();
 		leftWatermarkText.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -195,9 +198,11 @@ class MainMenuState extends MusicBeatState
 		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.06);
 		#end
 
-		if (FlxG.sound.music.volume < 0.8) FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
-		
-		if (_exiting) menuItems.enabled = false;
+		if (FlxG.sound.music.volume < 0.8)
+			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
+
+		if (_exiting)
+			menuItems.enabled = false;
 
 		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE && menuItems.enabled && !menuItems.busy)
 		{

@@ -11,7 +11,6 @@ import funkin.gameplay.objects.*;
 import funkin.gameplay.objects.note.*;
 import funkin.gameplay.objects.stage.*;
 import funkin.menus.objects.Alphabet;
-
 // Flixel Imports
 import flixel.FlxG;
 import flixel.FlxObject;

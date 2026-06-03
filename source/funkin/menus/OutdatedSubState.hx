@@ -1,8 +1,8 @@
 package funkin.menus;
 
 import flixel.text.FlxText;
-
 import funkin.menus.MainMenuState;
+
 class OutdatedSubState extends MusicBeatState
 {
 	public static var leftState:Bool = false;
@@ -14,12 +14,14 @@ class OutdatedSubState extends MusicBeatState
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
 
-		var warnText:FlxText = new FlxText(0, 0, FlxG.width,
-			"HEY YOU! looks like you're running an
-			\n outdated version of FNF: Definitive Edition. (" + Main.DEFINITIVE_VERSION + "),
-			\n please update to " + Main.updateVersion + "!
-			\n Press 'ESCAPE' to proceed anyway.",
-			32);
+		var warnText:FlxText = new FlxText(0, 0, FlxG.width, "HEY YOU! looks like you're running an
+			\n outdated version of FNF: Definitive Edition. ("
+			+ Main.DEFINITIVE_VERSION
+			+ "),
+			\n please update to "
+			+ Main.updateVersion
+			+ "!
+			\n Press 'ESCAPE' to proceed anyway.", 32);
 		warnText.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
 		warnText.screenCenter(Y);
 		add(warnText);

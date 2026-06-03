@@ -2,7 +2,6 @@ package funkin.gameplay.objects.note;
 
 import flixel.FlxSprite;
 import flixel.FlxG;
-
 import funkin.backend.chart.Conductor;
 import funkin.gameplay.PlayState;
 
@@ -20,13 +19,14 @@ enum abstract NoteSkin(String) to String
  * Lightweight data-only struct passed to `Note.setup()`.
  * Keeps the constructor clean and enables object pooling.
  */
-typedef NoteData = {
-  var strumTime:Float;
-  var noteData:Int;
-  var sustainLength:Float;
-  var isSustainNote:Bool;
-  var skin:NoteSkin;
-  var ?prevNote:Note;
+typedef NoteData =
+{
+	var strumTime:Float;
+	var noteData:Int;
+	var sustainLength:Float;
+	var isSustainNote:Bool;
+	var skin:NoteSkin;
+	var ?prevNote:Note;
 }
 
 /**
@@ -58,7 +58,8 @@ class Note extends FlxSprite
 	 */
 	public static function clearPool():Void
 	{
-		for (note in _pool) note.destroy();
+		for (note in _pool)
+			note.destroy();
 		_pool.resize(0);
 	}
 
@@ -75,23 +76,20 @@ class Note extends FlxSprite
 	//
 	// LAYOUT CONSTANTS
 	//
-
 	public static inline final SWAG_WIDTH:Float = 160 * 0.7;
 	public static inline final PIXEL_ZOOM:Float = 6.0; // Matches `PlayState.daPixelZoom`.
 
 	//
 	// NOTE COLORS => COLUMN INDEX
 	//
-
 	public static inline final COL_LEFT:Int = 0; // purple
-  public static inline final COL_DOWN:Int = 1; // blue
-  public static inline final COL_UP:Int = 2; // green
-  public static inline final COL_RIGHT:Int = 3; // red
+	public static inline final COL_DOWN:Int = 1; // blue
+	public static inline final COL_UP:Int = 2; // green
+	public static inline final COL_RIGHT:Int = 3; // red
 
 	//
 	// DATA FIELDS
 	//
-
 	public var strumTime:Float = 0;
 	public var noteData:Int = 0;
 	public var sustainLength:Float = 0;
@@ -112,14 +110,16 @@ class Note extends FlxSprite
 	//
 	// INTERNAL FIELDS
 	//
-
 	var _skin:NoteSkin = DEFAULT;
 	var _loadedSkin:NoteSkin = null; // make true once the atlas/graphic is loaded for this skin.
 
 	/**
 	 * PRIVATE - Use `Note.pool()` instead.
 	 */
-	function new() { super(0, -9999); }
+	function new()
+	{
+		super(0, -9999);
+	}
 
 	/**
 	 * Configure this not with new data.
@@ -153,10 +153,9 @@ class Note extends FlxSprite
 	//
 	// INITIALIZE GRAPHICS
 	//
-
 	static final ANIM_SCROLL = ["purpleScroll", "blueScroll", "greenScroll", "redScroll"];
-  static final ANIM_HOLD = ["purplehold", "bluehold", "greenhold", "redhold"];
-  static final ANIM_HOLDEND = ["purpleholdend", "blueholdend", "greenholdend", "redholdend"];
+	static final ANIM_HOLD = ["purplehold", "bluehold", "greenhold", "redhold"];
+	static final ANIM_HOLDEND = ["purpleholdend", "blueholdend", "greenholdend", "redholdend"];
 
 	function _loadGraphics():Void
 	{
@@ -165,13 +164,14 @@ class Note extends FlxSprite
 			_loadedSkin = _skin;
 			switch (_skin)
 			{
-				case PIXEL: 
+				case PIXEL:
 					_loadPixelGraphics();
-				default: 
+				default:
 					_loadDefaultGraphics();
 			}
 		}
-		else _playNoteAnim(); // Skin is already loaded, just play the correct skin.
+		else
+			_playNoteAnim(); // Skin is already loaded, just play the correct skin.
 	}
 
 	function _loadDefaultGraphics():Void
@@ -234,17 +234,20 @@ class Note extends FlxSprite
 	{
 		final col = noteData % 4;
 
-		if (!isSustainNote) animation.play(ANIM_SCROLL[col]);
+		if (!isSustainNote)
+			animation.play(ANIM_SCROLL[col]);
 		else
 		{
 			// Kade Engine moment lol
-			if (FlxG.save.data.downscroll) flipY = true;
+			if (FlxG.save.data.downscroll)
+				flipY = true;
 
 			animation.play(ANIM_HOLDEND[col]);
 			updateHitbox();
 			alpha = 0.8;
 
-			if (_skin == PIXEL) x += 30;
+			if (_skin == PIXEL)
+				x += 30;
 
 			// Tell the previous note to switch to its hold-piece animation.
 			if (prevNote != null && prevNote != this && prevNote.isSustainNote)
@@ -261,8 +264,10 @@ class Note extends FlxSprite
 	 */
 	function _scaleSustain(scrollSpeed:Float):Void
 	{
-		if (!isSustainNote) return;
-		if (prevNote == null || prevNote == this || !prevNote.isSustainNote) return;
+		if (!isSustainNote)
+			return;
+		if (prevNote == null || prevNote == this || !prevNote.isSustainNote)
+			return;
 
 		scrollSpeed = FlxMath.roundDecimal(scrollSpeed, 2);
 
@@ -277,18 +282,21 @@ class Note extends FlxSprite
 		if (!mustPress)
 		{
 			// For opponent notes, automatically hit them when the strumTime is reached.
-			if (!wasGoodHit && strumTime <= Conductor.songPosition) wasGoodHit = true;
+			if (!wasGoodHit && strumTime <= Conductor.songPosition)
+				wasGoodHit = true;
 			return;
 		}
 
 		// Already hit, so do nothing.
-		if (tooLate || wasGoodHit) return;
+		if (tooLate || wasGoodHit)
+			return;
 
 		if (willMiss)
 		{
 			tooLate = true;
 			canBeHit = false;
-			if (alpha > 0.3) alpha = 0.3;
+			if (alpha > 0.3)
+				alpha = 0.3;
 			return;
 		}
 
@@ -296,7 +304,8 @@ class Note extends FlxSprite
 		final safeZone = Conductor.safeZoneOffset;
 
 		// Check if the note has been hit, or if it's too late to be hit.
-		if (strumTime > songPos - safeZone && strumTime < songPos + 0.7 * safeZone) canBeHit = true;
+		if (strumTime > songPos - safeZone && strumTime < songPos + 0.7 * safeZone)
+			canBeHit = true;
 		else if (strumTime <= songPos - safeZone)
 		{
 			willMiss = true;

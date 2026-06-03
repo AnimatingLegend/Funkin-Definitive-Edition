@@ -57,7 +57,7 @@ class DialogueBox extends FlxSpriteGroup
 		}, 5);
 
 		box = new FlxSprite(-20, 45);
-		
+
 		var hasDialog = false;
 		switch (PlayState.SONG.song.toLowerCase())
 		{
@@ -87,7 +87,7 @@ class DialogueBox extends FlxSpriteGroup
 		}
 
 		this.dialogueList = dialogueList;
-		
+
 		if (!hasDialog)
 			return;
 
@@ -172,10 +172,10 @@ class DialogueBox extends FlxSpriteGroup
 			dialogueStarted = true;
 		}
 
-		if (FlxG.keys.justPressed.ENTER  && dialogueStarted == true)
+		if (FlxG.keys.justPressed.ENTER && dialogueStarted == true)
 		{
 			remove(dialogue);
-				
+
 			FlxG.sound.play(Paths.sound('clickText'), 0.8);
 
 			if (dialogueList[1] == null && dialogueList[0] != null)
@@ -184,7 +184,7 @@ class DialogueBox extends FlxSpriteGroup
 				{
 					isEnding = true;
 
-					switch(PlayState.SONG.song.toLowerCase())
+					switch (PlayState.SONG.song.toLowerCase())
 					{
 						case 'senpai' | 'thorns':
 							FlxG.sound.music.fadeOut(2.2, 0);
@@ -214,7 +214,7 @@ class DialogueBox extends FlxSpriteGroup
 				startDialogue();
 			}
 		}
-		
+
 		super.update(elapsed);
 	}
 
@@ -232,10 +232,10 @@ class DialogueBox extends FlxSpriteGroup
 			handSelect.visible = true;
 			dialogueEnded = true;
 		};
-	
+
 		handSelect.visible = false;
 		dialogueEnded = false;
-	
+
 		switch (curCharacter)
 		{
 			case 'dad':

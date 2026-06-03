@@ -11,12 +11,9 @@ import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
-
 import funkin.backend.utils.data.CharacterData;
-
 import haxe.Json;
 import haxe.xml.Access;
-
 import openfl.events.Event;
 import openfl.net.FileReference;
 import openfl.events.IOErrorEvent;
@@ -35,6 +32,7 @@ class AnimationDebug extends MusicBeatState
 	 * Scene Elements
 	 */
 	var opponent:Character;
+
 	var characterBackground:Character;
 	var character:Character;
 
@@ -58,6 +56,7 @@ class AnimationDebug extends MusicBeatState
 	 * UI Panel Elements
 	 */
 	static final PANEL_W:Int = 280;
+
 	static final PANEL_PAD:Int = 12;
 
 	var panelBG:FlxSprite;
@@ -73,12 +72,14 @@ class AnimationDebug extends MusicBeatState
 	 * UI Dropdowns / Inputs
 	 */
 	var characterDropdown:FlxUIDropDownMenu;
+
 	var animationDropdown:FlxUIDropDownMenu;
 
 	/**
 	 * Character Tab Fields
 	 */
 	var imageFileInput:FlxUIInputText;
+
 	var healthIconInput:FlxUIInputText;
 	var flipXCheck:FlxUICheckBox;
 	var singDurStepper:FlxUINumericStepper;
@@ -90,6 +91,7 @@ class AnimationDebug extends MusicBeatState
 	 * Animation Tab Fields
 	 */
 	var animNameInput:FlxUIInputText;
+
 	var animSymbolInput:FlxUIInputText;
 	var animFPSStepper:FlxUINumericStepper;
 	var animLoopCheck:FlxUICheckBox;
@@ -103,7 +105,7 @@ class AnimationDebug extends MusicBeatState
 		this.daAnim = daAnim;
 	}
 
-	override function create() 
+	override function create()
 	{
 		FlxG.sound.playMusic(Paths.music('pauseMusic/breakfast', 'shared'), 0.5);
 
@@ -188,19 +190,17 @@ class AnimationDebug extends MusicBeatState
 		panelGroup.add(makeSectionLabel(xBase, yOff, 'Character:'));
 		yOff += 22;
 
-		characterDropdown = new FlxUIDropDownMenu(
-			xBase, yOff,
-			FlxUIDropDownMenu.makeStrIdLabelArray(characters.length > 0 ? characters : ['N/A'], true),
+		characterDropdown = new FlxUIDropDownMenu(xBase, yOff, FlxUIDropDownMenu.makeStrIdLabelArray(characters.length > 0 ? characters : ['N/A'], true),
 			function(idx:String)
 			{
 				var characterID = characters[Std.parseInt(idx)];
-				if (characterID == null) return; // If the character ID is null, don't do anything.
+				if (characterID == null)
+					return; // If the character ID is null, don't do anything.
 				daAnim = characterID;
 				loadCharacterIntoView(characterID);
 				updateTexts();
 				genBoyOffsets(true, true);
-			}
-		);
+			});
 		characterDropdown.selectedLabel = daAnim;
 		characterDropdown.cameras = [camHUD];
 		characterDropdown.scrollFactor.set();
@@ -215,21 +215,18 @@ class AnimationDebug extends MusicBeatState
 		panelGroup.add(makeSectionLabel(xBase, yOff, 'Animation:'));
 		yOff += 22;
 
-		animationDropdown = new FlxUIDropDownMenu(
-			xBase, yOff,
-			FlxUIDropDownMenu.makeStrIdLabelArray(['N/A'], true),
-			function(idx:String)
-			{
-				var animationID = currentCharacterData.animations[Std.parseInt(idx)];
-				if (animationID == null) return; // If the animation ID is null, don't do anything.
-				curAnim = Std.parseInt(idx);
-				character.playAnim(animList[curAnim]);
+		animationDropdown = new FlxUIDropDownMenu(xBase, yOff, FlxUIDropDownMenu.makeStrIdLabelArray(['N/A'], true), function(idx:String)
+		{
+			var animationID = currentCharacterData.animations[Std.parseInt(idx)];
+			if (animationID == null)
+				return; // If the animation ID is null, don't do anything.
+			curAnim = Std.parseInt(idx);
+			character.playAnim(animList[curAnim]);
 
-				updateOffsetDisplay();
-				updateTexts();
-				genBoyOffsets(false);
-			}
-		);
+			updateOffsetDisplay();
+			updateTexts();
+			genBoyOffsets(false);
+		});
 		animationDropdown.cameras = [camHUD];
 		animationDropdown.scrollFactor.set();
 		styleDropdown(animationDropdown, innerW);
@@ -247,7 +244,8 @@ class AnimationDebug extends MusicBeatState
 		onionSkinCheck.callback = function()
 		{
 			onionSkinVisible = onionSkinCheck.checked;
-			if (characterBackground != null) characterBackground.alpha = onionSkinVisible ? 0.75 : 0;
+			if (characterBackground != null)
+				characterBackground.alpha = onionSkinVisible ? 0.75 : 0;
 		};
 		panelGroup.add(onionSkinCheck);
 
@@ -267,12 +265,12 @@ class AnimationDebug extends MusicBeatState
 
 		// Divide each section of the panel.
 		panelGroup.add(makeDivider(xBase, yOff, innerW));
-    yOff += 10;
+		yOff += 10;
 
 		// Create tabs for the panel (Animation, & Character).
 		var tabs = [
 			{name: "Animations", label: 'Animations'},
-      {name: "Character", label: 'Character'}
+			{name: "Character", label: 'Character'}
 		];
 		UI_BOX = new FlxUITabMenu(null, tabs, true);
 		UI_BOX.scrollFactor.set();
@@ -285,7 +283,7 @@ class AnimationDebug extends MusicBeatState
 		panelGroup.add(UI_BOX);
 
 		buildAnimTab(xBase, innerW);
-    buildCharacterTab(xBase, innerW);
+		buildCharacterTab(xBase, innerW);
 		yOff += 268;
 
 		// Divide each section of the panel.
@@ -346,7 +344,7 @@ class AnimationDebug extends MusicBeatState
 		tab.add(new FlxText(90, yAxis, 0, 'Loop:', 11));
 		yAxis += 15;
 		animFPSStepper = new FlxUINumericStepper(8, yAxis, 1, 24, 1, 240, 0);
-		animLoopCheck  = new FlxUICheckBox(90, yAxis, null, null, '', 20);
+		animLoopCheck = new FlxUICheckBox(90, yAxis, null, null, '', 20);
 		tab.add(animFPSStepper);
 		tab.add(animLoopCheck);
 		yAxis += 28;
@@ -357,7 +355,7 @@ class AnimationDebug extends MusicBeatState
 		tab.add(animIndicesInput);
 		yAxis += 24;
 
-		var addBtn = new FlxUIButton(8,  yAxis, 'Add / Update', onAnimAddUpdate);
+		var addBtn = new FlxUIButton(8, yAxis, 'Add / Update', onAnimAddUpdate);
 		var remBtn = new FlxUIButton(110, yAxis, 'Remove', onAnimRemove);
 		addBtn.resize(95, 20);
 		remBtn.resize(95, 20);
@@ -378,7 +376,8 @@ class AnimationDebug extends MusicBeatState
 		imageFileInput = new FlxUIInputText(8, yAxis, Std.int(innerW - 70), '', 12);
 		var reloadBtn = new FlxUIButton(Std.int(innerW - 58), yAxis, 'Reload', function()
 		{
-			if (currentCharacterData == null) return;
+			if (currentCharacterData == null)
+				return;
 			currentCharacterData.assetPath = imageFileInput.text.trim();
 			xmlPrefix = scanXMLPrefixes(currentCharacterData.assetPath, currentCharacterData.library);
 
@@ -399,7 +398,7 @@ class AnimationDebug extends MusicBeatState
 		tab.add(flipXCheck);
 		yAxis += 24;
 
-		tab.add(new FlxText(8,  yAxis, 0, 'Sing Length:', 11));
+		tab.add(new FlxText(8, yAxis, 0, 'Sing Length:', 11));
 		tab.add(new FlxText(110, yAxis, 0, 'Scale:', 11));
 		yAxis += 15;
 		singDurStepper = new FlxUINumericStepper(8, yAxis, 0.1, 4.0, 0.1, 20.0, 1);
@@ -464,26 +463,29 @@ class AnimationDebug extends MusicBeatState
 			if (file.startsWith('assets/data/characters/') && file.endsWith('.json'))
 			{
 				var name = file.replace('assets/data/characters/', '').replace('.json', '');
-				if (!dataFound.contains(name)) dataFound.push(name);
+				if (!dataFound.contains(name))
+					dataFound.push(name);
 			}
 		}
 
 		dataFound.sort((a, b) -> a < b ? -1 : a > b ? 1 : 0);
-    return dataFound;
+		return dataFound;
 	}
 
 	/**
-  * Parse the character's XML and return all unique animation prefixes.
-  * Strips trailing digits so "BF idle dance001" becomes "BF idle dance".
-  */
+	 * Parse the character's XML and return all unique animation prefixes.
+	 * Strips trailing digits so "BF idle dance001" becomes "BF idle dance".
+	 */
 	function scanXMLPrefixes(assetPath:String, library:String):Array<String>
 	{
 		var prefixes:Array<String> = [];
-		if (assetPath == null) return prefixes;
+		if (assetPath == null)
+			return prefixes;
 
 		var lib = library != null ? library : 'shared';
 		var xmlPath = Paths.file('images/$assetPath.xml', TEXT, lib);
-		if (!openfl.Assets.exists(xmlPath)) return prefixes;
+		if (!openfl.Assets.exists(xmlPath))
+			return prefixes;
 
 		try
 		{
@@ -491,19 +493,25 @@ class AnimationDebug extends MusicBeatState
 			for (sub in xml.nodes.SubTexture)
 			{
 				var prefix = ~/[0-9]+$/.replace(sub.att.name, '').rtrim();
-				if (!prefixes.contains(prefix)) prefixes.push(prefix);
+				if (!prefixes.contains(prefix))
+					prefixes.push(prefix);
 			}
 			prefixes.sort((a, b) -> a < b ? -1 : a > b ? 1 : 0);
 		}
-		catch (e) { trace('CHARACTER ANIMATION DEBUGGER: XML parse error: $e'); }
+		catch (e)
+		{
+			trace('CHARACTER ANIMATION DEBUGGER: XML parse error: $e');
+		}
 
 		return prefixes;
 	}
 
 	function loadCharacterIntoView(id:String):Void
 	{
-		if (character != null) remove(character);
-		if (characterBackground != null) remove(characterBackground);
+		if (character != null)
+			remove(character);
+		if (characterBackground != null)
+			remove(characterBackground);
 
 		var jsonPath = Paths.file('data/characters/$id.json', TEXT, 'preload');
 
@@ -526,11 +534,11 @@ class AnimationDebug extends MusicBeatState
 				animations: [],
 				flipX: false,
 				scale: 1.0,
-				healthIcon: { 
-					id: id, 
-					scale: 1.0, 
-					flipX: false, 
-					offsets: [0, 0] 
+				healthIcon: {
+					id: id,
+					scale: 1.0,
+					flipX: false,
+					offsets: [0, 0]
 				}
 			};
 		}
@@ -539,12 +547,13 @@ class AnimationDebug extends MusicBeatState
 		characterBackground.screenCenter();
 		characterBackground.debugMode = true;
 		characterBackground.alpha = onionSkinVisible ? 0.75 : 0.0;
-		
+
 		opponent = new Character(0, 0, id);
 		opponent.screenCenter();
 		opponent.debugMode = true;
 
-		if (isPlayable) character.flipX = !character.flipX;
+		if (isPlayable)
+			character.flipX = !character.flipX;
 
 		add(characterBackground);
 		add(opponent);
@@ -560,42 +569,52 @@ class AnimationDebug extends MusicBeatState
 
 		// Build the animation list.
 		animList = [];
-		for (animation in character.animation.getAnimationList()) animList.push(animation.name);
+		for (animation in character.animation.getAnimationList())
+			animList.push(animation.name);
 		for (animation in animList)
 		{
-			if (!character.animOffsets.exists(animation)) character.animOffsets.set(animation, [0.0, 0.0]);
+			if (!character.animOffsets.exists(animation))
+				character.animOffsets.set(animation, [0.0, 0.0]);
 		}
 
 		curAnim = 0;
-		if (animList.length > 0) character.playAnim(animList[0]);
+		if (animList.length > 0)
+			character.playAnim(animList[0]);
 
-		xmlPrefix = (currentCharacterData != null && currentCharacterData.assetPath != null)
-      ? scanXMLPrefixes(currentCharacterData.assetPath, currentCharacterData.library)
-      : [];
+		xmlPrefix = (currentCharacterData != null && currentCharacterData.assetPath != null) ? scanXMLPrefixes(currentCharacterData.assetPath,
+			currentCharacterData.library) : [];
 
 		rebuildAnimDropDown();
-    syncCharTabToData();
-    updateOffsetDisplay();
+		syncCharTabToData();
+		updateOffsetDisplay();
 	}
 
 	function rebuildAnimDropDown():Void
 	{
-		if (animationDropdown == null) return;
-		
+		if (animationDropdown == null)
+			return;
+
 		var labels = animList.length > 0 ? animList : ['N/A'];
 		animationDropdown.setData(FlxUIDropDownMenu.makeStrIdLabelArray(labels, true));
-		
-		if (animList.length > 0) animationDropdown.selectedLabel = animList[curAnim];
+
+		if (animList.length > 0)
+			animationDropdown.selectedLabel = animList[curAnim];
 	}
 
 	function syncCharTabToData():Void
 	{
-		if (currentCharacterData == null) return;
-		if (imageFileInput != null) imageFileInput.text = currentCharacterData.assetPath != null ? currentCharacterData.assetPath : '';
-		if (healthIconInput != null) healthIconInput.text = currentCharacterData.healthIcon != null ? currentCharacterData.healthIcon.id : daAnim;
-		if (flipXCheck != null) flipXCheck.checked = currentCharacterData.flipX == true;
-		if (singDurStepper != null) singDurStepper.value = currentCharacterData.singDuration != null ? currentCharacterData.singDuration : 4.0;
-		if (scaleStepper != null) scaleStepper.value = currentCharacterData.scale != null ? currentCharacterData.scale : 1.0;
+		if (currentCharacterData == null)
+			return;
+		if (imageFileInput != null)
+			imageFileInput.text = currentCharacterData.assetPath != null ? currentCharacterData.assetPath : '';
+		if (healthIconInput != null)
+			healthIconInput.text = currentCharacterData.healthIcon != null ? currentCharacterData.healthIcon.id : daAnim;
+		if (flipXCheck != null)
+			flipXCheck.checked = currentCharacterData.flipX == true;
+		if (singDurStepper != null)
+			singDurStepper.value = currentCharacterData.singDuration != null ? currentCharacterData.singDuration : 4.0;
+		if (scaleStepper != null)
+			scaleStepper.value = currentCharacterData.scale != null ? currentCharacterData.scale : 1.0;
 	}
 
 	//
@@ -604,7 +623,8 @@ class AnimationDebug extends MusicBeatState
 
 	function genBoyOffsets(pushList:Bool = true, ?cleanArray:Bool = false):Void
 	{
-		if (cleanArray) animList.splice(0, animList.length);
+		if (cleanArray)
+			animList.splice(0, animList.length);
 
 		var daLoop = 0;
 		for (anim => offsets in character.animOffsets)
@@ -619,7 +639,8 @@ class AnimationDebug extends MusicBeatState
 			txt.cameras = [camHUD];
 			dumbTexts.add(txt);
 
-			if (pushList && !animList.contains(anim)) animList.push(anim);
+			if (pushList && !animList.contains(anim))
+				animList.push(anim);
 			daLoop++;
 		}
 
@@ -633,12 +654,17 @@ class AnimationDebug extends MusicBeatState
 
 	function updateTexts():Void
 	{
-		dumbTexts.forEach(function(txt) { txt.kill(); dumbTexts.remove(txt, true); });
+		dumbTexts.forEach(function(txt)
+		{
+			txt.kill();
+			dumbTexts.remove(txt, true);
+		});
 	}
 
 	function updateOffsetDisplay():Void
 	{
-		if (animList.length == 0 || textOffset == null) return;
+		if (animList.length == 0 || textOffset == null)
+			return;
 		var offsets = character.animOffsets.get(animList[curAnim]);
 		textOffset.text = 'Offset: ' + (offsets != null ? offsets : [0, 0]);
 	}
@@ -646,14 +672,16 @@ class AnimationDebug extends MusicBeatState
 	//
 	// ANIMATION TAB CALLBACKS
 	//
-	
+
 	function onAnimAddUpdate():Void
 	{
-		if (currentCharacterData == null) return;
+		if (currentCharacterData == null)
+			return;
 
 		var name = animNameInput.text.trim();
 		var symbol = animSymbolInput.text.trim();
-		if (name == '' || symbol == '') return;
+		if (name == '' || symbol == '')
+			return;
 
 		var framerate = Std.int(animFPSStepper.value);
 		var looped = animLoopCheck.checked;
@@ -665,7 +693,8 @@ class AnimationDebug extends MusicBeatState
 			for (part in indicesString.split(','))
 			{
 				var value = Std.parseInt(part.trim());
-				if (value != null) indices.push(value);
+				if (value != null)
+					indices.push(value);
 			}
 		}
 
@@ -691,7 +720,7 @@ class AnimationDebug extends MusicBeatState
 				frameRate: framerate,
 				looped: looped,
 				frameIndices: indices.length > 0 ? indices : null,
-				offsets:[0, 0]
+				offsets: [0, 0]
 			});
 		}
 
@@ -704,8 +733,10 @@ class AnimationDebug extends MusicBeatState
 			character.animation.addByPrefix(name, symbol, framerate, looped);
 		}
 
-		if (!character.animOffsets.exists(name))  character.animOffsets.set(name, [0.0, 0.0]);
-		if (!animList.contains(name)) animList.push(name);
+		if (!character.animOffsets.exists(name))
+			character.animOffsets.set(name, [0.0, 0.0]);
+		if (!animList.contains(name))
+			animList.push(name);
 		curAnim = animList.indexOf(name);
 		character.playAnim(name);
 
@@ -717,7 +748,8 @@ class AnimationDebug extends MusicBeatState
 
 	function onAnimRemove():Void
 	{
-		if (currentCharacterData == null || animList.length == 0) return;
+		if (currentCharacterData == null || animList.length == 0)
+			return;
 
 		var name = animList[curAnim];
 		currentCharacterData.animations = currentCharacterData.animations.filter(a -> a.name != name);
@@ -726,7 +758,8 @@ class AnimationDebug extends MusicBeatState
 
 		curAnim = Std.int(Math.max(0, curAnim - 1));
 		rebuildAnimDropDown();
-		if (animList.length > 0) character.playAnim(animList[curAnim]);
+		if (animList.length > 0)
+			character.playAnim(animList[curAnim]);
 		updateTexts();
 		genBoyOffsets(false);
 		updateOffsetDisplay();
@@ -738,7 +771,8 @@ class AnimationDebug extends MusicBeatState
 
 	function syncOffsetToCharData(animName:String, offsets:Array<Dynamic>):Void
 	{
-		if (currentCharacterData == null) return;
+		if (currentCharacterData == null)
+			return;
 
 		for (anim in currentCharacterData.animations)
 		{
@@ -752,11 +786,16 @@ class AnimationDebug extends MusicBeatState
 
 	function saveToJson():Void
 	{
-		if (currentCharacterData == null) return;
-		if (imageFileInput != null) currentCharacterData.assetPath = imageFileInput.text.trim();
-		if (flipXCheck != null) currentCharacterData.flipX = flipXCheck.checked;
-		if (singDurStepper != null) currentCharacterData.singDuration = singDurStepper.value;
-		if (scaleStepper != null) currentCharacterData.scale = scaleStepper.value;
+		if (currentCharacterData == null)
+			return;
+		if (imageFileInput != null)
+			currentCharacterData.assetPath = imageFileInput.text.trim();
+		if (flipXCheck != null)
+			currentCharacterData.flipX = flipXCheck.checked;
+		if (singDurStepper != null)
+			currentCharacterData.singDuration = singDurStepper.value;
+		if (scaleStepper != null)
+			currentCharacterData.scale = scaleStepper.value;
 
 		if (healthIconInput != null && currentCharacterData.healthIcon != null)
 			currentCharacterData.healthIcon.id = healthIconInput.text.trim();
@@ -765,7 +804,7 @@ class AnimationDebug extends MusicBeatState
 			syncOffsetToCharData(animName, offsets);
 
 		var jsonString = Json.stringify(currentCharacterData, null, '\t');
-		var fileName   = daAnim + '.json';
+		var fileName = daAnim + '.json';
 
 		_file = new FileReference();
 		_file.addEventListener(Event.COMPLETE, onSaveComplete);
@@ -779,9 +818,8 @@ class AnimationDebug extends MusicBeatState
 		// Update the animation text
 		if (character != null && character.animation != null)
 		{
-			textAnim.text = character.animation.curAnim.name
-      + '  (' + (character.animation.curAnim.curFrame + 1)
-      + ' / ' + character.animation.curAnim.numFrames + ')';
+			textAnim.text = character.animation.curAnim.name + '  (' + (character.animation.curAnim.curFrame + 1) + ' / '
+				+ character.animation.curAnim.numFrames + ')';
 		}
 
 		// Show / Hide UI Elements
@@ -799,7 +837,8 @@ class AnimationDebug extends MusicBeatState
 		if (FlxG.keys.justPressed.O)
 		{
 			onionSkinVisible = !onionSkinVisible;
-			if (characterBackground != null) characterBackground.alpha = onionSkinVisible ? 0.75 : 0.0;
+			if (characterBackground != null)
+				characterBackground.alpha = onionSkinVisible ? 0.75 : 0.0;
 		}
 
 		// Exit to Main Menu.
@@ -818,7 +857,8 @@ class AnimationDebug extends MusicBeatState
 		}
 
 		// Save to JSON.
-		if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S) saveToJson();
+		if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S)
+			saveToJson();
 
 		// Flip Character on its X Axis.
 		if (FlxG.keys.justPressed.F)
@@ -835,7 +875,7 @@ class AnimationDebug extends MusicBeatState
 			if (FlxG.mouse.wheel != 0)
 			{
 				FlxG.camera.zoom += FlxG.mouse.wheel * 0.1;
-        FlxG.camera.zoom  = Math.max(0.1, Math.min(8.0, FlxG.camera.zoom));
+				FlxG.camera.zoom = Math.max(0.1, Math.min(8.0, FlxG.camera.zoom));
 			}
 
 			// Pan the camera around using your middle mouse button.
@@ -847,18 +887,23 @@ class AnimationDebug extends MusicBeatState
 		}
 
 		// Cycle Animations
-		if (FlxG.keys.justPressed.W) curAnim -= 1;
-    if (FlxG.keys.justPressed.S && !FlxG.keys.pressed.CONTROL) curAnim += 1;
+		if (FlxG.keys.justPressed.W)
+			curAnim -= 1;
+		if (FlxG.keys.justPressed.S && !FlxG.keys.pressed.CONTROL)
+			curAnim += 1;
 
-		if (curAnim < 0) curAnim = animList.length - 1;
-    if (curAnim >= animList.length) curAnim = 0;
+		if (curAnim < 0)
+			curAnim = animList.length - 1;
+		if (curAnim >= animList.length)
+			curAnim = 0;
 
 		if (FlxG.keys.justPressed.W || FlxG.keys.justPressed.S || FlxG.keys.justPressed.SPACE)
 		{
 			if (animList.length > 0)
 			{
 				character.playAnim(animList[curAnim]);
-				if (animationDropdown != null) animationDropdown.selectedLabel = animList[curAnim];
+				if (animationDropdown != null)
+					animationDropdown.selectedLabel = animList[curAnim];
 
 				updateOffsetDisplay();
 				updateTexts();
@@ -878,10 +923,14 @@ class AnimationDebug extends MusicBeatState
 			var offsets = character.animOffsets.get(animList[curAnim]);
 			if (offsets != null)
 			{
-				if (up_arrow) offsets[1] += 1 * mutliplier;
-				if (down_arrow) offsets[1] -= 1 * mutliplier;
-				if (left_arrow) offsets[0] += 1 * mutliplier;
-				if (right_arrow) offsets[0] -= 1 * mutliplier;
+				if (up_arrow)
+					offsets[1] += 1 * mutliplier;
+				if (down_arrow)
+					offsets[1] -= 1 * mutliplier;
+				if (left_arrow)
+					offsets[0] += 1 * mutliplier;
+				if (right_arrow)
+					offsets[0] -= 1 * mutliplier;
 
 				syncOffsetToCharData(animList[curAnim], offsets);
 				updateOffsetDisplay();

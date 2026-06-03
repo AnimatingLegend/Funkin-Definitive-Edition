@@ -1,7 +1,6 @@
 package funkin.editors;
 
 import flash.media.Sound;
-
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.ui.FlxInputText;
 import flixel.addons.ui.FlxUI9SliceSprite;
@@ -16,19 +15,14 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.ui.FlxSpriteButton;
-
 import funkin.backend.chart.Conductor.BPMChangeEvent;
 import funkin.backend.chart.Section.SwagSection;
 import funkin.backend.chart.Song;
 import funkin.backend.chart.Song.SwagSong;
-
 import funkin.gameplay.objects.note.Note;
 import funkin.gameplay.objects.HealthIcon;
-
 import haxe.Json;
-
 import lime.utils.Assets;
-
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
@@ -38,10 +32,9 @@ import openfl.utils.ByteArray;
 
 using StringTools;
 
-
 /**
-	* yckenn's chart editor for fnf-simple-engine (0.1.0)
-	* tweaks made by legend
+ * yckenn's chart editor for fnf-simple-engine (0.1.0)
+ * tweaks made by legend
 **/
 class ChartingState extends MusicBeatState
 {
@@ -299,7 +292,6 @@ class ChartingState extends MusicBeatState
 		UI_box.addGroup(tab_group_note);
 	}
 
-
 	function addSongUI():Void
 	{
 		var UI_songTitle = new FlxUIInputText(10, 10, 70, _song.song, 8);
@@ -363,11 +355,11 @@ class ChartingState extends MusicBeatState
 	{
 		var tab_group_assets = new FlxUI(null, UI_box);
 		tab_group_assets.name = "Assets";
-	
+
 		var characters:Array<String> = CoolUtil.coolTextFile(Paths.txt('characterList'));
 		var gfVersions:Array<String> = CoolUtil.coolTextFile(Paths.txt('gfVersionList'));
 		var stages:Array<String> = CoolUtil.coolTextFile(Paths.txt('stageList'));
-	
+
 		var player1DropDown = new FlxUIDropDownMenu(10, 30, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
 			_song.player1 = characters[Std.parseInt(character)];
@@ -379,24 +371,24 @@ class ChartingState extends MusicBeatState
 			_song.player2 = characters[Std.parseInt(character)];
 		});
 		player2DropDown.selectedLabel = _song.player2;
-	
+
 		var gfVersionDropDown = new FlxUIDropDownMenu(10, 80, FlxUIDropDownMenu.makeStrIdLabelArray(gfVersions, true), function(gfVersion:String)
 		{
 			_song.gfVersion = gfVersions[Std.parseInt(gfVersion)];
 		});
 		gfVersionDropDown.selectedLabel = _song.gfVersion;
-	
+
 		var stageDropDown = new FlxUIDropDownMenu(140, 80, FlxUIDropDownMenu.makeStrIdLabelArray(stages, true), function(stage:String)
 		{
 			_song.stage = stages[Std.parseInt(stage)];
 		});
 		stageDropDown.selectedLabel = _song.stage;
-	
+
 		var player1Label = new FlxText(10, 10, 64, 'Player');
 		var player2Label = new FlxText(140, 10, 64, 'Opponent');
 		var gfVersionLabel = new FlxText(10, 60, 64, 'Girlfriend');
 		var stageLabel = new FlxText(140, 60, 64, 'Stage');
-	
+
 		tab_group_assets.add(gfVersionDropDown);
 		tab_group_assets.add(stageDropDown);
 		tab_group_assets.add(player1DropDown);
@@ -406,13 +398,11 @@ class ChartingState extends MusicBeatState
 		tab_group_assets.add(player2Label);
 		tab_group_assets.add(stageLabel);
 		tab_group_assets.add(gfVersionLabel);
-	
-	
+
 		tab_group_assets.add(gfVersionDropDown);
 		tab_group_assets.add(stageDropDown);
 		tab_group_assets.add(player1DropDown);
 		tab_group_assets.add(player2DropDown);
-
 
 		tab_group_assets.add(gfVersionDropDown);
 		tab_group_assets.add(stageDropDown);
@@ -463,7 +453,7 @@ class ChartingState extends MusicBeatState
 
 		check_mustHitSection = new FlxUICheckBox(10, 30, null, null, "Must hit section", 100);
 		check_mustHitSection.name = 'check_mustHit';
-	//	check_mustHitSection.checked = true;
+		//	check_mustHitSection.checked = true;
 
 		check_altAnim = new FlxUICheckBox(10, 330, null, null, "Alt Animation", 100);
 		check_altAnim.name = 'check_altAnim';
@@ -703,52 +693,46 @@ class ChartingState extends MusicBeatState
 		}
 
 		if (ChartingState.hitsoundsDads)
-			{
-				for (note in _song.notes[curSection].sectionNotes)
-				{
-					var gottaHitNote:Bool = _song.notes[curSection].mustHitSection;
-	
-					if (note[1] > 4 - 1)
-					{
-						gottaHitNote = !_song.notes[curSection].mustHitSection;
-					}
-					if (note[0] <= Conductor.songPosition
-						&& FlxG.sound.music.playing
-						&& !hitNotesPlayed.contains(note)
-						&& !gottaHitNote)
-					{
-						hitNotesPlayed.push(note);
-						FlxG.sound.play(Paths.sound("hitsound"), 1);
-					}
-				}
-			}
-	
-		if (ChartingState.hitsoundsBFs)
 		{
 			for (note in _song.notes[curSection].sectionNotes)
 			{
-					var gottaHitNote:Bool = _song.notes[curSection].mustHitSection;
-	
+				var gottaHitNote:Bool = _song.notes[curSection].mustHitSection;
+
 				if (note[1] > 4 - 1)
 				{
 					gottaHitNote = !_song.notes[curSection].mustHitSection;
 				}
-				if (note[0] <= Conductor.songPosition
-					&& FlxG.sound.music.playing
-					&& !hitNotesPlayed.contains(note)
-					&& gottaHitNote)
+				if (note[0] <= Conductor.songPosition && FlxG.sound.music.playing && !hitNotesPlayed.contains(note) && !gottaHitNote)
 				{
 					hitNotesPlayed.push(note);
 					FlxG.sound.play(Paths.sound("hitsound"), 1);
 				}
 			}
 		}
-	
+
+		if (ChartingState.hitsoundsBFs)
+		{
+			for (note in _song.notes[curSection].sectionNotes)
+			{
+				var gottaHitNote:Bool = _song.notes[curSection].mustHitSection;
+
+				if (note[1] > 4 - 1)
+				{
+					gottaHitNote = !_song.notes[curSection].mustHitSection;
+				}
+				if (note[0] <= Conductor.songPosition && FlxG.sound.music.playing && !hitNotesPlayed.contains(note) && gottaHitNote)
+				{
+					hitNotesPlayed.push(note);
+					FlxG.sound.play(Paths.sound("hitsound"), 1);
+				}
+			}
+		}
+
 		if (muteSong)
 			FlxG.sound.music.volume = 0.000001;
 		else
 			FlxG.sound.music.volume = 1;
-	
+
 		if (muteVocals)
 			vocals.volume = 0.000001;
 		else
@@ -1099,10 +1083,8 @@ class ChartingState extends MusicBeatState
 
 			if (daSus > 0)
 			{
-				var sustainVis:FlxSprite = new FlxSprite(
-					note.x + (GRID_SIZE / 2) - 3,
-					note.y + GRID_SIZE - 4
-				).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height)));
+				var sustainVis:FlxSprite = new FlxSprite(note.x + (GRID_SIZE / 2) - 3,
+					note.y + GRID_SIZE - 4).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height)));
 				sustainVis.color = strumColors[daNoteInfo % 4];
 				curRenderedSustains.add(sustainVis);
 			}
@@ -1126,7 +1108,7 @@ class ChartingState extends MusicBeatState
 
 	function selectNote(note:Note):Void
 	{
-		 var swagNum:Int = 0;
+		var swagNum:Int = 0;
 
 		for (i in _song.notes[curSection].sectionNotes)
 		{

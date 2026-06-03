@@ -5,6 +5,7 @@ using StringTools;
 class HealthIcon extends FlxSprite
 {
 	public var sprTracker:FlxSprite;
+
 	private var isOldIcon:Bool = false;
 	private var isPlayer:Bool = false;
 	private var char:String = '';
@@ -29,7 +30,7 @@ class HealthIcon extends FlxSprite
 	{
 		if (isOldIcon = !isOldIcon)
 			changeIcon('bf-old');
-		else 
+		else
 			changeIcon('bf');
 
 		if (PlayState.storyWeek == 6 && !isOldIcon)

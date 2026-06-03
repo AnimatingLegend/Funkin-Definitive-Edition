@@ -16,6 +16,11 @@
       "version": "2.5.0"
     },
     {
+      "name": "formatter",
+      "type": "haxelib",
+      "version": null
+    },
+    {
       "name": "hxcpp",
       "type": "haxelib",
       "version": null

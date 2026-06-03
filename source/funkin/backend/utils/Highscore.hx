@@ -14,7 +14,6 @@ class Highscore
 	public static var songRatings:Map<String, Float> = new Map<String, Float>();
 	#end
 
-
 	public static function saveScore(song:String, score:Int = 0, ?diff:Int = 0):Void
 	{
 		var daSong:String = formatSong(song, diff);
@@ -23,9 +22,11 @@ class Highscore
 		{
 			if (songScores.exists(daSong))
 			{
-				if (songScores.get(daSong) < score) setScore(daSong, score);
+				if (songScores.get(daSong) < score)
+					setScore(daSong, score);
 			}
-			else setScore(daSong, score);
+			else
+				setScore(daSong, score);
 		}
 		else
 		{
@@ -41,9 +42,11 @@ class Highscore
 		{
 			if (songScores.exists(daWeek))
 			{
-				if (songScores.get(daWeek) < score) setScore(daWeek, score);
+				if (songScores.get(daWeek) < score)
+					setScore(daWeek, score);
 			}
-			else setScore(daWeek, score);
+			else
+				setScore(daWeek, score);
 		}
 		else
 		{
@@ -60,7 +63,7 @@ class Highscore
 		{
 			if (songCombos.exists(daSong))
 			{
-				if (getComboInt(songCombos.get(daSong)) < getComboInt(finalCombo)) 
+				if (getComboInt(songCombos.get(daSong)) < getComboInt(finalCombo))
 				{
 					setCombo(daSong, finalCombo);
 				}
@@ -84,9 +87,11 @@ class Highscore
 		{
 			if (songRatings.exists(daSong))
 			{
-				if (songRatings.get(daSong) < accuracy) setRating(daSong, accuracy);
+				if (songRatings.get(daSong) < accuracy)
+					setRating(daSong, accuracy);
 			}
-			else setRating(daSong, accuracy);
+			else
+				setRating(daSong, accuracy);
 		}
 		else
 		{
@@ -141,18 +146,23 @@ class Highscore
 	{
 		switch (combo)
 		{
-			case 'SDCB': return 1;
-			case 'FC': return 2;
-			case 'GFC': return 3;
-			case 'MFC': return 4;
-			default: return 0;
+			case 'SDCB':
+				return 1;
+			case 'FC':
+				return 2;
+			case 'GFC':
+				return 3;
+			case 'MFC':
+				return 4;
+			default:
+				return 0;
 		}
 	}
 
 	public static function getScore(song:String, diff:Int):Int
 	{
 		var daSong:String = formatSong(song, diff);
-		
+
 		if (!songScores.exists(daSong))
 		{
 			setScore(daSong, 0);
@@ -199,8 +209,11 @@ class Highscore
 
 	public static function load():Void
 	{
-		if (FlxG.save.data.songScores != null) songScores = FlxG.save.data.songScores;
-		if (FlxG.save.data.songCombos != null) songCombos = FlxG.save.data.songCombos;
-		if (FlxG.save.data.songRatings != null) songRatings = FlxG.save.data.songRatings;
+		if (FlxG.save.data.songScores != null)
+			songScores = FlxG.save.data.songScores;
+		if (FlxG.save.data.songCombos != null)
+			songCombos = FlxG.save.data.songCombos;
+		if (FlxG.save.data.songRatings != null)
+			songRatings = FlxG.save.data.songRatings;
 	}
 }
