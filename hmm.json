@@ -21,6 +21,16 @@
       "version": null
     },
     {
+      "name": "hscript",
+      "type": "haxelib",
+      "version": "2.4.0"
+    },
+    {
+      "name": "hxCodec",
+      "type": "haxelib",
+      "version": null
+    },
+    {
       "name": "hxcpp",
       "type": "haxelib",
       "version": null
@@ -34,16 +44,6 @@
       "name": "hxjsonast",
       "type": "haxelib",
       "version": null
-    },
-    {
-      "name": "hxvlc",
-      "type": "haxelib",
-      "version": "2.2.6"
-    },
-    {
-      "name": "hscript",
-      "type": "haxelib",
-      "version": "2.4.0"
     },
     {
       "name": "json2object",

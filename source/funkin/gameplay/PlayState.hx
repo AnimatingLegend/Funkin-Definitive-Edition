@@ -31,12 +31,19 @@ import funkin.editors.ChartingState;
 import funkin.editors.AnimationDebug;
 import funkin.gameplay.GitarooPause;
 import funkin.gameplay.PauseSubState;
+import funkin.gameplay.objects.cutscenes.CutsceneCharacter;
 import funkin.gameplay.objects.note.Note;
 import funkin.gameplay.objects.note.NoteSplash;
 import funkin.gameplay.objects.note.NoteSplash.NoteSplashPixel;
 import funkin.gameplay.objects.Character;
 import funkin.gameplay.shaders.BuildingShaders;
 import funkin.gameplay.shaders.WiggleEffect;
+#if FEATURE_VIDEO_CUTSCENES
+#if (hxCodec >= "3.0.0") import hxcodec.flixel.FlxVideo as VideoHandler;
+#elseif (hxCodec >= "2.6.1") import hxcodec.vlc.VideoHandler as VideoHandler;
+#elseif (hxCodec >= "2.6.0") import VideoHandler;
+#else import vlc.MP4Handler as VideoHandler; #end
+#end
 import haxe.Json;
 import haxe.macro.Expr.Case;
 
@@ -79,11 +86,6 @@ class PlayState extends MusicBeatState
 	 * How many times the player has died this session. 
 	 */
 	public static var deathCounter:Int = 0;
-
-	/** 
-	 * Whether the intro cutscene has already played this session. 
-	 */
-	public static var seenCutscene:Bool = false;
 
 	/** 
 	 * The full-combo rank string (e.g. "FC", "GFC", "MFC"). 
@@ -156,9 +158,9 @@ class PlayState extends MusicBeatState
 	public var camHUD:FlxCamera;
 
 	/** 
-	 * Cutscene-exclusive camera layer. 
+	 * Cutscene-exclusive camera HUD layer. 
 	 */
-	public var camCutscene:FlxCamera;
+	public var camHUD_cutscene:FlxCamera;
 
 	/** 
 	 * Whether the camera should zoom-in on beats. 
@@ -285,10 +287,55 @@ class PlayState extends MusicBeatState
 	 */
 	public static var daPixelZoom:Float = 6;
 
+	//
+	// CUTSCENES
+	//
+
 	/** 
 	 * Whether a cutscene is currently active (disables input). 
 	 */
 	public static var inCutscene:Bool = false;
+
+	/**
+	 * Whether the user is currently in a dialogue segment. (disables input)
+	 */
+	public static var inDialogue:Bool = false;
+
+	/** 
+	 * Whether the intro cutscene has already played this session. 
+	 */
+	public static var seenCutscene:Bool = false;
+
+	/**
+	 * Whether the School Week 6 cutscene has finished.
+	 */
+	public var schoolIntroEnd:Bool = false;
+
+	/** 
+	 * Whether the Tank Week 7 cutscene has finished. 
+	 */
+	public var tankIntroEnd:Bool = false;
+
+	//
+	// VIDEO HANDLING
+	//
+
+	#if FEATURE_VIDEO_CUTSCENES
+	/**
+	 * 
+	 */
+	private var activeVideo:VideoHandler = null;
+
+	/**
+	 * 
+	 */
+	private var activeVideoName:String = null;
+
+	/**
+	 * 
+	 */
+	private var activeVideoLibrary:String = null;
+	#end
 
 	//
 	// INSTANCE FIELDS
@@ -419,9 +466,9 @@ class PlayState extends MusicBeatState
 	var songName:FlxText;
 
 	/**
-	 *  Watermark text element. 
+	 *  The skip hint text element.
 	 */
-	var watermark:FlxText;
+	var skipHint:FlxText;
 
 	//
 	// Song state flags
@@ -560,7 +607,7 @@ class PlayState extends MusicBeatState
 	var talking:Bool = true;
 
 	/** 
-	 * GF dialogue lines loaded from text file. 
+	 * Array of dialogue lines loaded from text file. 
 	 */
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
@@ -573,16 +620,6 @@ class PlayState extends MusicBeatState
 	 * Whether perfect-mode is active (debug only). 
 	 */
 	var perfectMode:Bool = false;
-
-	/** 
-	 * Whether the Tank Week 7 intro has finished. 
-	 */
-	public var tankIntroEnd:Bool = false;
-
-	/** 
-	 * Spare FlxSprite slot used for debugging. 
-	 */
-	public var bar:FlxSprite;
 
 	//
 	// Stage Specific Fields
@@ -625,7 +662,7 @@ class PlayState extends MusicBeatState
 
 	// Week 7 - Tank
 	var gfCutsceneLayer:FlxGroup;
-	var bfTankCutsceneLayer:FlxGroup;
+	var bfCutsceneLayer:FlxGroup;
 	var tankWatchtower:BGSprite;
 	var tankGround:BGSprite;
 	var foregroundSprites:FlxTypedGroup<BGSprite>;
@@ -655,10 +692,13 @@ class PlayState extends MusicBeatState
 
 		// Camera Setup
 		camGame = new FlxCamera();
+		camHUD_cutscene = new FlxCamera();
+		camHUD_cutscene.bgColor.alpha = 0;
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 
 		FlxG.cameras.reset(camGame);
+		FlxG.cameras.add(camHUD_cutscene, false);
 		FlxG.cameras.add(camHUD, false);
 
 		// Asset cache:
@@ -718,8 +758,8 @@ class PlayState extends MusicBeatState
 		add(gf);
 		gfCutsceneLayer = new FlxGroup();
 		add(gfCutsceneLayer);
-		bfTankCutsceneLayer = new FlxGroup();
-		add(bfTankCutsceneLayer);
+		bfCutsceneLayer = new FlxGroup();
+		add(bfCutsceneLayer);
 
 		// Week 4:
 		// Limo goes between GF and mom for layering purposes.
@@ -740,7 +780,7 @@ class PlayState extends MusicBeatState
 		// Create dialogue box
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
 		doof.scrollFactor.set();
-		doof.finishThing = startCountdown;
+		doof.onDialogueComplete = startCountdown;
 
 		Conductor.songPosition = -5000;
 
@@ -801,8 +841,10 @@ class PlayState extends MusicBeatState
 			startCountdown();
 		}
 
-		super.create();
+		buildSkipHint();
 		cacheArea();
+
+		super.create();
 	}
 
 	/**
@@ -1170,7 +1212,10 @@ class PlayState extends MusicBeatState
 		}
 
 		if (!isStoryMode)
+		{
 			tankIntroEnd = true;
+			schoolIntroEnd = true;
+		}
 	}
 
 	/**
@@ -1315,6 +1360,57 @@ class PlayState extends MusicBeatState
 			doof.cameras = [camHUD];
 	}
 
+	
+	/**
+	 * Builds the cutscene skip hint overlay on the HUD.
+	 */
+	private function buildSkipHint():Void
+	{
+		skipHint = new FlxText(0, 0, FlxG.width, "", 24);
+    skipHint.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+    skipHint.borderSize = 2;
+    skipHint.scrollFactor.set();
+    skipHint.cameras = [camHUD_cutscene];
+    skipHint.y = FlxG.height - skipHint.height - 20;
+    skipHint.alpha = 0;
+    skipHint.visible = false;
+		skipHint.text = "[BACKSPACE] - Skip Cutscene";
+    add(skipHint);
+	}
+
+	/**
+	 * Shows the cutscene skip hint.
+	 */
+	public function showSkipHint():Void
+	{
+		if (skipHint == null) 
+			return;
+
+		skipHint.visible = true;
+		FlxTween.cancelTweensOf(skipHint);
+		FlxTween.tween(skipHint, {alpha: 1}, 0.3, {ease: FlxEase.quartOut});
+	}
+
+	/**
+	 * Hides the cutscene skip hint.
+	 */
+	public function hideSkipHint():Void
+	{
+		if (skipHint == null) 
+			return;
+
+		skipHint.visible = false;
+		FlxTween.cancelTweensOf(skipHint);
+		FlxTween.tween(skipHint, {alpha: 0}, 0.3, {ease: FlxEase.quartIn, onComplete: function(_)
+		{
+			skipHint.visible = false;
+		}});
+	}
+
+	//
+	// CUTSCENES
+	//
+
 	/**
 	 * Dispatches the correct intro cutscene for the current song.
 	 * Called only in Story Mode when the cutscene hasn't been seen yet.
@@ -1328,11 +1424,21 @@ class PlayState extends MusicBeatState
 			case 'winter-horrorland':
 				cutscene_winterHorrorland();
 			case 'senpai' | 'roses' | 'thorns':
-				if (curSong.toLowerCase() == 'roses')
-					FlxG.sound.play(Paths.sound('ANGRY'));
 				schoolIntro(doof);
 			case 'ugh' | 'guns' | 'stress':
-				tankIntro();
+				if (!FlxG.save.data.atlasToVideo)
+					tankIntro();
+				else
+				{
+					#if FEATURE_VIDEO_CUTSCENES
+					if (!FlxG.save.data.naughtyness && SONG.song.toLowerCase() == 'stress')
+						startVideo('week7/stress_cutscene_censored');
+					else
+						startVideo('week7/${SONG.song.toLowerCase()}_cutscene');
+					#else
+					startCountdown();
+					#end
+				}
 			default:
 				startCountdown();
 		}
@@ -1416,90 +1522,129 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	//
-	// CUTSCENES
-	//
-
+	/**
+	 *  Handles the Week 6 cutscenes for Senpai, Roses, and Thorns.
+	 */
 	function schoolIntro(?dialogueBox:DialogueBox):Void
 	{
-		var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
-		black.scrollFactor.set();
-		add(black);
+		inDialogue = true;
 
-		var red:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
-		red.scrollFactor.set();
+		var schoolIntroEnd:Void->Void = function()
+		{
+			inDialogue = true;
+
+			if (dialogueBox != null)
+				add(dialogueBox);
+			else
+				startCountdown();
+		}
+
+		switch (SONG.song.toLowerCase())
+		{
+			case 'senpai':
+				schoolIntro_senpai(schoolIntroEnd);
+			case 'roses':
+				schoolIntro_roses(schoolIntroEnd);
+			case 'thorns':
+				schoolIntro_thorns(schoolIntroEnd);
+			default:
+				schoolIntroEnd();
+		}
+	}
+
+	private function schoolIntro_senpai(onEnd:Void->Void):Void
+	{
+		var blackScreen:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+		blackScreen.scrollFactor.set();
+		add(blackScreen);
+
+		camFollow.setPosition(camPos.x, camPos.y);
+
+		new FlxTimer().start(0.3, function(tmr:FlxTimer)
+		{
+			blackScreen.alpha -= 0.15;
+			if (blackScreen.alpha > 0)
+			{
+				tmr.reset(0.3);
+			}
+			else
+			{
+				remove(blackScreen);
+				onEnd();
+			}
+		});
+	}
+
+	private function schoolIntro_roses(onEnd:Void->Void):Void
+	{
+		// Roses skips the black screen entirely. jump straight into the dialogue.
+		FlxG.sound.play(Paths.sound('ANGRY'));
+		onEnd();
+	}
+
+	private function schoolIntro_thorns(onEnd:Void->Void):Void
+	{
+		var redScreen:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
+		redScreen.scrollFactor.set();
+		add(redScreen);
+		camHUD.visible = false;
 
 		var senpaiEvil:FlxSprite = new FlxSprite();
 		senpaiEvil.frames = Paths.getSparrowAtlas('weeb/senpaiCrazy', 'week6');
 		senpaiEvil.animation.addByPrefix('idle', 'Senpai Pre Explosion', 24, false);
-		senpaiEvil.setGraphicSize(Std.int(senpaiEvil.width * daPixelZoom));
-		senpaiEvil.scrollFactor.set();
-		senpaiEvil.updateHitbox();
-		senpaiEvil.screenCenter();
-		senpaiEvil.x += senpaiEvil.width / 5;
+    senpaiEvil.setGraphicSize(Std.int(senpaiEvil.width * daPixelZoom));
+    senpaiEvil.scrollFactor.set();
+    senpaiEvil.updateHitbox();
+    senpaiEvil.screenCenter();
+    senpaiEvil.x += senpaiEvil.width / 5;
+    senpaiEvil.alpha = 0;
+    add(senpaiEvil);
 
-		camFollow.setPosition(camPos.x, camPos.y);
-
-		// Roses: skip the black screen. Thorns: replace black with red.
-		switch (SONG.song.toLowerCase())
+		// Fade senpai sprite in at a slow framerate.
+		new FlxTimer().start(0.3, function(fadeIn:FlxTimer)
 		{
-			case 'roses':
-				remove(black);
-			case 'thorns':
-				remove(black);
-				add(red);
-				camHUD.visible = false;
-		}
-
-		// Fade out black screen incrementally
-		new FlxTimer().start(0.3, function(tmr:FlxTimer)
-		{
-			black.alpha -= 0.15;
-			if (black.alpha > 0)
-				tmr.reset(0.3); // keep ticking until fully faded.
+			senpaiEvil.alpha += 0.15;
+			if (senpaiEvil.alpha < 1)
+			{
+				fadeIn.reset();
+			}
 			else
 			{
-				remove(black);
-				if (dialogueBox != null)
+				senpaiEvil.animation.play('idle');
+
+				// After 3.2 seconds, begin fading to white
+				new FlxTimer().start(3.2, function(_)
 				{
-					inCutscene = true;
-					if (SONG.song.toLowerCase() == 'thorns')
+					FlxG.camera.fade(FlxColor.WHITE, 1.6, false);
+				});
+
+				// Wait for the sound to finish, then transition to dialogue.
+				FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function()
+				{
+					remove(senpaiEvil);
+					remove(redScreen);
+
+					// Remove the white screen from the camera and return to normal.
+					FlxG.camera.fade(FlxColor.WHITE, 0.01, true, function()
 					{
-						add(senpaiEvil);
-						senpaiEvil.alpha = 0;
+						camHUD.visible = true;
+					}, true);
 
-						new FlxTimer().start(0.3, function(swagTimer:FlxTimer)
+					// Stepped fade out from black at a low framerate to match the pixel feel.
+					var whiteFade:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.WHITE);
+					whiteFade.scrollFactor.set();
+					add(whiteFade);
+
+					new FlxTimer().start(1 / 8, function(tmr:FlxTimer)
+					{
+						whiteFade.alpha = 1.0 - (tmr.elapsedLoops / 8);
+						if (tmr.elapsedLoops >= 8) 
 						{
-							senpaiEvil.alpha += 0.15;
-							if (senpaiEvil.alpha < 1)
-								swagTimer.reset();
-							else
-							{
-								senpaiEvil.animation.play('idle');
-								FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function()
-								{
-									remove(senpaiEvil);
-									remove(red);
-									FlxG.camera.fade(FlxColor.WHITE, 0.01, true, function()
-									{
-										add(dialogueBox);
-										camHUD.visible = true;
-									}, true);
-								});
-
-								// White camera fade out after 3.2 seconds
-								new FlxTimer().start(3.2, function(_)
-								{
-									FlxG.camera.fade(FlxColor.WHITE, 1.6, false);
-								});
-							}
-						});
-					}
-					else
-						add(dialogueBox);
-				}
-				else
-					startCountdown();
+							remove(whiteFade); 
+							onEnd(); 
+						}
+					}, 8);
+				});
 			}
 		});
 	}
@@ -1525,13 +1670,6 @@ class PlayState extends MusicBeatState
 			gf.animation.finishCallback = null;
 			dad.visible = true;
 			gf.dance();
-
-			camHUD.alpha = 0;
-			FlxTween.tween(camHUD, {alpha: 1}, 1.5, {ease: FlxEase.quadInOut, onComplete: function(_)
-			{
-				camHUD.visible = true;
-				camHUD.alpha = 1;
-			}});
 		};
 
 		switch (SONG.song.toLowerCase())
@@ -1708,7 +1846,7 @@ class PlayState extends MusicBeatState
 		dummyBF.animation.addByPrefix('loop', 'BF idle dance', 24, false);
 		dummyBF.animation.play('loop');
 		dummyBF.antialiasing = FlxG.save.data.antialiasing;
-		bfTankCutsceneLayer.add(dummyBF);
+		bfCutsceneLayer.add(dummyBF);
 
 		// Pre-load hidden GF holdup frames (0–6)
 		var dummyLoaderShit:FlxGroup = new FlxGroup();
@@ -1760,7 +1898,7 @@ class PlayState extends MusicBeatState
 		tankCutscene.animation.addByPrefix('tankyguy', 'TANK TALK 3 P1 UNCUT', 24, false);
 		tankCutscene.animation.play('tankyguy');
 		tankCutscene.antialiasing = FlxG.save.data.antialiasing;
-		bfTankCutsceneLayer.add(tankCutscene);
+		bfCutsceneLayer.add(tankCutscene);
 
 		var alsoTankCutscene:FlxSprite = new FlxSprite(20, 320);
 		alsoTankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong3-pt2', 'week7');
@@ -1768,7 +1906,7 @@ class PlayState extends MusicBeatState
 		alsoTankCutscene.antialiasing = FlxG.save.data.antialiasing;
 		alsoTankCutscene.y = FlxG.height + 100;
 		alsoTankCutscene.visible = false;
-		bfTankCutsceneLayer.add(alsoTankCutscene);
+		bfCutsceneLayer.add(alsoTankCutscene);
 
 		// Play correct audio + handle optional mouth censor
 		new FlxTimer().start(0.1, function(_)
@@ -1821,7 +1959,7 @@ class PlayState extends MusicBeatState
 				boyfriend.visible = false;
 				bfCatchGf.visible = true;
 				bfCatchGf.animation.play('catch');
-				bfTankCutsceneLayer.remove(dummyBF);
+				bfCutsceneLayer.remove(dummyBF);
 
 				bfCatchGf.animation.finishCallback = function(_)
 				{
@@ -1836,7 +1974,7 @@ class PlayState extends MusicBeatState
 				});
 				new FlxTimer().start(2.3, function(_)
 				{
-					bfTankCutsceneLayer.remove(tankCutscene);
+					bfCutsceneLayer.remove(tankCutscene);
 					alsoTankCutscene.visible = true;
 					alsoTankCutscene.y = 320;
 					alsoTankCutscene.animation.play('swagTank');
@@ -1845,16 +1983,16 @@ class PlayState extends MusicBeatState
 
 			gf.visible = false;
 			dad.visible = false;
-			var cutsceneShit:FlxSprite = new FlxSprite(210, 70, 'gfHoldup');
-			gfCutsceneLayer.add(cutsceneShit);
+			
+			var gfCutsceneMap:CutsceneCharacter = new CutsceneCharacter(210, 70, 'gfHoldup', 'week7');
+			gfCutsceneLayer.add(gfCutsceneMap);
 			gfCutsceneLayer.remove(dummyGF);
-
-			new FlxTimer().start(0.1, function(_)
+			gfCutsceneMap.onFinish = function()
 			{
 				gf.alpha = 1;
 				gf.visible = true;
 				dad.visible = true;
-			});
+			};
 
 			new FlxTimer().start(20, function(_)
 			{
@@ -1864,8 +2002,8 @@ class PlayState extends MusicBeatState
 
 				remove(dummyLoaderShit);
 				dummyLoaderShit.destroy();
-				gfCutsceneLayer.remove(cutsceneShit);
-				bfTankCutsceneLayer.remove(alsoTankCutscene);
+				gfCutsceneLayer.remove(gfCutsceneMap);
+				bfCutsceneLayer.remove(alsoTankCutscene);
 				dad.alpha = 1;
 			});
 		});
@@ -1899,9 +2037,153 @@ class PlayState extends MusicBeatState
 		});
 	}
 
+	/**
+	 * Skips the current cutscene and jumps straight into gameplay.
+	 */
+	private function skipCutscene():Void
+	{
+		hideSkipHint();
+		inCutscene = false;
+
+		#if FEATURE_VIDEO_CUTSCENES
+		if (activeVideo != null)
+		{
+			activeVideo.dispose();
+			activeVideo = null;
+		}
+		#end
+
+		// Stop any cutscene music, or sounds.
+		if (FlxG.sound.music != null && FlxG.sound.music.playing)
+		{
+			FlxG.sound.music.stop();
+			FlxG.sound.music = null;
+		}
+
+		// If you have specific cutscene sounds or music, 
+		// stop them and remove them from the list.
+		for (sound in FlxG.sound.list.members)
+		{
+			if (sound != null && sound.playing)
+				sound.stop();
+		}
+
+		// Clear all cutscene tweens / timers.
+		FlxTimer.globalManager.clear();
+		FlxTween.globalManager.clear();
+
+		// Clear any cutscene layers.
+		gfCutsceneLayer.clear();
+		bfCutsceneLayer.clear();
+
+		// Restore characters that cutscenes removed.
+		if (dad != null)
+		{
+			dad.visible = true;
+			dad.alpha = 1;
+		}
+
+		if (gf != null)
+		{
+			gf.visible = true;
+			gf.alpha = 1;
+		}
+
+		if (boyfriend != null)
+		{
+			boyfriend.visible = true;
+			boyfriend.alpha = 1;
+		}
+
+		// Reset tank-specific state
+		tankIntroEnd = true;
+
+		// Seamlessly tween in the gameplay HUD.
+		camHUD.alpha = 0;
+		FlxTween.tween(camHUD, {alpha: 1}, 1.5, {ease: FlxEase.quadInOut, onComplete: function(_)
+		{
+			camHUD.visible = true;
+			camHUD.alpha = 1;
+		}});
+
+		// Tween the camera back into it's default position.
+		FlxTween.tween(PlayState.instance, {targetCamZoom: defaultCamZoom}, (Conductor.crochet * 5) / 1000, 
+		{
+			ease: FlxEase.quartIn
+		});
+
+		seenCutscene = true;
+		startCountdown();
+	}
+
+	//
+	// VIDEO HANDLING
+	// TODO: Put this logic into a class or smth...
+	//
+
+	/**
+	 * Handles video playback for both `HTML5`, and `Desktop`. platforms.
+	 * @param name The video name, used for playing the cutscene/video.
+	 * @param library The asset library the video lives in.
+	 */
+	private function startVideo(name:String, ?library:String = null):Void
+	{
+		#if FEATURE_VIDEO_CUTSCENES
+		inCutscene = true;
+
+		trace('INFO: Starting cutscene video...');
+		var videoPath:String = Paths.videos(name);
+
+		// Check if the video exists
+		if (!openfl.utils.Assets.exists(videoPath))
+		{
+			trace('WARNING: Could not find video: $videoPath. Skipping to gameplay...');
+			startAndEnd();
+			return;
+		}
+
+		trace('INFO: Now playing video: $videoPath');
+		activeVideo = new VideoHandler();
+    activeVideoName = name;
+    activeVideoLibrary = library;
+
+		#if (hxCodec >= "3.0.0")
+		// Newer hxCodec versions.
+		activeVideo.play(videoPath);
+		activeVideo.onEndReached.add(function()
+		{
+			activeVideo.dispose();
+			activeVideo = null;
+			startAndEnd();
+			trace('INFO: Cutscene video finished. Returning to gameplay...');
+		}, true);
+		#else
+		// Older hxCodec versions.
+		activeVideo.playVideo(videoPath);
+		activeVideo.finishCallback = function()
+		{
+			activeVideo = null;
+			startAndEnd();
+			trace('INFO: Cutscene video finished. Returning to gameplay...');
+		}
+		#end
+		#else
+		trace('WARNING: Video playback is not supported on this platform. Skipping to gameplay...');
+		startAndEnd();
+		#end
+	}
+
 	//
 	// COUNTDOWN LOGIC
 	//
+
+	function startAndEnd():Void
+	{
+		if (endingSong)
+			endSong();
+		else
+			startCountdown();
+	}
 
 	/**
 	 * Preloads countdown image/sound assets into the cache.
@@ -2330,12 +2612,6 @@ class PlayState extends MusicBeatState
 		if (controls.PAUSE && startedCountdown && canPause)
 			pauseGame(true);
 
-		// Debug menu shortcuts
-		if (FlxG.keys.justPressed.SEVEN)
-			FlxG.switchState(new ChartingState());
-		if (FlxG.keys.justPressed.EIGHT)
-			FlxG.switchState(new AnimationDebug(SONG.player2));
-
 		updateHealthIcons();
 		updateSongPosition();
 		updateCameraSection();
@@ -2378,8 +2654,31 @@ class PlayState extends MusicBeatState
 			}
 		});
 
+		// Disable note input when in cutscenes.
 		if (!inCutscene)
 			keyShit();
+		// Show skip hint, or skip the cutscene when needed.
+		if (inCutscene || !inDialogue)
+		{
+			// Don't skip the cutscene until the player has pressed a key.
+			if (FlxG.keys.justPressed.ANY)
+			{
+				showSkipHint();
+
+				if (FlxG.keys.justPressed.BACKSPACE)
+					skipCutscene();
+			}
+		}
+		else
+		{
+			hideSkipHint();
+		}
+		
+		// Debug menu shortcuts
+		if (FlxG.keys.justPressed.SEVEN)
+			FlxG.switchState(new ChartingState());
+		if (FlxG.keys.justPressed.EIGHT)
+			FlxG.switchState(new AnimationDebug(SONG.player2));
 
 		// Debug playstate shortcuts
 		#if debug
@@ -3041,6 +3340,39 @@ class PlayState extends MusicBeatState
 						PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
 						LoadingState.loadAndSwitchState(new PlayState());
 					});
+				}
+				else if (SONG.song.toLowerCase() == 'roses')
+				{
+					// Taken from GameoverSubstate :BFTroll:
+					final PIXEL_FADE_DURATION:Float = 1.8;
+					final PIXEL_FADE_FPS:Int = 8;
+					final PIXEL_FADE_STEPS:Int = Std.int(PIXEL_FADE_DURATION * PIXEL_FADE_FPS);
+
+					var redShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
+						-FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, 0xFFff1b31);
+					redShit.scrollFactor.set();
+					redShit.alpha = 0;
+					add(redShit);
+
+					// For week 6, make the fade a lower framerate have that retro pixel look.
+					new FlxTimer().start(1 / PIXEL_FADE_FPS, function(fadeTimer:FlxTimer)
+					{
+						// Fade into the red screen while the HUD fades out at the same rate.
+						var FADE_PROGRESS:Float = fadeTimer.elapsedLoops / PIXEL_FADE_STEPS;
+						redShit.alpha = FADE_PROGRESS;
+						camHUD.alpha = 1.0 - FADE_PROGRESS;
+
+						if (fadeTimer.elapsedLoops >= PIXEL_FADE_STEPS)
+						{
+							camHUD.alpha = 0;
+
+							FlxTransitionableState.skipNextTransIn = true;
+							FlxTransitionableState.skipNextTransOut = true;
+
+							PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
+							LoadingState.loadAndSwitchState(new PlayState());
+						}
+					}, PIXEL_FADE_STEPS);
 				}
 				else
 				{
