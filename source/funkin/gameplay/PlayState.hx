@@ -2059,7 +2059,9 @@ class PlayState extends MusicBeatState
 		}
 
 		FlxG.sound.music.onComplete = endSong;
-		vocals.play();
+
+		if (vocals != null)
+			vocals.play();
 	}
 
 	//
@@ -2549,15 +2551,6 @@ class PlayState extends MusicBeatState
 					gfSpeed = 1;
 			}
 		}
-
-		if (curSong == 'Bopeebo')
-		{
-			switch (curBeat)
-			{
-				case 128, 129, 130:
-					vocals.volume = 0;
-			}
-		}
 	}
 
 	/**
@@ -2573,7 +2566,7 @@ class PlayState extends MusicBeatState
 			persistentDraw = false;
 			paused = true;
 
-			vocals.stop();
+			if (vocals != null) vocals.pause();
 			FlxG.sound.music.stop();
 			deathCounter++;
 
@@ -2732,7 +2725,7 @@ class PlayState extends MusicBeatState
 				}
 
 				dad.holdTimer = 0;
-				if (SONG.needsVoices)
+				if (vocals != null && SONG.needsVoices)
 					vocals.volume = 1;
 
 				// Take away the same amount of health that the player would take -
@@ -2785,7 +2778,9 @@ class PlayState extends MusicBeatState
 				if (daNote.mustPress && !botplay && !daNote.wasGoodHit && !daNote.isSustainNote)
 				{
 					comboBreak(daNote.noteData);
-					vocals.volume = 0;
+
+					if (vocals != null)
+						vocals.volume = 0;
 				}
 
 				notes.remove(daNote, true);
@@ -2818,8 +2813,10 @@ class PlayState extends MusicBeatState
 		{
 			if (FlxG.sound.music != null && !startingSong)
 				resyncVocals();
+
 			if (!startTimer.finished)
 				startTimer.active = true;
+
 			paused = false;
 		}
 
@@ -2959,6 +2956,10 @@ class PlayState extends MusicBeatState
 
 	function resyncVocals():Void
 	{
+		// Dont't run this if the music isn't playing.
+		if (FlxG.sound.music == null || vocals == null)
+			return;
+
 		vocals.pause();
 		FlxG.sound.music.play();
 		Conductor.songPosition = FlxG.sound.music.time;
@@ -2981,11 +2982,16 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.sound.music.volume = 0;
 			FlxG.sound.music.stop();
-			FlxG.sound.music.destroy();
 		}
-		vocals.volume = 0;
-		vocals.stop();
-		vocals.destroy();
+
+		if (vocals != null)
+		{
+			vocals.volume = 0;
+			vocals.stop();
+			FlxG.sound.list.remove(vocals); // Remove vocals from the sound list BEFORE destroying.
+			vocals.destroy();
+			vocals = null;
+		}
 
 		#if !switch
 		// Save highscore if you're not on switch.
@@ -3097,7 +3103,8 @@ class PlayState extends MusicBeatState
 		// noteDiff: positive = early, negative = late (clamped to safeZoneOffset for forced SHIT)
 		var noteDiff:Float = (daNote != null) ? -(daNote.strumTime - Conductor.songPosition) : Conductor.safeZoneOffset;
 
-		vocals.volume = 1;
+		if (vocals != null)
+			vocals.volume = 1;
 
 		var rating:FlxSprite = new FlxSprite();
 		var score:Int = 350;
@@ -3572,7 +3579,8 @@ class PlayState extends MusicBeatState
 
 		health -= 0.04;
 		songScore -= 10;
-		vocals.volume = 0;
+		if (vocals != null)
+			vocals.volume = 0;
 
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 
@@ -3596,7 +3604,8 @@ class PlayState extends MusicBeatState
 
 		if (instaKill)
 		{
-			vocals.volume = 0;
+			if (vocals != null)
+				vocals.volume = 0;
 			health = 0;
 		}
 
@@ -3933,6 +3942,10 @@ class PlayState extends MusicBeatState
 	override function stepHit()
 	{
 		super.stepHit();
+
+		// Don't run this if the music isn't playing.
+		if (FlxG.sound.music == null || !FlxG.sound.music.playing)
+			return;
 
 		if (FlxG.sound.music.time > Conductor.songPosition + 20 || FlxG.sound.music.time < Conductor.songPosition - 20)
 			resyncVocals();
