@@ -2549,15 +2549,6 @@ class PlayState extends MusicBeatState
 					gfSpeed = 1;
 			}
 		}
-
-		if (curSong == 'Bopeebo')
-		{
-			switch (curBeat)
-			{
-				case 128, 129, 130:
-					vocals.volume = 0;
-			}
-		}
 	}
 
 	/**
@@ -2818,8 +2809,10 @@ class PlayState extends MusicBeatState
 		{
 			if (FlxG.sound.music != null && !startingSong)
 				resyncVocals();
+
 			if (!startTimer.finished)
 				startTimer.active = true;
+
 			paused = false;
 		}
 
@@ -2959,6 +2952,10 @@ class PlayState extends MusicBeatState
 
 	function resyncVocals():Void
 	{
+		// Dont't run this if the music isn't playing.
+		if (FlxG.sound.music == null || vocals == null)
+			return;
+
 		vocals.pause();
 		FlxG.sound.music.play();
 		Conductor.songPosition = FlxG.sound.music.time;
@@ -2981,11 +2978,16 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.sound.music.volume = 0;
 			FlxG.sound.music.stop();
-			FlxG.sound.music.destroy();
 		}
-		vocals.volume = 0;
-		vocals.stop();
-		vocals.destroy();
+
+		if (vocals != null)
+		{
+			vocals.volume = 0;
+			vocals.stop();
+			FlxG.sound.list.remove(vocals); // Remove vocals from the sound list BEFORE destroying.
+			vocals.destroy();
+			vocals = null;
+		}
 
 		#if !switch
 		// Save highscore if you're not on switch.
@@ -3933,6 +3935,10 @@ class PlayState extends MusicBeatState
 	override function stepHit()
 	{
 		super.stepHit();
+
+		// Don't run this if the music isn't playing.
+		if (FlxG.sound.music == null || !FlxG.sound.music.playing)
+			return;
 
 		if (FlxG.sound.music.time > Conductor.songPosition + 20 || FlxG.sound.music.time < Conductor.songPosition - 20)
 			resyncVocals();
