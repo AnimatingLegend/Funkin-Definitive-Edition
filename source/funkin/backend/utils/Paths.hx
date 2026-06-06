@@ -10,6 +10,7 @@ import openfl.system.System;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
+import polymod.Polymod;
 
 /**
  * PATHS CLASS
@@ -94,6 +95,9 @@ class Paths
 			}
 		}
 
+		// Fuck you *sneaks polymore cache into the cache list*
+		Polymod.clearCache();
+
 		// Run garbage collection just incase...
 		#if cpp
 		cpp.vm.Gc.run(true);
@@ -163,6 +167,9 @@ class Paths
 		localTrackedAssets = [];
 		openfl.Assets.cache.clear("songs");
 		#end
+
+		// Fuck you *sneaks polymore cache into the cache list*
+		Polymod.clearCache();
 
 		// Run garbage collection just incase...
 		#if cpp
