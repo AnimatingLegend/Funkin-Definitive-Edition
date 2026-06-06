@@ -94,8 +94,12 @@ class Paths
 			}
 		}
 
-		// Run system garbage collection just incase...
-		System.gc();
+		// Run garbage collection just incase...
+		#if cpp
+		cpp.vm.Gc.run(true);
+		#end
+
+		trace('RAM(cache): Finished clearing unused memory.');
 	}
 
 	/**
@@ -160,8 +164,12 @@ class Paths
 		openfl.Assets.cache.clear("songs");
 		#end
 
-		// Run system garbage collection just incase...
-		System.gc();
+		// Run garbage collection just incase...
+		#if cpp
+		cpp.vm.Gc.run(true);
+		#end
+
+		trace('RAM(cache): Finished clearing stored memory.');
 	}
 
 	/**

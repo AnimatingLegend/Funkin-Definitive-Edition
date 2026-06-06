@@ -239,11 +239,11 @@ class TitleState extends MusicBeatState
 		}
 
 		#if desktop
-		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.BACKSPACE)
+		// Pressing BACK or ESCAPE will close the game.
+		// Useful for exiting without leaving fullscreen.
+		if (controls.BACK)
 		{
-			trace('EXITING: Leaving the game through title screen. Cleaning up resources...');
-			Paths.clearStoredMemory();
-			Sys.exit(0);
+			openfl.Lib.application.window.close();
 		}
 		#end
 
@@ -267,7 +267,7 @@ class TitleState extends MusicBeatState
 		if (Main.mustUpdate)
 		{
 			FlxG.switchState(new OutdatedSubState());
-			trace('[INFO] Game is outdated. Redirecting to update screen...');
+			trace('INFO: Game is outdated. Redirecting to update screen...');
 		}
 		else
 		{

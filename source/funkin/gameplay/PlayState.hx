@@ -171,6 +171,30 @@ class PlayState extends MusicBeatState
 	public static var camPos:FlxPoint;
 
 	//
+	// Camera Internals
+	//
+
+	/**
+	 * The zoom the beat-lerp always targets. Set this instead of `FlxG.camera.zoom` directly.
+	 */
+	public var targetCamZoom:Float = 1.05;
+
+	/** 
+	 * Default camera zoom for this stage. 
+	 */
+	var defaultCamZoom:Float = 1.05;
+
+	/** 
+	 * The invisible object the camera follows. 
+	 */
+	var camFollow:FlxObject;
+
+	/** 
+	 * Persisted camera follow from the previous song (story mode). 
+	 */
+	private static var prevCamFollow:FlxObject;
+
+	//
 	// Strumlines
 	//
 
@@ -536,21 +560,6 @@ class PlayState extends MusicBeatState
 	var talking:Bool = true;
 
 	/** 
-	 * Default camera zoom for this stage. 
-	 */
-	var defaultCamZoom:Float = 1.05;
-
-	/** 
-	 * The invisible object the camera follows. 
-	 */
-	var camFollow:FlxObject;
-
-	/** 
-	 * Persisted camera follow from the previous song (story mode). 
-	 */
-	private static var prevCamFollow:FlxObject;
-
-	/** 
 	 * GF dialogue lines loaded from text file. 
 	 */
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
@@ -769,9 +778,9 @@ class PlayState extends MusicBeatState
 		}
 		add(camFollow);
 
-		FlxG.camera.zoom = defaultCamZoom;
+		FlxG.camera.follow(camFollow, LOCKON, 0);
+		targetCamZoom = defaultCamZoom;
 		FlxG.camera.focusOn(camFollow.getPosition());
-		FlxG.camera.follow(camFollow, LOCKON, 0.04 * (30 / FlxG.save.data.fpsCap));
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 		FlxG.fixedTimestep = false;
@@ -1383,11 +1392,11 @@ class PlayState extends MusicBeatState
 			camFollow.y = -2050;
 			camFollow.x += 200;
 			FlxG.camera.focusOn(camFollow.getPosition());
-			FlxG.camera.zoom = 1.5;
+			defaultCamZoom = 1.5;
 
 			new FlxTimer().start(0.8, function(_)
 			{
-				FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, {
+				FlxTween.tween(PlayState.instance, {targetCamZoom: defaultCamZoom}, 2.5, {
 					ease: FlxEase.quadInOut,
 					onComplete: function(_)
 					{
@@ -1538,11 +1547,12 @@ class PlayState extends MusicBeatState
 
 	private function tankIntroUgh(tankManEnd:Void->Void):Void
 	{
-		camHUD.visible = false;
+		caching('DISTORTO', 'music', 'week7');
 		caching('wellWellWell', 'sound', 'week7');
 		caching('killYou', 'sound', 'week7');
 		caching('bfBeep', 'sound', 'week7');
 
+		camHUD.visible = false;
 		FlxG.sound.playMusic(Paths.music('DISTORTO', 'week7'));
 		FlxG.sound.music.fadeIn(5, 0, 0.5);
 
@@ -1557,7 +1567,7 @@ class PlayState extends MusicBeatState
 		tankCutscene.antialiasing = FlxG.save.data.antialiasing;
 		gfCutsceneLayer.add(tankCutscene);
 
-		FlxG.camera.zoom *= 1.2;
+		targetCamZoom *= 1.2;
 		camFollow.y += 100;
 
 		// "Well well well..."
@@ -1571,7 +1581,7 @@ class PlayState extends MusicBeatState
 		{
 			camFollow.x += 800;
 			camFollow.y += 100;
-			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2}, 0.27, {ease: FlxEase.quadInOut});
+			FlxTween.tween(PlayState.instance, {targetCamZoom: defaultCamZoom * 1.2}, 0.27, {ease: FlxEase.quadInOut});
 
 			// BF beeps
 			new FlxTimer().start(1.5, function(_)
@@ -1588,7 +1598,7 @@ class PlayState extends MusicBeatState
 			{
 				camFollow.x -= 800;
 				camFollow.y -= 100;
-				FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2}, 0.5, {ease: FlxEase.quadInOut});
+				FlxTween.tween(PlayState.instance, {targetCamZoom: defaultCamZoom * 1.2}, 0.5, {ease: FlxEase.quadInOut});
 
 				boyfriend.dance();
 				tankCutscene.animation.play('killYou');
@@ -1597,8 +1607,10 @@ class PlayState extends MusicBeatState
 				// "Let's see what you've got!"
 				new FlxTimer().start(6.1, function(_)
 				{
+					FlxTween.tween(PlayState.instance, {targetCamZoom: defaultCamZoom}, (Conductor.crochet * 5) / 1000, {ease: FlxEase.quartIn});
 					tankManEnd();
-					Paths.clearUnusedMemory();
+					cacheArea();
+
 					gfCutsceneLayer.remove(tankCutscene);
 				});
 			});
@@ -1616,6 +1628,7 @@ class PlayState extends MusicBeatState
 			}});
 		});
 
+		caching('DISTORTO', 'music', 'week7');
 		FlxG.sound.playMusic(Paths.music('DISTORTO', 'week7'), 0, false);
 		FlxG.sound.music.fadeIn(5, 0, 0.5);
 
@@ -1630,7 +1643,7 @@ class PlayState extends MusicBeatState
 		});
 
 		camFollow.y += 100;
-		FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2}, 4, {ease: FlxEase.quadInOut});
+		FlxTween.tween(PlayState.instance, {targetCamZoom: defaultCamZoom * 1.2}, 4, {ease: FlxEase.quadInOut});
 
 		var tankCutscene:FlxSprite = new FlxSprite(20, 320);
 		tankCutscene.frames = Paths.getSparrowAtlas('cutscenes/tankTalkSong2', 'week7');
@@ -1643,8 +1656,8 @@ class PlayState extends MusicBeatState
 		// GF gets sad partway through
 		new FlxTimer().start(4.1, function(_)
 		{
-			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.4}, 0.4, {ease: FlxEase.quadOut});
-			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.3}, 0.7, {ease: FlxEase.quadInOut, startDelay: 0.45});
+			FlxTween.tween(PlayState.instance, {targetCamZoom: defaultCamZoom * 1.4}, 0.4, {ease: FlxEase.quadOut});
+			FlxTween.tween(PlayState.instance, {targetCamZoom: defaultCamZoom * 1.3}, 0.7, {ease: FlxEase.quadInOut, startDelay: 0.45});
 
 			if (gf != null)
 			{
@@ -1659,8 +1672,9 @@ class PlayState extends MusicBeatState
 		// End sequence
 		new FlxTimer().start(11.6, function(_)
 		{
-			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.crochet * 5) / 1000, {ease: FlxEase.quartIn});
+			FlxTween.tween(PlayState.instance, {targetCamZoom: defaultCamZoom}, (Conductor.crochet * 5) / 1000, {ease: FlxEase.quartIn});
 			tankManEnd();
+			cacheArea();
 
 			if (gf != null)
 			{
@@ -1669,7 +1683,6 @@ class PlayState extends MusicBeatState
 			}
 
 			gfCutsceneLayer.remove(tankCutscene);
-			Paths.clearUnusedMemory();
 		});
 	}
 
@@ -1732,7 +1745,7 @@ class PlayState extends MusicBeatState
 		{
 			camFollow.x = 436.5;
 			camFollow.y = 534.5;
-			FlxTween.tween(FlxG.camera, {zoom: 0.9 * 1.2}, 1, {ease: FlxEase.quadInOut});
+			FlxTween.tween(PlayState.instance, {targetCamZoom: 0.9 * 1.2}, 1, {ease: FlxEase.quadInOut});
 		});
 
 		var stressCutscene:FlxSound = new FlxSound().loadEmbedded(Paths.sound('stressCutscene', 'week7'));
@@ -1800,11 +1813,11 @@ class PlayState extends MusicBeatState
 		{
 			camFollow.y -= 170;
 			camFollow.x += 200;
-			FlxTween.tween(FlxG.camera, {zoom: FlxG.camera.zoom * 1.3}, 2.1, {ease: FlxEase.quadInOut});
+			FlxTween.tween(PlayState.instance, {targetCamZoom: FlxG.camera.zoom * 1.3}, 2.1, {ease: FlxEase.quadInOut});
 
 			new FlxTimer().start(2.2, function(_)
 			{
-				FlxG.camera.zoom = 0.8;
+				targetCamZoom = 0.8;
 				boyfriend.visible = false;
 				bfCatchGf.visible = true;
 				bfCatchGf.animation.play('catch');
@@ -1845,13 +1858,15 @@ class PlayState extends MusicBeatState
 
 			new FlxTimer().start(20, function(_)
 			{
+				FlxTween.tween(PlayState.instance, {targetCamZoom: defaultCamZoom}, (Conductor.crochet * 5) / 1000, {ease: FlxEase.quartIn});
 				tankManEnd();
+				cacheArea();
+
 				remove(dummyLoaderShit);
 				dummyLoaderShit.destroy();
 				gfCutsceneLayer.remove(cutsceneShit);
 				bfTankCutsceneLayer.remove(alsoTankCutscene);
 				dad.alpha = 1;
-				Paths.clearUnusedMemory();
 			});
 		});
 
@@ -1868,17 +1883,17 @@ class PlayState extends MusicBeatState
 				}
 			};
 
-			camFollow.x += 400;
-			camFollow.y += 150;
+			camFollow.x += 450;
+			camFollow.y += 120;
 			FlxG.camera.zoom = defaultCamZoom * 1.4;
 			FlxG.camera.focusOn(camFollow.getPosition());
-			FlxTween.tween(FlxG.camera, {zoom: 0.9 * 1.2 * 1.2}, 0.25, {ease: FlxEase.elasticOut});
+			FlxTween.tween(PlayState.instance, {targetCamZoom: FlxG.camera.zoom + 0.1}, 0.5, {ease: FlxEase.elasticOut});
 
 			new FlxTimer().start(1, function(_)
 			{
 				camFollow.x -= 400;
 				camFollow.y -= 150;
-				FlxG.camera.zoom /= 1.4;
+				targetCamZoom /= 1.4;
 				FlxG.camera.focusOn(camFollow.getPosition());
 			});
 		});
@@ -1934,7 +1949,7 @@ class PlayState extends MusicBeatState
 		Conductor.songPosition = 0;
 		Conductor.songPosition -= Conductor.crochet * 5;
 
-		if (FlxG.sound.music.playing)
+		if (FlxG.sound.music != null && FlxG.sound.music.playing)
 			FlxG.sound.music.stop();
 
 		// Determine whether we need pixel UI assets. (Week 6 stages)
@@ -2023,6 +2038,10 @@ class PlayState extends MusicBeatState
 			}
 			swagCounter++;
 		}, 5);
+
+		// Snap camera to correct side immediately before the first beat.
+		cameraRightSide = PlayState.SONG.notes[0] != null ? PlayState.SONG.notes[0].mustHitSection : false;
+		cameraMovement();
 	}
 
 	/**
@@ -2201,7 +2220,7 @@ class PlayState extends MusicBeatState
 			if (FlxG.save.data.hideCPUStrums)
 			{
 				if (player == 1)
-					babyArrow.alpha = 1;
+					babyArrow.visible = true;
 				else
 					babyArrow.visible = false;
 			}
@@ -2288,11 +2307,6 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
-		// HTML5 requires per-frame lerp recalculation.
-		#if html5
-		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.04);
-		#end
-
 		#if !debug
 		perfectMode = false;
 		#end
@@ -2326,9 +2340,15 @@ class PlayState extends MusicBeatState
 
 		if (camZooming)
 		{
-			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
-			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
+			var lerpSpeed:Float = 1.0 - Math.pow(0.05, elapsed); // Camera moves 5% per second.
+			FlxG.camera.zoom += (targetCamZoom - FlxG.camera.zoom) * lerpSpeed;
+			camHUD.zoom += (1.0 - camHUD.zoom) * lerpSpeed;
 		}
+
+		// Manual camera follow lerp for smooth transitions.
+		var camLerp:Float = 1.0 - Math.pow(0.04, elapsed);
+		camGame.scroll.x += (camFollow.x - camGame.scroll.x - camGame.width * 0.5) * camLerp;
+		camGame.scroll.y += (camFollow.y - camGame.scroll.y - camGame.height * 0.5) * camLerp;
 
 		FlxG.watch.addQuick("curBeat", curBeat);
 		FlxG.watch.addQuick("curStep", curStep);
@@ -2529,15 +2549,6 @@ class PlayState extends MusicBeatState
 					gfSpeed = 1;
 			}
 		}
-
-		if (curSong == 'Bopeebo')
-		{
-			switch (curBeat)
-			{
-				case 128, 129, 130:
-					vocals.volume = 0;
-			}
-		}
 	}
 
 	/**
@@ -2689,9 +2700,6 @@ class PlayState extends MusicBeatState
 			// Opponent auto-hit
 			if (!daNote.mustPress && daNote.wasGoodHit)
 			{
-				if (SONG.song != 'Tutorial')
-					camZooming = true;
-
 				var altAnim = "";
 				if (SONG.notes[Math.floor(curStep / 16)] != null && SONG.notes[Math.floor(curStep / 16)].altAnim)
 					altAnim = '-alt';
@@ -2801,8 +2809,10 @@ class PlayState extends MusicBeatState
 		{
 			if (FlxG.sound.music != null && !startingSong)
 				resyncVocals();
+
 			if (!startTimer.finished)
 				startTimer.active = true;
+
 			paused = false;
 		}
 
@@ -2942,6 +2952,10 @@ class PlayState extends MusicBeatState
 
 	function resyncVocals():Void
 	{
+		// Dont't run this if the music isn't playing.
+		if (FlxG.sound.music == null || vocals == null)
+			return;
+
 		vocals.pause();
 		FlxG.sound.music.play();
 		Conductor.songPosition = FlxG.sound.music.time;
@@ -2964,11 +2978,16 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.sound.music.volume = 0;
 			FlxG.sound.music.stop();
-			FlxG.sound.music.destroy();
 		}
-		vocals.volume = 0;
-		vocals.stop();
-		vocals.destroy();
+
+		if (vocals != null)
+		{
+			vocals.volume = 0;
+			vocals.stop();
+			FlxG.sound.list.remove(vocals); // Remove vocals from the sound list BEFORE destroying.
+			vocals.destroy();
+			vocals = null;
+		}
 
 		#if !switch
 		// Save highscore if you're not on switch.
@@ -3277,53 +3296,51 @@ class PlayState extends MusicBeatState
 
 	/**
 	 * Snaps the camera follow point to the active character's midpoint.
-	 * Called every 4 beats when the section changes,
+	 * Called every 4 beats when the section changes.
 	 */
 	private function cameraMovement():Void
 	{
-		// Opponent side
-		if (camFollow.x != dad.getMidpoint().x + 150 && !cameraRightSide)
-		{
-			camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+		camZooming = true;
 
-			// Per-character camera offsets
-			switch (dad.currentCharacter)
+		if (!cameraRightSide)
+    {
+      // Opponent side
+      camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+
+      switch (dad.currentCharacter)
+      {
+        case 'mom':
+          camFollow.y = dad.getMidpoint().y;
+          vocals.volume = 1;
+        case 'senpai' | 'senpai-angry':
+          camFollow.y = dad.getMidpoint().y - 430;
+          camFollow.x = dad.getMidpoint().x - 100;
+      }
+
+      if (SONG.song.toLowerCase() == 'tutorial')
+        tweenCamIn();
+    }
+    else
+    {
+      // Player side
+      camFollow.setPosition(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+
+      switch (curStage)
+      {
+        case 'limo':
+          camFollow.x = boyfriend.getMidpoint().x - 300;
+        case 'mall':
+          camFollow.y = boyfriend.getMidpoint().y - 200;
+        case 'school' | 'schoolEvil':
+          camFollow.x = boyfriend.getMidpoint().x - 200;
+          camFollow.y = boyfriend.getMidpoint().y - 200;
+      }
+
+      if (SONG.song.toLowerCase() == 'tutorial')
 			{
-				case 'mom':
-					camFollow.y = dad.getMidpoint().y;
-				case 'senpai' | 'senpai-angry':
-					camFollow.y = dad.getMidpoint().y - 430;
-					camFollow.x = dad.getMidpoint().x - 100;
+				FlxTween.tween(PlayState.instance, {targetCamZoom: defaultCamZoom}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut});
 			}
-
-			if (dad.currentCharacter == 'mom')
-				vocals.volume = 1;
-			if (SONG.song.toLowerCase() == 'tutorial')
-				tweenCamIn();
-		}
-
-		// Player side
-		if (cameraRightSide && camFollow.x != boyfriend.getMidpoint().x - 100)
-		{
-			camFollow.setPosition(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
-
-			// Per-stage camera offsets
-			switch (curStage)
-			{
-				case 'limo':
-					camFollow.x = boyfriend.getMidpoint().x - 300;
-				case 'mall':
-					camFollow.y = boyfriend.getMidpoint().y - 200;
-				case 'school' | 'schoolEvil':
-					camFollow.x = boyfriend.getMidpoint().x - 200;
-					camFollow.y = boyfriend.getMidpoint().y - 200;
-			}
-
-			if (SONG.song.toLowerCase() == 'tutorial')
-			{
-				FlxTween.tween(FlxG.camera, {zoom: 1}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut});
-			}
-		}
+    }
 	}
 
 	/**
@@ -3331,7 +3348,7 @@ class PlayState extends MusicBeatState
 	 */
 	public static function tweenCamIn():Void
 	{
-		FlxTween.tween(FlxG.camera, {zoom: 1.3}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut});
+		FlxTween.tween(PlayState.instance, {targetCamZoom: PlayState.instance.defaultCamZoom * 1.3}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut});
 	}
 
 	//
@@ -3797,7 +3814,7 @@ class PlayState extends MusicBeatState
 			// Tween back only if the normal beat-zoom isn't already running
 			if (!camZooming)
 			{
-				FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 0.5);
+				FlxTween.tween(PlayState.instance, {targetCamZoom: defaultCamZoom}, 0.5);
 				FlxTween.tween(camHUD, {zoom: 1}, 0.5);
 			}
 		}
@@ -3919,6 +3936,10 @@ class PlayState extends MusicBeatState
 	{
 		super.stepHit();
 
+		// Don't run this if the music isn't playing.
+		if (FlxG.sound.music == null || !FlxG.sound.music.playing)
+			return;
+
 		if (FlxG.sound.music.time > Conductor.songPosition + 20 || FlxG.sound.music.time < Conductor.songPosition - 20)
 			resyncVocals();
 	}
@@ -3957,7 +3978,7 @@ class PlayState extends MusicBeatState
 				camHUD.zoom += 0.03;
 			}
 
-			if (camZooming && FlxG.camera.zoom < 1.35 && curBeat % 4 == 0)
+			if (camZooming && targetCamZoom < defaultCamZoom + 0.3 && curBeat % 4 == 0)
 			{
 				FlxG.camera.zoom += 0.015;
 				camHUD.zoom += 0.03;

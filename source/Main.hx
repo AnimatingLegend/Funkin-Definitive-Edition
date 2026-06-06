@@ -70,13 +70,27 @@ class Main extends Sprite
 		if (hasEventListener(Event.ADDED_TO_STAGE))
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 
-		#if !mobile
-		// Force-dispose of any cached assets, to prevent background processing.
+		#if (!html5 && !mobile)
+		// Force-dispose of any cached assets before exiting,
+		// to prevent background processing.
 		openfl.Lib.application.onExit.add((_) ->
 		{
+			// Clean up any stored/unused memory before exiting.
+			funkin.backend.utils.Paths.clearStoredMemory();
+			funkin.backend.utils.Paths.clearUnusedMemory();
+
+			#if hxvlc
+			// Clean up VLC threads to prevent memory leaks.
+			hxvlc.util.Handle.dispose();
+			#end
+
+		 	// Dispose of any assets still in the OpenFL cache, just incase.
 			openfl.Assets.cache.clear();
+
 			trace('EXITING: Resources are disposed. Game is closing now.');
-		});
+
+			Sys.exit(0);
+		}, 99);
 		#end
 
 		setupGame();
