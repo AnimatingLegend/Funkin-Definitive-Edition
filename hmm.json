@@ -43,7 +43,7 @@
     {
       "name": "hscript",
       "type": "haxelib",
-      "version": "2.4.0"
+      "version": null
     },
     {
       "name": "json2object",
@@ -74,7 +74,7 @@
       "name": "polymod",
       "type": "git",
       "dir": null,
-      "ref": "453e161ac38ac73997b53bd74819bf52a77d985b",
+      "ref": "d42902d49a31e66fdeabbc8bb885a4bc99cd08d8",
       "url": "https://github.com/FunkinCrew/polymod"
     },
     {
