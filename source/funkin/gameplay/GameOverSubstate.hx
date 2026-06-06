@@ -103,7 +103,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		// Exclude explicit voice lines if content filter is off.
 		// 1=Cock, 3=Shitty, 8=Shit, 13=Fuck, 17=Shit/Asshole, 21=Fucking
-		var exclude:Array<Int> = FlxG.save.data.naughtyness ? [] : [1, 3, 8, 13, 17, 21];
+		var exclude:Array<Int> = !FlxG.save.data.naughtyness ? [] : [1, 3, 8, 13, 17, 21];
 		tankGameOverLines = FlxG.random.int(1, 25, exclude);
 	}
 
