@@ -78,7 +78,9 @@ class OptionsMenuState extends MusicBeatState
 		Paths.clearUnusedMemory();
 
 		if (FlxG.sound.music != null && !FlxG.sound.music.playing)
+		{
 			FlxG.sound.playMusic(Paths.music('settingsMenu'), 0.5, true);
+		}
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
 		menuBG.color = 0xFFc4618c;
@@ -171,7 +173,8 @@ class OptionsMenuState extends MusicBeatState
 
 			new FlxTimer().start(0.5, function(tmr:FlxTimer)
 			{
-				FlxG.sound.music.stop();
+				if (FlxG.sound.music != null)
+					FlxG.sound.music.stop();
 
 				if (fromFreeplay)
 				{
