@@ -4,7 +4,7 @@ import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.text.FlxText.FlxTextBorderStyle;
-import funkin.backend.system.monitor.DebugDisplay;
+import funkin.ui.debug.DebugDisplay;
 import openfl.Assets;
 import openfl.Lib;
 import openfl.display.Sprite;
@@ -76,8 +76,8 @@ class Main extends Sprite
 		openfl.Lib.application.onExit.add((_) ->
 		{
 			// Clean up any stored/unused memory before exiting.
-			funkin.backend.utils.Paths.clearStoredMemory();
-			funkin.backend.utils.Paths.clearUnusedMemory();
+			funkin.util.Paths.clearStoredMemory();
+			funkin.util.Paths.clearUnusedMemory();
 
 		 	// Dispose of any assets still in the OpenFL cache, just incase.
 			openfl.Assets.cache.clear();
@@ -130,8 +130,28 @@ class Main extends Sprite
 	 * Toggle the FPS counter.
 	 */
 	public static function toggleFPS(value:Bool):Void
+	{
 		if (debugDisplay != null)
 			debugDisplay.visible = value;
+	}
+
+	/**
+	 * Get your current FPS cap.
+	 */
+	public static function getFPSCap():Int
+	{
+		return FlxG.updateFramerate;
+	}
+
+	/**
+	 * Set the FPS cap to a specific value.
+	 * @param value 
+	 */
+	public static function setFPSCap(value:Int):Void
+	{
+		FlxG.updateFramerate = value;
+		FlxG.drawFramerate = FlxG.updateFramerate;
+	}
 
 	/**
 	 * Clear games cache of assets and song data. (taken from Kade Engine)

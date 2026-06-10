@@ -7,10 +7,9 @@ import flixel.graphics.FlxGraphic;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import flixel.util.FlxColor;
-import funkin.backend.system.PlayerSettings;
-import funkin.backend.utils.DefinitiveData;
-import funkin.backend.utils.Highscore;
-import funkin.menus.CacheState;
+import funkin.input.PlayerSettings;
+import funkin.save.DefinitiveData;
+import funkin.save.Highscore;
 
 /**
  * INITALIZE CLASS
@@ -94,7 +93,7 @@ class InitState extends FlxState
 	 */
 	function onLostFocus():Void
 	{
-		trace('WARNING: User lost focus of the game window. Turning down volume by 25%.');
+		trace('INFO: User lost focus of the game window. Turning down volume by 25%.');
 		if (FlxG.sound.muted || FlxG.sound.volume <= 0 || FlxG.autoPause)
 			return;
 		_lostFocusVolume = FlxG.sound.volume;
@@ -109,13 +108,11 @@ class InitState extends FlxState
 		trace('INFO: User regained focus of the game window. Restoring volume and framerate.');
 		if (FlxG.save.data.fpsCap != null)
 		{
-			FlxG.updateFramerate = FlxG.save.data.fpsCap;
-			FlxG.drawFramerate = FlxG.save.data.fpsCap;
+			Main.getFPSCap();
 		}
 		else
 		{
-			FlxG.updateFramerate = 60;
-			FlxG.drawFramerate = 60;
+			Main.setFPSCap(60);
 		}
 
 		// Restore the volume.
@@ -143,19 +140,19 @@ class InitState extends FlxState
 
 		#if PREVIEW_ANIMATION_EDITOR
 		// -DPREVIEW_ANIMATION_EDITOR
-		FlxG.switchState(new funkin.editors.AnimationDebug());
+		FlxG.switchState(new funkin.ui.debug.animation.CharacterEditor());
 		#elseif PREVIEW_CHART_EDITOR
 		// -DPREVIEW_CHART_EDITOR
-		FlxG.switchState(new funkin.editors.ChartingState());
+		FlxG.switchState(new funkin.ui.debug.charting.ChartingState());
 		#elseif FREEPLAY_MENU
 		// -DFREEPLAY_MENU
-		FlxG.switchState(new funkin.menus.FreeplayState());
+		FlxG.switchState(new funkin.ui.freeplay.FreeplayState());
 		#elseif (!debug || FEATURE_CACHE)
 		// -DFEATURE_CACHE
 		// Adding this here if you want to cache the game when debugging.
-		FlxG.switchState(new funkin.menus.CacheState());
+		FlxG.switchState(new funkin.ui.transition.preload.CacheState());
 		#else
-		FlxG.switchState(new funkin.menus.TitleState());
+		FlxG.switchState(new funkin.ui.title.TitleState());
 		#end
 	}
 }
