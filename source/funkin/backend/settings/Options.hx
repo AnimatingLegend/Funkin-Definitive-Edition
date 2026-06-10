@@ -332,6 +332,31 @@ class LaunchInFullscreen extends Option
 		return 'Launch in Fullscreen';
 }
 
+class AtlasToVideo extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function pressKey(value:Bool):Bool
+	{
+		if (value)
+		{
+			FlxG.save.data.atlasToVideo = !FlxG.save.data.atlasToVideo;
+			FlxG.save.flush();
+		}
+
+		acceptValues = FlxG.save.data.atlasToVideo;
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+		return 'Atlas cutscenes to mp4';
+}
+
 // * -------------------------------------- * \\
 // * UI SETTINGS                       			* \\
 // * -------------------------------------- * \\

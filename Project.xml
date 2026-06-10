@@ -23,6 +23,7 @@
 	<!-- _____________________________ FDE Defines ______________________________ -->
 
 	<define name="FEATURE_CRASH_HANDLER" if="desktop release"/>
+	<define name="FEATURE_VIDEO_CUTSCENES" if="windows || linux" unless="32bits"/>
 
 	<!-- _______________________________ Scripts ________________________________ -->
 
@@ -98,9 +99,7 @@
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<!-- Haxe Libraries -->
-	<section if="cpp">
-		<haxelib name="hxvlc" path=".haxelib/hxvlc/2,2,6" />
-	</section>
+	<haxelib name="hxCodec" if="FEATURE_VIDEO_CUTSCENES"/>
 	<haxelib name="hxcpp"/>
 	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
 	<haxelib name="hscript"/>

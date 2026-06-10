@@ -79,11 +79,6 @@ class Main extends Sprite
 			funkin.backend.utils.Paths.clearStoredMemory();
 			funkin.backend.utils.Paths.clearUnusedMemory();
 
-			#if hxvlc
-			// Clean up VLC threads to prevent memory leaks.
-			hxvlc.util.Handle.dispose();
-			#end
-
 		 	// Dispose of any assets still in the OpenFL cache, just incase.
 			openfl.Assets.cache.clear();
 

@@ -51,7 +51,9 @@ class PauseSubState extends MusicBeatSubstate
 	 * `Hard`: Hard difficulty.
 	 * `Back`: Return to the previous menu.
 	 */
-	static final DIFFICULTY_ENTRIES:Array<String> = ['Easy', 'Normal', 'Hard', 'Back'];
+	static final DIFFICULTY_ENTRIES:Array<String> = [
+		'Easy', 'Normal', 'Hard', 'Back'
+	];
 
 	//
 	// SONG PROPERTIES / VALUES
@@ -197,7 +199,7 @@ class PauseSubState extends MusicBeatSubstate
 			case 1:
 				levelInfo.text += '\n${activeModifiers[0]} ACTIVE';
 			default:
-				levelInfo.text += '\nModifiers: ' + activeModifiers.join(', ');
+				levelInfo.text += '\nMODIFIERS: ${activeModifiers.join(',')}';
 		}
 
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);

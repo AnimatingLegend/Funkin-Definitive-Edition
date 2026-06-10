@@ -29,6 +29,8 @@ class DefinitiveData
 			FlxG.save.data.fpsCap = 60;
 		if (FlxG.save.data.launchInFullscreen == null)
 			FlxG.save.data.launchInFullscreen = false;
+		if (FlxG.save.data.atlasToVideo == null)
+			FlxG.save.data.atlasToVideo = false;
 
 		/**
 		 * UI Settings

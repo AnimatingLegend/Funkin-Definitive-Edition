@@ -7,161 +7,298 @@ import flixel.util.FlxTimer;
 
 using StringTools;
 
+/**
+ * DIALOGUE BOX CLASS
+ * 
+ * A resusable class for dialogue boxes that supports pixel-art and standard styles.
+ */
 class DialogueBox extends FlxSpriteGroup
 {
-	var box:FlxSprite;
+	/**
+	 * Legacy `Alphabet` dialogue object - KEPT FOR COMPATIBILITY.
+	 */
+	var dialogueObject:Alphabet;
 
-	var curCharacter:String = '';
+	/**
+	 * The dialogue box background sprite. (like the name of the class!! :0)
+	 */
+	var dialogueBox:FlxSprite;
 
-	var dialogue:Alphabet;
-	var dialogueList:Array<String> = [];
+	/**
+	 * Background fade overlay
+	 */
+	var backgroundFade:FlxSprite;
 
-	// SECOND DIALOGUE FOR THE PIXEL SHIT INSTEAD???
-	var swagDialogue:FlxTypeText;
+	/**
+	 * Left-side portrait (opponent/dad).
+	 */
+	var portraitLeft:FlxSprite;
 
+	/**
+	 * Right-side portrait (boyfriend).
+	 */
+	var portraitRight:FlxSprite;
+
+	/**
+	 * Alternative `portraitLeft` sprite for the thorns dialogue box.
+	 */
+	var portraitLeft_spirit:FlxSprite;
+
+	/**
+	 * Hand cursor showed when dialogue is complete.
+	 */
+	var handSelect:FlxSprite;
+
+	/**
+	 * Drop shadow text behind the main dialogue text.
+	 */
 	var dropText:FlxText;
 
-	public var finishThing:Void->Void;
+	/**
+	 * The skip hint text element; press `BACKSPACE` to skip.
+	 */
+	var skipHint:FlxText;
 
-	var portraitLeft:FlxSprite;
-	var portraitRight:FlxSprite;
-	var face:FlxSprite;
+	/**
+	 * The animated typewriter text element for dialogue.
+	 * swagDialogue
+	 */
+	var animatedDialogue:FlxTypeText;
 
-	var handSelect:FlxSprite;
-	var bgFade:FlxSprite;
+	//
+	// STATE VARIABLES
+	//
 
-	public function new(talkingRight:Bool = true, ?dialogueList:Array<String>)
+	/**
+	 * The remaining lines of dialogue to display.
+	 */
+	var dialogueList:Array<String> = [];
+
+	/**
+	 * Which character is currently speaking.
+	 */
+	var currentCharacter:String = '';
+
+	//
+	// BOOLEAN VARIABLES
+	//
+
+	/**
+	 * Whether the dialogue box is currently open.
+	 * @default false
+	 */
+	var dialogueOpened:Bool = false;
+
+	/**
+	 * Whether the first line of dialogue has started.
+	 * @default false
+	 */
+	var dialogueStarted:Bool = false;
+
+	/**
+	 * Whether the current line has finished typing.
+	 * @default false
+	 */
+	var dialogueComplete:Bool = false;
+
+	/**
+	 * Whether the closing sequence has started.
+	 * @default false
+	 */
+	var isEnding:Bool = false;
+
+	//
+	// CALLBACKS
+	//
+
+	/**
+	 * Called when all dialogue lines have been shown, and the box closes.
+	 */
+	public var onDialogueComplete:Void->Void;
+
+	public function new(talkingRight:Bool = true, ?dialogueList:Array<String> = null)
 	{
 		super();
 
+		PlayState.inDialogue = true;
+
+		this.dialogueList = dialogueList ?? [];
+
+		setupBackgroundOverlay();
+
+		var hasDialogue:Bool = setupDialogueBox();
+		if (!hasDialogue) // If there is no dialogue, don't do anything.
+			return;
+
+		setupPortraits(talkingRight);
+		setupText();
+
+		trace('DIALOGUE BOX: Initialization complete.');
+	}
+
+	//
+	// UI ELEMENTS
+	//
+
+	/**
+	 * Create a basic background fade overlay.
+	 */
+	private function setupBackgroundOverlay():Void
+	{
+		backgroundFade = new FlxSprite(-200, -200).makeGraphic(Std.int(FlxG.width * 1.3), Std.int(FlxG.height * 1.3), 0xFFB3DFd8);
+		backgroundFade.scrollFactor.set();
+		backgroundFade.alpha = 0;
+		add(backgroundFade);
+
+		new FlxTimer().start(0.83, function(_)
+		{
+			// Smoothly fade in to 70% opacity over 6 seconds.
+			backgroundFade.alpha = Math.min(backgroundFade.alpha + (1 / 5) * 0.7, 0.7);
+		}, 6);
+
+		// If the song is roses, skip the fade in.
+		if (PlayState.SONG.song.toLowerCase() == 'roses')
+			backgroundFade.alpha = 0.7;
+	}
+
+	/**
+	 * Plays the opening music for the dialogue box depending on the stage, or character.
+	 */
+	private function setupMusic():Void
+	{
 		switch (PlayState.SONG.song.toLowerCase())
 		{
 			case 'senpai':
 				FlxG.sound.playMusic(Paths.music('Lunchbox', 'week6'), 0);
-				FlxG.sound.music.fadeIn(1, 0, 0.8);
-			case 'thorns':
-				FlxG.sound.playMusic(Paths.music('LunchboxScary', 'week6'), 0);
-				FlxG.sound.music.fadeIn(1, 0, 0.8);
+        FlxG.sound.music.fadeIn(1, 0, 0.8);
+      case 'thorns':
+        FlxG.sound.playMusic(Paths.music('LunchboxScary', 'week6'), 0);
+        FlxG.sound.music.fadeIn(1, 0, 0.8);
 		}
+	}
 
-		bgFade = new FlxSprite(-200, -200).makeGraphic(Std.int(FlxG.width * 1.3), Std.int(FlxG.height * 1.3), 0xFFB3DFd8);
-		bgFade.scrollFactor.set();
-		bgFade.alpha = 0;
-		add(bgFade);
-
-		new FlxTimer().start(0.83, function(tmr:FlxTimer)
-		{
-			bgFade.alpha += (1 / 5) * 0.7;
-			if (bgFade.alpha > 0.7)
-				bgFade.alpha = 0.7;
-		}, 5);
-
-		box = new FlxSprite(-20, 45);
-
-		var hasDialog = false;
+	/**
+	 * Creates the dialogue box sprite with the correct skin for the current song, or stage.
+	 * @return Whether or not a song has dialogue.
+	 */
+	private function setupDialogueBox():Bool
+	{
+		dialogueBox = new FlxSprite(-20, 45);
 		switch (PlayState.SONG.song.toLowerCase())
 		{
 			case 'senpai':
-				hasDialog = true;
-				box.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-pixel', 'week6');
-				box.animation.addByPrefix('normalOpen', 'Text Box Appear', 24, false);
-				box.animation.addByIndices('normal', 'Text Box Appear instance 1', [4], "", 24);
-
+				dialogueBox.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-pixel', 'week6');
+				dialogueBox.animation.addByPrefix('open_textBox', 'Text Box Appear', 24, false);
+				dialogueBox.animation.addByIndices('static_textBox', 'Text Box Appear instance 1', [4], "", 0);
+				dialogueBox.animation.addByIndices('close_textBox', 'Text Box Appear instance 1', [4, 3, 2, 1, 0], "", 24, false);
 			case 'roses':
-				hasDialog = true;
 				FlxG.sound.play(Paths.sound('ANGRY_TEXT_BOX'));
-
-				box.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-senpaiMad', 'week6');
-				box.animation.addByPrefix('normalOpen', 'SENPAI ANGRY IMPACT SPEECH', 24, false);
-				box.animation.addByIndices('normal', 'SENPAI ANGRY IMPACT SPEECH instance 1', [4], "", 24);
-
+				dialogueBox.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-senpaiMad', 'week6');
+				dialogueBox.animation.addByPrefix('open_textBox', 'SENPAI ANGRY IMPACT SPEECH', 24, false);
+				dialogueBox.animation.addByIndices('static_textBox', 'SENPAI ANGRY IMPACT SPEECH instance 1', [4], "", 0);
+				dialogueBox.animation.addByIndices('close_textBox', 'SENPAI ANGRY IMPACT SPEECH instance 1', [4], "", 24, false);
 			case 'thorns':
-				hasDialog = true;
-				box.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-evil', 'week6');
-				box.animation.addByPrefix('normalOpen', 'Spirit Textbox spawn', 24, false);
-				box.animation.addByIndices('normal', 'Spirit Textbox spawn instance 1', [11], "", 24);
+				dialogueBox.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-evil', 'week6');
+				dialogueBox.animation.addByPrefix('open_textBox', 'Spirit Textbox spawn', 24, false);
+				dialogueBox.animation.addByIndices('static_textBox', 'Spirit Textbox spawn instance 1', [11], "", 0);
+				dialogueBox.animation.addByIndices('close_textBox', 'Spirit Textbox spawn instance 1', [11, 8, 4, 1, 0], "", 24, false);
 
-				var face:FlxSprite = new FlxSprite(320, 170).loadGraphic(Paths.image('weeb/spiritFaceForward', 'week6'));
-				face.setGraphicSize(Std.int(face.width * 6));
-				add(face);
+				portraitLeft_spirit = new FlxSprite(320, 170).loadGraphic(Paths.image('weeb/spiritFaceForward', 'week6'));
+				portraitLeft_spirit.setGraphicSize(Std.int(portraitLeft_spirit.width * 6));
+				portraitLeft_spirit.visible = false;
+				add(portraitLeft_spirit);
+			default:
+				return false;
 		}
+		dialogueBox.animation.play('open_textBox');
+		dialogueBox.setGraphicSize(Std.int(dialogueBox.width * PlayState.daPixelZoom * 0.9));
+		dialogueBox.updateHitbox();
+		dialogueBox.screenCenter(X);
+		add(dialogueBox);
 
-		this.dialogueList = dialogueList;
+		return true;
+	}
 
-		if (!hasDialog)
-			return;
-
+	/**
+	 * Creates and adds the left and right portrait sprites.
+	 */
+	private function setupPortraits(talkingRight:Bool):Void
+	{
 		portraitLeft = new FlxSprite(-20, 40);
-		portraitLeft.frames = Paths.getSparrowAtlas('weeb/senpaiPortrait', 'week6');
-		portraitLeft.animation.addByPrefix('enter', 'Senpai Portrait Enter', 24, false);
-		portraitLeft.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
-		portraitLeft.updateHitbox();
-		portraitLeft.scrollFactor.set();
-		add(portraitLeft);
-		portraitLeft.visible = false;
+    portraitLeft.frames = Paths.getSparrowAtlas('weeb/senpaiPortrait', 'week6');
+    portraitLeft.animation.addByPrefix('enter', 'Senpai Portrait Enter', 24, false);
+    portraitLeft.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+    portraitLeft.updateHitbox();
+  	portraitLeft.scrollFactor.set();
+    portraitLeft.visible = false;
+    add(portraitLeft);
 
-		portraitRight = new FlxSprite(0, 40);
-		portraitRight.frames = Paths.getSparrowAtlas('weeb/bfPortrait', 'week6');
-		portraitRight.animation.addByPrefix('enter', 'Boyfriend portrait enter', 24, false);
-		portraitRight.setGraphicSize(Std.int(portraitRight.width * PlayState.daPixelZoom * 0.9));
-		portraitRight.updateHitbox();
-		portraitRight.scrollFactor.set();
-		add(portraitRight);
-		portraitRight.visible = false;
+    portraitRight = new FlxSprite(0, 40);
+    portraitRight.frames = Paths.getSparrowAtlas('weeb/bfPortrait', 'week6');
+    portraitRight.animation.addByPrefix('enter', 'Boyfriend portrait enter', 24, false);
+    portraitRight.setGraphicSize(Std.int(portraitRight.width * PlayState.daPixelZoom * 0.9));
+    portraitRight.updateHitbox();
+    portraitRight.scrollFactor.set();
+    portraitRight.visible = false;
+    add(portraitRight);
 
-		box.animation.play('normalOpen');
-		box.setGraphicSize(Std.int(box.width * PlayState.daPixelZoom * 0.9));
-		box.updateHitbox();
-		add(box);
+    portraitLeft.screenCenter(X);
+	}
 
-		box.screenCenter(X);
-		portraitLeft.screenCenter(X);
-
+	/**
+	 * Creates the typewriter text, drop shadow, and hand cursor elements.
+	 */
+	private function setupText():Void
+	{
 		handSelect = new FlxSprite(1042, 590).loadGraphic(Paths.image('weeb/pixelUI/hand_textbox', 'week6'));
 		handSelect.setGraphicSize(Std.int(handSelect.width * PlayState.daPixelZoom * 0.9));
 		handSelect.updateHitbox();
 		handSelect.visible = false;
 		add(handSelect);
 
-		talkingRight = !talkingRight;
-
 		dropText = new FlxText(242, 502, Std.int(FlxG.width * 0.6), "", 32);
-		dropText.font = 'Pixel Arial 11 Bold';
-		dropText.color = 0xFFD89494;
-		add(dropText);
+    dropText.font = 'Pixel Arial 11 Bold';
+    dropText.color = 0xFFD89494;
+    add(dropText);
 
-		swagDialogue = new FlxTypeText(240, 500, Std.int(FlxG.width * 0.6), "", 32);
-		swagDialogue.font = 'Pixel Arial 11 Bold';
-		swagDialogue.color = 0xFF3F2021;
-		swagDialogue.sounds = [FlxG.sound.load(Paths.sound('pixelText'), 0.6)];
-		add(swagDialogue);
+		skipHint = new FlxText(25, 0, Std.int(FlxG.width * 0.6), "", 0);
+		skipHint.setFormat(Paths.font("vcr.ttf"), 24, 0xFFD89494, FlxTextAlign.RIGHT, FlxTextBorderStyle.OUTLINE, 0xFF3F2021);
+		skipHint.text = "[BACKSPACE] - Skip Dialogue";
+		skipHint.visible = false;
+		add(skipHint);
 
-		dialogue = new Alphabet(0, 80, "", false, true);
+		animatedDialogue = new FlxTypeText(240, 500, Std.int(FlxG.width * 0.6), "", 32);
+		animatedDialogue.font = 'Pixel Arial 11 Bold';
+		animatedDialogue.color = 0xFF3F2021;
+		animatedDialogue.sounds = [FlxG.sound.load(Paths.sound('pixelText'), 0.5)];
+		add(animatedDialogue);
+
+		dialogueObject = new Alphabet(0, 80, "", false, true);
 	}
 
-	var dialogueOpened:Bool = false;
-	var dialogueStarted:Bool = false;
-	var dialogueEnded:Bool = false;
+	//
+	// HELPER FUNCTIONS
+	//
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		switch (PlayState.SONG.song.toLowerCase())
-		{
-			case 'roses':
-				portraitLeft.visible = false;
-			case 'thorns':
-				swagDialogue.color = FlxColor.WHITE;
-				dropText.color = FlxColor.BLACK;
-				portraitLeft.visible = false;
-		}
+    {
+      case 'roses':
+        portraitLeft.visible = false;
+      case 'thorns':
+        animatedDialogue.color = FlxColor.WHITE;
+        dropText.color = FlxColor.BLACK;
+    }
 
-		dropText.text = swagDialogue.text;
+		dropText.text = animatedDialogue.text;
 
-		if (box.animation.curAnim != null)
+		// Check if the dialogue box has been opened, and set the dialogue started flag.
+		if (dialogueBox.animation.curAnim != null && dialogueBox.animation.curAnim.name == 'open_textBox')
 		{
-			if (box.animation.curAnim.name == 'normalOpen' && box.animation.curAnim.finished)
+			if (dialogueBox.animation.curAnim.finished)
 			{
-				box.animation.play('normal');
+				dialogueBox.animation.play('static_textBox');
 				dialogueOpened = true;
 			}
 		}
@@ -169,96 +306,185 @@ class DialogueBox extends FlxSpriteGroup
 		if (dialogueOpened && !dialogueStarted)
 		{
 			startDialogue();
+			setupMusic();
 			dialogueStarted = true;
 		}
 
-		if (FlxG.keys.justPressed.ENTER && dialogueStarted == true)
+		// If the enter key is pressed, handle basic dialogue input.
+		if (FlxG.keys.justPressed.ENTER && dialogueOpened && dialogueStarted)
+			handleInput();
+		// If the backspace key is pressed, skip the entire dialogue segment,
+		// and skip to gameplay. 
+		if (FlxG.keys.justPressed.BACKSPACE && isEnding != true)
 		{
-			remove(dialogue);
-
-			FlxG.sound.play(Paths.sound('clickText'), 0.8);
-
-			if (dialogueList[1] == null && dialogueList[0] != null)
-			{
-				if (!isEnding)
-				{
-					isEnding = true;
-
-					switch (PlayState.SONG.song.toLowerCase())
-					{
-						case 'senpai' | 'thorns':
-							FlxG.sound.music.fadeOut(2.2, 0);
-					}
-
-					new FlxTimer().start(0.2, function(tmr:FlxTimer)
-					{
-						box.alpha -= 1 / 5;
-						bgFade.alpha -= 1 / 5 * 0.7;
-						portraitLeft.visible = false;
-						portraitRight.visible = false;
-						swagDialogue.alpha -= 1 / 5;
-						handSelect.alpha -= 1 / 5;
-						dropText.alpha = swagDialogue.alpha;
-					}, 5);
-
-					new FlxTimer().start(1.2, function(tmr:FlxTimer)
-					{
-						finishThing();
-						kill();
-					});
-				}
-			}
-			else
-			{
-				dialogueList.remove(dialogueList[0]);
-				startDialogue();
-			}
+			trace('DIALOGUE BOX: BACKSPACE key pressed. Closing dialogue box...');
+			closeDialogue();
 		}
 
 		super.update(elapsed);
 	}
 
-	var isEnding:Bool = false;
-
-	function startDialogue():Void
+	private function handleInput():Void
 	{
-		cleanDialog();
+		// Disable any further input if the dialogue is complete.
+		if (isEnding)
+			return;
 
-		swagDialogue.resetText(dialogueList[0]);
-		swagDialogue.start(0.04, true);
-		swagDialogue.completeCallback = function()
+		// If the text is still typing, snap it to completion.
+		if (!dialogueComplete)
 		{
-			trace('dialogue finish');
-			handSelect.visible = true;
-			dialogueEnded = true;
-		};
+			animatedDialogue.skip();
+			trace('DIALOGUE BOX: Dialogue skipped.');
+			return;
+		}
 
-		handSelect.visible = false;
-		dialogueEnded = false;
+		if (dialogueObject != null)
+			remove(dialogueObject);
 
-		switch (curCharacter)
+		FlxG.sound.play(Paths.sound('clickText'), 0.7);
+
+		final isLastLine:Bool = dialogueList[1] == null && dialogueList[0] != null;
+		if (isLastLine)
 		{
-			case 'dad':
-				portraitRight.visible = false;
-				if (!portraitLeft.visible)
-				{
-					portraitLeft.visible = true;
-					portraitLeft.animation.play('enter');
-				}
-			case 'bf':
-				portraitLeft.visible = false;
-				if (!portraitRight.visible)
-				{
-					portraitRight.visible = true;
-					portraitRight.animation.play('enter');
-				}
+			closeDialogue();
+		}
+		else
+		{
+			dialogueList.remove(dialogueList[0]);
+			startDialogue();
 		}
 	}
 
-	function cleanDialog():Void
+	//
+	// DIALOGUE LOGIC
+	//
+
+	/**
+	 * Starts displaying the next line of dialogue.
+	 */
+	private function startDialogue():Void
 	{
-		var splitName:Array<String> = dialogueList[0].split(":");
-		curCharacter = splitName[1];
-		dialogueList[0] = dialogueList[0].substr(splitName[1].length + 2).trim();
+		parseNextLine();
+
+		animatedDialogue.resetText(dialogueList[0]);
+		animatedDialogue.start(0.04, true);
+		animatedDialogue.completeCallback = function()
+		{
+			skipHint.visible = true;
+			handSelect.visible = true;
+			dialogueComplete = true;
+			trace('DIALOGUE BOX: Dialogue section complete.');
+		};
+
+		handSelect.visible = false;
+		dialogueComplete = false;
+
+		updatePortraits();
 	}
+
+	/**
+	 * Starts the closing sequence for the dialogue box.
+	 */
+	private function closeDialogue():Void
+	{
+		trace('DIALOGUE BOX: All dialogue complete. Closing dialogue box...');
+
+		if (isEnding)
+			return;
+
+		isEnding = true;
+
+		switch (PlayState.SONG.song.toLowerCase())
+		{
+			case 'senpai' | 'roses' | 'thorns':
+				FlxG.sound.music.fadeOut(2.5, 0);
+		}
+
+		// Close the dialogue box, and hide its elements.
+		dialogueBox.animation.play('close_textBox');
+		animatedDialogue.visible = dropText.visible = false;
+		handSelect.visible = false;
+
+		// Fade all elements out over 6 ticks.
+		new FlxTimer().start(0.3, function(_)
+		{
+			skipHint.alpha -= 1 / 5;
+			dialogueBox.alpha -= 1 / 5;
+			backgroundFade.alpha -= 1 / 5 * 0.9;
+
+			// Add special fade effect for Roses and Thorns.
+			// in 6 ticks.
+			switch (PlayState.SONG.song.toLowerCase())
+			{
+				case 'roses':
+					portraitRight.alpha -= 1 / 5;
+				case 'thorns':
+					portraitLeft_spirit.alpha -= 1 / 5;
+				default: 
+					// Otherwise, just hide the portraits normally.
+					portraitRight.visible = portraitLeft.visible = false;
+			}
+		}, 6);
+
+		new FlxTimer().start(1.5, function(_)
+		{
+			Paths.clearUnusedMemory();
+			onDialogueComplete();
+			kill();
+		});
+
+		trace('DIALOGUE BOX: Dialogue box closed. Now returning to gameplay.');
+	}
+
+	//
+	// MISC FUNCTIONS
+	//
+
+	/**
+  * Parses the character tag from the front of the current dialogue line.
+  * Format: `line text:characterName`
+  */
+  private function parseNextLine():Void
+  {
+    var splitName:Array<String> = dialogueList[0].split(":");
+    currentCharacter = splitName[1];
+    dialogueList[0] = dialogueList[0].substr(splitName[1].length + 2).trim();
+  }
+
+	/**
+  * Shows or hides portraits based on who is currently speaking.
+  */
+  private function updatePortraits():Void
+  {
+    switch (currentCharacter)
+    {
+      case 'senpai':
+        portraitRight.visible = false;
+        if (!portraitLeft.visible)
+        {
+					portraitLeft.visible = true;
+          portraitLeft.animation.play('enter');
+        }
+			case 'spirit':
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!portraitLeft_spirit.visible)
+				{
+					// Manually fade the spirit face in over 6 ticks.
+					portraitLeft_spirit.alpha = 0;
+					new FlxTimer().start(0.2, function(_)
+					{
+						portraitLeft_spirit.alpha += 1 / 5;
+						portraitLeft_spirit.visible = true;
+					}, 6);
+				}
+      case 'bf':
+        portraitLeft.visible = false;
+        if (!portraitRight.visible)
+        {
+          portraitRight.visible = true;
+          portraitRight.animation.play('enter');
+        }
+    }
+  }
 }

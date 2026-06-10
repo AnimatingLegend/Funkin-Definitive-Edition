@@ -30,6 +30,7 @@ class OptionsMenuState extends MusicBeatState
 			new DebugDisplayBGOP('Adjust the debug display\'s background opacity.'),
 			new FPSCap('The maximum framerate the game targets. (60 - 280)'),
 			new LaunchInFullscreen('When enabled, the game will automatically launch in fullscreen.'),
+			new AtlasToVideo('When enabled, atlas cutscenes will be played in a video format. (CPU insensitive)'),
 		]),
 		new OptionCategory("Visuals and UI", [
 			new AccuracyDisplay('When disabled, the miss / accuracy display will be hidden.'),
