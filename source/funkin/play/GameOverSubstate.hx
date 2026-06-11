@@ -20,6 +20,12 @@ class GameOverSubstate extends MusicBeatSubstate
 	public static var instance:GameOverSubstate = null;
 
 	/**
+	 * Whether the substate is currently active.
+	 * @default true
+	 */
+	static var isSubState:Bool = true;
+
+	/**
 	 * Which music track to play.
 	 * 
 	 * Current suffix:
@@ -46,6 +52,11 @@ class GameOverSubstate extends MusicBeatSubstate
 	 * The boyfriend character.
 	 */
 	var boyfriend:Null<Boyfriend> = null;
+
+	/**
+	 * The camera that follows the boyfriend character.
+	 */
+	var cameraPoint:Null<FunkinCamera>;
 
 	/**
 	 * The invisible object that follows the camera.
@@ -91,6 +102,11 @@ class GameOverSubstate extends MusicBeatSubstate
 		boyfriend.playAnim('firstDeath');
 
 		var boyfriendPos:FlxPoint = boyfriend.getGraphicMidpoint();
+		
+		// Create a camera that follows the boyfriend character.
+		cameraPoint = new FunkinCamera(FlxG.camera, PlayState.instance.targetCamZoom);
+		cameraPoint.followLerping = true;
+		// Get the object that follows the camera.
 		cameraFollowPoint = new FlxObject(boyfriendPos.x, boyfriendPos.y, 1, 1);
 		add(cameraFollowPoint);
 
@@ -133,6 +149,7 @@ class GameOverSubstate extends MusicBeatSubstate
 	public override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		cameraPoint.update(elapsed);
 
 		if (FlxG.sound.music != null && FlxG.sound.music.playing)
 		{
@@ -169,7 +186,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		// Start camera follow at frame 12.
 		if (deathAnim.curFrame == 12)
 		{
-			FlxG.camera.follow(cameraFollowPoint, LOCKON, 0.01 #if !html5 * (30 / FlxG.save.data.fpsCap) #end);
+			cameraPoint.setFollow(cameraFollowPoint, false);
 		}
 
 		// Once `firstDeath` finishes, start the death loop music.
@@ -207,7 +224,7 @@ class GameOverSubstate extends MusicBeatSubstate
 	function confirmRestart():Void
 	{
 		isEnding = true;
-		boyfriend.playAnim('deathConfirm', true);
+		boyfriend.playAnim('deathConfirm', false);
 
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -220,58 +237,44 @@ class GameOverSubstate extends MusicBeatSubstate
 		// After the animation finishes, fade out the music.
 		new FlxTimer().start(FADE_TIMER, function(tmr:FlxTimer)
 		{
-			// Fade out the graphics, and smoothly transition back to the PlayState.
-			var resetPlaying = function()
+			// Callback for when the transition is finished.
+			var finishTransition = function()
 			{
-				fadeOutEffect(true);
+				if (FlxG.state.subState == this)
+				{
+					close();
+					trace('CAMERA: Transition to PlayState event triggered.');
+				}
+				else
+				{
+					LoadingState.loadAndSwitchState(new PlayState());
+					trace('CAMERA: Transition to PlayState event failed. Restarting PlayState...');
+				}
 			};
 
-			resetPlaying();
-		});
-	}
-
-	/**
-	 * Triggers the fade out effect.
-	 */
-	function fadeOutEffect(pixel:Bool = false):Void
-	{
-		/**
-		 * Values for the fade out effect.
-		 */
-		final PIXEL_FADE_DURATION:Float = 2.5; // How long does the fade take?
-		final PIXEL_FADE_FPS:Int = 8; // What framerate does the fade take?
-		final PIXEL_FADE_STEPS:Int = Std.int(PIXEL_FADE_DURATION * PIXEL_FADE_FPS); // How many steps does the fade take?
-
-		var fadeScreen:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		fadeScreen.scrollFactor.set();
-		fadeScreen.alpha = 0;
-		fadeScreen.cameras = [FlxG.camera];
-		add(fadeScreen);
-
-		if (musicSuffix.contains('-pixel') && pixel)
-		{
-			// For week 6, make the fade a lower framerate have that retro pixel look.
-			new FlxTimer().start(1 / PIXEL_FADE_FPS, function(fadeTimer:FlxTimer)
+			// Fade out the graphics, and smoothly transition back to the PlayState.
+			if (musicSuffix.contains('-pixel'))
 			{
-				fadeScreen.alpha = fadeTimer.elapsedLoops / PIXEL_FADE_STEPS;
-
-				if (fadeTimer.elapsedLoops >= PIXEL_FADE_STEPS)
+				cameraPoint.pixelFade(FlxColor.BLACK, 2.8, 8, 22, false, function()
 				{
-					LoadingState.loadAndSwitchState(new PlayState());
-				}
-			}, PIXEL_FADE_STEPS);
-		}
-		else
-		{
-			// For all other weeks, make the fade a normal framerate.
-			FlxTween.tween(fadeScreen, {alpha: 1}, PIXEL_FADE_DURATION, {
-				ease: FlxEase.quadInOut,
-				onComplete: function(_)
+					finishTransition();
+					// Add a REALLY small delay before fading back in.
+					// Removing this doesn't even transition properly for some reason.
+					new FlxTimer().start(0, function(_)
+					{
+						cameraPoint.pixelFade(FlxColor.BLACK, 2.8, 8, 22, true, null);
+					});
+				}, this);
+			}
+			else
+			{
+				cameraPoint.fade(FlxColor.BLACK, 2.8, false, function()
 				{
-					LoadingState.loadAndSwitchState(new PlayState());
-				}
-			});
-		}
+					finishTransition();
+					cameraPoint.fade(FlxColor.BLACK, 2.8, true);
+				});
+			}
+		});
 	}
 
 	/**
@@ -302,7 +305,18 @@ class GameOverSubstate extends MusicBeatSubstate
 		super.beatHit();
 	}
 
-	public override function destroy():Void
+	override public function close():Void
+	{
+		super.close();
+
+		// Reset the camera zoom, and snap it to the correct side.
+		cameraPoint.resetZoom();
+		cameraPoint.snapToTarget();
+
+		PlayState.instance.restartSong();
+	}
+
+	override public function destroy():Void
 	{
 		instance = null;
 		super.destroy();

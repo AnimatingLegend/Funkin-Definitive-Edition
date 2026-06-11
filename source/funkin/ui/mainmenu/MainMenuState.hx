@@ -8,6 +8,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import lime.app.Application;
+import funkin.graphics.FunkinCamera;
 import funkin.ui.mainmenu.components.MenuItem;
 import funkin.ui.mainmenu.components.MenuTypedList;
 import funkin.ui.mainmenu.components.AtlasMenuItem;
@@ -22,6 +23,7 @@ class MainMenuState extends MusicBeatState
 	var bg:FlxSprite;
 	var magenta:FlxSprite;
 
+	var camMenu:FunkinCamera;
 	var camFollow:FlxObject;
 
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
@@ -54,6 +56,9 @@ class MainMenuState extends MusicBeatState
 		bg.screenCenter();
 		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
+
+		camMenu = new FunkinCamera(FlxG.camera, 1.0);
+		camMenu.followLerping = true;
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
@@ -114,7 +119,7 @@ class MainMenuState extends MusicBeatState
 			item.y = pos + (160 * i);
 		}
 
-		FlxG.camera.follow(camFollow, null, 0.04 #if !html5 * (30 / FlxG.save.data.fpsCap) #end);
+		camMenu.setFollow(camFollow, true);
 
 		super.create();
 		initWatermark();
@@ -194,9 +199,7 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		#if html5
-		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.06);
-		#end
+		camMenu.update(elapsed);
 
 		if (FlxG.sound.music.volume < 0.8)
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;

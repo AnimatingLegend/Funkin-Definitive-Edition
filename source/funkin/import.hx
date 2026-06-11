@@ -9,6 +9,7 @@ import funkin.data.character.*;
 import funkin.data.stage.*;
 import funkin.data.story.level.*;
 import funkin.data.song.*;
+import funkin.graphics.*;
 import funkin.graphics.video.*;
 import funkin.input.*;
 import funkin.play.*;

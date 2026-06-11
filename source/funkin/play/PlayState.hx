@@ -3172,8 +3172,7 @@ class PlayState extends MusicBeatState
 		// Reset health immediately to prevent softlocking.
 		health = 1;
 
-		persistentUpdate = true;
-		persistentDraw = true;
+		persistentUpdate = persistentDraw = true;
 
 		// Pause audio immediately to prevent audio overlap.
 		if (FlxG.sound.music != null)
@@ -3183,7 +3182,10 @@ class PlayState extends MusicBeatState
 		}
 
 		if (vocals != null)
-			vocals.pause();
+		{
+			vocals.stop();
+			vocals.time = 0;
+		}
 
 		// Stop the countdown timer if it's still running
 		if (startTimer != null && !startTimer.finished)
