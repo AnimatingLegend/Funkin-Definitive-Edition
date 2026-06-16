@@ -243,7 +243,6 @@ class Note extends FlxSprite
 
 			animation.play(ANIM_HOLDEND[col]);
 			updateHitbox();
-			alpha = 0.8;
 
 			if (_skin == PIXEL)
 				x += 30;
@@ -268,9 +267,19 @@ class Note extends FlxSprite
 		if (prevNote == null || prevNote == this || !prevNote.isSustainNote)
 			return;
 
-		scrollSpeed = FlxMath.roundDecimal(scrollSpeed, 2);
+		// Try and match the custom scroll speed to the sustain trail length.
+		scrollSpeed = FlxMath.roundDecimal(
+			FlxG.save.data.scrollSpeed == 1 
+			? PlayState.SONG.speed 
+			: FlxG.save.data.scrollSpeed, 2
+		);
 
-		prevNote.scale.y = (0.45 * Conductor.stepCrochet * scrollSpeed + 2) / prevNote.frameHeight;
+		// Determine the length of the sustain trail and scale it accordingly.
+		prevNote.scale.y = 1.0;
+		prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.52) * scrollSpeed;
+		_skin == PIXEL
+			? prevNote.scale.y *= PIXEL_ZOOM
+			: prevNote.scale.y *= 0.7;
 		prevNote.updateHitbox();
 	}
 
