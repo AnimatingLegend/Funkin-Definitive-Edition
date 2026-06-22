@@ -1,6 +1,5 @@
 package funkin.ui.debug;
 
-import flixel.text.FlxText.FlxTextBorderStyle;
 import openfl.display.Shape;
 import openfl.events.Event;
 import openfl.system.System;
@@ -10,130 +9,112 @@ import openfl.text.TextFormat;
 /**
  * DEBUG DISPLAY (FPS COUNTER) CLASS
  * 
- * A simple FPS Counter that displays your current FPS, and Memory usage.
+ * Displays your current FPS, as well as your MEM usage for the game,
+ * in the top left corner of your game window.
  */
 class DebugDisplay extends TextField
 {
+	//
+	// CONFIG (color, thickness, padding, etc.)
+	//
+
+	static inline final BG_COLOR:Int = 0x2c2f30;
+	static inline final BORDER_COLOR:Int = 0x3d3f41;
+	static inline final BORDER_THICKNESS:Int = 4;
+	static inline final PADDING:Int = 6;
+	static inline final FONT_SIZE:Int = 12;
+	static inline final UPDATE_INTERVAL:Float = 50.0;
+
+	//
+	// PUBLIC FIELDS
+	//
+
 	/**
-	 * The opacity of the FPS Counters background.
+	 * Opacity of the debug display's background panel.
 	 */
 	public var backgroundOpacity(default, set):Float = 0.5;
 
 	/**
-	 * The current FPS, calculated as the number of frames rendered in the last second.
+	 * Whether the debug display's background panel is visible.
+	 * @default true
 	 */
-	public var currentFPS(default, null):Int;
+	public var backgroundVisible(default, set):Bool = true;
 
 	/**
-	 * The current, and maximum memory usage of the game.
+	 * Current FPS, capped at the game's `FlxG.updateFramerate`.
+	 */
+	public var currentFPS(default, null):Int = 0;
+
+	/**
+	 * Current GC memory usage, in bytes.
 	 */
 	public var systemMemory(default, null):Float = 0;
 
-	public var maxMemory:Float = 0;
+	/**
+	 * Peak GC memory usage, in bytes.
+	 */
+	public var maxMemory(default, null):Float = 0;
+
+	//
+	// PRIVATE FIELDS
+	//
 
 	/**
-	 * The timestamps of the frames rendered in the last second.
+	 * The debug display's background panel.
 	 */
-	@:noCompletion private var times:Array<Float>;
+	private var _background:Shape;
 
-	var debugDisplayBG:Shape;
+	/**
+	 * Array of times since the last update.
+	 */
+	private var _times:Array<Float> = [];
 
-	public function new(x:Float = 10, y:Float = 10, args:FlxTextBorderStyle)
+	/**
+	 * Accumulated time since the last update.
+	 */
+	private var _deltaAccumulator:Float = 0.0;
+
+	public function new(x:Float = 10, y:Float = 10)
 	{
 		super();
 
 		this.x = x;
 		this.y = y;
 
-		this.times = [];
+		selectable = false;
+		mouseEnabled = false;
+		multiline = true;
+		autoSize = LEFT;
 
-		this.selectable = false;
-		this.mouseEnabled = false;
-
-		this.textColor = FlxColor.WHITE;
-		this.defaultTextFormat = new TextFormat('_sans', 12, FlxColor.BLACK, true);
-		this.multiline = true;
-		this.autoSize = LEFT;
+		defaultTextFormat = new TextFormat('_sans', FONT_SIZE, 0xffffff, true);
 	}
 
+	/**
+	 * Call after adding to the display list to create the bacground panel.
+	 */
 	public function createBackground():Void
 	{
 		if (parent == null)
 		{
-			trace('WARNING: Parent is null, retrying next frame...');
-			addEventListener(Event.ADDED_TO_STAGE, retryCreateBackground);
-			return;
+			addEventListener(Event.ADDED_TO_STAGE, _onAddedToStage);
+      return;
 		}
-		debugDisplayBG = new Shape();
-		debugDisplayBG.x = this.x;
-		debugDisplayBG.y = this.y;
-		parent.addChildAt(debugDisplayBG, parent.getChildIndex(this));
-		trace('INFO: Created debug display background.');
+
+		_background = new Shape();
+		_background.x = x;
+		_background.y = y;
+		parent.addChildAt(_background, parent.getChildIndex(this));
 	}
-
-	function retryCreateBackground(_):Void
-	{
-		if (parent == null)
-			return;
-		removeEventListener(Event.ADDED_TO_STAGE, retryCreateBackground);
-		createBackground();
-	}
-
-	function redrawBackground():Void
-	{
-		if (debugDisplayBG == null)
-			return;
-
-		final padding:Int = 6;
-		final borderThickness:Int = 4;
-		final width:Float = this.width + (padding * 2);
-		final height:Float = this.height + (padding * 2);
-
-		debugDisplayBG.x = this.x - padding;
-		debugDisplayBG.y = this.y - padding;
-		debugDisplayBG.graphics.clear();
-
-		// Outer border
-		debugDisplayBG.graphics.beginFill(0x3d3f41, 1);
-		debugDisplayBG.graphics.drawRect(0, 0, width, height);
-		debugDisplayBG.graphics.endFill();
-
-		// Inner background
-		debugDisplayBG.graphics.beginFill(0x2c2f30, 1);
-		debugDisplayBG.graphics.drawRect(borderThickness, borderThickness, width - (borderThickness * 2), height - (borderThickness * 2));
-		debugDisplayBG.graphics.endFill();
-
-		debugDisplayBG.alpha = backgroundOpacity;
-	}
-
-	var deltaTimeout:Float = 0.0;
 
 	/**
-	 * `__enterFrame` event handler that updates the FPS and memory usage every second.
-	 */
-	@:noCompletion
-	private override function __enterFrame(deltaTime:Float):Void
+   * Formats an MB value into a display string, switching to GB above 1000 MB.
+   * @param value Memory value in megabytes
+   */
+	public function formatMemory(value:Float):String
 	{
-		final now:Float = haxe.Timer.stamp() * 1000;
-		times.push(now);
-		while (times[0] < now - 1000)
-			times.shift();
-
-		// If the time between updates is less than 50 milliseconds, don't update the display yet.
-		if (deltaTimeout < 50)
-		{
-			deltaTimeout += deltaTime;
-			return;
-		}
-
-		systemMemory = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 2)); // Convert bytes to megabytes and round to 2 decimal places.
-		if (systemMemory > maxMemory)
-			maxMemory = systemMemory; // Update max memory if current memory exceeds it.
-
-		currentFPS = times.length < FlxG.updateFramerate ? times.length : FlxG.updateFramerate;
-		updateDisplay();
-		redrawBackground();
-		deltaTimeout = 0.0;
+		return value >= 1000
+			? '${FlxMath.roundDecimal(value / 1000, 2)}GB'
+			: '${value}MB';
 	}
 
 	/**
@@ -142,28 +123,131 @@ class DebugDisplay extends TextField
 	 */
 	public dynamic function updateDisplay():Void
 	{
-		// If your memory usage is above 1000 megabytes, display it in gigabytes. (default: megabytes)
-		var memoryUnit = systemMemory >= 1000 ? 'GB' : 'MB';
+		// Get the operating system your game is running on
+		final OS:Array<String> = [
+			#if windows 
+			'Windows',
+			#elseif mac 
+			'macOS',
+			#elseif linux 
+			'Linux',
+			#elseif html5
+			'HTML5',
+			#elseif android
+			'Android',
+			#else
+			'NO OS DETECTED', 
+			#end
+		];
+
+		// Get the compiler used to build the game.
+		final COMPILER:Array<String> = [
+			#if cpp
+			'C++',
+			#elseif hl
+			'HashLink',
+			#else
+			'NO COMPILER DETECTED',
+			#end
+		];
 
 		text = [
 			'FPS: ${currentFPS}',
-			'MEM: ${systemMemory} / ${maxMemory}${memoryUnit}',
-			'GAME STATE: ${Type.getClassName(Type.getClass(FlxG.state))}.hx'
+			#if !hl 
+			'MEM: ${formatMemory(systemMemory)} / ${formatMemory(maxMemory)}', 
+			#end
+			#if debug
+			'OS: ${OS.join(" ")} (${COMPILER.join(" ")})',
+			'STATE: ${Type.getClassName(Type.getClass(FlxG.state))}.hx' 
+			#end
 		].join('\n');
 
-		textColor = FlxColor.WHITE;
-		if (maxMemory > 3000 || currentFPS <= FlxG.save.data.fpsCap / 2)
-			textColor = FlxColor.RED;
+		// If the current FPS is less than half the target FPS, make the text red.
+		// DEFAULT: White
+		textColor = (maxMemory > 3000 || currentFPS <= FlxG.save.data.fpsCap / 2)
+      ? 0xFF0000
+      : 0xFFFFFF;
 	}
 
-	public function set_backgroundOpacityVisible(value:Bool):Void
-		if (debugDisplayBG != null)
-			debugDisplayBG.visible = value;
+	private function _onAddedToStage(event:Event):Void
+	{
+		removeEventListener(Event.ADDED_TO_STAGE, _onAddedToStage);
+		createBackground();
+	}
+
+	private function _redrawBackground():Void
+	{
+		if (_background == null)
+			return;
+
+		final bgWidth:Float = this.width + (PADDING * 2);
+		final bgHeight:Float = this.height + (PADDING * 2);
+
+		_background.x = x - PADDING;
+		_background.y = y - PADDING;
+		_background.graphics.clear();
+
+		// Outer Border
+		_background.graphics.beginFill(BORDER_COLOR, 1);
+		_background.graphics.drawRect(0, 0, bgWidth, bgHeight);
+		_background.graphics.endFill();
+
+		// Inner Border
+		_background.graphics.beginFill(BG_COLOR, 1);
+		_background.graphics.drawRect(
+			BORDER_THICKNESS, BORDER_THICKNESS,
+			bgWidth - (BORDER_THICKNESS * 2),
+			bgHeight - (BORDER_THICKNESS * 2)
+		);
+		_background.graphics.endFill();
+
+		_background.alpha = backgroundOpacity;
+	}
+
+	/**
+	 * `__enterFrame` event handler that updates the FPS and memory usage every millisecond.
+	 */
+	@:noCompletion
+	private override function __enterFrame(deltaTime:Float):Void
+	{
+		final now:Float = haxe.Timer.stamp() * 1000;
+		_times.push(now);
+		while (_times[0] < now - 1000)
+		{
+			_times.shift();
+		}
+
+		// Update the display once every 50ms
+		_deltaAccumulator += deltaTime;
+		if (_deltaAccumulator < UPDATE_INTERVAL)
+			return;
+
+		// Convert bytes to megabytes and round to 2 decimal places.
+		systemMemory = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 2));
+		// Update max memory if current memory exceeds it.
+		if (systemMemory > maxMemory)
+			maxMemory = systemMemory;
+
+		currentFPS = _times.length < FlxG.updateFramerate ? _times.length : FlxG.updateFramerate;
+
+		updateDisplay();
+		_redrawBackground();
+		_deltaAccumulator;
+	}
 
 	public function set_backgroundOpacity(value:Float):Float
 	{
-		if (debugDisplayBG != null)
-			debugDisplayBG.alpha = value;
-		return backgroundOpacity = value;
+		backgroundOpacity = value;
+		if (_background != null)
+			_background.alpha = value;
+		return value;
+	}
+
+	public function set_backgroundVisible(value:Bool):Bool
+	{
+		backgroundVisible = value;
+		if (_background != null)
+			_background.visible = value;
+		return value;
 	}
 }

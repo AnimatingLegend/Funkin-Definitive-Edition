@@ -19,7 +19,7 @@ class DefinitiveData
 		{
 			Main.toggleFPS(FlxG.save.data.debugDisplay);
 			Main.debugDisplay.backgroundOpacity = FlxG.save.data.debugDisplayBGOpacity / 100;
-			Main.debugDisplay.set_backgroundOpacityVisible(FlxG.save.data.debugDisplay);
+			Main.debugDisplay.set_backgroundVisible(FlxG.save.data.debugDisplay);
 		}
 		if (FlxG.save.data.debugDisplayBGOpacity == null)
 			FlxG.save.data.debugDisplayBGOpacity = 50;

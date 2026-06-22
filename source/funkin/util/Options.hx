@@ -188,7 +188,7 @@ class DebugDisplayOP extends Option
 
 			Main.toggleFPS(FlxG.save.data.debugDisplay);
 			Main.debugDisplay.set_backgroundOpacity(FlxG.save.data.debugDisplayBGOpacity / 100);
-			Main.debugDisplay.set_backgroundOpacityVisible(FlxG.save.data.debugDisplay);
+			Main.debugDisplay.set_backgroundVisible(FlxG.save.data.debugDisplay);
 		}
 
 		acceptValues = FlxG.save.data.debugDisplay;

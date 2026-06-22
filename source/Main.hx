@@ -104,15 +104,15 @@ class Main extends Sprite
 		var framerate:Int = FlxG.save.data.fpsCap != null ? FlxG.save.data.fpsCap : 60;
 
 		var game = new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate,
-			skipSplash, FlxG.stage.window.fullscreen || FlxG.save.data.launchInFullscreen);
+			skipSplash, (FlxG.stage.window.fullscreen || FlxG.save.data.launchInFullscreen));
 		addChild(game);
 
-		debugDisplay = new DebugDisplay(10, 15, FlxTextBorderStyle.OUTLINE);
+		debugDisplay = new DebugDisplay(10, 15);
 		addChild(debugDisplay);
 		toggleFPS(FlxG.save.data.debugDisplay);
 		debugDisplay.createBackground();
 		debugDisplay.backgroundOpacity = (FlxG.save.data.debugDisplayBGOpacity) / 100;
-		debugDisplay.set_backgroundOpacityVisible(FlxG.save.data.debugDisplay);
+		debugDisplay.set_backgroundVisible(FlxG.save.data.debugDisplay);
 
 		#if html5
 		FlxG.autoPause = false;
