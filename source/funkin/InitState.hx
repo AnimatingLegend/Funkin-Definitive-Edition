@@ -94,7 +94,7 @@ class InitState extends FlxState
 	function onLostFocus():Void
 	{
 		trace('INFO: User lost focus of the game window. Turning down volume by 25%.');
-		if (FlxG.sound.muted || FlxG.sound.volume <= 0 || FlxG.autoPause)
+		if (FlxG.sound.muted || FlxG.sound.volume == 0 || FlxG.autoPause)
 			return;
 		_lostFocusVolume = FlxG.sound.volume;
 		FlxG.sound.volume *= 0.25;
@@ -116,13 +116,10 @@ class InitState extends FlxState
 		}
 
 		// Restore the volume.
-		if (FlxG.autoPause)
+		if (FlxG.sound.muted || FlxG.sound.volume == 0 || FlxG.autoPause)
 			return;
 		if (_lostFocusVolume != null)
-		{
 			FlxG.sound.volume = _lostFocusVolume;
-			_lostFocusVolume = null;
-		}
 	}
 
 	/**
